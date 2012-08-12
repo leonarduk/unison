@@ -1,0 +1,4 @@
+Testsuite: uk.co.sleonard.unison.input.tests.NewsArticleTest
+Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.078 sec
+
+Testcase: testGetNewsgroupList took 0.062 sec

@@ -1,0 +1,7 @@
+Testsuite: uk.co.sleonard.unison.utils.tests.HttpDateObjectTest
+Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.031 sec
+------------- Standard Output ---------------
+Wed Nov 28 00:00:00 GMT 2007
+------------- ---------------- ---------------
+
+Testcase: testParse took 0.031 sec

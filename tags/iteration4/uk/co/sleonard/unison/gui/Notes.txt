@@ -1,0 +1,7 @@
+need to create new GUI:
+
+field to enter name or part name with wildcards to get list of newsgroups - goes to db then net to get list
+2 fields for dates 2 and from - be able to limit download to e.g. 2000 messages
+pause and resume download
+
+

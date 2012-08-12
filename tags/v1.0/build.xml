@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Usenet analyzer" default="schema" basedir=".">
+
+	<!-- setup variables to use throughout file -->
+	<property name="source.root" value="src" />
+	<property name="class.root" value="classes" />
+	<property name="lib.dir" value="lib" />
+
+	<!--  set up class path -->
+	<path id="project.class.path">
+		<pathelement location="${class.root}" />
+		<fileset dir="WebSite/deploy">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir=".">
+			<include name="**/*.hbm.xml" />
+		</fileset>
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+			<exclude name="NewsReader.jar" />
+		</fileset>
+	</path>
+
+	<!--  teach Ant how to use hibernate code generation -->
+	<taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask" classpathref="project.class.path" />
+
+	<!-- create runtime directories -->
+	<target name="prepare" description="Set up build dirs">
+		<mkdir dir="${class.root}" />
+		<!-- copy over property files -->
+		<copy todir="${class.root}">
+			<fileset dir="${source.root}">
+				<include name="**/*.properties" />
+			</fileset>
+			<fileset dir="${source.root}">
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+	</target>
+
+	<taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask" classpathref="project.class.path" />
+
+	<target name="codegen">
+		<hibernatetool destdir="${source.root}">
+			<configuration>
+				<fileset dir="${source.root}">
+					<include name="**/*.hbm.xml" />
+				</fileset>
+			</configuration>
+			<hbm2java />
+		</hibernatetool>
+	</target>
+
+	<!-- generate schemas -->
+	<!-- ================================= 
+          target: schema              
+         ================================= -->
+	<target name="schema" depends="compile">
+		<hibernatetool destdir="${class.root}">
+			<configuration>
+				<fileset dir="${class.root}">
+					<include name="**/*.hbm.xml" />
+				</fileset>
+			</configuration>
+			<hbm2ddl drop="false" delimiter=";" />
+		</hibernatetool>
+	</target>
+
+	<!-- compile the java code -->
+	<target name="compile" depends="prepare" description="compiles all the .java classes">
+		<javac srcdir="${source.root}" destdir="${class.root}" debug="on" optimize="off" deprecation="on">
+			<exclude name="**/obsolete/**.*" />
+			<exclude name="**/org/**.*" />
+			<exclude name="**/java/**.*" />
+			<classpath refid="project.class.path" />
+		</javac>
+	</target>
+
+	<!-- ================================= 
+          target: name              
+         ================================= -->
+    <target name="test" depends="compile" >
+        
+	<junit printsummary="yes" haltonfailure="yes">
+	  <classpath>
+	  	<path refid="project.class.path"/>
+	  </classpath>
+
+	  <formatter type="plain"/>
+
+	  <batchtest fork="yes" todir="Docs">
+	    <fileset dir="${source.root}">
+	      <include name="**/*Test*.java"/>
+	    </fileset>
+	  </batchtest>
+	</junit>
+        </target>
+
+	<!-- ================================= 
+          target: clean              
+         ================================= -->
+	<target name="clean" description="remove old files">
+		<mkdir dir="${class.root}" />
+		<delete>
+			<fileset dir="${class.root}">
+				<include name="**/*" />
+			</fileset>
+		</delete>
+	</target>
+
+
+
+
+	<!-- ================================= 
+          target: run              
+         ================================= -->
+	<target name="run" description=" run GUI">
+		<java classname="uk.co.sleonard.unison.gui.generated.DownloadNewsPanel" fork="true">
+			<classpath refid="project.class.path" />
+		</java>
+	</target>
+</project>

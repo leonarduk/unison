@@ -9,12 +9,10 @@
 	<!--  set up class path -->
 	<path id="project.class.path">
 		<pathelement location="${class.root}" />
-		<fileset dir="deploy">
+		<fileset dir="WebSite/deploy">
 			<include name="**/*.jar" />
-			<include name="**/*.properties" />
-			<include name="**/*.xml" />
 		</fileset>
-		<fileset dir="src">
+		<fileset dir=".">
 			<include name="**/*.hbm.xml" />
 		</fileset>
 		<fileset dir="${lib.dir}">

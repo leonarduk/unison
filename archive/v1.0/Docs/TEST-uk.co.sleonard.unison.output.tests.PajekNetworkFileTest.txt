@@ -1,0 +1,15 @@
+Testsuite: uk.co.sleonard.unison.output.tests.PajekNetworkFileTest
+Tests run: 6, Failures: 0, Errors: 0, Time elapsed: 0.032 sec
+------------- Standard Output ---------------
+Link1: 1 2 1
+Link2: 1 2 2
+Saved to UnitTest.net
+*Vertices 0
+------------- ---------------- ---------------
+
+Testcase: testAddNode took 0 sec
+Testcase: testAddRelationship took 0 sec
+Testcase: testCreateDirectedLinks took 0 sec
+Testcase: testCreateUndirectedLinks took 0.016 sec
+Testcase: testSaveToFile took 0 sec
+Testcase: testWriteData took 0 sec

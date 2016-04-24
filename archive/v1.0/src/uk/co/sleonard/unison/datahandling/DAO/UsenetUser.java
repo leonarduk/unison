@@ -7,43 +7,17 @@ package uk.co.sleonard.unison.datahandling.DAO;
  * 
  */
 public class UsenetUser implements java.io.Serializable {
-	public boolean equals(Object object) {
-		if (this == object) {
-			return true;
-		}
-		if (!(object instanceof UsenetUser)) {
-			return false;
-		}
-		final UsenetUser that = (UsenetUser) object;
-		if (this.getId() != that.getId()
-				|| !this.getEmail().equals(that.getEmail())
-				|| !this.getName().equals(that.getName())) {
-			return false;
-		}
-		return true;
-	}
-
-	public int hashCode() {
-		int hashCode = 0;
-		hashCode = 29 * hashCode + id;
-
-		return hashCode;
-	}
 
 	/**
 	 * 
 	 */
+	private static final long serialVersionUID = 8032895354711821215L;
 	private String email;
 	private String gender;
 	private int id;
 	private String ipaddress;
 	private Location location;
 	private String name;
-
-	@Override
-	public String toString() {
-		return getName() + "(" + getEmail() + ")";
-	}
 
 	public UsenetUser() {
 	}

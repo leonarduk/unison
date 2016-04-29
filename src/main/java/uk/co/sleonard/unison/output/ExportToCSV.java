@@ -14,18 +14,38 @@ import javax.swing.JTable;
 
 import uk.co.sleonard.unison.gui.UNISoNException;
 
+/**
+ * The Class ExportToCSV.
+ *
+ * @author Stephen
+ */
 public class ExportToCSV {
+
+	/**
+	 * The main method.
+	 *
+	 * @param args
+	 *            the arguments
+	 */
 	public static void main(String[] args) {
 		ExportToCSV test = new ExportToCSV();
 		String data = "M'I-5'Persecut ion , Bern ard Le vin expre sses h is v iews";
 		test.extractCommas(data);
 	}
 
+	/**
+	 * Export table to csv.
+	 *
+	 * @param table
+	 *            the table
+	 * @param fieldNames
+	 *            the field names
+	 * @throws UNISoNException
+	 *             the UNI so n exception
+	 */
 	@SuppressWarnings("deprecation")
-	public void exportTableToCSV(JTable table, Vector<String> fieldNames)
-			throws UNISoNException {
-		FileDialog file = new FileDialog(new JFrame(), "Save CSV Network File",
-				FileDialog.SAVE);
+	public void exportTableToCSV(JTable table, Vector<String> fieldNames) throws UNISoNException {
+		FileDialog file = new FileDialog(new JFrame(), "Save CSV Network File", FileDialog.SAVE);
 		final String CSV_FILE_SUFFIX = ".csv";
 		String initialValue = "*" + CSV_FILE_SUFFIX;
 		file.setFile(initialValue); // set initial filename filter
@@ -54,19 +74,29 @@ public class ExportToCSV {
 
 	}
 
-	public void exportTable(String fileName, JTable table,
-			Vector<String> fieldNames) throws UNISoNException {
+	/**
+	 * Export table.
+	 *
+	 * @param fileName
+	 *            the file name
+	 * @param table
+	 *            the table
+	 * @param fieldNames
+	 *            the field names
+	 * @throws UNISoNException
+	 *             the UNI so n exception
+	 */
+	public void exportTable(String fileName, JTable table, Vector<String> fieldNames) throws UNISoNException {
 		try {
 			File file = new File(fileName);
 			if (file != null) {
-				
+
 				// clear old file if it exists
 				if (file.exists()) {
 					file.delete();
 				}
 				try {
-					BufferedWriter bufferedWriter = new BufferedWriter(
-							new FileWriter(file, true));
+					BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file, true));
 					PrintWriter fileWriter = new PrintWriter(bufferedWriter);
 					String data;
 					for (int j = 0; j < table.getColumnCount(); ++j) {
@@ -79,8 +109,7 @@ public class ExportToCSV {
 					fileWriter.println("");
 					for (int i = 0; i < table.getRowCount(); ++i) {
 						for (int j = 0; j < table.getColumnCount(); ++j) {
-							data = extractCommas(table.getValueAt(i, j)
-									.toString());
+							data = extractCommas(table.getValueAt(i, j).toString());
 							fileWriter.print(data + ",");
 						}
 						fileWriter.println("");
@@ -96,6 +125,13 @@ public class ExportToCSV {
 		}
 	}// export Table
 
+	/**
+	 * Extract commas.
+	 *
+	 * @param data
+	 *            the data
+	 * @return the string
+	 */
 	private String extractCommas(String data) {
 		if (data.startsWith("M'I-5'Persecut ion")) {
 			int i = 0;

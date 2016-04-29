@@ -10,12 +10,22 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+/**
+ * The Class StringUtils.
+ */
 /*
  * //TODO Add this reference for the compression
  * FRom http://forum.java.sun.com/thread.jspa?threadID=250124&messageID=926638
  */
 public class StringUtils {
 
+	/**
+	 * Convert string to list.
+	 *
+	 * @param field the field
+	 * @param delimiters the delimiters
+	 * @return the vector
+	 */
 	public static Vector<String> convertStringToList(final String field,
 			final String delimiters) {
 		final Vector<String> list = new Vector<String>();
@@ -32,6 +42,13 @@ public class StringUtils {
 		return list;
 	}
 
+	/**
+	 * Compress.
+	 *
+	 * @param str the str
+	 * @return the byte[]
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public static final byte[] compress(final String str) throws IOException {
 		final ByteArrayOutputStream out = new ByteArrayOutputStream();
 		final ZipOutputStream zout = new ZipOutputStream(out);
@@ -43,6 +60,12 @@ public class StringUtils {
 		return compressed;
 	}
 
+	/**
+	 * Convert commas to list.
+	 *
+	 * @param commaSeparatedString the comma separated string
+	 * @return the list
+	 */
 	public static List<String> convertCommasToList(
 			final String commaSeparatedString) {
 		final Vector<String> words = new Vector<String>();
@@ -55,6 +78,13 @@ public class StringUtils {
 		return words;
 	}
 
+	/**
+	 * Decompress.
+	 *
+	 * @param compressed the compressed
+	 * @return the string
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public static final String decompress(final byte[] compressed)
 			throws IOException {
 		if (null == compressed) {
@@ -76,6 +106,13 @@ public class StringUtils {
 		return decompressed;
 	}
 
+	/**
+	 * Join.
+	 *
+	 * @param strings the strings
+	 * @param delimiter the delimiter
+	 * @return the string
+	 */
 	public static String join(final String[] strings, final String delimiter) {
 		final StringBuffer buf = new StringBuffer();
 
@@ -85,27 +122,5 @@ public class StringUtils {
 		buf.append(strings[strings.length - 1]);
 
 		return buf.toString();
-	}
-
-	public static final void main(final String[] args) {
-		final String[] words = new String[] { "one", "two", "three" };
-		final String result = StringUtils.join(words, ", ");
-		System.out.println("Created : " + result);
-
-		final String str = "Compress this string\r\n"
-				+ "Compress this string\r\n" + "Compress this string\r\n"
-				+ "Compress this string\r\n" + "Compress this string\r\n"
-				+ "Compress this string\r\n" + "Compress this string\r\n"
-				+ "Compress this string\r\n";
-		try {
-			final byte[] compressed = StringUtils.compress(str);
-			final int compressedSize = compressed.length;
-			final String decompressed = StringUtils.decompress(compressed);
-			final int decompressedSize = decompressed.getBytes().length;
-			System.out.println("Compressed Size = " + compressedSize);
-			System.out.println("Decompressed Size = " + decompressedSize);
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
 	}
 }

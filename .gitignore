@@ -1,2 +1,3 @@
 /bin/
 /target
+/src/main/resources/DB/projectDB.properties

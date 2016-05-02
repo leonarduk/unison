@@ -30,7 +30,7 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 
 	<repositories>
 		<!-- Added because javax.jms has not been found on maven repository -->
@@ -42,137 +42,137 @@
 	</repositories>
 
 	<dependencies>
-	
+
 		<dependency>
 			<groupId>javax.jms</groupId>
 			<artifactId>jms</artifactId>
 			<version>1.1</version>
 		</dependency>
-		
+
 		<!-- Caused by: java.lang.ClassNotFoundException: org.slf4j.impl.StaticLoggerBinder -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.5.6</version>
 		</dependency>
-		
+
 		<!-- Caused by: java.lang.ClassNotFoundException: javassist.util.proxy.MethodFilter -->
 		<dependency>
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
 			<version>3.18.1-GA</version>
 		</dependency>
-				
+
 		<!-- 1.2.9 to 1.2.12 -->
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.12</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-net</groupId>
 			<artifactId>commons-net</artifactId>
 			<version>1.4.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
 			<version>2.3.9</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>httpunit</groupId>
 			<artifactId>httpunit</artifactId>
 			<version>1.6.2</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>oro</groupId>
 			<artifactId>oro</artifactId>
 			<version>2.0.8</version>
 		</dependency>
-		
+
 		<!-- 1.0.2 version has not been found. Using 1.1.1 -->
 		<dependency>
 			<groupId>javax.activation</groupId>
 			<artifactId>activation</artifactId>
 			<version>1.1.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>antlr</groupId>
 			<artifactId>antlr</artifactId>
 			<version>2.7.6</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>asm</groupId>
 			<artifactId>asm</artifactId>
 			<version>1.5.3</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>asm</groupId>
 			<artifactId>asm-attrs</artifactId>
 			<version>1.5.3</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
 			<version>2.1_3</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>colt</groupId>
 			<artifactId>colt</artifactId>
 			<version>1.2.0</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
 			<version>2.1.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
 			<version>3.2</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 			<version>2.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 			<version>1.0.4</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.kuali.db.ojb</groupId>
 			<artifactId>db-ojb</artifactId>
 			<version>1.0.4-patch9</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>
 			<version>1.5.2</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
 			<version>1.2</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
@@ -191,11 +191,8 @@
 			<version>1.8.0.1</version>
 		</dependency>
 
-		<!-- <dependency>
-		    <groupId>gnu.classpath.ext</groupId>
-		    <artifactId>inetlib</artifactId>
-		    <version>1.1.1</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>gnu.classpath.ext</groupId> <artifactId>inetlib</artifactId> 
+			<version>1.1.1</version> </dependency> -->
 
 		<dependency>
 			<groupId>jdom</groupId>
@@ -228,6 +225,32 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>2.0.5-beta</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
+			<version>1.6.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>1.6.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>3.4</version>
+		</dependency>
+
+		<dependency>
 			<groupId>opensymphony</groupId>
 			<artifactId>oscache</artifactId>
 			<version>2.4.1</version>
@@ -238,14 +261,15 @@
 			<artifactId>swing-layout</artifactId>
 			<version>1.0.3</version>
 		</dependency>
-		
-		<!-- gnumail lib not found. Then we checked that the package used is (javax.mail). So, we have added its dependency  -->
+
+		<!-- gnumail lib not found. Then we checked that the package used is (javax.mail). 
+			So, we have added its dependency -->
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 			<version>1.4.7</version>
 		</dependency>
-				
-		
+
+
 	</dependencies>
 </project>

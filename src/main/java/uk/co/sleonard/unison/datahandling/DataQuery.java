@@ -18,11 +18,54 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.gui.UNISoNController;
 
+/**
+ * The Class DataQuery.
+ */
 public class DataQuery {
+
+	/** The logger. */
 	private static Logger logger = Logger.getLogger("DataQuery");
 
-	private static StringBuffer addWhereClause(final StringBuffer sqlBuffer,
-			final Vector<String> whereClauses) {
+	private HibernateHelper helper;
+
+	/**
+	 * Instantiates a new data query.
+	 */
+	protected DataQuery() {
+		this(UNISoNController.getInstance().helper());
+	}
+
+	public DataQuery(HibernateHelper helper) {
+		this.helper = helper;
+	}
+
+	/**
+	 * Gets the single instance of DataQuery.
+	 *
+	 * @return single instance of DataQuery
+	 */
+	public static DataQuery getInstance() {
+		return DataQueryHelper.getInstance();
+	}
+
+	static class DataQueryHelper {
+		static DataQuery instance = new DataQuery();
+
+		static DataQuery getInstance() {
+			return instance;
+		}
+	}
+
+	/**
+	 * Adds the where clause.
+	 *
+	 * @param sqlBuffer
+	 *            the sql buffer
+	 * @param whereClauses
+	 *            the where clauses
+	 * @return the string buffer
+	 */
+	private StringBuffer addWhereClause(final StringBuffer sqlBuffer, final Vector<String> whereClauses) {
 		DataQuery.logger.debug("addWhereClause");
 
 		if (whereClauses.size() > 0) {
@@ -36,35 +79,62 @@ public class DataQuery {
 		return sqlBuffer;
 	}
 
-	protected static StringBuffer getBaseQuery(final Class<?> tableType) {
+	/**
+	 * Gets the base query.
+	 *
+	 * @param tableType
+	 *            the table type
+	 * @return the base query
+	 */
+	protected StringBuffer getBaseQuery(final Class<?> tableType) {
 		return new StringBuffer(" FROM " + tableType.getName());
 	}
 
+	/**
+	 * Gets the locations.
+	 *
+	 * @param countries
+	 *            the countries
+	 * @param session
+	 *            the session
+	 * @param filtered
+	 *            the filtered
+	 * @return the locations
+	 */
 	@SuppressWarnings("unchecked")
-	public static Vector<Location> getLocations(final Vector<String> countries,
-			Session session, boolean filtered) {
+	public Vector<Location> getLocations(final Vector<String> countries, Session session, boolean filtered) {
 		DataQuery.logger.debug("getLocations : " + countries);
 		if (filtered && null != countries && countries.size() > 0) {
-			final StringBuffer sqlBuffer = DataQuery
-					.getBaseQuery(Location.class);
-			if ((null != countries)) {
-				sqlBuffer.append(" where country in ( ");
-				sqlBuffer.append("'" + countries.get(0) + "'");
-				if (countries.size() > 1) {
-					for (int i = 1; i < countries.size(); i++) {
-						sqlBuffer.append(", '" + countries.get(i) + "'");
-					}
-				}
-				sqlBuffer.append(") ");
-			}
+			final StringBuffer sqlBuffer = getLocationsSQL(countries);
 
-			return (Vector<Location>) UNISoNController.getInstance().helper()
-					.runQuery(sqlBuffer.toString(), session);
+			return (Vector<Location>) helper.runQuery(sqlBuffer.toString(), session);
 		}
 		return null;
 	}
 
-	public static StringBuffer getMessageIdsString(final Vector<Message> users) {
+	public StringBuffer getLocationsSQL(final Vector<String> countries) {
+		final StringBuffer sqlBuffer = getBaseQuery(Location.class);
+		if ((null != countries)) {
+			sqlBuffer.append(" where country in ( ");
+			sqlBuffer.append("'" + countries.get(0) + "'");
+			if (countries.size() > 1) {
+				for (int i = 1; i < countries.size(); i++) {
+					sqlBuffer.append(", '" + countries.get(i) + "'");
+				}
+			}
+			sqlBuffer.append(") ");
+		}
+		return sqlBuffer;
+	}
+
+	/**
+	 * Gets the message ids string.
+	 *
+	 * @param users
+	 *            the users
+	 * @return the message ids string
+	 */
+	public StringBuffer getMessageIdsString(final Vector<Message> users) {
 		DataQuery.logger.debug("getMessageIdsString");
 
 		final StringBuffer buf = new StringBuffer();
@@ -79,46 +149,57 @@ public class DataQuery {
 		return buf;
 	}
 
+	/**
+	 * Gets the messages.
+	 *
+	 * @param messages
+	 *            the messages
+	 * @param users
+	 *            the users
+	 * @param session
+	 *            the session
+	 * @param fromDate
+	 *            the from date
+	 * @param toDate
+	 *            the to date
+	 * @param filtered
+	 *            the filtered
+	 * @param newsgroups
+	 *            the newsgroups
+	 * @param countries
+	 *            the countries
+	 * @return the messages
+	 */
 	@SuppressWarnings("unchecked")
-	public static Vector<Message> getMessages(final Vector<Message> messages,
-			final Vector<UsenetUser> users, Session session, Date fromDate,
-			Date toDate, boolean filtered, List<NewsGroup> newsgroups,
-			Set<String> countries) {
+	public Vector<Message> getMessages(final Vector<Message> messages, final Vector<UsenetUser> users, Session session,
+			Date fromDate, Date toDate, boolean filtered, List<NewsGroup> newsgroups, Set<String> countries) {
 		DataQuery.logger.debug("getMessages");
 
-		StringBuffer sqlBuffer = DataQuery.getBaseQuery(Message.class);
+		StringBuffer sqlBuffer = getBaseQuery(Message.class);
 		sqlBuffer.append(" as message ");
 
 		if (filtered) {
 			final Vector<String> whereClauses = new Vector<String>();
 			if ((null != users && users.size() > 0)) {
-				sqlBuffer
-						.append(" left join fetch message.poster as usenetuser ");
-				whereClauses.add(" usenetuser.id in ( "
-						+ DataQuery.getUsenetUserIdsString(users) + ") ");
+				sqlBuffer.append(" left join fetch message.poster as usenetuser ");
+				whereClauses.add(" usenetuser.id in ( " + getUsenetUserIdsString(users) + ") ");
 			}
 
 			if ((null != countries && countries.size() > 0)) {
-				sqlBuffer
-						.append(" left join fetch message.poster.location as location ");
-				whereClauses.add(" location.Country in ('"
-						+ join(countries, "','") + "') ");
+				sqlBuffer.append(" left join fetch message.poster.location as location ");
+				whereClauses.add(" location.Country in ('" + join(countries, "','") + "') ");
 			}
 			if ((null != newsgroups) && (newsgroups.size() > 0)) {
-				sqlBuffer
-						.append(" left join fetch message.newsgroups as newsgroup ");
-				whereClauses.add(" newsgroup.id in ( "
-						+ DataQuery.getNewsGroupIdsString(newsgroups) + ") ");
+				sqlBuffer.append(" left join fetch message.newsgroups as newsgroup ");
+				whereClauses.add(" newsgroup.id in ( " + getNewsGroupIdsString(newsgroups) + ") ");
 			}
 
 			if ((null != messages) && (messages.size() > 0)) {
-				whereClauses.add(" message.id in ( "
-						+ DataQuery.getMessageIdsString(messages) + ") ");
+				whereClauses.add(" message.id in ( " + getMessageIdsString(messages) + ") ");
 			}
 
 			if (null != fromDate) {
-				whereClauses.add(" message.DateCreated >= '"
-						+ yyyyMMDDFormatter.format(fromDate) + "'");
+				whereClauses.add(" message.DateCreated >= '" + yyyyMMDDFormatter.format(fromDate) + "'");
 			}
 
 			if (null != toDate) {
@@ -126,19 +207,26 @@ public class DataQuery {
 				cal.setTime(toDate);
 				cal.add(Calendar.DAY_OF_MONTH, 1);
 
-				whereClauses.add(" message.DateCreated < '"
-						+ yyyyMMDDFormatter.format(cal.getTime()) + "'");
+				whereClauses.add(" message.DateCreated < '" + yyyyMMDDFormatter.format(cal.getTime()) + "'");
 			}
 
 			if (whereClauses.size() > 0) {
-				sqlBuffer = DataQuery.addWhereClause(sqlBuffer, whereClauses);
+				sqlBuffer = addWhereClause(sqlBuffer, whereClauses);
 			}
 		}
-		return (Vector<Message>) UNISoNController.getInstance().helper()
-				.runQuery(sqlBuffer.toString(), session);
+		return (Vector<Message>) UNISoNController.getInstance().helper().runQuery(sqlBuffer.toString(), session);
 	}
 
-	public static String join(Collection s, String delimiter) {
+	/**
+	 * Join.
+	 *
+	 * @param s
+	 *            the s
+	 * @param delimiter
+	 *            the delimiter
+	 * @return the string
+	 */
+	public String join(Collection s, String delimiter) {
 		StringBuffer buffer = new StringBuffer();
 		Iterator iter = s.iterator();
 		while (iter.hasNext()) {
@@ -150,7 +238,14 @@ public class DataQuery {
 		return buffer.toString();
 	}
 
-	private static String getNewsGroupIdsString(List<NewsGroup> newsgroups) {
+	/**
+	 * Gets the news group ids string.
+	 *
+	 * @param newsgroups
+	 *            the newsgroups
+	 * @return the news group ids string
+	 */
+	private String getNewsGroupIdsString(List<NewsGroup> newsgroups) {
 		final StringBuffer buf = new StringBuffer();
 		if ((newsgroups != null) && (newsgroups.size() > 0)) {
 			buf.append("'" + newsgroups.get(0).getId() + "'");
@@ -163,11 +258,17 @@ public class DataQuery {
 		return buf.toString();
 	}
 
-	static SimpleDateFormat yyyyMMDDFormatter = new SimpleDateFormat(
-			"yyyy-MM-dd");
+	/** The yyyy mmdd formatter. */
+	SimpleDateFormat yyyyMMDDFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
-	public static StringBuffer getUsenetUserIdsString(
-			final Vector<UsenetUser> users) {
+	/**
+	 * Gets the usenet user ids string.
+	 *
+	 * @param users
+	 *            the users
+	 * @return the usenet user ids string
+	 */
+	public StringBuffer getUsenetUserIdsString(final Vector<UsenetUser> users) {
 		DataQuery.logger.debug("getUsenetUserIdsString");
 
 		final StringBuffer buf = new StringBuffer();
@@ -183,42 +284,27 @@ public class DataQuery {
 		return buf;
 	}
 
-	public static void main(final String[] args) {
-
-		// Session session = null;
-		// final Vector<Location> locations = DataQuery.testLocations(session);
-		// final Vector<UsenetUser> users = DataQuery.testUsenetUsers(locations,
-		// session);
-		// final Vector<Message> messages = DataQuery.testMessages(users,
-		// session);
-		// final Vector<NewsGroup> groups = DataQuery.testNewsgroups(messages,
-		// session);
-		// DataQuery.testTopics(groups, session);
-		DataQuery.logger.warn("DONE");
-	}
-
 	/**
+	 * Test locations.
+	 *
 	 * @param session
-	 * @param args
-	 * @return
+	 *            the session
+	 * @return the vector
 	 */
-	public static Vector<Location> testLocations(Session session) {
+	public Vector<Location> testLocations(Session session) {
 		DataQuery.logger.debug("testLocations");
 
 		DataQuery.logger.warn("ALL COUNTRIES");
-		DataQuery.logger.warn(DataQuery.getLocations(null, session, true));
+		DataQuery dataQuery = getInstance();
+		DataQuery.logger.warn(dataQuery.getLocations(null, session, true));
 
 		DataQuery.logger.warn("UNITED STATES");
 		final Vector<String> countries = new Vector<String>();
 		countries.add("UNITED STATES");
-		final Vector<Location> locations = DataQuery.getLocations(countries,
-				session, true);
+		final Vector<Location> locations = dataQuery.getLocations(countries, session, true);
 		DataQuery.logger.warn(locations);
 		return locations;
 
-	}
-
-	protected DataQuery() {
 	}
 
 }

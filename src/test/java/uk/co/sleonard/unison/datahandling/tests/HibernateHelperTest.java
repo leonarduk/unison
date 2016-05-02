@@ -1,15 +1,12 @@
 package uk.co.sleonard.unison.datahandling.tests;
 
-import junit.framework.TestCase;
-
 import static org.junit.Assert.fail;
 
 import org.hibernate.Session;
 import org.junit.Before;
-import org.junit.Test;
 
-import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
+import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 
 public class HibernateHelperTest {
 

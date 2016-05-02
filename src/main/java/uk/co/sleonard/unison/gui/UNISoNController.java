@@ -567,7 +567,7 @@ public class UNISoNController extends Observable {
 
 		UNISoNController.logger.debug("refreshDataFromDatabase");
 
-		this.messagesFilter = DataQuery.getMessages(this.selectedMessages, this
+		this.messagesFilter = DataQuery.getInstance().getMessages(this.selectedMessages, this
 				.getSelectedPosters(), session, this.fromDate, this.toDate,
 				this.filtered, this.getSelectedNewsgroups(), this
 						.getSelectedCountries());

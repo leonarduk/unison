@@ -214,7 +214,7 @@ public class DataQuery {
 				sqlBuffer = addWhereClause(sqlBuffer, whereClauses);
 			}
 		}
-		return (Vector<Message>) UNISoNController.getInstance().helper().runQuery(sqlBuffer.toString(), session);
+		return (Vector<Message>) helper.runQuery(sqlBuffer.toString(), session);
 	}
 
 	/**

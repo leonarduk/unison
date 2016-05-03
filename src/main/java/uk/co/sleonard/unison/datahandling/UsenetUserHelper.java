@@ -123,30 +123,4 @@ public class UsenetUserHelper {
 		return emailAddress;
 	}
 
-	public static void main(final String[] args) {
-		final UsenetUserHelper test = new UsenetUserHelper();
-		test.testEmailToUser("Steve <steve@sleonard.co.uk>", null);
-		test.testEmailToUser("<steve@sleonard.co.uk> Steve", "localhost");
-		test.testEmailToUser("<steve@sleonard.co.uk>", "localhost");
-		test.testEmailToUser("\"Steve\" <steve@sleonard.co.uk>", "localhost");
-		test.testEmailToUser("steve@sleonard.co.uk", "localhost");
-		test.testEmailToUser("steve@sleonard.co.uk (steve)", "localhost");
-		test.testEmailToUser("(steve) steve@sleonard.co.uk ", "localhost");
-		test.testEmailToUser("() steve@sleonard.co.uk ", "localhost");
-		test.testEmailToUser("steve ", "localhost");
-
-	}
-
-	public static String toString(final UsenetUser user) {
-		return ("Name:" + user.getName() + " eMail: " + user.getEmail()
-				+ " Gender: " + user.getGender() + " IP: " + user
-				.getIpaddress());
-	}
-
-	private void testEmailToUser(final String emailString,
-			final String ipAddress) {
-		final EmailAddress user = UsenetUserHelper.parseFromField(emailString,
-				ipAddress);
-		UsenetUserHelper.logger.info(user.toString());
-	}
 }

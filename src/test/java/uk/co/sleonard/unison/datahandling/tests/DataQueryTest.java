@@ -6,12 +6,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import org.hibernate.Session;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Matchers;
 
@@ -19,7 +21,10 @@ import uk.co.sleonard.unison.datahandling.DataQuery;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.DAO.Location;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
+import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
+
+import com.ibm.icu.util.Calendar;
 
 /**
  * The Class DataQueryTest.
@@ -36,6 +41,9 @@ public class DataQueryTest {
 		dataQuery = new DataQuery(helper);
 	}
 
+	/**
+	 * Test get location.
+	 */
 	@Test
 	public void testGetLocations() {
 		Vector<String> countries = new Vector<>();
@@ -50,6 +58,9 @@ public class DataQueryTest {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * Test get location string.
+	 */
 	@Test
 	public void testGetLocationString() {
 		Vector<String> countries = new Vector<>();
@@ -81,10 +92,32 @@ public class DataQueryTest {
 
 	}
 
-	@Ignore
+	/**
+	 * Test get messages.
+	 */
 	@Test
 	public void testGetMessages() {
-
+		Vector messages = new Vector<Message>();
+		Vector<UsenetUser> users = new Vector<>();
+		List<NewsGroup> news = new ArrayList<>();
+		Set<String> countries = new HashSet<>();
+		Date date = Calendar.getInstance().getTime();
+		
+		messages.addElement(new Message());
+		users.addElement(new UsenetUser());
+		news.add(new NewsGroup());
+		countries.add("Brazil");
+		Session session = mock(Session.class);
+		boolean filtered = true;
+		when(helper.runQuery(Matchers.anyString(), Matchers.any(Session.class))).thenReturn(messages);
+		Vector<Message> actual = dataQuery.getMessages(messages, users, session,date,date,filtered,news,countries); //If filtered is true
+		Vector expected = messages;
+		assertEquals(expected, actual);
+		filtered = false;
+		actual = dataQuery.getMessages(messages, users, session,date,date,filtered,news,countries); //If filtered is false
+		assertEquals(expected, actual);
+		actual = dataQuery.getMessages(null, null, session,null,null,filtered,null,null); //If all parameters is null
+		assertEquals(expected, actual);
 	}
 
 	/**

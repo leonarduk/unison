@@ -40,10 +40,9 @@ public class HibernateHelperTest {
 	@Before
 	public void setUp() throws Exception {
 		UNISoNController uniController = mock(UNISoNController.class);
-		helper = new HibernateHelper(uniController);
-		session = mock(Session.class);
+		this.helper = new HibernateHelper(uniController);
+		this.session = mock(Session.class);
 	}
-
 	/**
 	 * Test create location.
 	 */
@@ -59,14 +58,14 @@ public class HibernateHelperTest {
 	@Test
 	public void testFetchAll() {
 		String queryExpected = "from uk.co.sleonard.unison.datahandling.DAO.Location";
-		Vector expected = new Vector<>();
-		expected.addElement(new Location());
+		Vector<Location> expected = new Vector<>();
+		expected.add(new Location());
 		Query query = mock(Query.class);
 		
-		when(session.createQuery(queryExpected)).thenReturn(query);
-		when(helper.runQuery(query)).thenReturn(expected);
+		when(this.session.createQuery(queryExpected)).thenReturn(query);
+		when(this.helper.runQuery(query, Location.class)).thenReturn(expected);
 		try{
-			List<Location> actual = (List<Location>) helper.fetchAll(Location.class, session);
+			List<Location> actual = (List<Location>) this.helper.fetchAll(Location.class, this.session);
 			assertEquals(expected.size(), actual.size());
 		}catch (NullPointerException e){
 			fail(e.getMessage());
@@ -80,13 +79,13 @@ public class HibernateHelperTest {
 	@Test
 	public void testFetchBaseNewsGroups() {
 		String queryExpected = "from uk.co.sleonard.unison.datahandling.DAO.NewsGroup where lastnode is true";
-		Vector expected = new Vector<>();
+		Vector<NewsGroup> expected = new Vector<>();
 		expected.addElement(new NewsGroup());
 		Query query = mock(Query.class);
-		when(session.createQuery(queryExpected)).thenReturn(query);
-		when(helper.runQuery(query)).thenReturn(expected);
+		when(this.session.createQuery(queryExpected)).thenReturn(query);
+		when(this.helper.runQuery(query, NewsGroup.class)).thenReturn(expected);
 		try{
-			List<NewsGroup> actual = (List<NewsGroup>) helper.fetchBaseNewsGroups(session);
+			List<NewsGroup> actual = (List<NewsGroup>) this.helper.fetchBaseNewsGroups(this.session);
 			assertEquals(expected.size(), actual.size());
 		}catch (NullPointerException e){
 			fail(e.getMessage());
@@ -100,9 +99,9 @@ public class HibernateHelperTest {
 	public void testFetchOrInsert() {
 		List<Object> list = new ArrayList<>();
 		IpAddress expected = new IpAddress();
-		IpAddress actual = (IpAddress) helper.fetchOrInsert(session, expected, list);
+		IpAddress actual = (IpAddress) this.helper.fetchOrInsert(this.session, expected, list);
 		try{
-			verify(session).saveOrUpdate(Matchers.any());		//Verify if method was called (saveOrUpdate)
+			verify(this.session).saveOrUpdate(Matchers.any());		//Verify if method was called (saveOrUpdate)
 		}catch (Exception e){
 			fail(e.getMessage());
 		}
@@ -119,15 +118,15 @@ public class HibernateHelperTest {
 		String query = "uk.co.sleonard.unison.datahandling.DAO.Message" + ".findByKey";
 		Query queryMock = mock(Query.class);
 		
-		when(session.getNamedQuery(query)).thenReturn(queryMock);
+		when(this.session.getNamedQuery(query)).thenReturn(queryMock);
 		when(queryMock.uniqueResult()).thenReturn(expected);
 		try{
-			Message actual = (Message) helper.findByKey(1, session, Message.class);
+			Message actual = (Message) this.helper.findByKey(1, this.session, Message.class);
 			assertEquals(expected, actual);
 			actual = null;
 			try{
 				when(queryMock.uniqueResult()).thenThrow(NonUniqueResultException.class);
-				actual = (Message) helper.findByKey(1, session, Message.class);		//If throw Exception 
+				actual = (Message) this.helper.findByKey(1, this.session, Message.class);		//If throw Exception 
 			}catch (RuntimeException e){
 				assertNull(actual);
 			}
@@ -146,15 +145,15 @@ public class HibernateHelperTest {
 		String query = "uk.co.sleonard.unison.datahandling.DAO.Message" + ".findByKey";
 		Query queryMock = mock(Query.class);
 		
-		when(session.getNamedQuery(query)).thenReturn(queryMock);
+		when(this.session.getNamedQuery(query)).thenReturn(queryMock);
 		when(queryMock.uniqueResult()).thenReturn(expected);
 		try{
-			Message actual = (Message) helper.findByKey("key", session, Message.class);
+			Message actual = (Message) this.helper.findByKey("key", this.session, Message.class);
 			assertEquals(expected, actual);
 			actual = null;
 			try{
 				when(queryMock.uniqueResult()).thenThrow(NonUniqueResultException.class);
-				actual = (Message) helper.findByKey("key", session, Message.class);		//If throw Exception 
+				actual = (Message) this.helper.findByKey("key", this.session, Message.class);		//If throw Exception 
 			}catch (RuntimeException e){
 				assertNull(actual);
 			}
@@ -178,7 +177,7 @@ public class HibernateHelperTest {
 	 */
 	@Test
 	public void testGenerateSchema() {
-		helper.generateSchema();
+		this.helper.generateSchema();
 	}
 
 	/**
@@ -187,10 +186,10 @@ public class HibernateHelperTest {
 	@Test
 	public void testGetGoogleMapURL() {
 		String expected = "http://maps.google.com/maps?f=q&hl=en&geocode=&q=" + "Houston" + "&ie=UTF8&z=12&om=1";
-		String actual = helper.getGoogleMapURL("Houston");
+		String actual = this.helper.getGoogleMapURL("Houston");
 		assertEquals(expected, actual);			//If city is Houston
 		expected = "UNKNOWN LOCATION";
-		actual = helper.getGoogleMapURL("(Private Address)");
+		actual = this.helper.getGoogleMapURL("(Private Address)");
 		assertEquals(expected, actual);			//If Private Address
 	}
 
@@ -200,7 +199,7 @@ public class HibernateHelperTest {
 	@Test
 	public void testGetHibernateSession() {
 		try {
-			Session session = helper.getHibernateSession();
+			Session session = this.helper.getHibernateSession();
 			assertNotNull(session);
 		} catch (UNISoNException e) {
 			fail(e.getMessage());
@@ -300,7 +299,7 @@ public class HibernateHelperTest {
 				+ " group by n.fullname " + " order by total desc";
 
 		try {
-			helper.getListResults(query, NewsGroup.class, session);
+			this.helper.getListResults(query, NewsGroup.class, session);
 
 		} catch (Exception e) {
 			fail("ERROR" + e.getMessage());

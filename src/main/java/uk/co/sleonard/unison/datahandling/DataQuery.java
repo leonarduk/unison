@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package uk.co.sleonard.unison.datahandling;
 
 import java.text.SimpleDateFormat;
@@ -18,6 +21,7 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.gui.UNISoNController;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class DataQuery.
  */
@@ -26,6 +30,7 @@ public class DataQuery {
 	/** The logger. */
 	private static Logger logger = Logger.getLogger("DataQuery");
 
+	/** The helper. */
 	private HibernateHelper helper;
 
 	/**
@@ -35,6 +40,11 @@ public class DataQuery {
 		this(UNISoNController.getInstance().helper());
 	}
 
+	/**
+	 * Instantiates a new data query.
+	 *
+	 * @param helper the helper
+	 */
 	public DataQuery(HibernateHelper helper) {
 		this.helper = helper;
 	}
@@ -48,9 +58,19 @@ public class DataQuery {
 		return DataQueryHelper.getInstance();
 	}
 
+	/**
+	 * The Class DataQueryHelper.
+	 */
 	static class DataQueryHelper {
+		
+		/** The instance. */
 		static DataQuery instance = new DataQuery();
 
+		/**
+		 * Gets the single instance of DataQueryHelper.
+		 *
+		 * @return single instance of DataQueryHelper
+		 */
 		static DataQuery getInstance() {
 			return instance;
 		}
@@ -107,11 +127,17 @@ public class DataQuery {
 		if (filtered && null != countries && countries.size() > 0) {
 			final StringBuffer sqlBuffer = getLocationsSQL(countries);
 
-			return (Vector<Location>) helper.runQuery(sqlBuffer.toString(), session);
+			return (Vector<Location>) helper.runQuery(sqlBuffer.toString(), session, Location.class );
 		}
 		return null;
 	}
 
+	/**
+	 * Gets the locations sql.
+	 *
+	 * @param countries the countries
+	 * @return the locations sql
+	 */
 	public StringBuffer getLocationsSQL(final Vector<String> countries) {
 		final StringBuffer sqlBuffer = getBaseQuery(Location.class);
 		if ((null != countries)) {
@@ -214,7 +240,7 @@ public class DataQuery {
 				sqlBuffer = addWhereClause(sqlBuffer, whereClauses);
 			}
 		}
-		return (Vector<Message>) helper.runQuery(sqlBuffer.toString(), session);
+		return helper.runQuery(sqlBuffer.toString(), session, Message.class);
 	}
 
 	/**
@@ -228,7 +254,7 @@ public class DataQuery {
 	 */
 	public String join(Collection s, String delimiter) {
 		StringBuffer buffer = new StringBuffer();
-		Iterator iter = s.iterator();
+		Iterator<String> iter = s.iterator();
 		while (iter.hasNext()) {
 			buffer.append(iter.next());
 			if (iter.hasNext()) {

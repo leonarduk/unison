@@ -191,10 +191,10 @@ public class HibernateHelper {
 		return poster;
 	}
 
-	public List<?> fetchAll(final Class<?> classtype, Session session)
+	public <T> List<T> fetchAll(final Class<T> classtype, Session session)
 			throws GenericJDBCException {
 		final String query = "from " + classtype.getName();
-		final List<?> returnVal = runQuery(query, session);
+		final List<T> returnVal = runQuery(query, session, classtype);
 		return returnVal;
 	}
 
@@ -204,7 +204,7 @@ public class HibernateHelper {
 		final String query = "from " + NewsGroup.class.getName()
 				+ " where lastnode is true";
 		final List<NewsGroup> returnVal = (List<NewsGroup>) runQuery(query,
-				session);
+				session, NewsGroup.class);
 		return returnVal;
 	}
 
@@ -529,9 +529,9 @@ public class HibernateHelper {
 
 	}
 
-	public Vector<ResultRow> getListResults(String query, Class<?> type,
+	public <T> Vector<ResultRow> getListResults(String query, Class<T> type,
 			Session session) {
-		List<?> resultsRows = runSQLQuery(query, session);
+		List<T> resultsRows = runSQLQuery(query, session,type);
 		Vector<ResultRow> resultsVector = new Vector<ResultRow>();
 		for (Object next : resultsRows) {
 			Object[] results = (Object[]) next;
@@ -640,12 +640,12 @@ public class HibernateHelper {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Vector<?> runQuery(final Query query) {
+	public <T> Vector<T> runQuery(final Query query,Class<T> type) {
 		logger.debug("runSQL: " + query);
 		// TODO create prepared statements
 		Vector<?> returnVal = null;
 		try {
-			returnVal = new Vector<Object>(query.list());
+			returnVal = new Vector<T>(query.list());
 		} catch (final GenericJDBCException dbe) {
 			throw dbe;
 		} catch (final HibernateException e) {
@@ -654,18 +654,18 @@ public class HibernateHelper {
 		if (null == returnVal) {
 			returnVal = new Vector<Object>();
 		}
-		return returnVal;
+		return (Vector<T>) returnVal;
 	}
 
-	public Vector<?> runQuery(final String query, Session hibernateSession) {
+	public <T> Vector<T> runQuery(final String query, Session hibernateSession, Class<T> type)  {
 		logger.debug("runSQL: " + query);
 		final Query createQuery = hibernateSession.createQuery(query);
-		return runQuery(createQuery);
+		return runQuery(createQuery, type);
 	}
 
-	public List<?> runSQLQuery(final String query, Session session) {
+	public <T> List<T> runSQLQuery(final String query, Session session, Class<T> type) {
 		logger.debug("runSQL: " + query);
-		return runQuery(session.createSQLQuery(query));
+		return runQuery(session.createSQLQuery(query),type);
 	}
 
 	public synchronized void storeNewsgroups(final List<String> newsgroupsList,

@@ -191,10 +191,20 @@ public class HibernateHelper {
 		return poster;
 	}
 
+	/**
+	 * Fetch all.
+	 *
+	 * @param <T> the generic type
+	 * @param classtype the classtype
+	 * @param session the session
+	 * @return the list
+	 * @throws GenericJDBCException the generic jdbc exception
+	 */
 	public <T> List<T> fetchAll(final Class<T> classtype, Session session)
 			throws GenericJDBCException {
 		final String query = "from " + classtype.getName();
-		final List<T> returnVal = runQuery(query, session, classtype);
+		final List<T
+		> returnVal = runQuery(query, session, classtype);
 		return returnVal;
 	}
 
@@ -246,7 +256,8 @@ public class HibernateHelper {
 	 * 
 	 * @param key
 	 * @param session
-	 * @param objclass
+	 * @+
+	 * aram objclass
 	 * @return
 	 * @throws HibernateException
 	 */

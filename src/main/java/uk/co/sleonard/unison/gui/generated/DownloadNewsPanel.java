@@ -253,7 +253,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements
         getLocationCheck.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
         hostCombo.setEditable(true);
-        hostCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "freetext.usenetserver.com", "textnews.news.cambrium.nl", "news-archive.icm.edu.pl", "news.edisontel.com", "news.ciril.fr", "newsarchiv.arcor-online.net" }));
+        hostCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] {  "news.mixmin.net","news-archive.icm.edu.pl", }));
         hostCombo.setToolTipText("Look at http://freeusenetnews.com/newspage.html?sortby=articles for other hosts if these are broken. Can enter name here.");
 
         availableNewsgroups.setModel(getAvailableGroupsModel());

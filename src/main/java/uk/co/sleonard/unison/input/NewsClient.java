@@ -90,7 +90,7 @@ public class NewsClient extends NNTPClient {
 	public Set<NNTPNewsGroup> listNNTPNewsgroups(final String wildcard,
 			String nntpserver) throws UNISoNException {
 
-		final Set<NNTPNewsGroup> groupSet = new TreeSet<NNTPNewsGroup>();
+		final Set<NNTPNewsGroup> groupSet = new TreeSet<>();
 
 		try {
 			this.connect(nntpserver);

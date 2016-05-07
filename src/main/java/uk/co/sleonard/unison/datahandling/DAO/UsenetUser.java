@@ -7,6 +7,7 @@ package uk.co.sleonard.unison.datahandling.DAO;
  * 
  */
 public class UsenetUser implements java.io.Serializable {
+	@Override
 	public boolean equals(Object object) {
 		if (this == object) {
 			return true;
@@ -23,6 +24,7 @@ public class UsenetUser implements java.io.Serializable {
 		return true;
 	}
 
+	@Override
 	public int hashCode() {
 		int hashCode = 0;
 		hashCode = 29 * hashCode + id;

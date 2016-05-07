@@ -10,6 +10,7 @@ import java.util.Set;
  * 
  */
 public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
+	@Override
 	public boolean equals(Object object) {
 		if (!(object instanceof NewsGroup)) {
 			return false;
@@ -22,6 +23,7 @@ public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
 		return true;
 	}
 
+	@Override
 	public int hashCode() {
 		int hashCode = 0;
 		hashCode = 29 * hashCode + id;
@@ -194,6 +196,7 @@ public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
 		return getFullName();
 	}
 
+	@Override
 	public int compareTo(NewsGroup that) {
 	return this.getFullName().compareTo(that.getFullName());
 	}

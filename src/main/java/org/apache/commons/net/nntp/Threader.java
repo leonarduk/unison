@@ -85,7 +85,7 @@ public class Threader {
 	 */
 	private void buildContainer(Threadable threadable) {
 		String id = threadable.messageThreadId();
-		ThreadContainer container = (ThreadContainer) idTable.get(id);
+		ThreadContainer container = idTable.get(id);
 
 		// A ThreadContainer exists for this id already. This should be a
 		// forward reference, but may
@@ -120,7 +120,7 @@ public class Threader {
 			String[] references = threadable.messageThreadReferences();
 			for (int i = 0; i < references.length; ++i) {
 				String refString = references[i];
-				ThreadContainer ref = (ThreadContainer) idTable.get(refString);
+				ThreadContainer ref = idTable.get(refString);
 
 				// if this id doesnt have a container, create one
 				if (ref == null) {
@@ -198,7 +198,7 @@ public class Threader {
 
 		while (iter.hasNext()) {
 			Object key = iter.next();
-			ThreadContainer c = (ThreadContainer) idTable.get(key);
+			ThreadContainer c = idTable.get(key);
 			if (c.parent == null) {
 				if (c.next != null)
 					throw new RuntimeException("c.next is " + c.next.toString());
@@ -303,7 +303,7 @@ public class Threader {
 			if (subj == null || subj == "")
 				continue;
 
-			ThreadContainer old = (ThreadContainer) subjectTable.get(subj);
+			ThreadContainer old = subjectTable.get(subj);
 
 			// Add this container to the table iff:
 			// - There exists no container with this subject
@@ -349,7 +349,7 @@ public class Threader {
 			if (subj == null || subj == "")
 				continue;
 
-			ThreadContainer old = (ThreadContainer) subjectTable.get(subj);
+			ThreadContainer old = subjectTable.get(subj);
 
 			if (old == c) // That's us
 				continue;

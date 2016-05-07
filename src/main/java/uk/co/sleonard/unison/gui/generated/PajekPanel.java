@@ -270,14 +270,17 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 		incMissingCheck.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
 		incMissingCheck.setMargin(new java.awt.Insets(0, 0, 0, 0));
 		incMissingCheck.addAncestorListener(new javax.swing.event.AncestorListener() {
+			@Override
 			public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
 				incMissingCheckAncestorMoved(evt);
 			}
 
+			@Override
 			public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
 				incMissingCheckAncestorAdded(evt);
 			}
 
+			@Override
 			public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
 			}
 		});
@@ -306,6 +309,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 
 		previewButton.setText("Refresh");
 		previewButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				previewButtonActionPerformed(evt);
 			}
@@ -314,6 +318,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 		saveButton.setText("Save To Pajek");
 		saveButton.setToolTipText("Save to Pajek Network file (as in Pajek File Preview tab)");
 		saveButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				saveButtonActionPerformed(evt);
 			}
@@ -341,6 +346,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 		csvButton.setText("Save to CSV");
 		csvButton.setToolTipText("Save to Comma-separated  file (as in Matrixtab).  This can be read into Excel.");
 		csvButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				csvButtonActionPerformed(evt);
 			}

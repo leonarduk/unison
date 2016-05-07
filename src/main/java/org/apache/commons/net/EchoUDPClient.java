@@ -54,7 +54,8 @@ public final class EchoUDPClient extends DiscardUDPClient
      * @exception IOException If an error occurs during the datagram send
      *     operation.
      ***/
-    public void send(byte[] data, int length, InetAddress host)
+    @Override
+	public void send(byte[] data, int length, InetAddress host)
     throws IOException
     {
         send(data, length, host, DEFAULT_PORT);
@@ -62,7 +63,8 @@ public final class EchoUDPClient extends DiscardUDPClient
 
 
     /*** Same as <code> send(data, data.length, host) </code> ***/
-    public void send(byte[] data, InetAddress host) throws IOException
+    @Override
+	public void send(byte[] data, InetAddress host) throws IOException
     {
         send(data, data.length, host, DEFAULT_PORT);
     }

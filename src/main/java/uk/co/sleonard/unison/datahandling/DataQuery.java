@@ -127,7 +127,7 @@ public class DataQuery {
 		if (filtered && null != countries && countries.size() > 0) {
 			final StringBuffer sqlBuffer = getLocationsSQL(countries);
 
-			return (Vector<Location>) helper.runQuery(sqlBuffer.toString(), session, Location.class );
+			return helper.runQuery(sqlBuffer.toString(), session, Location.class );
 		}
 		return null;
 	}

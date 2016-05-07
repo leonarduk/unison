@@ -110,7 +110,7 @@ public class PajekNetworkFile {
 		// Then list all the vertices
 		final Iterator<String> iter = this.vertices.iterator();
 		while (iter.hasNext()) {
-			final String nodeName = (String) iter.next();
+			final String nodeName = iter.next();
 			final int nodeIndex = this.getVerticeIndex(nodeName);
 			printStream.println(nodeIndex + " \"" + nodeName + "\"");
 		}
@@ -121,7 +121,7 @@ public class PajekNetworkFile {
 			final Iterator<Relationship> linksIter = this.undirectedLinks
 					.iterator();
 			while (linksIter.hasNext()) {
-				final Relationship link = (Relationship) linksIter.next();
+				final Relationship link = linksIter.next();
 				printStream.println(link.getOwner() + " " + link.getTarget()
 						+ " " + link.getValue());
 			}
@@ -133,7 +133,7 @@ public class PajekNetworkFile {
 			final Iterator<Relationship> linksIter = this.directedLinks
 					.iterator();
 			while (linksIter.hasNext()) {
-				final Relationship link = (Relationship) linksIter.next();
+				final Relationship link = linksIter.next();
 				printStream.println(link.getOwner() + " " + link.getTarget()
 						+ " " + link.getValue());
 			}

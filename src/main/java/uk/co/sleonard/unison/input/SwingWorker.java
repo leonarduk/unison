@@ -105,6 +105,7 @@ public abstract class SwingWorker extends Observable implements Runnable {
 		this.threadVar.clear();
 	}
 
+	@Override
 	public void run() {
 		try {
 			this.setValue(this.construct());
@@ -112,6 +113,7 @@ public abstract class SwingWorker extends Observable implements Runnable {
 			this.threadVar.clear();
 		}
 		final Runnable doFinished = new Runnable() {
+			@Override
 			public void run() {
 				SwingWorker.this.finished();
 			}

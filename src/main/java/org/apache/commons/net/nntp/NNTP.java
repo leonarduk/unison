@@ -167,6 +167,7 @@ public class NNTP extends SocketClient {
 	 * and {@link #_writer_} to wrap {@link SocketClient#_input_} and
 	 * {@link SocketClient#_output_}.
 	 **************************************************************************/
+	@Override
 	protected void _connectAction_() throws IOException {
 		super._connectAction_();
 		_reader_ = new BufferedReader(new InputStreamReader(_input_,
@@ -212,6 +213,7 @@ public class NNTP extends SocketClient {
 	 * @exception IOException
 	 *                If an error occurs while disconnecting.
 	 **************************************************************************/
+	@Override
 	public void disconnect() throws IOException {
 		super.disconnect();
 		_reader_ = null;

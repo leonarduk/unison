@@ -22,6 +22,7 @@ import java.util.Vector;
 import javax.naming.NamingException;
 import javax.swing.JOptionPane;
 
+import org.apache.log4j.Category;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
@@ -29,7 +30,6 @@ import org.hibernate.MappingException;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -213,7 +213,7 @@ public class HibernateHelper {
 			throws GenericJDBCException {
 		final String query = "from " + NewsGroup.class.getName()
 				+ " where lastnode is true";
-		final List<NewsGroup> returnVal = (List<NewsGroup>) runQuery(query,
+		final List<NewsGroup> returnVal = runQuery(query,
 				session, NewsGroup.class);
 		return returnVal;
 	}
@@ -524,10 +524,10 @@ public class HibernateHelper {
 
 				// FIXME - couldn't stop the NoInitialContext warning so this
 				// hack will stop it being displayed
-				Level level = Logger.getRoot().getLevel();
-				Logger.getRoot().setLevel(Level.FATAL);
+				Level level = Category.getRoot().getLevel();
+				Category.getRoot().setLevel(Level.FATAL);
 				sessionFactory = config.buildSessionFactory();
-				Logger.getRoot().setLevel(level);
+				Category.getRoot().setLevel(level);
 
 			} catch (Throwable e) {
 				e.printStackTrace();

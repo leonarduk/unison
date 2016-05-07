@@ -77,7 +77,7 @@ public class HibernateHelperTest {
 		when(this.session.createQuery(queryExpected)).thenReturn(query);
 		when(this.helper.runQuery(query, Location.class)).thenReturn(expected);
 		try{
-			List<Location> actual = (List<Location>) this.helper.fetchAll(Location.class, this.session);
+			List<Location> actual = this.helper.fetchAll(Location.class, this.session);
 			assertEquals(expected.size(), actual.size());
 		}catch (NullPointerException e){
 			fail(e.getMessage());
@@ -97,7 +97,7 @@ public class HibernateHelperTest {
 		when(this.session.createQuery(queryExpected)).thenReturn(query);
 		when(this.helper.runQuery(query, NewsGroup.class)).thenReturn(expected);
 		try{
-			List<NewsGroup> actual = (List<NewsGroup>) this.helper.fetchBaseNewsGroups(this.session);
+			List<NewsGroup> actual = this.helper.fetchBaseNewsGroups(this.session);
 			assertEquals(expected.size(), actual.size());
 		}catch (NullPointerException e){
 			fail(e.getMessage());

@@ -36,6 +36,7 @@ import javax.swing.border.BevelBorder;
 
 public class JSplashScreen extends JDialog {
 	class CloseJNSplash implements Runnable {
+		@Override
 		public synchronized void run() {
 			JSplashScreen.this.setVisible(false);
 			JSplashScreen.this.dispose();

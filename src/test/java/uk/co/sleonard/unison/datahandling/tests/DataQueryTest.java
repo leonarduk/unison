@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import org.easymock.internal.matchers.Any;
 import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +25,6 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 
 import com.ibm.icu.util.Calendar;
-import com.sun.msv.datatype.xsd.regex.Match;
 
 /**
  * The Class DataQueryTest.

@@ -16,7 +16,6 @@ public class UNISoNException extends Exception {
 		// TODO Auto-generated constructor stub
 	}
 
-	
 	/**
 	 * Instantiates a new UNI so n exception.
 	 *

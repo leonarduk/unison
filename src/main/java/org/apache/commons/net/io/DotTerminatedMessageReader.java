@@ -79,7 +79,8 @@ public final class DotTerminatedMessageReader extends Reader
      * @exception IOException If an error occurs while reading the underlying
      *            stream.
      */
-    public int read() throws IOException
+    @Override
+	public int read() throws IOException
     {
         int ch;
 
@@ -176,7 +177,8 @@ public final class DotTerminatedMessageReader extends Reader
      * @exception IOException If an error occurs in reading the underlying
      *            stream.
      */
-    public int read(char[] buffer) throws IOException
+    @Override
+	public int read(char[] buffer) throws IOException
     {
         return read(buffer, 0, buffer.length);
     }
@@ -195,7 +197,8 @@ public final class DotTerminatedMessageReader extends Reader
      * @exception IOException If an error occurs in reading the underlying
      *            stream.
      */
-    public int read(char[] buffer, int offset, int length) throws IOException
+    @Override
+	public int read(char[] buffer, int offset, int length) throws IOException
     {
         int ch, off;
         synchronized (lock)
@@ -226,7 +229,8 @@ public final class DotTerminatedMessageReader extends Reader
      * @exception IOException If an error occurs while checking the underlying
      *            stream.
      */
-    public boolean ready() throws IOException
+    @Override
+	public boolean ready() throws IOException
     {
         synchronized (lock)
         {
@@ -248,7 +252,8 @@ public final class DotTerminatedMessageReader extends Reader
      * @exception IOException  If an error occurs while reading the
      *            underlying stream.
      */
-    public void close() throws IOException
+    @Override
+	public void close() throws IOException
     {
         synchronized (lock)
         {

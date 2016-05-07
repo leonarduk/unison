@@ -11,6 +11,7 @@ public class IpAddress implements java.io.Serializable {
 	 * Need to implement this to avoid NonUniqueObjectException //TODO
 	 * http://forum.springframework.org/showthread.php?t=22261
 	 */
+	@Override
 	public int hashCode() {
 		int hashCode = 0;
 		hashCode = 29 * hashCode + id;
@@ -18,6 +19,7 @@ public class IpAddress implements java.io.Serializable {
 		return hashCode;
 	}
 
+	@Override
 	public boolean equals(Object object) {
 		if (this == object) {
 			return true;

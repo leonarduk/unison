@@ -45,6 +45,7 @@ public class NewsClient extends NNTPClient {
 	/**
 	 * Disconnect from the News Server
 	 */
+	@Override
 	public void disconnect() {
 		try {
 			this.logout();
@@ -61,6 +62,7 @@ public class NewsClient extends NNTPClient {
 	 * 
 	 * @throws UNISoNException
 	 */
+	@Override
 	public void connect(final String server) throws UNISoNException {
 		final int port = 119;
 		final String username = null;

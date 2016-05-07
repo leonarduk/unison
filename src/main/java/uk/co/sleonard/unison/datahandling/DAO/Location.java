@@ -10,6 +10,7 @@ import java.util.List;
  * 
  */
 public class Location implements java.io.Serializable {
+	@Override
 	public int hashCode() {
 		int hashCode = 0;
 		hashCode = 29 * hashCode + id;
@@ -17,6 +18,7 @@ public class Location implements java.io.Serializable {
 		return hashCode;
 	}
 
+	@Override
 	public boolean equals(Object object) {
 		if (this == object) {
 			return true;

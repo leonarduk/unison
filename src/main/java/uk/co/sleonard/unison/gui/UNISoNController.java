@@ -48,6 +48,7 @@ public class UNISoNController extends Observable {
 
 	class NewsGroupComparator implements Comparator<NewsGroup> {
 
+		@Override
 		public int compare(final NewsGroup first, final NewsGroup second) {
 			return first.getName().compareTo(second.getName());
 		}
@@ -56,6 +57,7 @@ public class UNISoNController extends Observable {
 
 	public class TopicComparator implements Comparator<Topic> {
 
+		@Override
 		public int compare(final Topic first, final Topic second) {
 			return first.getSubject().compareTo(second.getSubject());
 		}
@@ -196,6 +198,7 @@ public class UNISoNController extends Observable {
 	 * @deprecated
 	 * @param newsgroup
 	 */
+	@Deprecated
 	public void connectToNewsGroup(final String newsgroup) {
 		this.setConnectingState();
 		this.showStatus("Connect to " + newsgroup);
@@ -402,7 +405,7 @@ public class UNISoNController extends Observable {
 			final Object[] array = (Object[]) iter.next();
 			final int userID = (Integer) array[1];
 
-			final List<NewsGroup> posters = (List<NewsGroup>) helper
+			final List<NewsGroup> posters = helper
 					.runQuery("from " + NewsGroup.class.getName() + " where id = " + userID, session, NewsGroup.class);
 			if (posters.size() > 0) {
 				final NewsGroup usenetUser = posters.get(0);

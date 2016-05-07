@@ -27,41 +27,82 @@ import uk.co.sleonard.unison.input.NNTPNewsGroup;
 import uk.co.sleonard.unison.utils.HttpDateObject;
 
 /**
- * 
+ * The Class DownloadNewsPanel.
+ *
  * @author Steve
  */
 public class DownloadNewsPanel extends javax.swing.JPanel implements
 		UNISoNLogger, Observer {
 
-	/**
-	 * 
-	 */
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 6581138636992116397L;
+    
+    /** The available newsgroups. */
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList availableNewsgroups;
+    private javax.swing.JList<NNTPNewsGroup> availableNewsgroups;
+    
+    /** The cancel button. */
     private javax.swing.JButton cancelButton;
+    
+    /** The download button. */
     private javax.swing.JButton downloadButton;
+    
+    /** The download progress bar. */
     private javax.swing.JProgressBar downloadProgressBar;
+    
+    /** The download progress label. */
     private javax.swing.JLabel downloadProgressLabel;
+    
+    /** The find button. */
     private javax.swing.JButton findButton;
+    
+    /** The from date field. */
     private javax.swing.JTextField fromDateField;
+    
+    /** The from date label. */
     private javax.swing.JLabel fromDateLabel;
+    
+    /** The get location check. */
     private javax.swing.JCheckBox getLocationCheck;
+    
+    /** The get text check. */
     private javax.swing.JCheckBox getTextCheck;
+    
+    /** The host combo. */
     private javax.swing.JComboBox hostCombo;
+    
+    /** The host label. */
     private javax.swing.JLabel hostLabel;
+    
+    /** The j scroll pane1. */
     private javax.swing.JScrollPane jScrollPane1;
+    
+    /** The j scroll pane3. */
     private javax.swing.JScrollPane jScrollPane3;
+    
+    /** The newsgroup field. */
     private javax.swing.JTextField newsgroupField;
+    
+    /** The newsgroup label. */
     private javax.swing.JLabel newsgroupLabel;
+    
+    /** The notes area. */
     private javax.swing.JTextArea notesArea;
+    
+    /** The pause button. */
     private javax.swing.JButton pauseButton;
+    
+    /** The to date field. */
     private javax.swing.JTextField toDateField;
+    
+    /** The to date label. */
     private javax.swing.JLabel toDateLabel;
     // End of variables declaration//GEN-END:variables
-	/** Creates new form DownloadNewsPanel */
+	/**
+     *  Creates new form DownloadNewsPanel.
+     */
 	public DownloadNewsPanel() {
-		controller = UNISoNController.getInstance();
+		this.controller = UNISoNController.getInstance();
 
 		this.initComponents();
 
@@ -86,6 +127,11 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements
 		downloadProgressLabel.setVisible(false);
 	}
 
+	/**
+	 * Download enabled.
+	 *
+	 * @param enabled the enabled
+	 */
 	private void downloadEnabled(boolean enabled) {
 		this.downloadButton.setEnabled(enabled);
 		fromDateLabel.setEnabled(enabled);
@@ -100,6 +146,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements
 		this.pauseButton.setEnabled(!enabled);
 	}
 
+	/** The available groups. */
 	private Set<NNTPNewsGroup> availableGroups;
 
 	/**
@@ -131,10 +178,11 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements
         getLocationCheck = new javax.swing.JCheckBox();
         hostCombo = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
-        availableNewsgroups = new javax.swing.JList();
+        availableNewsgroups = new javax.swing.JList<NNTPNewsGroup>();
 
         addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mousePressed(java.awt.event.MouseEvent evt) {
                 formMousePressed(evt);
             }
         });
@@ -149,7 +197,8 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements
         findButton.setText("Find groups");
         findButton.setToolTipText("Enter name or part name (* for wild chararcter) the n click here");
         findButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 findButtonActionPerformed(evt);
             }
         });
@@ -166,21 +215,24 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements
 
         downloadButton.setText("Download");
         downloadButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 downloadButtonActionPerformed(evt);
             }
         });
 
         pauseButton.setText("Pause");
         pauseButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pauseButtonActionPerformed(evt);
             }
         });
 
         cancelButton.setText("Cancel");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);
             }
         });
@@ -207,7 +259,8 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements
         availableNewsgroups.setModel(getAvailableGroupsModel());
         availableNewsgroups.setToolTipText("The number in brackets is an estimate (provided by the server) which is likely to be higher than actual number of messages as many messages are deleted.");
         availableNewsgroups.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+            @Override
+			public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 availableNewsgroupsValueChanged(evt);
             }
         });
@@ -305,17 +358,32 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements
         );
     }// </editor-fold>//GEN-END:initComponents
 
+		/**
+		 * Form mouse pressed.
+		 *
+		 * @param evt the evt
+		 */
 		private void formMousePressed(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_formMousePressed
 		// TODO add your handling code here:
 	}// GEN-LAST:event_formMousePressed
 
+	/**
+	 * Available newsgroups value changed.
+	 *
+	 * @param evt the evt
+	 */
 	private void availableNewsgroupsValueChanged(
 			javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_availableNewsgroupsValueChanged
 
 	}// GEN-LAST:event_availableNewsgroupsValueChanged
 
-	private ListModel getAvailableGroupsModel() {
-		final DefaultListModel model = new DefaultListModel();
+	/**
+	 * Gets the available groups model.
+	 *
+	 * @return the available groups model
+	 */
+	private ListModel<NNTPNewsGroup> getAvailableGroupsModel() {
+		final DefaultListModel<NNTPNewsGroup> model = new DefaultListModel<NNTPNewsGroup>();
 
 		if (null != availableGroups) {
 			for (final Iterator<NNTPNewsGroup> iter = availableGroups
@@ -328,11 +396,13 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements
 	}
 
 	/**
-	 * @param args
-	 *            the command line arguments
+	 * The main method.
+	 *
+	 * @param args            the command line arguments
 	 */
 	public static void main(final String args[]) {
 		java.awt.EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				UNISoNTabbedFrame frame = new UNISoNTabbedFrame();
 				frame.setVisible(true);
@@ -343,10 +413,20 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements
 		});
 	}
 
+	/**
+	 * Cancel button action performed.
+	 *
+	 * @param evt the evt
+	 */
 	private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cancelButtonActionPerformed
 		controller.getHeaderDownloader().fullstop();
 	}// GEN-LAST:event_cancelButtonActionPerformed
 
+	/**
+	 * Pause button action performed.
+	 *
+	 * @param evt the evt
+	 */
 	private void pauseButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_pauseButtonActionPerformed
 		HeaderDownloadWorker headerDownloader = controller
 				.getHeaderDownloader();
@@ -359,9 +439,17 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements
 		}
 	}// GEN-LAST:event_pauseButtonActionPerformed
 
+	/** The parser. */
 	HttpDateObject parser = HttpDateObject.getParser();
+	
+	/** The controller. */
 	private UNISoNController controller;
 
+	/**
+	 * Download button action performed.
+	 *
+	 * @param evt the evt
+	 */
 	private void downloadButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_downloadButtonActionPerformed
 		downloadEnabled(false);
 
@@ -397,15 +485,28 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements
 		}
 	}// GEN-LAST:event_downloadButtonActionPerformed
 
+	/* (non-Javadoc)
+	 * @see uk.co.sleonard.unison.gui.UNISoNLogger#log(java.lang.String)
+	 */
+	@Override
 	public void log(String message) {
 		notesArea.append(message + "\n");
 	}
 
+	/* (non-Javadoc)
+	 * @see uk.co.sleonard.unison.gui.UNISoNLogger#alert(java.lang.String)
+	 */
+	@Override
 	public void alert(String message) {
 		log(message);
 		UNISoNController.getInstance().showAlert(message);
 	}
 
+	/**
+	 * Find button action performed.
+	 *
+	 * @param evt the evt
+	 */
 	private void findButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_findButtonActionPerformed
 		String host = hostCombo.getSelectedItem().toString().trim();
 		controller.setNntpHost(host);
@@ -432,6 +533,9 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements
 
 	}// GEN-LAST:event_findButtonActionPerformed
 
+	/* (non-Javadoc)
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
 	@Override
 	public void update(Observable observable, Object arg1) {
 		if (observable instanceof HeaderDownloadWorker) {

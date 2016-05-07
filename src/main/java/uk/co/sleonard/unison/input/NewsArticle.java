@@ -86,6 +86,7 @@ public class NewsArticle implements Comparable<Object> {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
 	public int compareTo(final Object o) {
 		final int myNumber = this.getArticleNumber();
 		final int otherNumber = ((NewsArticle) o).getArticleNumber();

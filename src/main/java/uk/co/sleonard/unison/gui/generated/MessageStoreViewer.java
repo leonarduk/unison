@@ -193,6 +193,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer,
 		}
 	}
 
+	@Override
 	public void alert(String message) {
 		log(message);
 		UNISoNController.getInstance().showAlert(message);
@@ -382,6 +383,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer,
 		setPreferredSize(new java.awt.Dimension(461, 281));
 		groupsHierarchy
 				.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+					@Override
 					public void valueChanged(
 							javax.swing.event.TreeSelectionEvent evt) {
 						groupsHierarchyValueChanged(evt);
@@ -398,6 +400,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer,
 		topicsHierarchy.setAutoscrolls(true);
 		topicsHierarchy
 				.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+					@Override
 					public void valueChanged(
 							javax.swing.event.TreeSelectionEvent evt) {
 						topicsHierarchyValueChanged(evt);
@@ -424,6 +427,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer,
 
 		crosspostComboBox
 				.addActionListener(new java.awt.event.ActionListener() {
+					@Override
 					public void actionPerformed(java.awt.event.ActionEvent evt) {
 						crosspostComboBoxActionPerformed(evt);
 					}
@@ -433,16 +437,19 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer,
 			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4",
 					"Item 5" };
 
+			@Override
 			public int getSize() {
 				return strings.length;
 			}
 
+			@Override
 			public Object getElementAt(int i) {
 				return strings[i];
 			}
 		});
 		topPostersList
 				.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+					@Override
 					public void valueChanged(
 							javax.swing.event.ListSelectionEvent evt) {
 						topPostersListValueChanged(evt);
@@ -457,16 +464,19 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer,
 			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4",
 					"Item 5" };
 
+			@Override
 			public int getSize() {
 				return strings.length;
 			}
 
+			@Override
 			public Object getElementAt(int i) {
 				return strings[i];
 			}
 		});
 		topGroupsList
 				.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+					@Override
 					public void valueChanged(
 							javax.swing.event.ListSelectionEvent evt) {
 						topGroupsListValueChanged(evt);
@@ -481,16 +491,19 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer,
 			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4",
 					"Item 5" };
 
+			@Override
 			public int getSize() {
 				return strings.length;
 			}
 
+			@Override
 			public Object getElementAt(int i) {
 				return strings[i];
 			}
 		});
 		topCountriesList
 				.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+					@Override
 					public void valueChanged(
 							javax.swing.event.ListSelectionEvent evt) {
 						topCountriesListValueChanged(evt);
@@ -514,6 +527,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer,
 				.createEmptyBorder(0, 0, 0, 0));
 		missingMessagesCheck.setMargin(new java.awt.Insets(0, 0, 0, 0));
 		missingMessagesCheck.addItemListener(new java.awt.event.ItemListener() {
+			@Override
 			public void itemStateChanged(java.awt.event.ItemEvent evt) {
 				missingMessagesCheckItemStateChanged(evt);
 			}
@@ -521,6 +535,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer,
 
 		refreshButton.setText("Refresh Data");
 		refreshButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				refreshButtonActionPerformed(evt);
 			}
@@ -528,6 +543,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer,
 
 		getBodyButton.setText("Get Body");
 		getBodyButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				getBodyButtonActionPerformed(evt);
 			}
@@ -537,6 +553,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer,
 		headersButton
 				.setToolTipText("Download extra fields: location and crossposts for messages in filter");
 		headersButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				headersButtonActionPerformed(evt);
 			}
@@ -546,6 +563,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer,
 		filterToggle
 				.setToolTipText("Enter date values, select groups or posters in lists, or combination then click filter");
 		filterToggle.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				filterToggleActionPerformed(evt);
 			}
@@ -898,6 +916,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer,
 		}
 	}
 
+	@Override
 	public void log(String message) {
 		// notesArea.append(message + "\n");
 	}

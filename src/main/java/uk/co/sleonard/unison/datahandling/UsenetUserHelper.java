@@ -3,7 +3,6 @@ package uk.co.sleonard.unison.datahandling;
 import org.apache.log4j.Logger;
 
 import uk.co.sleonard.unison.datahandling.DAO.EmailAddress;
-import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 
 public class UsenetUserHelper {
 	private static Logger logger = Logger.getLogger("PopulateUsenetUser");

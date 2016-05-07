@@ -128,9 +128,10 @@ public class GraphPreviewPanel extends JPanel {
 		 * 
 		 * @see edu.uci.ics.jung.graph.decorators.VertexStringer#getLabel(edu.uci.ics.jung.graph.Vertex)
 		 */
+		@Override
 		public String getLabel(ArchetypeVertex v) {
 			if (showLabels) {
-				return (String) map.get(v);
+				return map.get(v);
 			} else {
 				return "";
 			}

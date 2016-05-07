@@ -36,6 +36,7 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
 	 */
 	public static void main(final String args[]) {
 		java.awt.EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				new UNISoNTabbedFrame().setVisible(true);
 			}
@@ -138,6 +139,7 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
 				.setToolTipText("Loads the latest data from the database");
 		refreshDBMenuItem
 				.addActionListener(new java.awt.event.ActionListener() {
+					@Override
 					public void actionPerformed(java.awt.event.ActionEvent evt) {
 						refreshDBMenuItemActionPerformed(evt);
 					}
@@ -150,6 +152,7 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
 				.setToolTipText("Brings up a DB client to view the data directly");
 		showDBclientMenuItem
 				.addActionListener(new java.awt.event.ActionListener() {
+					@Override
 					public void actionPerformed(java.awt.event.ActionEvent evt) {
 						showDBclientMenuItemActionPerformed(evt);
 					}
@@ -162,6 +165,7 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
 		exitMenuItem.setText("Exit");
 		exitMenuItem.setToolTipText("Exits the application");
 		exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				exitMenuItemActionPerformed(evt);
 			}
@@ -176,6 +180,7 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
 		deleteDBMenuItem
 				.setToolTipText("This clears all the downloaded data - warning you will need to download everything again");
 		deleteDBMenuItem.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				deleteDBMenuItemActionPerformed(evt);
 			}
@@ -188,6 +193,7 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
 		aboutMenuItem.setText("About UNISoN");
 		aboutMenuItem.setToolTipText("A little bit about this application.");
 		aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				aboutMenuItemActionPerformed(evt);
 			}

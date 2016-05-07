@@ -63,6 +63,7 @@ public final class NNTPNewsGroup implements Comparable<NNTPNewsGroup> {
 		this.__postingPermission = permission;
 	}
 
+	@Override
 	public int compareTo(final NNTPNewsGroup that) {
 		return this.getNewsgroup().compareTo(that.getNewsgroup());
 	}

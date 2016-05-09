@@ -69,7 +69,7 @@ public class HibernateHelperTest {
 	 */
 	@Test
 	public void testFetchAll() {
-		String queryExpected = Messages.getString("0"); //$NON-NLS-1$
+		String queryExpected = "from uk.co.sleonard.unison.datahandling.DAO.Location";
 		Vector<Location> expected = new Vector<>();
 		expected.add(new Location());
 		Query query = mock(Query.class);
@@ -90,7 +90,7 @@ public class HibernateHelperTest {
 	 */
 	@Test
 	public void testFetchBaseNewsGroups() {
-		String queryExpected = Messages.getString("1"); //$NON-NLS-1$
+		String queryExpected = "from uk.co.sleonard.unison.datahandling.DAO.NewsGroup where lastnode is true";
 		Vector<NewsGroup> expected = new Vector<>();
 		expected.addElement(new NewsGroup());
 		Query query = mock(Query.class);
@@ -128,7 +128,7 @@ public class HibernateHelperTest {
 	@Test
 	public void testFindByKeyIntSessionClassOfQ() {
 		Message expected = new Message();
-		String query = Messages.getString("2") + Messages.getString("3"); //$NON-NLS-1$ //$NON-NLS-2$
+		String query = "uk.co.sleonard.unison.datahandling.DAO.Message" + ".findByKey";
 		Query queryMock = mock(Query.class);
 		
 		when(this.session.getNamedQuery(query)).thenReturn(queryMock);
@@ -156,18 +156,18 @@ public class HibernateHelperTest {
 	@Test
 	public void testFindByKeyStringSessionClassOfQ() {
 		Message expected = new Message();
-		String query = Messages.getString("4") + Messages.getString("5"); //$NON-NLS-1$ //$NON-NLS-2$
+		String query = "uk.co.sleonard.unison.datahandling.DAO.Message" + ".findByKey";
 		Query queryMock = mock(Query.class);
 		
 		when(this.session.getNamedQuery(query)).thenReturn(queryMock);
 		when(queryMock.uniqueResult()).thenReturn(expected);
 		try{
-			Message actual = (Message) this.helper.findByKey(Messages.getString("6"), this.session, Message.class); //$NON-NLS-1$
+			Message actual = (Message) this.helper.findByKey("key", this.session, Message.class);
 			assertEquals(expected, actual);
 			actual = null;
 			try{
 				when(queryMock.uniqueResult()).thenThrow(NonUniqueResultException.class);
-				actual = (Message) this.helper.findByKey(Messages.getString("7"), this.session, Message.class);		//If throw Exception  //$NON-NLS-1$
+				actual = (Message) this.helper.findByKey("key", this.session, Message.class);		//If throw Exception 
 			}catch (RuntimeException e){
 				assertNull(actual);
 			}
@@ -182,16 +182,16 @@ public class HibernateHelperTest {
 	 */
 	@Test
 	public void testFindOrCreateNewsGroup() {
-		NewsGroup expected = new NewsGroup(Messages.getString("8")); //$NON-NLS-1$
-		expected.setFullName(Messages.getString("9")); //$NON-NLS-1$
+		NewsGroup expected = new NewsGroup("allin");
+		expected.setFullName("alt.pl.allin");
 		NewsGroup actual = null;
 		Query query = mock(Query.class);
 		
 		when(this.session.getNamedQuery(Matchers.anyString())).thenReturn(query);
-		actual = this.helper.findOrCreateNewsGroup(this.session, Messages.getString("10"));	//If the search no locate data on DB //$NON-NLS-1$
+		actual = this.helper.findOrCreateNewsGroup(this.session, "alt.pl.allin");	//If the search no locate data on DB
 		assertEquals(expected, actual);
 		when(query.uniqueResult()).thenReturn(expected);
-		actual = this.helper.findOrCreateNewsGroup(this.session, Messages.getString("11"));	//If the search locate data on DB. //$NON-NLS-1$
+		actual = this.helper.findOrCreateNewsGroup(this.session, "alt.pl.allin");	//If the search locate data on DB.
 		assertEquals(expected, actual); 											
 	}
 
@@ -208,11 +208,11 @@ public class HibernateHelperTest {
 	 */
 	@Test
 	public void testGetGoogleMapURL() {
-		String expected = Messages.getString("12") + Messages.getString("13") + Messages.getString("14"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		String actual = this.helper.getGoogleMapURL(Messages.getString("15")); //$NON-NLS-1$
+		String expected = "http://maps.google.com/maps?f=q&hl=en&geocode=&q=" + "Houston" + "&ie=UTF8&z=12&om=1";
+		String actual = this.helper.getGoogleMapURL("Houston");
 		assertEquals(expected, actual);			//If city is Houston
-		expected = Messages.getString("16"); //$NON-NLS-1$
-		actual = this.helper.getGoogleMapURL(Messages.getString("17")); //$NON-NLS-1$
+		expected = "UNKNOWN LOCATION";
+		actual = this.helper.getGoogleMapURL("(Private Address)");
 		assertEquals(expected, actual);			//If Private Address
 	}
 
@@ -236,10 +236,10 @@ public class HibernateHelperTest {
 	public void testGetListResults() {
 		Vector<ResultRow> actual = null;
 		Vector<ResultRow> expected = new Vector<>();
-		expected.addElement(new ResultRow(Messages.getString("18"), 1, Topic.class)); //$NON-NLS-1$
+		expected.addElement(new ResultRow("topic", 1, Topic.class));
 		Vector<String[]> listTopic = new Vector<>(1);
-		listTopic.addElement(new String[] {new String(Messages.getString("19")), new String(Messages.getString("20"))}); //$NON-NLS-1$ //$NON-NLS-2$
-		String query = Messages.getString("21"); //$NON-NLS-1$
+		listTopic.addElement(new String[] {new String("topic"), new String("1")});
+		String query = "select topic from Topic";
 		
 		SQLQuery queryMock = mock(SQLQuery.class);
 		when(this.session.createSQLQuery(query)).thenReturn(queryMock);
@@ -253,18 +253,18 @@ public class HibernateHelperTest {
 	 */
 	@Test
 	public void testGetNewsgroupByFullName() {
-		NewsGroup expected = new NewsGroup(Messages.getString("22")); //$NON-NLS-1$
-		String expectedQuery = new String(Messages.getString("23") //$NON-NLS-1$
-										+ Messages.getString("24")); //$NON-NLS-1$
+		NewsGroup expected = new NewsGroup("newsgroup");
+		String expectedQuery = new String("from uk.co.sleonard.unison.datahandling.DAO.NewsGroup"
+										+ " where fullname=?");
 		Query queryMock = mock(Query.class);
 		
 		when(this.session.createQuery(expectedQuery)).thenReturn(queryMock);
 		when(queryMock.setString(anyInt(), anyString())).thenReturn(queryMock);
 		when(queryMock.uniqueResult()).thenReturn(expected);
 		try{
-			this.helper.getNewsgroupByFullName(Messages.getString("25"), this.session);		 //$NON-NLS-1$
+			this.helper.getNewsgroupByFullName("newsgroup", this.session);		
 		}catch (Exception e){
-			fail(Messages.getString("26") + e); //$NON-NLS-1$
+			fail("ERROR: " + e);
 		}
 	}
 
@@ -277,29 +277,29 @@ public class HibernateHelperTest {
 		String actual = null;
 
 		Message message = new Message();
-		UsenetUser user = new UsenetUser(Messages.getString("27"), Messages.getString("28"), Messages.getString("29")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		UsenetUser user = new UsenetUser("User", "my@email.com", "private");
 		message.setPoster(user);
-		expected = Messages.getString("30"); //$NON-NLS-1$
+		expected = "From:User(my@email.com)";
 		actual = this.helper.getText(message);	
 		assertEquals(expected, actual);					//Message
 		
-		NewsGroup newsGroup = new NewsGroup(Messages.getString("31")); //$NON-NLS-1$
-		expected = Messages.getString("32"); //$NON-NLS-1$
+		NewsGroup newsGroup = new NewsGroup("News");
+		expected = "News";
 		actual = this.helper.getText(newsGroup);
 		assertEquals(expected, actual);					//News
 		newsGroup.setLastMessageTotal(10);
-		expected = Messages.getString("33"); //$NON-NLS-1$
+		expected = "News (10)";
 		actual = this.helper.getText(newsGroup);
 		assertEquals(expected, actual);					//News with Last Message Total.
 		
 		Location location = new Location();
-		location.setCity(Messages.getString("34")); //$NON-NLS-1$
-		location.setCountryCode(Messages.getString("35")); //$NON-NLS-1$
-		expected = Messages.getString("36"); //$NON-NLS-1$
+		location.setCity("Sao Paulo");
+		location.setCountryCode("BR");
+		expected = "Location : Sao Paulo,BR";
 		actual = this.helper.getText(location);
 		assertEquals(expected, actual);					//Location
 		
-		expected = Messages.getString("37"); //$NON-NLS-1$
+		expected = "Poster : User";
 		actual = this.helper.getText(user);
 		assertEquals(expected, actual);					//UsernetUser
 		
@@ -311,7 +311,7 @@ public class HibernateHelperTest {
 	@Ignore
 	@Test
 	public void testHibernateData() {
-		fail(Messages.getString("38")); //$NON-NLS-1$
+		fail("Not yet implemented");
 	}
 
 	/**
@@ -320,7 +320,7 @@ public class HibernateHelperTest {
 	@Ignore
 	@Test
 	public void testRunQueryQuery() {
-		fail(Messages.getString("39")); //$NON-NLS-1$
+		fail("Not yet implemented");
 	}
 
 	/**
@@ -329,7 +329,7 @@ public class HibernateHelperTest {
 	@Ignore
 	@Test
 	public void testRunQueryStringSession() {
-		fail(Messages.getString("40")); //$NON-NLS-1$
+		fail("Not yet implemented");
 	}
 
 	/**
@@ -338,7 +338,7 @@ public class HibernateHelperTest {
 	@Ignore
 	@Test
 	public void testRunSQLQuery() {
-		fail(Messages.getString("41")); //$NON-NLS-1$
+		fail("Not yet implemented");
 	}
 
 	/**
@@ -347,7 +347,7 @@ public class HibernateHelperTest {
 	@Ignore
 	@Test
 	public void testStoreNewsgroupsListOfStringMessageSession() {
-		fail(Messages.getString("42")); //$NON-NLS-1$
+		fail("Not yet implemented");
 	}
 
 	/**
@@ -367,7 +367,7 @@ public class HibernateHelperTest {
 		
 		Set<NNTPNewsGroup> list = new HashSet<NNTPNewsGroup>(1);
 		NNTPNewsGroup nntp = PowerMockito.mock(NNTPNewsGroup.class);
-		PowerMockito.when(nntp.getNewsgroup()).thenReturn(Messages.getString("43")); //$NON-NLS-1$
+		PowerMockito.when(nntp.getNewsgroup()).thenReturn("newsgroup");
 		PowerMockito.when(nntp.getArticleCount()).thenReturn(1);
 		PowerMockito.when(nntp.getFirstArticle()).thenReturn(1);
 		PowerMockito.when(nntp.getLastArticle()).thenReturn(1);
@@ -385,20 +385,20 @@ public class HibernateHelperTest {
 	 */
 	public void testData() throws Exception {
 		Session session = null; //TODO mock this and add expected return
-		String query = Messages.getString("44") //$NON-NLS-1$
-				+ Messages.getString("45") //$NON-NLS-1$
-				+ Messages.getString("46") //$NON-NLS-1$
-				+ Messages.getString("47") //$NON-NLS-1$
-				+ Messages.getString("48") + Messages.getString("49"); //$NON-NLS-1$ //$NON-NLS-2$
+		String query = "SELECT  n.fullname, count(*) as total"
+				+ " FROM newsgroup n, newsgroup_topic as nt, message m "
+				+ " where nt.topic_id = m.topic_id "
+				+ " and n.newsgroup_id = nt.newsgroup_id "
+				+ " group by n.fullname " + " order by total desc";
 
 		try {
 			this.helper.getListResults(query, NewsGroup.class, this.session);
 
 		} catch (Exception e) {
-			fail(Messages.getString("50") + e.getMessage()); //$NON-NLS-1$
+			fail("ERROR" + e.getMessage());
 			e.printStackTrace();
 		}
-		System.out.println(Messages.getString("51")); //$NON-NLS-1$
+		System.out.println("OK");
 	}
 
 

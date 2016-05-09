@@ -29,18 +29,12 @@
 
 		<!-- Echo all executed SQL to stdout -->
 		<property name="hibernate.show_sql">false</property>
-		 	<mapping
-			resource="uk/co/sleonard/unison/datahandling/DAO/Topic.hbm.xml" />
-			<mapping
-			resource="uk/co/sleonard/unison/datahandling/DAO/NewsGroup.hbm.xml" />
-			<mapping
-			resource="uk/co/sleonard/unison/datahandling/DAO/Message.hbm.xml" />
-			<mapping
-			resource="uk/co/sleonard/unison/datahandling/DAO/UsenetUser.hbm.xml" />
-			<mapping
-			resource="uk/co/sleonard/unison/datahandling/DAO/Location.hbm.xml" />
-			<mapping
-			resource="uk/co/sleonard/unison/datahandling/DAO/IpAddress.hbm.xml" />
+		<mapping resource="dao/Topic.hbm.xml" />
+		<mapping resource="dao/NewsGroup.hbm.xml" />
+		<mapping resource="dao/Message.hbm.xml" />
+		<mapping resource="dao/UsenetUser.hbm.xml" />
+		<mapping resource="dao/Location.hbm.xml" />
+		<mapping resource="dao/IpAddress.hbm.xml" />
 
 	</session-factory>
 </hibernate-configuration>

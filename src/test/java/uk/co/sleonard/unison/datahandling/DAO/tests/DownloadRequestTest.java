@@ -18,7 +18,7 @@ public class DownloadRequestTest {
 	@Test
 	public void testGetUsenetID() {
 		String expected = new String("usenet");
-		DownloadRequest actual = new DownloadRequest(expected,DownloadMode.ALL);
+		DownloadRequest actual = new DownloadRequest(expected, DownloadMode.ALL);
 		assertEquals(expected, actual.getUsenetID());
 	}
 
@@ -28,7 +28,7 @@ public class DownloadRequestTest {
 	@Test
 	public void testGetMode() {
 		DownloadMode expected = DownloadMode.ALL;
-		DownloadRequest actual = new DownloadRequest("usenet",expected);
+		DownloadRequest actual = new DownloadRequest("usenet", expected);
 		assertEquals(expected, actual.getMode());
 	}
 

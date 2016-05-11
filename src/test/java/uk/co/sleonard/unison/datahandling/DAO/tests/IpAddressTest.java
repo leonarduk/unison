@@ -32,7 +32,7 @@ public class IpAddressTest {
 		actual.setIpAddress(expected);
 		assertEquals(expected, actual.getIpAddress());
 		actual = new IpAddress(expected, null);
-		assertEquals(expected, actual.getIpAddress());	//Constructor Test
+		assertEquals(expected, actual.getIpAddress()); // Constructor Test
 	}
 
 	/**
@@ -47,7 +47,8 @@ public class IpAddressTest {
 		actual.setLocation(expected);
 		assertEquals(expected.getCity(), actual.getLocation().getCity());
 		actual = new IpAddress(expected);
-		assertEquals(expected.getCity(), actual.getLocation().getCity()); //Constructor Test
+		assertEquals(expected.getCity(), actual.getLocation().getCity()); // Constructor
+																			// Test
 	}
 
 }

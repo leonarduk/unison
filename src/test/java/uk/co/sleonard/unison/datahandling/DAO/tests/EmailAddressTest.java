@@ -1,8 +1,7 @@
 package uk.co.sleonard.unison.datahandling.DAO.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import uk.co.sleonard.unison.datahandling.DAO.EmailAddress;

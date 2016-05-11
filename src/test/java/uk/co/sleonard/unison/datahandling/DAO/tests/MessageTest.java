@@ -22,14 +22,17 @@ import com.ibm.icu.util.Calendar;
  */
 public class MessageTest {
 
+	/**
+	 * Test toString.
+	 */
 	@Test
-	public void testToString(){
-		String expected = "Subject:null"; 
+	public void testToString() {
+		String expected = "Subject:null";
 		Message actual = new Message();
 		actual.setSubject("Subject");
 		assertEquals(expected, actual.toString());
 	}
-	
+
 	/**
 	 * Test getDateCreated.
 	 */
@@ -55,7 +58,7 @@ public class MessageTest {
 	 */
 	@Test
 	public void testGetMessageBody() {
-		byte[] expecteds = {0,1,2,3,4};
+		byte[] expecteds = { 0, 1, 2, 3, 4 };
 		Message actuals = new Message();
 		assertNull(actuals.getMessageBody());
 		actuals.setMessageBody(expecteds);
@@ -84,7 +87,7 @@ public class MessageTest {
 		Message actual = new Message();
 		assertNull(actual.getPoster());
 		actual.setPoster(expected);
-		assertEquals(expected,actual.getPoster());
+		assertEquals(expected, actual.getPoster());
 	}
 
 	/**
@@ -96,7 +99,7 @@ public class MessageTest {
 		Message actual = new Message();
 		assertNull(actual.getReferencedMessages());
 		actual.setReferencedMessages(expected);
-		assertEquals(expected,actual.getReferencedMessages());
+		assertEquals(expected, actual.getReferencedMessages());
 	}
 
 	/**
@@ -108,7 +111,7 @@ public class MessageTest {
 		Message actual = new Message();
 		assertNull(actual.getSubject());
 		actual.setSubject(expected);
-		assertEquals(expected,actual.getSubject());
+		assertEquals(expected, actual.getSubject());
 	}
 
 	/**
@@ -121,7 +124,7 @@ public class MessageTest {
 		Message actual = new Message();
 		assertNull(actual.getTopic());
 		actual.setTopic(expected);
-		assertEquals(expected.getSubject(),actual.getTopic().getSubject());
+		assertEquals(expected.getSubject(), actual.getTopic().getSubject());
 	}
 
 	/**
@@ -133,7 +136,7 @@ public class MessageTest {
 		Message actual = new Message();
 		assertNull(actual.getUsenetMessageID());
 		actual.setUsenetMessageID(expected);
-		assertEquals(expected,actual.getUsenetMessageID());
+		assertEquals(expected, actual.getUsenetMessageID());
 	}
 
 }

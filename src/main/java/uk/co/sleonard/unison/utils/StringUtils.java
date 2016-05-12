@@ -2,13 +2,17 @@ package uk.co.sleonard.unison.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
+import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
 
 /**
  * The Class StringUtils.
@@ -123,4 +127,28 @@ public class StringUtils {
 
 		return buf.toString();
 	}
+	
+	/**
+	 * Read the properties file on src/main/resource and process to String Array.
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * @return Return the server list on Array
+	 */
+	public static String[] loadServerList(){
+		
+		Properties prop = new Properties();
+		
+		try{
+			prop.load(ClassLoader.getSystemResourceAsStream("servers.properties"));
+			List<String> list = convertCommasToList(prop.getProperty("servers"));
+			
+			String[] listServers = list.toArray(new String[list.size()]);
+			
+			return listServers;
+		}catch (IOException io){
+			io.printStackTrace();
+		}
+		
+		return new String[]{"empty"};
+	}
+	
 }

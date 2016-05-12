@@ -4,11 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
+import java.text.ParseException;
 import java.util.List;
 
-import org.junit.Ignore;
+import org.apache.commons.net.nntp.Article;
 import org.junit.Test;
 
 import uk.co.sleonard.unison.gui.UNISoNException;
@@ -20,6 +20,26 @@ import com.ibm.icu.util.Calendar;
  * The Class NewsArticleTest.
  */
 public class NewsArticleTest {
+
+	/**
+	 * Test constructor NewsArticle(final Article article).
+	 * 
+	 * @throws UNISoNException
+	 *             Signals that an exception in application has occurred..
+	 */
+	@Test
+	public void testConstructorArticle() throws UNISoNException {
+		Article expected = new Article();
+		expected.setArticleId("ART");
+		expected.setArticleNumber(100);
+		expected.setFrom("from");
+		expected.setSubject("subject");
+		expected.setDate("Wed, 11 May 2016 13:10:00 GMT");
+		NewsArticle actual = new NewsArticle(expected);
+		assertEquals(expected.getArticleId(), actual.getArticleId());
+		assertEquals(expected.getFrom(), actual.getFrom());
+		assertEquals(expected.getSubject(), actual.getSubject());
+	}
 
 	/**
 	 * Test getRefencesList.
@@ -42,7 +62,7 @@ public class NewsArticleTest {
 		actual.setPostingHost("postingHost");
 		assertTrue(actual.isFullHeader());
 	}
-	
+
 	/**
 	 * Test compareTo.
 	 */
@@ -70,7 +90,7 @@ public class NewsArticleTest {
 		actual.setArticleId(expected);
 		assertEquals(expected, actual.getArticleId());
 	}
-	
+
 	/**
 	 * Test getArticleId expected NullPointerException.
 	 */
@@ -94,11 +114,21 @@ public class NewsArticleTest {
 
 	/**
 	 * Test getDate.
+	 * 
+	 * @throws UNISoNException
+	 *             Signals that an exception in application has occurred..
+	 * @throws ParseException
+	 *             Signals that an parse exception in application has occurred..
 	 */
 	@Test
-	@Ignore
-	public void testGetDate() {
-		fail("Not yet implemented");
+	public void testGetDate() throws ParseException, UNISoNException {
+		String dateExpected = "Wed, 11 May 2016 13:10:00 GMT";
+		NewsArticle test = new NewsArticle();
+		assertNull(test.getDate());
+		test.setDate(dateExpected);
+		Calendar actual = Calendar.getInstance();
+		actual.setTime(test.getDate());
+		assertEquals(4, actual.get(Calendar.MONTH));
 	}
 
 	/**
@@ -112,11 +142,11 @@ public class NewsArticleTest {
 		actual.setFrom(expected);
 		assertEquals(expected, actual.getFrom());
 	}
-	
+
 	/**
 	 * Test getFrom expected NullPointerException.
 	 */
-	@Test(expected=NullPointerException.class)
+	@Test(expected = NullPointerException.class)
 	public void testGetFromThrowException() {
 		NewsArticle actual = new NewsArticle();
 		actual.setFrom(null);
@@ -124,13 +154,14 @@ public class NewsArticleTest {
 
 	/**
 	 * Test getNewsgroupsList.
-	 * @throws UNISoNException 
+	 * 
+	 * @throws UNISoNException
 	 */
 	@Test
 	public void testGetNewsgroupsList() throws UNISoNException {
 		String newsgroups = "newsgroup1,newsgroup2,newsgroup3";
-		NewsArticle test = new NewsArticle("article", 0, Calendar.getInstance().getTime(),
-											"from", null, null, null, newsgroups, null);
+		NewsArticle test = new NewsArticle("article", 0, Calendar.getInstance()
+				.getTime(), "from", null, null, null, newsgroups, null);
 		List<String> actual = test.getNewsgroupsList();
 		assertEquals(3, actual.size());
 	}
@@ -150,10 +181,13 @@ public class NewsArticleTest {
 	/**
 	 * Test getReferences.
 	 */
-	@Ignore
 	@Test
 	public void testGetReferences() {
-		fail("Not yet implemented");
+		String expected = "references";
+		NewsArticle actual = new NewsArticle();
+		assertNull(actual.getReferences());
+		actual.setReferences(expected);
+		assertEquals(expected, actual.getReferences());
 	}
 
 	/**
@@ -171,10 +205,11 @@ public class NewsArticleTest {
 	/**
 	 * Test toString.
 	 */
-	@Ignore
 	@Test
 	public void testToString() {
-		fail("Not yet implemented");
+		NewsArticle test = new NewsArticle();
+		test.setArticleNumber(100);
+		assertTrue(test.toString().contains("Number: 100"));
 	}
-	
+
 }

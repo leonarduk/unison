@@ -25,6 +25,7 @@ import uk.co.sleonard.unison.input.DataHibernatorWorker;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
 import uk.co.sleonard.unison.input.NNTPNewsGroup;
 import uk.co.sleonard.unison.utils.HttpDateObject;
+import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
  * The Class DownloadNewsPanel.
@@ -253,7 +254,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements
         getLocationCheck.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
         hostCombo.setEditable(true);
-        hostCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] {  "news.mixmin.net","news-archive.icm.edu.pl", }));
+        hostCombo.setModel(new javax.swing.DefaultComboBoxModel(StringUtils.loadServerList()));
         hostCombo.setToolTipText("Look at http://freeusenetnews.com/newspage.html?sortby=articles for other hosts if these are broken. Can enter name here.");
 
         availableNewsgroups.setModel(getAvailableGroupsModel());

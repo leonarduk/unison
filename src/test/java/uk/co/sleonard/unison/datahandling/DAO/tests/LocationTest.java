@@ -26,17 +26,19 @@ public class LocationTest {
 	@Test
 	public void testToString() {
 		String expected = city + " - " + countryCode;
-		Location actual = new Location(city, null, countryCode, true, null, null);
+		Location actual = new Location(city, null, countryCode, true, null,
+				null);
 		assertEquals(expected, actual.toString());
 	}
-	
+
 	/**
 	 * Test fullString.
 	 */
 	@Test
 	public void testFullString() {
 		String expected = city + ", " + country + " (" + countryCode + ")";
-		Location actual = new Location(city, country, countryCode, true, null, null);
+		Location actual = new Location(city, country, countryCode, true, null,
+				null);
 		assertEquals(expected, actual.fullString());
 	}
 

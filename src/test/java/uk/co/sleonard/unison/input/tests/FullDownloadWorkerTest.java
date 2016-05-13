@@ -1,8 +1,11 @@
 package uk.co.sleonard.unison.input.tests;
 
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -12,9 +15,31 @@ import uk.co.sleonard.unison.gui.UNISoNController;
 import uk.co.sleonard.unison.gui.UNISoNException;
 import uk.co.sleonard.unison.input.FullDownloadWorker;
 import uk.co.sleonard.unison.input.NewsArticle;
+import uk.co.sleonard.unison.utils.StringUtils;
 
-@Ignore
+/**
+ * The Class FullDownloadWorkerTest.
+ */
 public class FullDownloadWorkerTest {
+
+	private FullDownloadWorker worker;
+	
+	@Before
+	public void setUp() throws Exception {
+		worker = new FullDownloadWorker(StringUtils.loadServerList()[0], null);
+	}
+
+	@Ignore
+	@Test
+	public void testConstruct() {
+		fail("Not yet implemented");
+	}
+
+	@Ignore
+	@Test
+	public void testFinished() {
+		fail("Not yet implemented");
+	}
 
 	// 5 2006-04-28 <Baf4g.374$Lj1.115@fe10.lga> Re: Novel brain-penetrating
 	// antioxidant 4 2 <1146147483.974309.7550@t31g2000cwb.googlegroups.com>
@@ -44,4 +69,40 @@ public class FullDownloadWorkerTest {
 		}
 	}
 
+	@Ignore
+	@Test
+	public void testAddDownloadRequest() {
+		fail("Not yet implemented");
+	}
+
+	@Ignore
+	@Test
+	public void testDownloadArticle() {
+		fail("Not yet implemented");
+	}
+
+	@Ignore
+	@Test
+	public void testDownloadFullMessage() {
+		fail("Not yet implemented");
+	}
+
+	@Ignore
+	@Test
+	public void testReaderToString() {
+		fail("Not yet implemented");
+	}
+
+	@Ignore
+	@Test
+	public void testStartDownloaders() {
+		fail("Not yet implemented");
+	}
+
+	@Ignore
+	@Test
+	public void testQueueSize() {
+		fail("Not yet implemented");
+	}
+	
 }

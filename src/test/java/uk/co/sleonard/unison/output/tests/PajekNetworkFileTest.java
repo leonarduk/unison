@@ -4,27 +4,36 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
 import uk.co.sleonard.unison.output.PajekNetworkFile;
 import uk.co.sleonard.unison.output.Relationship;
 
-public class PajekNetworkFileTest extends TestCase {
+/**
+ * The Class PajekNetworkFile.
+ */
+public class PajekNetworkFileTest{
 	private PajekNetworkFile file;
 
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		this.file = new PajekNetworkFile();
 	}
 
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
+	@After
+	public void tearDown() throws Exception {
 	}
 
+	@Test
+	@Ignore
 	public void testAddNode() {
 //		Assert.fail("Not yet implemented");
 	}
 
+	@Test
 	public void testAddRelationship() {
 		final List<Relationship> links = new Vector<Relationship>();
 		Relationship link = this.file.addRelationship("Alf", "Bob", links);
@@ -33,6 +42,7 @@ public class PajekNetworkFileTest extends TestCase {
 		System.out.println("Link2: " + link);
 	}
 
+	@Test
 	public void testCreateDirectedLinks() {
 		final HashMap<String, String> nodePairs = new HashMap<String, String>();
 		nodePairs.put("Alf", "Bertie");
@@ -52,10 +62,13 @@ public class PajekNetworkFileTest extends TestCase {
 
 	}
 
+	@Test
+	@Ignore
 	public void testCreateUndirectedLinks() {
 //		Assert.fail("Not yet implemented");
 	}
 
+	@Test
 	public void testSaveToFile() {
 		final HashMap<String, String> nodePairs = new HashMap<String, String>();
 		nodePairs.put("Alf", "Bertie");
@@ -69,6 +82,7 @@ public class PajekNetworkFileTest extends TestCase {
 		this.file.saveToFile("UnitTest");
 	}
 
+	@Test
 	public void testWriteData() {
 		final Vector<Vector<String>> nodePairs = new Vector<Vector<String>>();
 		// nodePairs.add(new Vector<String> ( Array. new String[] { "Alf",

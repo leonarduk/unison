@@ -1,15 +1,21 @@
 package uk.co.sleonard.unison.utils.tests;
 
+import static org.junit.Assert.fail;
+
 import java.text.ParseException;
 import java.util.Date;
+
+import org.junit.Test;
 
 import uk.co.sleonard.unison.gui.UNISoNException;
 import uk.co.sleonard.unison.utils.HttpDateObject;
 
-import junit.framework.TestCase;
+/**
+ * The Class HttpDateObject.
+ */
+public class HttpDateObjectTest{
 
-public class HttpDateObjectTest extends TestCase {
-
+	@Test
 	public void testParse() {
 		HttpDateObject parser = HttpDateObject.getParser();
 

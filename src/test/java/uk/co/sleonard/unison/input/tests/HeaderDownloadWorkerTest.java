@@ -29,6 +29,9 @@ public class HeaderDownloadWorkerTest {
 
 	private HeaderDownloadWorker worker;
 
+	/**
+	 * Setup.
+	 */
 	@Before
 	public void setUp() throws Exception {
 		worker = new HeaderDownloadWorker();

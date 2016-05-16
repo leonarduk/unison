@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 
 import java.util.Date;
 
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -28,6 +29,7 @@ import com.ibm.icu.util.Calendar;
 public class HeaderDownloadWorkerTest {
 
 	private HeaderDownloadWorker worker;
+	private static Logger logger = Logger.getLogger(HeaderDownloadWorkerTest.class);
 
 	/**
 	 * Setup.
@@ -124,7 +126,9 @@ public class HeaderDownloadWorkerTest {
 		Date fromAndTo = Calendar.getInstance().getTime();
 		assertFalse(this.worker.isDownloading());
 		
-		this.worker.initialise(ngr, 0, 1, StringUtils.loadServerList()[0],
+		String server = StringUtils.loadServerList()[0];
+		
+		this.worker.initialise(ngr, 0, 1, server,
 				"newsgroup", uniLog, DownloadMode.ALL, fromAndTo, fromAndTo);;
 				
 		assertTrue(this.worker.isDownloading());

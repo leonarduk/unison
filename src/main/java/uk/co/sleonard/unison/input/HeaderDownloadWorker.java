@@ -11,6 +11,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.commons.net.nntp.Article;
 import org.apache.commons.net.nntp.NNTPClient;
+import org.apache.log4j.Logger;
 
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.gui.UNISoNController;
@@ -26,7 +27,7 @@ import uk.co.sleonard.unison.utils.HttpDateObject;
  */
 public class HeaderDownloadWorker extends SwingWorker {
 
-	// private static Logger logger = Logger.getLogger("DownloadWorker");
+	 private static Logger logger = Logger.getLogger(HeaderDownloadWorker.class);
 
 	// private static final int MAX_DEPTH = 0;
 
@@ -232,6 +233,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 		this.fromDate = from;
 		this.toDate = to;
 
+		logger.info(" Server: " + server + " Newsgroup: " + newsgroup);
 		try {
 			this.newsReader.client.connect(server);
 			this.newsReader.client.selectNewsgroup(newsgroup);

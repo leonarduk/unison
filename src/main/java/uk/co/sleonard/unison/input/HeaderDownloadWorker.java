@@ -20,66 +20,76 @@ import uk.co.sleonard.unison.gui.UNISoNLogger;
 import uk.co.sleonard.unison.utils.HttpDateObject;
 
 /**
- * Class to create a separate Thread for downloading messages
- * 
+ * Class to create a separate Thread for downloading messages.
+ *
  * @author steve
- * 
  */
 public class HeaderDownloadWorker extends SwingWorker {
 
-	 private static Logger logger = Logger.getLogger(HeaderDownloadWorker.class);
+	/** The logger. */
+	private static Logger logger = Logger.getLogger(HeaderDownloadWorker.class);
 
 	// private static final int MAX_DEPTH = 0;
 
+	/** The end index. */
 	private int endIndex;
 
 	// private int messageCount;
 
+	/** The news reader. */
 	private NewsGroupReader newsReader = null;
 
+	/** The start index. */
 	private int startIndex;
 
+	/** The newsgroup. */
 	private String newsgroup;
 
+	/** The from date. */
 	private Date fromDate;
 
+	/** The to date. */
 	private Date toDate;
 
+	/** The log. */
 	private UNISoNLogger log;
 
+	/** The downloading. */
 	private boolean downloading = false;
 
+	/**
+	 * Checks if is downloading.
+	 *
+	 * @return true, if is downloading
+	 */
 	public boolean isDownloading() {
 		return downloading;
 	}
 
+	/** The running. */
 	private boolean running = true;
 
+	/** The log tally. */
 	private int logTally = 0;
 
+	/** The index. */
 	private int index = 0;
 
+	/** The skipped. */
 	private int skipped = 0;
 
+	/** The kept. */
 	private int kept = 0;
 
+	/** The mode. */
 	private DownloadMode mode;
 
 	/**
 	 * Given an {@link NNTPClient} instance, and an integer range of messages,
 	 * return an array of {@link Article} instances.
-	 * 
-	 * @param newsGroupReader
-	 * @param lowArticleNumber
-	 * @param highArticleNumber
-	 * @param newsgroup
-	 * @param toDate
-	 * @param fromDate
-	 * @param log
+	 *
 	 * @return Article[] An array of Article
-	 * @throws UNISoNException
-	 * @throws IOException
-	 * @throws UNISoNException
+	 * @throws UNISoNException the UNI so n exception
 	 */
 	public boolean storeArticleInfo() throws UNISoNException {
 		Reader reader = null;
@@ -104,16 +114,21 @@ public class HeaderDownloadWorker extends SwingWorker {
 		return true;
 	}
 
-	private boolean queueMessages(Reader reader) throws IOException,
-			UNISoNException {
+	/**
+	 * Queue messages.
+	 *
+	 * @param reader the reader
+	 * @return true, if successful
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws UNISoNException the UNI so n exception
+	 */
+	private boolean queueMessages(Reader reader) throws IOException, UNISoNException {
 		if (reader != null) {
 
 			final BufferedReader bufReader = new BufferedReader(reader);
-			LinkedBlockingQueue<NewsArticle> queue = UNISoNController
-					.getInstance().getQueue();
+			LinkedBlockingQueue<NewsArticle> queue = UNISoNController.getInstance().getQueue();
 
-			for (String line = bufReader.readLine(); line != null; line = bufReader
-					.readLine()) {
+			for (String line = bufReader.readLine(); line != null; line = bufReader.readLine()) {
 				if (!running) {
 					log.alert("Download aborted");
 					notifyObservers();
@@ -139,8 +154,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 				String from = stt.nextToken();
 				Date date;
 				try {
-					date = HttpDateObject.getParser()
-							.parseDate(stt.nextToken());
+					date = HttpDateObject.getParser().parseDate(stt.nextToken());
 				} catch (ParseException e) {
 					throw new UNISoNException(e);
 				}
@@ -154,14 +168,12 @@ public class HeaderDownloadWorker extends SwingWorker {
 					String postingHost = null;
 					String content = null;
 
-					final NewsArticle article = new NewsArticle(articleId,
-							articleNumber, date, from, subject, references,
-							content, newsgroup, postingHost);
+					final NewsArticle article = new NewsArticle(articleId, articleNumber, date, from, subject,
+							references, content, newsgroup, postingHost);
 
 					queue.add(article);
 					if (!mode.equals(DownloadMode.BASIC)) {
-						FullDownloadWorker.addDownloadRequest(articleId, mode,
-								log);
+						FullDownloadWorker.addDownloadRequest(articleId, mode, log);
 					}
 					kept++;
 				} else {
@@ -173,8 +185,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 					if (!mode.equals(DownloadMode.BASIC)) {
 						size += FullDownloadWorker.queueSize();
 					}
-					log.log("Downloaded " + index + " kept " + kept
-							+ " skipped " + skipped + " to process: " + size
+					log.log("Downloaded " + index + " kept " + kept + " skipped " + skipped + " to process: " + size
 							+ " [" + new Date() + "]");
 					logTally = 0;
 				}
@@ -184,14 +195,13 @@ public class HeaderDownloadWorker extends SwingWorker {
 			if (!mode.equals(DownloadMode.BASIC)) {
 				size += FullDownloadWorker.queueSize();
 			}
-			log.log("Downloaded " + index + " kept " + kept + " to process: "
-					+ size);
+			log.log("Downloaded " + index + " kept " + kept + " to process: " + size);
 		}
 		return true;
 	}
 
 	/**
-	 * Method to stop all downloading and end the thread
+	 * Method to stop all downloading and end the thread.
 	 */
 	public void fullstop() {
 		running = false;
@@ -207,12 +217,18 @@ public class HeaderDownloadWorker extends SwingWorker {
 		notifyObservers();
 	}
 
+	/* (non-Javadoc)
+	 * @see java.util.Observable#notifyObservers()
+	 */
 	@Override
 	public void notifyObservers() {
 		setChanged();
 		super.notifyObservers();
 	}
 
+	/**
+	 * Instantiates a new header download worker.
+	 */
 	public HeaderDownloadWorker() {
 		super("HeaderDownloader");
 		running = true;
@@ -220,10 +236,22 @@ public class HeaderDownloadWorker extends SwingWorker {
 		this.start();
 	}
 
-	public void initialise(final NewsGroupReader reader, final int startIndex,
-			final int endIndex, final String server, String newsgroup,
-			UNISoNLogger log, DownloadMode mode, Date from, Date to)
-			throws UNISoNException {
+	/**
+	 * Initialise.
+	 *
+	 * @param reader the reader
+	 * @param startIndex the start index
+	 * @param endIndex the end index
+	 * @param server the server
+	 * @param newsgroup the newsgroup
+	 * @param log the log
+	 * @param mode the mode
+	 * @param from the from
+	 * @param to the to
+	 * @throws UNISoNException the UNI so n exception
+	 */
+	public void initialise(final NewsGroupReader reader, final int startIndex, final int endIndex, final String server,
+			String newsgroup, UNISoNLogger log, DownloadMode mode, Date from, Date to) throws UNISoNException {
 		this.log = log;
 		this.mode = mode;
 		this.startIndex = startIndex;
@@ -237,23 +265,22 @@ public class HeaderDownloadWorker extends SwingWorker {
 		try {
 			this.newsReader.client.connect(server);
 			this.newsReader.client.selectNewsgroup(newsgroup);
-		} catch (IOException e) {
-			throw new UNISoNException("Failed to initialise downloader", e);
 		} catch (Exception e) {
+			logger.warn(e.getMessage(), e);
 			throw new UNISoNException("Failed to initialise downloader", e);
 		}
 
 		this.downloading = true;
-		System.out.println("Creating " + this.getClass() + " "
-				+ reader.getNumberOfMessages());
+		logger.info("Creating " + this.getClass() + " " + reader.getNumberOfMessages());
 	}
 
 	/**
-	 * 
-	 * @param fromDate
-	 * @param toDate
-	 * @param date
-	 * @return
+	 * In date range.
+	 *
+	 * @param fromDate the from date
+	 * @param toDate the to date
+	 * @param date the date
+	 * @return true, if successful
 	 */
 	private boolean inDateRange(Date fromDate, Date toDate, Date date) {
 		if (null == date) {
@@ -294,6 +321,9 @@ public class HeaderDownloadWorker extends SwingWorker {
 	//
 	// }
 
+	/* (non-Javadoc)
+	 * @see uk.co.sleonard.unison.input.SwingWorker#construct()
+	 */
 	@Override
 	public Object construct() {
 
@@ -315,16 +345,25 @@ public class HeaderDownloadWorker extends SwingWorker {
 		return ("Completed");
 	}
 
+	/* (non-Javadoc)
+	 * @see uk.co.sleonard.unison.input.SwingWorker#finished()
+	 */
 	@Override
 	public void finished() {
 		downloading = false;
 		notifyObservers();
 	}
 
+	/**
+	 * Resume.
+	 */
 	public void resume() {
 		downloading = true;
 	}
 
+	/**
+	 * Pause.
+	 */
 	public void pause() {
 		downloading = false;
 	}

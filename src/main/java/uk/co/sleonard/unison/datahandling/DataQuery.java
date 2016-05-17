@@ -21,7 +21,6 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.gui.UNISoNController;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class DataQuery.
  */

@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Properties;
@@ -138,7 +139,12 @@ public class StringUtils {
 		Properties prop = new Properties();
 		
 		try{
-			prop.load(ClassLoader.getSystemResourceAsStream("servers.properties"));
+			String file = "servers.properties";
+			InputStream resources = ClassLoader.getSystemResourceAsStream(file);
+			if(null == resources){
+				throw new IOException("can't find " + file);
+			}
+			prop.load(resources);
 			List<String> list = convertCommasToList(prop.getProperty("servers"));
 			
 			String[] listServers = list.toArray(new String[list.size()]);

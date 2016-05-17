@@ -35,6 +35,9 @@ public class DataQueryTest {
 	private DataQuery dataQuery;
 	private HibernateHelper helper;
 
+	/**
+	 * Setup.
+	 */
 	@Before
 	public void setUp() {
 		helper = mock(HibernateHelper.class);
@@ -44,6 +47,7 @@ public class DataQueryTest {
 	/**
 	 * Test get location.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testGetLocations() {
 		Vector<String> countries = new Vector<>();
@@ -96,6 +100,7 @@ public class DataQueryTest {
 	/**
 	 * Test get messages.
 	 */
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void testGetMessages() {
 		Vector<Message> messages = new Vector<>();

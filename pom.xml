@@ -6,19 +6,41 @@
 	<version>1.2.2</version>
 	<name>unison</name>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<log4j.version>1.2.17</log4j.version>
+		<slf4j-log4j12.version>1.5.6</slf4j-log4j12.version>
+		<junit.version>4.11</junit.version>
+		<java.version>1.8</java.version>
+		<powermock.version>1.6.1</powermock.version>
+		<mockito.version>1.9.5</mockito.version>
+		<javax.mail.version>1.4</javax.mail.version>
+		<maven-assembly-plugin.version>2.2-beta-4
+		</maven-assembly-plugin.version>
+		<jacoco.version>0.7.6.201602180812</jacoco.version>
+		<jms.version>1.1</jms.version>
+		<javassist.version>3.18.1-GA</javassist.version>
+		<commons-net>1.4.1</commons-net>
+		<freemarker.version>2.3.9</freemarker.version>
+		<httpunit.version>1.6.2</httpunit.version>
+		<oro.version>2.0.8</oro.version>
+		<javax-activation.version>1.1.1</javax-activation.version>
+	</properties>
+
 	<build>
 		<plugins>
 			<!-- Build an executable JAR -->
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.2-beta-4</version>
+				<version>${maven-assembly-plugin.version}</version>
 				<configuration>
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>uk.co.sleonard.unison.gui.generated.DownloadNewsPanel</mainClass>
+							<mainClass>uk.co.sleonard.unison.gui.generated.DownloadNewsPanel
+							</mainClass>
 						</manifest>
 					</archive>
 					<skipTests>${skipTests}</skipTests>
@@ -39,7 +61,8 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>uk.co.sleonard.unison.gui.generated.DownloadNewsPanel</mainClass>
+							<mainClass>uk.co.sleonard.unison.gui.generated.DownloadNewsPanel
+							</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -48,10 +71,57 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 				</configuration>
 			</plugin>
+			<plugin>
+  <groupId>org.jacoco</groupId>
+  <artifactId>jacoco-maven-plugin</artifactId>
+  		<version>${jacoco.version}</version>
+		<executions>
+    <execution>
+      <goals>
+        <goal>prepare-agent</goal>
+      </goals>
+    </execution>
+    <execution>
+      <id>report</id>
+      <phase>test</phase>
+      <goals>
+        <goal>report</goal>
+      </goals>
+    </execution>
+  </executions>
+</plugin>
+<!-- 
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
+				<configuration>
+					<destFile>${basedir}/target/coverage-reports/jacoco-unit.exec
+					</destFile>
+					<dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec
+					</dataFile>
+				</configuration>
+				<executions>
+					<execution>
+						<id>jacoco-initialize</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>jacoco-site</id>
+						<phase>package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+ -->
 		</plugins>
 	</build>
 
@@ -70,59 +140,59 @@
 		<dependency>
 			<groupId>javax.jms</groupId>
 			<artifactId>jms</artifactId>
-			<version>1.1</version>
+			<version>${jms.version}</version>
 		</dependency>
 
 		<!-- Caused by: java.lang.ClassNotFoundException: org.slf4j.impl.StaticLoggerBinder -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.5.6</version>
+			<version>${slf4j-log4j12.version}</version>
 		</dependency>
 
 		<!-- Caused by: java.lang.ClassNotFoundException: javassist.util.proxy.MethodFilter -->
 		<dependency>
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
-			<version>3.18.1-GA</version>
+			<version>${javassist.version}</version>
 		</dependency>
 
 		<!-- 1.2.9 to 1.2.12 -->
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.12</version>
+			<version>${log4j.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>commons-net</groupId>
 			<artifactId>commons-net</artifactId>
-			<version>1.4.1</version>
+			<version>${commons-net}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
-			<version>2.3.9</version>
+			<version>${freemarker.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>httpunit</groupId>
 			<artifactId>httpunit</artifactId>
-			<version>1.6.2</version>
+			<version>${httpunit.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>oro</groupId>
 			<artifactId>oro</artifactId>
-			<version>2.0.8</version>
+			<version>${oro.version}</version>
 		</dependency>
 
 		<!-- 1.0.2 version has not been found. Using 1.1.1 -->
 		<dependency>
 			<groupId>javax.activation</groupId>
 			<artifactId>activation</artifactId>
-			<version>1.1.1</version>
+			<version>${javax-activation.version}</version>
 		</dependency>
 
 		<dependency>
@@ -294,6 +364,11 @@
 			<version>1.4.7</version>
 		</dependency>
 
-
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>jacoco-maven-plugin</artifactId>
+			<version>${jacoco.version}</version>
+			<type>maven-plugin</type>
+		</dependency>
 	</dependencies>
 </project>

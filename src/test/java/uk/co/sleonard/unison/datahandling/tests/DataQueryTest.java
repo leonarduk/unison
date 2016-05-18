@@ -30,7 +30,7 @@ import com.ibm.icu.util.Calendar;
  * The Class DataQueryTest.
  */
 
-public class DataQueryTest {
+public class DataQueryTest { 
 
 	private DataQuery dataQuery;
 	private HibernateHelper helper;

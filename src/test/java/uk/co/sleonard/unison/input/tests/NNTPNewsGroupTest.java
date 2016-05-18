@@ -1,14 +1,13 @@
 package uk.co.sleonard.unison.input.tests;
 
-import static org.junit.Assert.*;
-
-import static org.powermock.api.mockito.PowerMockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.powermock.api.mockito.PowerMockito.mock;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 import org.apache.commons.net.nntp.NewsgroupInfo;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -21,16 +20,29 @@ import uk.co.sleonard.unison.input.NNTPNewsGroup;
 @PrepareForTest(value = { NewsgroupInfo.class })
 public class NNTPNewsGroupTest {
 
+	/** The nntp ng. */
 	private NNTPNewsGroup nntpNG;
 
+	/** The expected article count. */
 	private int expectedArticleCount = 10;
+
+	/** The expected first article. */
 	private int expectedFirstArticle = 2;
+
+	/** The expected last article. */
 	private int expectedLastArticle = 79;
+
+	/** The expected newsgroup. */
 	private String expectedNewsgroup = "newsgroup";
+
+	/** The expected posting perm. */
 	private int expectedPostingPerm = 1;
 
 	/**
 	 * Setup.
+	 *
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -100,8 +112,8 @@ public class NNTPNewsGroupTest {
 	}
 
 	/**
-	 * Create a mock of NewsgroupInfo
-	 * 
+	 * Create a mock of NewsgroupInfo.
+	 *
 	 * @return Mock object of NewsgroupInfo
 	 */
 	private NewsgroupInfo generateNewsgroupInfoMock() {

@@ -11,10 +11,10 @@ import java.util.List;
 import org.apache.commons.net.nntp.Article;
 import org.junit.Test;
 
+import com.ibm.icu.util.Calendar;
+
 import uk.co.sleonard.unison.gui.UNISoNException;
 import uk.co.sleonard.unison.input.NewsArticle;
-
-import com.ibm.icu.util.Calendar;
 
 /**
  * The Class NewsArticleTest.
@@ -114,11 +114,11 @@ public class NewsArticleTest {
 
 	/**
 	 * Test getDate.
-	 * 
-	 * @throws UNISoNException
-	 *             Signals that an exception in application has occurred..
+	 *
 	 * @throws ParseException
 	 *             Signals that an parse exception in application has occurred..
+	 * @throws UNISoNException
+	 *             Signals that an exception in application has occurred..
 	 */
 	@Test
 	public void testGetDate() throws ParseException, UNISoNException {
@@ -154,14 +154,15 @@ public class NewsArticleTest {
 
 	/**
 	 * Test getNewsgroupsList.
-	 * 
+	 *
 	 * @throws UNISoNException
+	 *             the UNI so n exception
 	 */
 	@Test
 	public void testGetNewsgroupsList() throws UNISoNException {
 		String newsgroups = "newsgroup1,newsgroup2,newsgroup3";
-		NewsArticle test = new NewsArticle("article", 0, Calendar.getInstance()
-				.getTime(), "from", null, null, null, newsgroups, null);
+		NewsArticle test = new NewsArticle("article", 0, Calendar.getInstance().getTime(), "from",
+		        null, null, null, newsgroups, null);
 		List<String> actual = test.getNewsgroupsList();
 		assertEquals(3, actual.size());
 	}

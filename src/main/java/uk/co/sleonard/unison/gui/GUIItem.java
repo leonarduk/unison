@@ -10,10 +10,27 @@ import org.apache.log4j.Logger;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 
+/**
+ * The Class GUIItem.
+ *
+ * @param <T>
+ *            the generic type
+ */
 public class GUIItem<T> {
+
+	/** The Constant logger. */
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger("GUIItem");
 
+	/**
+	 * Gets the GUI list.
+	 *
+	 * @param list
+	 *            the list
+	 * @param helper
+	 *            the helper
+	 * @return the GUI list
+	 */
 	public static Vector<GUIItem<?>> getGUIList(final List<?> list, HibernateHelper helper) {
 		final Vector<GUIItem<?>> returnList = new Vector<GUIItem<?>>();
 
@@ -22,7 +39,8 @@ public class GUIItem<T> {
 			String text = null;
 			if (next instanceof NewsGroup) {
 				text = ((NewsGroup) next).getFullName();
-			} else {
+			}
+			else {
 				text = helper.getText(next);
 			}
 			returnList.add(new GUIItem<Object>(text, next));
@@ -30,23 +48,52 @@ public class GUIItem<T> {
 		return returnList;
 	}
 
+	/**
+	 * Gets the GUI list.
+	 *
+	 * @param array
+	 *            the array
+	 * @param helper
+	 *            the helper
+	 * @return the GUI list
+	 */
 	public static Vector<GUIItem<?>> getGUIList(final Object[] array, HibernateHelper helper) {
 		return GUIItem.getGUIList(Arrays.asList(array), helper);
 	}
 
+	/** The name. */
 	private final String name;
 
+	/** The object. */
 	private final T object;
 
+	/**
+	 * Instantiates a new GUI item.
+	 *
+	 * @param name
+	 *            the name
+	 * @param data
+	 *            the data
+	 */
 	public GUIItem(final String name, final T data) {
 		this.name = name;
 		this.object = data;
 	}
 
+	/**
+	 * Gets the item.
+	 *
+	 * @return the item
+	 */
 	public T getItem() {
 		return this.object;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return this.name;

@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2003, the JUNG Project and the Regents of the University of
- * California All rights reserved.
+ * Copyright (c) 2003, the JUNG Project and the Regents of the University of California All rights
+ * reserved.
  * 
- * This software is open-source under the BSD license; see either "license.txt"
- * or http://jung.sourceforge.net/license.txt for a description.
+ * This software is open-source under the BSD license; see either "license.txt" or
+ * http://jung.sourceforge.net/license.txt for a description.
  * 
  */
 package uk.co.sleonard.unison.gui;
@@ -18,7 +18,6 @@ import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import uk.co.sleonard.unison.output.Relationship;
 import edu.uci.ics.jung.graph.ArchetypeVertex;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Vertex;
@@ -39,11 +38,12 @@ import edu.uci.ics.jung.visualization.ShapePickSupport;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
+import uk.co.sleonard.unison.output.Relationship;
 
 /**
- * Demonstrates the use of <code>GraphZoomScrollPane</code>. This class shows
- * off the <code>VisualizationViewer</code> zooming and panning capabilities,
- * using horizontal and vertical scrollbars.
+ * Demonstrates the use of <code>GraphZoomScrollPane</code>. This class shows off the
+ * <code>VisualizationViewer</code> zooming and panning capabilities, using horizontal and vertical
+ * scrollbars.
  * 
  * <p>
  * This demo also shows ToolTips on graph vertices.
@@ -54,45 +54,41 @@ import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
  */
 public class GraphPreviewPanel extends JPanel {
 
-	/**
-	 * 
-	 */
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 7584897717727915747L;
 
-	/**
-	 * the graph
-	 */
+	/** the graph. */
 	Graph graph;
 
-	/**
-	 * the visual component and renderer for the graph
-	 */
+	/** the visual component and renderer for the graph. */
 	VisualizationViewer vv;
 
+	/** The show labels. */
 	boolean showLabels;
 
 	/**
-	 * create an instance of a simple graph with controls to demo the zoom
-	 * features.
-	 * 
+	 * create an instance of a simple graph with controls to demo the zoom features.
+	 *
+	 * @param peopleList
+	 *            the people list
 	 * @param links
+	 *            the links
 	 * @throws UNISoNException
-	 * 
+	 *             the UNI so n exception
 	 */
-	public GraphPreviewPanel(LinkedList<String> peopleList,
-			List<Relationship> links) throws UNISoNException {
+	public GraphPreviewPanel(LinkedList<String> peopleList, List<Relationship> links)
+	        throws UNISoNException {
 		// create a simple graph for the demo
 		graph = new DirectedSparseGraph();
 		Vertex[] v = createEdges(links, peopleList);
 
 		PluggableRenderer pr = new PluggableRenderer();
 		pr.setVertexStringer(new UnicodeVertexStringer(v, peopleList));
-		pr.setVertexPaintFunction(new PickableVertexPaintFunction(pr,
-				Color.lightGray, Color.white, Color.yellow));
-		pr.setGraphLabelRenderer(new DefaultGraphLabelRenderer(Color.cyan,
-				Color.cyan));
+		pr.setVertexPaintFunction(
+		        new PickableVertexPaintFunction(pr, Color.lightGray, Color.white, Color.yellow));
+		pr.setGraphLabelRenderer(new DefaultGraphLabelRenderer(Color.cyan, Color.cyan));
 		VertexIconAndShapeFunction dvisf = new VertexIconAndShapeFunction(
-				new EllipseVertexShapeFunction());
+		        new EllipseVertexShapeFunction());
 		pr.setVertexShapeFunction(dvisf);
 		pr.setVertexIconFunction(dvisf);
 		vv = new VisualizationViewer(new FRLayout(graph), pr);
@@ -113,10 +109,22 @@ public class GraphPreviewPanel extends JPanel {
 		// showLabels = true;
 	}
 
+	/**
+	 * The Class UnicodeVertexStringer.
+	 */
 	class UnicodeVertexStringer implements VertexStringer {
 
+		/** The map. */
 		Map<Vertex, String> map = new HashMap<Vertex, String>();
 
+		/**
+		 * Instantiates a new unicode vertex stringer.
+		 *
+		 * @param vertices
+		 *            the vertices
+		 * @param labels
+		 *            the labels
+		 */
 		public UnicodeVertexStringer(Vertex[] vertices, List<String> labels) {
 			for (int i = 0; i < vertices.length; i++) {
 				map.put(vertices[i], labels.get(i));
@@ -126,25 +134,43 @@ public class GraphPreviewPanel extends JPanel {
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see edu.uci.ics.jung.graph.decorators.VertexStringer#getLabel(edu.uci.ics.jung.graph.Vertex)
+		 * @see
+		 * edu.uci.ics.jung.graph.decorators.VertexStringer#getLabel(edu.uci.ics.jung.graph.Vertex)
 		 */
 		@Override
 		public String getLabel(ArchetypeVertex v) {
 			if (showLabels) {
 				return map.get(v);
-			} else {
+			}
+			else {
 				return "";
 			}
 		}
 	}
 
+	/**
+	 * The Class UsenetVertex.
+	 */
 	class UsenetVertex extends DirectedSparseVertex {
+
+		/** The label. */
 		private String label;
 
+		/**
+		 * Instantiates a new usenet vertex.
+		 *
+		 * @param label
+		 *            the label
+		 */
 		public UsenetVertex(String label) {
 			this.label = label;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see edu.uci.ics.jung.graph.impl.AbstractSparseVertex#toString()
+		 */
 		@Override
 		public String toString() {
 			return label;
@@ -152,30 +178,31 @@ public class GraphPreviewPanel extends JPanel {
 	}
 
 	/**
-	 * create edges for this demo graph
-	 * 
+	 * create edges for this demo graph.
+	 *
+	 * @param links
+	 *            the links
 	 * @param peopleList
-	 * 
-	 * @param v
-	 *            an array of Vertices to connect
-	 * @return
+	 *            the people list
+	 * @return the vertex[]
 	 * @throws UNISoNException
+	 *             the UNI so n exception
 	 */
 	Vertex[] createEdges(List<Relationship> links, LinkedList<String> peopleList)
-			throws UNISoNException {
+	        throws UNISoNException {
 		Vertex[] v = new Vertex[peopleList.size()];
 		for (int i = 0; i < peopleList.size(); i++) {
 			v[i] = graph.addVertex(new UsenetVertex(peopleList.get(i)));
 		}
 		for (Relationship link : links) {
 			try {
-				//subtract one as index starts at 0 for arrays
-				graph.addEdge(new DirectedSparseEdge(v[link.getOwner()-1], v[link
-						.getTarget()-1]));
-			} catch (ArrayIndexOutOfBoundsException e) {
-				throw new UNISoNException("Array out of bounds: size "
-						+ v.length + " vs " + link.getOwner() + " or "
-						+ link.getTarget());
+				// subtract one as index starts at 0 for arrays
+				graph.addEdge(
+				        new DirectedSparseEdge(v[link.getOwner() - 1], v[link.getTarget() - 1]));
+			}
+			catch (ArrayIndexOutOfBoundsException e) {
+				throw new UNISoNException("Array out of bounds: size " + v.length + " vs "
+				        + link.getOwner() + " or " + link.getTarget());
 
 			}
 		}
@@ -183,9 +210,12 @@ public class GraphPreviewPanel extends JPanel {
 	}
 
 	/**
-	 * a driver for this demo
-	 * 
+	 * a driver for this demo.
+	 *
+	 * @param args
+	 *            the arguments
 	 * @throws UNISoNException
+	 *             the UNI so n exception
 	 */
 	public static void main(String[] args) throws UNISoNException {
 		JFrame frame = new JFrame();
@@ -204,8 +234,7 @@ public class GraphPreviewPanel extends JPanel {
 		String STEVE = "Steve";
 		posters.add(STEVE);
 
-		Relationship link = new Relationship(posters.indexOf(STEVE), posters
-				.indexOf(LUCY));
+		Relationship link = new Relationship(posters.indexOf(STEVE), posters.indexOf(LUCY));
 
 		List<Relationship> links = new Vector<Relationship>();
 		links.add(link);

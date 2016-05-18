@@ -36,34 +36,50 @@ import uk.co.sleonard.unison.output.PajekNetworkFile;
 import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
- * 
+ * The Class PajekPanel.
+ *
  * @author Steve
  */
 public class PajekPanel extends javax.swing.JPanel implements Observer {
 
+	/** The Constant PAJEK_NETWORK_FILE_SUFFIX. */
 	private static final String PAJEK_NETWORK_FILE_SUFFIX = ".net";
 
-	/**
-	 * 
-	 */
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 84102596787648747L;
 
+	/** The pajek file. */
 	private PajekNetworkFile pajekFile;
 
+	/** The frame. */
 	private JFrame frame;
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
 	@Override
 	public void update(Observable observable, Object arg1) {
 		if (observable instanceof UNISoNController) {
 			// UNISoNController controller = (UNISoNController) observable;
 			try {
 				refreshPajekMatrixTable();
-			} catch (UNISoNException e) {
+			}
+			catch (UNISoNException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
+	/**
+	 * The main method.
+	 *
+	 * @param args
+	 *            the arguments
+	 * @throws UNISoNException
+	 *             the UNI so n exception
+	 */
 	public static void main(String[] args) throws UNISoNException {
 		JFrame frame = new JFrame();
 		UNISoNController.create(frame);
@@ -76,17 +92,21 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 
 	}
 
+	/** The csv exporter. */
 	private ExportToCSV csvExporter = new ExportToCSV();
 
+	/** The session. */
 	private Session session;
 
 	/**
-	 * Creates new form PajekPanel
-	 * 
-	 * @throws UNISoNException
+	 * Creates new form PajekPanel.
+	 *
+	 * @param frame
+	 *            the frame
 	 */
 	public PajekPanel(JFrame frame) {
-		pajekHeader = new Vector<String>(Arrays.asList(new String[] { "Subject", "Date", "FROM", "TO" }));
+		pajekHeader = new Vector<String>(
+		        Arrays.asList(new String[] { "Subject", "Date", "FROM", "TO" }));
 		try {
 
 			this.frame = frame;
@@ -103,24 +123,31 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 			filePreviewArea.setEditable(false);
 			previousRadio.setSelected(true);
 			refreshPajekMatrixTable();
-		} catch (UNISoNException e) {
+		}
+		catch (UNISoNException e) {
 			UNISoNController.getInstance().showAlert("Error: " + e.getMessage());
 		}
 
 	}
 
 	/**
-	 * 
+	 * Creates the new row.
+	 *
 	 * @param rowIndex
+	 *            the row index
 	 * @param currentMsg
+	 *            the current msg
 	 * @param originalMsg
-	 * @return
+	 *            the original msg
+	 * @return the vector
 	 */
-	private Vector<String> createNewRow(final int rowIndex, final Message currentMsg, final Message originalMsg) {
+	private Vector<String> createNewRow(final int rowIndex, final Message currentMsg,
+	        final Message originalMsg) {
 		String toText = "";
 
 		if (null != originalMsg) {
-			toText = originalMsg.getPoster().getName() + " [" + originalMsg.getPoster().getEmail() + "]";
+			toText = originalMsg.getPoster().getName() + " [" + originalMsg.getPoster().getEmail()
+			        + "]";
 		}
 		final Vector<String> row = new Vector<String>();
 		row.add(currentMsg.getSubject());
@@ -137,6 +164,11 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 		return row;
 	}
 
+	/**
+	 * Gets the latest pajek matrix vector.
+	 *
+	 * @return the latest pajek matrix vector
+	 */
 	@SuppressWarnings("unchecked")
 	private Vector<Vector<String>> getLatestPajekMatrixVector() {
 		Vector<Vector<String>> tableData;
@@ -144,8 +176,8 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 		HashMap<String, Message> msgMap = new HashMap<String, Message>();
 
 		// Load ALL messages into map so can get complete referemce
-		Vector<Message> allMessages = DataQuery.getInstance().getMessages(null, null, session, null, null, false, null,
-				null);
+		Vector<Message> allMessages = DataQuery.getInstance().getMessages(null, null, session, null,
+		        null, false, null, null);
 		for (Object next : allMessages) {
 			Message msg = (Message) next;
 			msgMap.put(msg.getUsenetMessageID(), msg);
@@ -157,16 +189,19 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 			final Message next = msgIter.next();
 			Message lastMsg = null;
 
-			List<String> refMsgs = StringUtils.convertStringToList(next.getReferencedMessages(), " ");
+			List<String> refMsgs = StringUtils.convertStringToList(next.getReferencedMessages(),
+			        " ");
 			int size;
 			try {
 				size = refMsgs.size();
-			} catch (final Exception e) {
+			}
+			catch (final Exception e) {
 				e.printStackTrace();
 				size = 0;
 			}
 			if ((null != refMsgs) && (size > 0)) {
-				List<String> msgList = StringUtils.convertStringToList(next.getReferencedMessages(), " ");
+				List<String> msgList = StringUtils.convertStringToList(next.getReferencedMessages(),
+				        " ");
 
 				if (this.allRadio.isSelected()) {
 
@@ -175,15 +210,19 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 						Message msg = getReferencedMessage(msgMap, iter.next(), next);
 						tableData.add(this.createNewRow(rowIndex++, next, msg));
 					}
-				} else {
+				}
+				else {
 					if (this.previousRadio.isSelected()) {
-						lastMsg = getReferencedMessage(msgMap, refMsgs.get(refMsgs.size() - 1), next);
-					} else if (this.creatorRadio.isSelected()) {
+						lastMsg = getReferencedMessage(msgMap, refMsgs.get(refMsgs.size() - 1),
+						        next);
+					}
+					else if (this.creatorRadio.isSelected()) {
 						lastMsg = getReferencedMessage(msgMap, refMsgs.get(0), next);
 					}
 					tableData.add(this.createNewRow(rowIndex++, next, lastMsg));
 				}
-			} else {
+			}
+			else {
 				tableData.add(this.createNewRow(rowIndex++, next, null));
 			}
 
@@ -191,19 +230,38 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 		return tableData;
 	}
 
-	public Message getReferencedMessage(HashMap<String, Message> msgMap, String key, Message currentMessage) {
+	/**
+	 * Gets the referenced message.
+	 *
+	 * @param msgMap
+	 *            the msg map
+	 * @param key
+	 *            the key
+	 * @param currentMessage
+	 *            the current message
+	 * @return the referenced message
+	 */
+	public Message getReferencedMessage(HashMap<String, Message> msgMap, String key,
+	        Message currentMessage) {
 		Message message = msgMap.get(key);
 
 		// create dummy message for missing ones
 		if (null != key && key.contains("@") && null == message) {
 			// This message and poster is not saved to the database
 			UsenetUser poster = new UsenetUser("MISSING", key, "UNKNOWN", null, null);
-			message = new Message(null, key, currentMessage.getSubject(), poster, currentMessage.getTopic(), null,
-					currentMessage.getReferencedMessages().replaceAll(key, ""), null);
+			message = new Message(null, key, currentMessage.getSubject(), poster,
+			        currentMessage.getTopic(), null,
+			        currentMessage.getReferencedMessages().replaceAll(key, ""), null);
 		}
 		return message;
 	}
 
+	/**
+	 * Refresh pajek matrix table.
+	 *
+	 * @throws UNISoNException
+	 *             the UNI so n exception
+	 */
 	@SuppressWarnings("unchecked")
 	private void refreshPajekMatrixTable() throws UNISoNException {
 		final DefaultTableModel model = (DefaultTableModel) this.resultsMatrixTable.getModel();
@@ -211,7 +269,8 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 
 		// filePreviewArea
 		pajekFile = new PajekNetworkFile();
-		pajekFile.createDirectedLinks(((DefaultTableModel) this.resultsMatrixTable.getModel()).getDataVector());
+		pajekFile.createDirectedLinks(
+		        ((DefaultTableModel) this.resultsMatrixTable.getModel()).getDataVector());
 		graphScrollPane.removeAll();
 
 		GraphPreviewPanel previewPanel = pajekFile.getPreviewPanel();
@@ -236,9 +295,8 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 	}
 
 	/**
-	 * This method is called from within the constructor to initialize the form.
-	 * WARNING: Do NOT modify this code. The content of this method is always
-	 * regenerated by the Form Editor.
+	 * This method is called from within the constructor to initialize the form. WARNING: Do NOT
+	 * modify this code. The content of this method is always regenerated by the Form Editor.
 	 */
 	// <editor-fold defaultstate="collapsed" desc=" Generated Code
 	// <editor-fold defaultstate="collapsed" desc=" Generated Code
@@ -264,8 +322,8 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 		csvButton = new javax.swing.JButton();
 
 		incMissingCheck.setText("Include Missing Messages");
-		incMissingCheck
-				.setToolTipText("Not all referenced messages can be downloaded. This will show placeholders for them.");
+		incMissingCheck.setToolTipText(
+		        "Not all referenced messages can be downloaded. This will show placeholders for them.");
 		incMissingCheck.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		incMissingCheck.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
 		incMissingCheck.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -288,7 +346,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 		matrixTypeGroup.add(creatorRadio);
 		creatorRadio.setText("Thread creator vs Current Poster");
 		creatorRadio.setToolTipText(
-				"Thsi takes the details of the message's poster along with that of the person who started the thread.");
+		        "Thsi takes the details of the message's poster along with that of the person who started the thread.");
 		creatorRadio.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		creatorRadio.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
 		creatorRadio.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -297,13 +355,14 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 		previousRadio.setSelected(true);
 		previousRadio.setText("Previous poster vs current");
 		previousRadio.setToolTipText(
-				"This takes the current poster and that of the last message. i.e. the one they actually replied to.");
+		        "This takes the current poster and that of the last message. i.e. the one they actually replied to.");
 		previousRadio.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		previousRadio.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
 		matrixTypeGroup.add(allRadio);
 		allRadio.setText("All thread posters to current");
-		allRadio.setToolTipText("This uses all the authors in the thread up to the point of this message.");
+		allRadio.setToolTipText(
+		        "This uses all the authors in the thread up to the point of this message.");
 		allRadio.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		allRadio.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
@@ -326,11 +385,10 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 
 		pajekTabPane.addTab("Graph", graphScrollPane);
 
-		resultsMatrixTable
-				.setModel(new javax.swing.table.DefaultTableModel(
-						new Object[][] { { null, null, null, null }, { null, null, null, null },
-								{ null, null, null, null }, { null, null, null, null } },
-						new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
+		resultsMatrixTable.setModel(new javax.swing.table.DefaultTableModel(
+		        new Object[][] { { null, null, null, null }, { null, null, null, null },
+		                { null, null, null, null }, { null, null, null, null } },
+		        new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
 		matrixScrollPane.setViewportView(resultsMatrixTable);
 
 		pajekTabPane.addTab("Matrix", matrixScrollPane);
@@ -344,7 +402,8 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 		pajekTabPane.getAccessibleContext().setAccessibleName("Graph");
 
 		csvButton.setText("Save to CSV");
-		csvButton.setToolTipText("Save to Comma-separated  file (as in Matrixtab).  This can be read into Excel.");
+		csvButton.setToolTipText(
+		        "Save to Comma-separated  file (as in Matrixtab).  This can be read into Excel.");
 		csvButton.addActionListener(new java.awt.event.ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -354,66 +413,114 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup()
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(incMissingCheck)
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-										.addComponent(creatorRadio, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(allRadio, javax.swing.GroupLayout.DEFAULT_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(previousRadio)))
-				.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(previewButton)
-				.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(saveButton)
-						.addComponent(csvButton)).addContainerGap(87, Short.MAX_VALUE))
-				.addComponent(pajekTabPane, javax.swing.GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE));
+		layout.setHorizontalGroup(layout
+		        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+		        .addGroup(layout.createSequentialGroup().addGroup(layout
+		                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+		                .addComponent(incMissingCheck)
+		                .addGroup(layout
+		                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
+		                                false)
+		                        .addComponent(creatorRadio, javax.swing.GroupLayout.DEFAULT_SIZE,
+		                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+		                        .addComponent(allRadio, javax.swing.GroupLayout.DEFAULT_SIZE,
+		                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+		                        .addComponent(previousRadio)))
+		                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+		                .addComponent(previewButton)
+		                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+		                .addGroup(layout
+		                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+		                        .addComponent(saveButton).addComponent(csvButton))
+		                .addContainerGap(87, Short.MAX_VALUE))
+		        .addComponent(pajekTabPane, javax.swing.GroupLayout.DEFAULT_SIZE, 478,
+		                Short.MAX_VALUE));
 
 		layout.linkSize(javax.swing.SwingConstants.HORIZONTAL,
-				new java.awt.Component[] { csvButton, previewButton, saveButton });
+		        new java.awt.Component[] { csvButton, previewButton, saveButton });
 
-		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addContainerGap()
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup()
-										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(previewButton).addComponent(saveButton))
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(
-										csvButton))
-								.addGroup(layout.createSequentialGroup().addComponent(incMissingCheck)
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(creatorRadio)
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(previousRadio)
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(allRadio)))
-						.addGap(18, 18, 18)
-						.addComponent(pajekTabPane, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)));
+		layout.setVerticalGroup(
+		        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+		                .addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout
+		                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+		                        .addGroup(layout.createSequentialGroup()
+		                                .addGroup(layout
+		                                        .createParallelGroup(
+		                                                javax.swing.GroupLayout.Alignment.BASELINE)
+		                                        .addComponent(previewButton)
+		                                        .addComponent(saveButton))
+		                                .addPreferredGap(
+		                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+		                                .addComponent(csvButton))
+		                        .addGroup(
+		                                layout.createSequentialGroup().addComponent(incMissingCheck)
+		                                        .addPreferredGap(
+		                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+		                                        .addComponent(creatorRadio)
+		                                        .addPreferredGap(
+		                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+		                                        .addComponent(previousRadio)
+		                                        .addPreferredGap(
+		                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+		                                        .addComponent(allRadio)))
+		                        .addGap(18, 18, 18).addComponent(pajekTabPane,
+		                                javax.swing.GroupLayout.DEFAULT_SIZE, 339,
+		                                Short.MAX_VALUE)));
 	}// </editor-fold>//GEN-END:initComponents
 
+	/**
+	 * Csv button action performed.
+	 *
+	 * @param evt
+	 *            the evt
+	 */
 	private void csvButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_csvButtonActionPerformed
 		try {
 			csvExporter.exportTableToCSV(resultsMatrixTable, pajekHeader);
-		} catch (UNISoNException e) {
+		}
+		catch (UNISoNException e) {
 			// TODO Auto-generated catch block
 
 			e.printStackTrace();
 		}
 	}// GEN-LAST:event_csvButtonActionPerformed
 
+	/**
+	 * Inc missing check ancestor moved.
+	 *
+	 * @param evt
+	 *            the evt
+	 */
 	private void incMissingCheckAncestorMoved(javax.swing.event.AncestorEvent evt) {// GEN-FIRST:event_incMissingCheckAncestorMoved
 		// TODO add your handling code here:
 	}// GEN-LAST:event_incMissingCheckAncestorMoved
 
+	/**
+	 * Inc missing check ancestor added.
+	 *
+	 * @param evt
+	 *            the evt
+	 */
 	private void incMissingCheckAncestorAdded(javax.swing.event.AncestorEvent evt) {// GEN-FIRST:event_incMissingCheckAncestorAdded
 		// TODO add your handling code here:
 	}// GEN-LAST:event_incMissingCheckAncestorAdded
 
+	/**
+	 * Preview button action performed.
+	 *
+	 * @param evt
+	 *            the evt
+	 */
 	private void previewButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_previewButtonActionPerformed
 		UNISoNController.getInstance().notifyObservers();
 	}// GEN-LAST:event_previewButtonActionPerformed
 
+	/**
+	 * Save button action performed.
+	 *
+	 * @param evt
+	 *            the evt
+	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_saveButtonActionPerformed
 		FileDialog file = new FileDialog(frame, "Save Pajek Network File", FileDialog.SAVE);
@@ -443,47 +550,69 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 			pajekFile.saveToFile(fileName);
 			this.showStatus("Saved file " + filename);
 
-		} else {
+		}
+		else {
 			this.showStatus("You cancelled.");
 		}
 
 	}// GEN-LAST:event_saveButtonActionPerformed
 
+	/**
+	 * Show status.
+	 *
+	 * @param string
+	 *            the string
+	 */
 	private void showStatus(String string) {
 		UNISoNController.getInstance().showStatus(string);
 	}
 
+	/** The all radio. */
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private javax.swing.JRadioButton allRadio;
 
+	/** The creator radio. */
 	private javax.swing.JRadioButton creatorRadio;
 
+	/** The csv button. */
 	private javax.swing.JButton csvButton;
 
+	/** The file preview area. */
 	private javax.swing.JTextArea filePreviewArea;
 
+	/** The file preview scroll pane. */
 	private javax.swing.JScrollPane filePreviewScrollPane;
 
+	/** The graph scroll pane. */
 	private javax.swing.JScrollPane graphScrollPane;
 
+	/** The inc missing check. */
 	private javax.swing.JCheckBox incMissingCheck;
 
+	/** The matrix scroll pane. */
 	private javax.swing.JScrollPane matrixScrollPane;
 
+	/** The matrix type group. */
 	private javax.swing.ButtonGroup matrixTypeGroup;
 
+	/** The pajek tab pane. */
 	private javax.swing.JTabbedPane pajekTabPane;
 
+	/** The preview button. */
 	private javax.swing.JButton previewButton;
 
+	/** The previous radio. */
 	private javax.swing.JRadioButton previousRadio;
 
+	/** The results matrix table. */
 	private javax.swing.JTable resultsMatrixTable;
 
+	/** The save button. */
 	private javax.swing.JButton saveButton;
 
 	// End of variables declaration//GEN-END:variables
 
+	/** The pajek header. */
 	private final Vector<String> pajekHeader;
 
 }

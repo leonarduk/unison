@@ -1,6 +1,5 @@
 package uk.co.sleonard.unison.gui;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class UNISoNException.
  */
@@ -19,7 +18,8 @@ public class UNISoNException extends Exception {
 	/**
 	 * Instantiates a new UNI so n exception.
 	 *
-	 * @param arg0 the arg0
+	 * @param arg0
+	 *            the arg0
 	 */
 	public UNISoNException(String arg0) {
 		super(arg0);
@@ -29,7 +29,8 @@ public class UNISoNException extends Exception {
 	/**
 	 * Instantiates a new UNI so n exception.
 	 *
-	 * @param arg0 the arg0
+	 * @param arg0
+	 *            the arg0
 	 */
 	public UNISoNException(Throwable arg0) {
 		super(arg0);
@@ -39,8 +40,10 @@ public class UNISoNException extends Exception {
 	/**
 	 * Instantiates a new UNI so n exception.
 	 *
-	 * @param arg0 the arg0
-	 * @param arg1 the arg1
+	 * @param arg0
+	 *            the arg0
+	 * @param arg1
+	 *            the arg1
 	 */
 	public UNISoNException(String arg0, Throwable arg1) {
 		super(arg0, arg1);

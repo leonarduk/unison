@@ -45,8 +45,8 @@ import uk.co.sleonard.unison.input.NNTPNewsGroup;
  */
 public class HibernateHelperTest {
 
-	private HibernateHelper helper;
-	private Session session;
+	private HibernateHelper	helper;
+	private Session			session;
 
 	/**
 	 * Setup.
@@ -57,13 +57,14 @@ public class HibernateHelperTest {
 		this.helper = new HibernateHelper(uniController);
 		this.session = mock(Session.class);
 	}
+
 	/**
 	 * Test create location.
 	 */
 	@Test
 	public void testCreateLocation() {
-		/*Address http://api.hostip.info/rough.php?ip= with problem.
-		 *TODO Search other.
+		/*
+		 * Address http://api.hostip.info/rough.php?ip= with problem. TODO Search other.
 		 */
 	}
 
@@ -76,18 +77,19 @@ public class HibernateHelperTest {
 		Vector<Location> expected = new Vector<>();
 		expected.add(new Location());
 		Query query = mock(Query.class);
-		
+
 		when(this.session.createQuery(queryExpected)).thenReturn(query);
 		when(this.helper.runQuery(query, Location.class)).thenReturn(expected);
-		try{
+		try {
 			List<Location> actual = this.helper.fetchAll(Location.class, this.session);
 			assertEquals(expected.size(), actual.size());
-		}catch (NullPointerException e){
+		}
+		catch (NullPointerException e) {
 			fail(e.getMessage());
 		}
 
 	}
-	
+
 	/**
 	 * Test fetch news groups.
 	 */
@@ -99,10 +101,11 @@ public class HibernateHelperTest {
 		Query query = mock(Query.class);
 		when(this.session.createQuery(queryExpected)).thenReturn(query);
 		when(this.helper.runQuery(query, NewsGroup.class)).thenReturn(expected);
-		try{
+		try {
 			List<NewsGroup> actual = this.helper.fetchBaseNewsGroups(this.session);
 			assertEquals(expected.size(), actual.size());
-		}catch (NullPointerException e){
+		}
+		catch (NullPointerException e) {
 			fail(e.getMessage());
 		}
 	}
@@ -115,12 +118,15 @@ public class HibernateHelperTest {
 		List<Object> list = new ArrayList<>();
 		IpAddress expected = new IpAddress();
 		IpAddress actual = (IpAddress) this.helper.fetchOrInsert(this.session, expected, list);
-		try{
-			verify(this.session).saveOrUpdate(Matchers.any());		//Verify if method was called (saveOrUpdate)
-		}catch (Exception e){
+		try {
+			verify(this.session).saveOrUpdate(Matchers.any());		// Verify if method was called
+			                                                  		// (saveOrUpdate)
+		}
+		catch (Exception e) {
 			fail(e.getMessage());
 		}
-		list.add(expected);list.add(expected);
+		list.add(expected);
+		list.add(expected);
 		assertSame(expected, actual);
 	}
 
@@ -133,21 +139,25 @@ public class HibernateHelperTest {
 		Message expected = new Message();
 		String query = "uk.co.sleonard.unison.datahandling.DAO.Message" + ".findByKey";
 		Query queryMock = mock(Query.class);
-		
+
 		when(this.session.getNamedQuery(query)).thenReturn(queryMock);
 		when(queryMock.uniqueResult()).thenReturn(expected);
-		try{
+		try {
 			Message actual = (Message) this.helper.findByKey(1, this.session, Message.class);
 			assertEquals(expected, actual);
 			actual = null;
-			try{
+			try {
 				when(queryMock.uniqueResult()).thenThrow(NonUniqueResultException.class);
-				actual = (Message) this.helper.findByKey(1, this.session, Message.class);		//If throw Exception 
-			}catch (RuntimeException e){
+				actual = (Message) this.helper.findByKey(1, this.session, Message.class);		// If
+				                                                                         		// throw
+				                                                                         		// Exception
+			}
+			catch (RuntimeException e) {
 				assertNull(actual);
 			}
-			
-		}catch (Exception e){
+
+		}
+		catch (Exception e) {
 			fail(e.getMessage());
 		}
 	}
@@ -161,21 +171,25 @@ public class HibernateHelperTest {
 		Message expected = new Message();
 		String query = "uk.co.sleonard.unison.datahandling.DAO.Message" + ".findByKey";
 		Query queryMock = mock(Query.class);
-		
+
 		when(this.session.getNamedQuery(query)).thenReturn(queryMock);
 		when(queryMock.uniqueResult()).thenReturn(expected);
-		try{
+		try {
 			Message actual = (Message) this.helper.findByKey("key", this.session, Message.class);
 			assertEquals(expected, actual);
 			actual = null;
-			try{
+			try {
 				when(queryMock.uniqueResult()).thenThrow(NonUniqueResultException.class);
-				actual = (Message) this.helper.findByKey("key", this.session, Message.class);		//If throw Exception 
-			}catch (RuntimeException e){
+				actual = (Message) this.helper.findByKey("key", this.session, Message.class);		// If
+				                                                                             		// throw
+				                                                                             		// Exception
+			}
+			catch (RuntimeException e) {
 				assertNull(actual);
 			}
-			
-		}catch (Exception e){
+
+		}
+		catch (Exception e) {
 			fail(e.getMessage());
 		}
 	}
@@ -189,13 +203,17 @@ public class HibernateHelperTest {
 		expected.setFullName("alt.pl.allin");
 		NewsGroup actual = null;
 		Query query = mock(Query.class);
-		
+
 		when(this.session.getNamedQuery(Matchers.anyString())).thenReturn(query);
-		actual = this.helper.findOrCreateNewsGroup(this.session, "alt.pl.allin");	//If the search no locate data on DB
+		actual = this.helper.findOrCreateNewsGroup(this.session, "alt.pl.allin");	// If the search
+		                                                                         	// no locate
+		                                                                         	// data on DB
 		assertEquals(expected, actual);
 		when(query.uniqueResult()).thenReturn(expected);
-		actual = this.helper.findOrCreateNewsGroup(this.session, "alt.pl.allin");	//If the search locate data on DB.
-		assertEquals(expected, actual); 											
+		actual = this.helper.findOrCreateNewsGroup(this.session, "alt.pl.allin");	// If the search
+		                                                                         	// locate data
+		                                                                         	// on DB.
+		assertEquals(expected, actual);
 	}
 
 	/**
@@ -211,12 +229,13 @@ public class HibernateHelperTest {
 	 */
 	@Test
 	public void testGetGoogleMapURL() {
-		String expected = "http://maps.google.com/maps?f=q&hl=en&geocode=&q=" + "Houston" + "&ie=UTF8&z=12&om=1";
+		String expected = "http://maps.google.com/maps?f=q&hl=en&geocode=&q=" + "Houston"
+		        + "&ie=UTF8&z=12&om=1";
 		String actual = this.helper.getGoogleMapURL("Houston");
-		assertEquals(expected, actual);			//If city is Houston
+		assertEquals(expected, actual);			// If city is Houston
 		expected = "UNKNOWN LOCATION";
 		actual = this.helper.getGoogleMapURL("(Private Address)");
-		assertEquals(expected, actual);			//If Private Address
+		assertEquals(expected, actual);			// If Private Address
 	}
 
 	/**
@@ -227,7 +246,8 @@ public class HibernateHelperTest {
 		try {
 			Session session = this.helper.getHibernateSession();
 			assertNotNull(session);
-		} catch (UNISoNException e) {
+		}
+		catch (UNISoNException e) {
 			fail(e.getMessage());
 		}
 	}
@@ -241,9 +261,9 @@ public class HibernateHelperTest {
 		Vector<ResultRow> expected = new Vector<>();
 		expected.addElement(new ResultRow("topic", 1, Topic.class));
 		Vector<String[]> listTopic = new Vector<>(1);
-		listTopic.addElement(new String[] {new String("topic"), new String("1")});
+		listTopic.addElement(new String[] { new String("topic"), new String("1") });
 		String query = "select topic from Topic";
-		
+
 		SQLQuery queryMock = mock(SQLQuery.class);
 		when(this.session.createSQLQuery(query)).thenReturn(queryMock);
 		when(queryMock.list()).thenReturn(listTopic);
@@ -257,16 +277,17 @@ public class HibernateHelperTest {
 	@Test
 	public void testGetNewsgroupByFullName() {
 		NewsGroup expected = new NewsGroup("newsgroup");
-		String expectedQuery = new String("from uk.co.sleonard.unison.datahandling.DAO.NewsGroup"
-										+ " where fullname=?");
+		String expectedQuery = new String(
+		        "from uk.co.sleonard.unison.datahandling.DAO.NewsGroup" + " where fullname=?");
 		Query queryMock = mock(Query.class);
-		
+
 		when(this.session.createQuery(expectedQuery)).thenReturn(queryMock);
 		when(queryMock.setString(anyInt(), anyString())).thenReturn(queryMock);
 		when(queryMock.uniqueResult()).thenReturn(expected);
-		try{
-			this.helper.getNewsgroupByFullName("newsgroup", this.session);		
-		}catch (Exception e){
+		try {
+			this.helper.getNewsgroupByFullName("newsgroup", this.session);
+		}
+		catch (Exception e) {
 			fail("ERROR: " + e);
 		}
 	}
@@ -283,29 +304,29 @@ public class HibernateHelperTest {
 		UsenetUser user = new UsenetUser("User", "my@email.com", "private");
 		message.setPoster(user);
 		expected = "From:User(my@email.com)";
-		actual = this.helper.getText(message);	
-		assertEquals(expected, actual);					//Message
-		
+		actual = this.helper.getText(message);
+		assertEquals(expected, actual);					// Message
+
 		NewsGroup newsGroup = new NewsGroup("News");
 		expected = "News";
 		actual = this.helper.getText(newsGroup);
-		assertEquals(expected, actual);					//News
+		assertEquals(expected, actual);					// News
 		newsGroup.setLastMessageTotal(10);
 		expected = "News (10)";
 		actual = this.helper.getText(newsGroup);
-		assertEquals(expected, actual);					//News with Last Message Total.
-		
+		assertEquals(expected, actual);					// News with Last Message Total.
+
 		Location location = new Location();
 		location.setCity("Sao Paulo");
 		location.setCountryCode("BR");
 		expected = "Location : Sao Paulo,BR";
 		actual = this.helper.getText(location);
-		assertEquals(expected, actual);					//Location
-		
+		assertEquals(expected, actual);					// Location
+
 		expected = "Poster : User";
 		actual = this.helper.getText(user);
-		assertEquals(expected, actual);					//UsernetUser
-		
+		assertEquals(expected, actual);					// UsernetUser
+
 	}
 
 	/**
@@ -359,7 +380,7 @@ public class HibernateHelperTest {
 	@Ignore
 	@Test
 	public void testStoreNewsgroupsSetOfNNTPNewsGroupSession() {
-		
+
 		NewsGroup expected = new NewsGroup();
 		expected.setLastMessageTotal(1);
 		expected.setFirstMessage(1);
@@ -367,7 +388,7 @@ public class HibernateHelperTest {
 		List<NewsGroup> actual = null;
 		Query queryMock = mock(Query.class);
 		when(this.session.getNamedQuery(Matchers.anyString())).thenReturn(queryMock);
-		
+
 		Set<NNTPNewsGroup> list = new HashSet<NNTPNewsGroup>(1);
 		NNTPNewsGroup nntp = PowerMockito.mock(NNTPNewsGroup.class);
 		PowerMockito.when(nntp.getNewsgroup()).thenReturn("newsgroup");
@@ -375,34 +396,33 @@ public class HibernateHelperTest {
 		PowerMockito.when(nntp.getFirstArticle()).thenReturn(1);
 		PowerMockito.when(nntp.getLastArticle()).thenReturn(1);
 		list.add(nntp);
-		
+
 		actual = this.helper.storeNewsgroups(list, this.session);
 		assertTrue(expected.getLastMessageTotal() == actual.get(0).getLastMessageTotal());
 		assertTrue(expected.getFirstMessage() == actual.get(0).getFirstMessage());
 		assertTrue(expected.getLastMessage() == actual.get(0).getLastMessage());
-		//TODO Method do not add anything in the list (LINE 764).  
+		// TODO Method do not add anything in the list (LINE 764).
 	}
-	
+
 	/**
 	 * Test data (old).
 	 */
 	public void testData() throws Exception {
-		Session session = null; //TODO mock this and add expected return
+		Session session = null; // TODO mock this and add expected return
 		String query = "SELECT  n.fullname, count(*) as total"
-				+ " FROM newsgroup n, newsgroup_topic as nt, message m "
-				+ " where nt.topic_id = m.topic_id "
-				+ " and n.newsgroup_id = nt.newsgroup_id "
-				+ " group by n.fullname " + " order by total desc";
+		        + " FROM newsgroup n, newsgroup_topic as nt, message m "
+		        + " where nt.topic_id = m.topic_id " + " and n.newsgroup_id = nt.newsgroup_id "
+		        + " group by n.fullname " + " order by total desc";
 
 		try {
 			this.helper.getListResults(query, NewsGroup.class, this.session);
 
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			fail("ERROR" + e.getMessage());
 			e.printStackTrace();
 		}
 		System.out.println("OK");
 	}
-
 
 }

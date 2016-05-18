@@ -53,50 +53,83 @@ import uk.co.sleonard.unison.input.NewsArticle;
 import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
- * This is one of the the most important classes as it helps persist the data to
- * the HSQL database
- * 
+ * This is one of the the most important classes as it helps persist the data to the HSQL database.
+ *
  * @author steve
- * 
  */
 public class HibernateHelper {
 
-	//private final static String DB_URL = "jdbc:hsqldb:file:DB/projectDB";
+	/** The Constant DB_URL. */
+	// private final static String DB_URL = "jdbc:hsqldb:file:DB/projectDB";
 	private final static String DB_URL = "jdbc:hsqldb:file:src/main/resources/DB/projectDB";
 
+	/** The Constant dbDriver. */
 	private final static String dbDriver = "org.hsqldb.jdbcDriver";
 
+	/** The Constant dbUser. */
 	private final static String dbUser = "sa";
 
+	/** The first connect. */
 	private static boolean firstConnect = true;
 
-	public static final String GUI_ARGS[] = { "-driver", dbDriver, "-url",
-			DB_URL, "-user", dbUser };
+	/** The Constant GUI_ARGS. */
+	public static final String GUI_ARGS[] = { "-driver", dbDriver, "-url", DB_URL, "-user",
+	        dbUser };
 
+	/** The Constant HIBERNATE_CONNECTION_URL. */
 	private static final String HIBERNATE_CONNECTION_URL = "hibernate.connection.url";
 
+	/** The logger. */
 	private static Logger logger = Logger.getLogger("HibernateHelper");
 
+	/** The session factory. */
 	private static SessionFactory sessionFactory = null;
 
+	/**
+	 * The main method.
+	 *
+	 * @param args
+	 *            the arguments
+	 */
 	public static void main(final String[] args) {
 		HibernateHelper helper = new HibernateHelper(null);
 		helper.generateSchema();
 		DatabaseManagerSwing.main(GUI_ARGS);
 	}
 
+	/** The controller. */
 	private UNISoNController controller;
 
+	/**
+	 * Instantiates a new hibernate helper.
+	 *
+	 * @param controller
+	 *            the controller
+	 */
 	public HibernateHelper(UNISoNController controller) {
 		this.controller = controller;
 	}
 
+	/**
+	 * Close hibernate session factory.
+	 *
+	 * @throws HibernateException
+	 *             the hibernate exception
+	 */
 	public void closeHibernateSessionFactory() throws HibernateException {
 		sessionFactory.close();
 	}
 
-	private synchronized Location createLocation(final NewsArticle article,
-			Session session) {
+	/**
+	 * Creates the location.
+	 *
+	 * @param article
+	 *            the article
+	 * @param session
+	 *            the session
+	 * @return the location
+	 */
+	private synchronized Location createLocation(final NewsArticle article, Session session) {
 		Location location;
 		IpAddress ip = findOrCreateIpAddress(article, session);
 		location = ip.getLocation();
@@ -107,12 +140,18 @@ public class HibernateHelper {
 		return location;
 	}
 
+	/**
+	 * Creates the location.
+	 *
+	 * @param ipAddress
+	 *            the ip address
+	 * @return the location
+	 */
 	@SuppressWarnings("unchecked")
 	public Location createLocation(final String ipAddress) {
 
 		Location location = null;
-		final String locationLookupUrl = "http://api.hostip.info/rough.php?ip="
-				+ ipAddress;
+		final String locationLookupUrl = "http://api.hostip.info/rough.php?ip=" + ipAddress;
 
 		final HashMap<String, String> fieldMap = new HashMap<String, String>();
 
@@ -121,8 +160,7 @@ public class HibernateHelper {
 			final URL url = new URL(locationLookupUrl);
 
 			// Read all the text returned by the server
-			final BufferedReader in = new BufferedReader(new InputStreamReader(
-					url.openStream()));
+			final BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 			String str;
 			// Example output:
 			// Country: UNITED STATES
@@ -145,45 +183,71 @@ public class HibernateHelper {
 			Vector<UsenetUser> posters = null;// new Vector<UsenetUser>();
 			Vector<IpAddress> ips = null;// new Vector<IpAddress>();
 
-			location = new Location(city, country, countryCode, guessed,
-					posters, ips);
+			location = new Location(city, country, countryCode, guessed, posters, ips);
 
-		} catch (final MalformedURLException e) {
+		}
+		catch (final MalformedURLException e) {
 			e.printStackTrace();
-		} catch (final IOException e) {
+		}
+		catch (final IOException e) {
 			e.printStackTrace();
 		}
 		return location;
 	}
 
-	private Message createMessage(final NewsArticle article, Topic topic,
-			UsenetUser poster) throws UNISoNException {
+	/**
+	 * Creates the message.
+	 *
+	 * @param article
+	 *            the article
+	 * @param topic
+	 *            the topic
+	 * @param poster
+	 *            the poster
+	 * @return the message
+	 * @throws UNISoNException
+	 *             the UNI so n exception
+	 */
+	private Message createMessage(final NewsArticle article, Topic topic, UsenetUser poster)
+	        throws UNISoNException {
 		Message message;
 		byte[] body = null;
 		if (null != article.getContent()) {
 			// As messages can be quite large, we compress them
 			try {
 				body = StringUtils.compress(article.getContent().toString());
-			} catch (IOException e) {
+			}
+			catch (IOException e) {
 				throw new UNISoNException("Failed to compress message", e);
 			}
 		}
 
-		message = new Message(article.getDate(), article.getArticleId(),
-				article.getSubject(), poster, topic, null, article
-						.getReferences(), body);
+		message = new Message(article.getDate(), article.getArticleId(), article.getSubject(),
+		        poster, topic, null, article.getReferences(), body);
 		return message;
 	}
 
-	private synchronized UsenetUser createUsenetUser(final NewsArticle article,
-			Session session, Location location, String gender) {
+	/**
+	 * Creates the usenet user.
+	 *
+	 * @param article
+	 *            the article
+	 * @param session
+	 *            the session
+	 * @param location
+	 *            the location
+	 * @param gender
+	 *            the gender
+	 * @return the usenet user
+	 */
+	private synchronized UsenetUser createUsenetUser(final NewsArticle article, Session session,
+	        Location location, String gender) {
 		// Add location details if got all details
 		if (article.isFullHeader()) {
 			location = createLocation(article, session);
 		}
 		UsenetUser poster = findOrCreateUsenetUser(article, session, gender);
-		if (null == poster.getLocation()
-				|| !poster.getLocation().equals(location)) {
+		if (null == poster.getLocation() || !poster.getLocation().equals(location)) {
 			poster.setLocation(location);
 			poster.setLocation(location);
 			session.saveOrUpdate(poster);
@@ -194,75 +258,107 @@ public class HibernateHelper {
 	/**
 	 * Fetch all.
 	 *
-	 * @param <T> the generic type
-	 * @param classtype the classtype
-	 * @param session the session
+	 * @param <T>
+	 *            the generic type
+	 * @param classtype
+	 *            the classtype
+	 * @param session
+	 *            the session
 	 * @return the list
-	 * @throws GenericJDBCException the generic jdbc exception
+	 * @throws GenericJDBCException
+	 *             the generic jdbc exception
 	 */
 	public <T> List<T> fetchAll(final Class<T> classtype, Session session)
-			throws GenericJDBCException {
+	        throws GenericJDBCException {
 		final String query = "from " + classtype.getName();
-		final List<T
-		> returnVal = runQuery(query, session, classtype);
+		final List<T> returnVal = runQuery(query, session, classtype);
 		return returnVal;
 	}
 
+	/**
+	 * Fetch base news groups.
+	 *
+	 * @param session
+	 *            the session
+	 * @return the list
+	 * @throws GenericJDBCException
+	 *             the generic jdbc exception
+	 */
 	@SuppressWarnings("unchecked")
-	public List<NewsGroup> fetchBaseNewsGroups(Session session)
-			throws GenericJDBCException {
-		final String query = "from " + NewsGroup.class.getName()
-				+ " where lastnode is true";
-		final List<NewsGroup> returnVal = runQuery(query,
-				session, NewsGroup.class);
+	public List<NewsGroup> fetchBaseNewsGroups(Session session) throws GenericJDBCException {
+		final String query = "from " + NewsGroup.class.getName() + " where lastnode is true";
+		final List<NewsGroup> returnVal = runQuery(query, session, NewsGroup.class);
 		return returnVal;
 	}
 
-	public Serializable fetchOrInsert(final Session session,
-			Serializable storable, final List<?> dbList)
-			throws HibernateException {
+	/**
+	 * Fetch or insert.
+	 *
+	 * @param session
+	 *            the session
+	 * @param storable
+	 *            the storable
+	 * @param dbList
+	 *            the db list
+	 * @return the serializable
+	 * @throws HibernateException
+	 *             the hibernate exception
+	 */
+	public Serializable fetchOrInsert(final Session session, Serializable storable,
+	        final List<?> dbList) throws HibernateException {
 		if (dbList.size() > 0) {
 			storable = (Serializable) dbList.get(0);
-		} else {
+		}
+		else {
 			session.saveOrUpdate(storable);
 		}
 		return storable;
 	}
 
 	/**
-	 * 
+	 * Find by key.
+	 *
 	 * @param key
+	 *            the key
 	 * @param session
+	 *            the session
 	 * @param objclass
-	 * @return
+	 *            the objclass
+	 * @return the object
 	 * @throws HibernateException
+	 *             the hibernate exception
 	 */
-	public Object findByKey(final int key, final Session session,
-			final Class<?> objclass) throws HibernateException {
+	public Object findByKey(final int key, final Session session, final Class<?> objclass)
+	        throws HibernateException {
 		final String queryText = objclass.getName() + ".findByKey";
 		final Query query = session.getNamedQuery(queryText);
 		query.setInteger("key", key);
 		Object uniqueResult = null;
 		try {
 			uniqueResult = query.uniqueResult();
-		} catch (NonUniqueResultException e) {
-			throw new RuntimeException("Got non-unique result for " + key
-					+ " on " + objclass.getName() + " " + e);
+		}
+		catch (NonUniqueResultException e) {
+			throw new RuntimeException(
+			        "Got non-unique result for " + key + " on " + objclass.getName() + " " + e);
 		}
 		return uniqueResult;
 	}
 
 	/**
-	 * 
+	 * Find by key.
+	 *
 	 * @param key
+	 *            the key
 	 * @param session
-	 * @+
-	 * aram objclass
-	 * @return
+	 *            the session
+	 * @param objclass
+	 *            the objclass
+	 * @return the object
 	 * @throws HibernateException
+	 *             the hibernate exception @+ aram objclass
 	 */
-	public Object findByKey(final String key, final Session session,
-			final Class<?> objclass) throws HibernateException {
+	public Object findByKey(final String key, final Session session, final Class<?> objclass)
+	        throws HibernateException {
 
 		final String queryText = objclass.getName() + ".findByKey";
 		final Query query = session.getNamedQuery(queryText);
@@ -271,24 +367,27 @@ public class HibernateHelper {
 		try {
 			uniqueResult = query.uniqueResult();
 
-		} catch (NonUniqueResultException e) {
-			throw new RuntimeException("Got non-unique result for " + key
-					+ " on " + objclass.getName() + " " + e);
+		}
+		catch (NonUniqueResultException e) {
+			throw new RuntimeException(
+			        "Got non-unique result for " + key + " on " + objclass.getName() + " " + e);
 		}
 		return uniqueResult;
 	}
 
 	/**
-	 * 
+	 * Find or create ip address.
+	 *
 	 * @param article
+	 *            the article
 	 * @param session
-	 * @return
+	 *            the session
+	 * @return the ip address
 	 */
-	private synchronized IpAddress findOrCreateIpAddress(
-			final NewsArticle article, Session session) {
+	private synchronized IpAddress findOrCreateIpAddress(final NewsArticle article,
+	        Session session) {
 		// If user is new, then location might be too
-		IpAddress ip = (IpAddress) findByKey(article.getPostingHost(), session,
-				IpAddress.class);
+		IpAddress ip = (IpAddress) findByKey(article.getPostingHost(), session, IpAddress.class);
 
 		if (null == ip) {
 			ip = new IpAddress(article.getPostingHost(), null);
@@ -298,20 +397,22 @@ public class HibernateHelper {
 	}
 
 	/**
-	 * 
+	 * Find or create location.
+	 *
 	 * @param session
+	 *            the session
 	 * @param ipAddress
-	 * @return
+	 *            the ip address
+	 * @return the location
 	 */
-	private synchronized Location findOrCreateLocation(Session session,
-			IpAddress ipAddress) {
+	private synchronized Location findOrCreateLocation(Session session, IpAddress ipAddress) {
 		Location location;
 		location = createLocation(ipAddress.getIpAddress());
 
 		// find if location was already created for another
 		// IP
-		final Location dbLocation = (Location) findByKey(location.getCity(),
-				session, Location.class);
+		final Location dbLocation = (Location) findByKey(location.getCity(), session,
+		        Location.class);
 		if (null != dbLocation) {
 			location = dbLocation;
 			List<IpAddress> ipAddresses = location.getIpAddresses();
@@ -326,16 +427,15 @@ public class HibernateHelper {
 	}
 
 	/**
-	 * 
-	 * @param article
+	 * Find or create message.
+	 *
+	 * @param aMessage
+	 *            the a message
 	 * @param session
-	 * @param topic
-	 * @param poster
-	 * @param msgId
-	 * @return
+	 *            the session
+	 * @return the message
 	 */
-	private synchronized Message findOrCreateMessage(final Message aMessage,
-			Session session) {
+	private synchronized Message findOrCreateMessage(final Message aMessage, Session session) {
 		String key = aMessage.getUsenetMessageID();
 		// if (messages.containsKey(key)) {
 		// return messages.get(key);
@@ -349,15 +449,25 @@ public class HibernateHelper {
 				session.saveOrUpdate(aMessage);
 				// messagesCache.put(key, message);
 			}
-		} catch (ObjectNotFoundException e) {
+		}
+		catch (ObjectNotFoundException e) {
 			logger.warn(message.getPoster(), e);
 		}
 		return message;
 
 	}
 
+	/**
+	 * Find or create news group.
+	 *
+	 * @param session
+	 *            the session
+	 * @param groupName
+	 *            the group name
+	 * @return the news group
+	 */
 	public synchronized NewsGroup findOrCreateNewsGroup(final Session session,
-			final String groupName) {
+	        final String groupName) {
 
 		// if (groupsCache.containsKey(groupName)) {
 		// return groupsCache.get(groupName);
@@ -380,8 +490,8 @@ public class HibernateHelper {
 				// session.saveOrUpdate(topics);
 				HashSet<Message> messages = null;// new HashSet<Message>();
 				// session.saveOrUpdate(messages);
-				group = new NewsGroup(namePart, lastGroup, topics, messages,
-						-1, -1, -1, -1, fullName, false);
+				group = new NewsGroup(namePart, lastGroup, topics, messages, -1, -1, -1, -1,
+				        fullName, false);
 				session.saveOrUpdate(group);
 			}
 			lastGroup = group;
@@ -393,8 +503,16 @@ public class HibernateHelper {
 		return lastGroup;
 	}
 
-	private synchronized Topic findOrCreateTopic(final Session session,
-			String subject) {
+	/**
+	 * Find or create topic.
+	 *
+	 * @param session
+	 *            the session
+	 * @param subject
+	 *            the subject
+	 * @return the topic
+	 */
+	private synchronized Topic findOrCreateTopic(final Session session, String subject) {
 		Topic topic = null;
 		subject = subject.replaceAll("Re: ", "").trim();
 		topic = (Topic) findByKey(subject, session, Topic.class);
@@ -406,24 +524,37 @@ public class HibernateHelper {
 		return topic;
 	}
 
-	private synchronized UsenetUser findOrCreateUsenetUser(
-			final NewsArticle article, Session session, String gender) {
+	/**
+	 * Find or create usenet user.
+	 *
+	 * @param article
+	 *            the article
+	 * @param session
+	 *            the session
+	 * @param gender
+	 *            the gender
+	 * @return the usenet user
+	 */
+	private synchronized UsenetUser findOrCreateUsenetUser(final NewsArticle article,
+	        Session session, String gender) {
 		// Need to create a user to get the correctly formatted email
 		// for the key
-		EmailAddress emailAddress = UsenetUserHelper.parseFromField(article
-				.getFrom(), article.getPostingHost());
+		EmailAddress emailAddress = UsenetUserHelper.parseFromField(article.getFrom(),
+		        article.getPostingHost());
 		UsenetUser poster = null;
-		poster = (UsenetUser) findByKey(emailAddress.getEmail(), session,
-				UsenetUser.class);
+		poster = (UsenetUser) findByKey(emailAddress.getEmail(), session, UsenetUser.class);
 
 		if (null == poster) {
-			poster = new UsenetUser(emailAddress.getName(), emailAddress
-					.getEmail(), emailAddress.getIpAddress(), gender, null);
+			poster = new UsenetUser(emailAddress.getName(), emailAddress.getEmail(),
+			        emailAddress.getIpAddress(), gender, null);
 			session.saveOrUpdate(poster);
 		}
 		return poster;
 	}
 
+	/**
+	 * Generate schema.
+	 */
 	public void generateSchema() {
 		Configuration config;
 		try {
@@ -433,24 +564,44 @@ public class HibernateHelper {
 			final SchemaExport sch = new SchemaExport(config);
 			sch.create(true, true);
 			tx.commit();
-		} catch (final Exception e) {
+		}
+		catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * Gets the google map url.
+	 *
+	 * @param city
+	 *            the city
+	 * @return the google map url
+	 */
 	public String getGoogleMapURL(final String city) {
 		String googleUrl;
 		if (!city.equals("(Private Address)")) {
-			googleUrl = "http://maps.google.com/maps?f=q&hl=en&geocode=&q="
-					+ city + "&ie=UTF8&z=12&om=1";
-		} else {
+			googleUrl = "http://maps.google.com/maps?f=q&hl=en&geocode=&q=" + city
+			        + "&ie=UTF8&z=12&om=1";
+		}
+		else {
 			googleUrl = "UNKNOWN LOCATION";
 		}
 		return googleUrl;
 	}
 
-	private Configuration getHibernateConfig() throws HibernateException,
-			MappingException, NamingException {
+	/**
+	 * Gets the hibernate config.
+	 *
+	 * @return the hibernate config
+	 * @throws HibernateException
+	 *             the hibernate exception
+	 * @throws MappingException
+	 *             the mapping exception
+	 * @throws NamingException
+	 *             the naming exception
+	 */
+	private Configuration getHibernateConfig()
+	        throws HibernateException, MappingException, NamingException {
 		// Hashtable<String, String> env = new Hashtable<String, String>();
 		// env.put(Context.INITIAL_CONTEXT_FACTORY,
 		// "com.sun.jndi.fscontext.RefFSContextFactory");
@@ -464,8 +615,7 @@ public class HibernateHelper {
 		if (firstConnect) {
 			// will be like jdbc:hsqldb:file:<filelocation>
 			final String connUrl = props.getProperty(HIBERNATE_CONNECTION_URL);
-			final String dbLocation = connUrl.replaceFirst("jdbc:hsqldb:file:",
-					"");
+			final String dbLocation = connUrl.replaceFirst("jdbc:hsqldb:file:", "");
 			logger.warn("DB: " + dbLocation);
 
 			final String dbLockFileName = dbLocation + ".lck";
@@ -478,27 +628,27 @@ public class HibernateHelper {
 			// If lock exists warn user and ask what to do
 			while (dbLock.exists()) {
 
-				final String question = "Found database lockfile "
-						+ dbLockFileName
-						+ "\n if there is another UNISoN running, then quit,\n"
-						+ " otherwise click OK";
+				final String question = "Found database lockfile " + dbLockFileName
+				        + "\n if there is another UNISoN running, then quit,\n"
+				        + " otherwise click OK";
 				final String defaultOption = "OK";
 
 				final String[] options = { defaultOption, "Quit" };
 				final String title = "Database locked";
 				if (null != controller) {
-					final int response = controller.askQuestion(question,
-							options, title, defaultOption);
+					final int response = controller.askQuestion(question, options, title,
+					        defaultOption);
 					switch (response) {
-					case 0: // delete
-						dbLock.delete();
-						break;
-					case 1:
-						System.exit(0);
-					case JOptionPane.CLOSED_OPTION: // quit
-						break;
+						case 0: // delete
+							dbLock.delete();
+							break;
+						case 1:
+							System.exit(0);
+						case JOptionPane.CLOSED_OPTION: // quit
+							break;
 					}
-				} else {
+				}
+				else {
 					dbLock.delete();
 				}
 			}
@@ -515,6 +665,13 @@ public class HibernateHelper {
 		return config;
 	}
 
+	/**
+	 * Gets the hibernate session.
+	 *
+	 * @return the hibernate session
+	 * @throws UNISoNException
+	 *             the UNI so n exception
+	 */
 	@SuppressWarnings("deprecation")
 	public synchronized Session getHibernateSession() throws UNISoNException {
 		logger.debug("getHibernateSession");
@@ -529,7 +686,8 @@ public class HibernateHelper {
 				sessionFactory = config.buildSessionFactory();
 				Category.getRoot().setLevel(level);
 
-			} catch (Throwable e) {
+			}
+			catch (Throwable e) {
 				e.printStackTrace();
 				throw new UNISoNException("Failed to connect to DB", e);
 			}
@@ -540,9 +698,21 @@ public class HibernateHelper {
 
 	}
 
-	public <T> Vector<ResultRow> getListResults(String query, Class<T> type,
-			Session session) {
-		List<T> resultsRows = runSQLQuery(query, session,type);
+	/**
+	 * Gets the list results.
+	 *
+	 * @param <T>
+	 *            the generic type
+	 * @param query
+	 *            the query
+	 * @param type
+	 *            the type
+	 * @param session
+	 *            the session
+	 * @return the list results
+	 */
+	public <T> Vector<ResultRow> getListResults(String query, Class<T> type, Session session) {
+		List<T> resultsRows = runSQLQuery(query, session, type);
 		Vector<ResultRow> resultsVector = new Vector<ResultRow>();
 		for (Object next : resultsRows) {
 			Object[] results = (Object[]) next;
@@ -553,40 +723,65 @@ public class HibernateHelper {
 		return resultsVector;
 	}
 
-	public NewsGroup getNewsgroupByFullName(final String groupName,
-			Session session) {
-		final Query query = session.createQuery("from "
-				+ NewsGroup.class.getName() + " where fullname=?");
+	/**
+	 * Gets the newsgroup by full name.
+	 *
+	 * @param groupName
+	 *            the group name
+	 * @param session
+	 *            the session
+	 * @return the newsgroup by full name
+	 */
+	public NewsGroup getNewsgroupByFullName(final String groupName, Session session) {
+		final Query query = session
+		        .createQuery("from " + NewsGroup.class.getName() + " where fullname=?");
 
-		final NewsGroup group = (NewsGroup) query.setString(0, groupName)
-				.uniqueResult();
+		final NewsGroup group = (NewsGroup) query.setString(0, groupName).uniqueResult();
 		return group;
 	}
 
+	/**
+	 * Gets the text.
+	 *
+	 * @param object
+	 *            the object
+	 * @return the text
+	 */
 	public String getText(final Object object) {
 		String text = "";
 		if (object instanceof Message) {
 			text = "From:" + ((Message) object).getPoster().toString();
-		} else if (object instanceof NewsGroup) {
+		}
+		else if (object instanceof NewsGroup) {
 			final NewsGroup group = (NewsGroup) object;
 			text = group.getName();
 			if (group.getLastMessageTotal() > 0) {
 				text += " (" + group.getLastMessageTotal() + ")";
 			}
-		} else if (object instanceof Location) {
+		}
+		else if (object instanceof Location) {
 			final Location location = (Location) object;
-			text = "Location : " + location.getCity() + ","
-					+ location.getCountryCode();
-		} else if (object instanceof UsenetUser) {
+			text = "Location : " + location.getCity() + "," + location.getCountryCode();
+		}
+		else if (object instanceof UsenetUser) {
 			text = "Poster : " + ((UsenetUser) object).getName();
-		} else if (object instanceof Topic) {
+		}
+		else if (object instanceof Topic) {
 			// text = ((Topic) object).getSubject();
 		}
 		return text;
 	}
 
-	public synchronized boolean hibernateData(final NewsArticle article,
-			Session session) {
+	/**
+	 * Hibernate data.
+	 *
+	 * @param article
+	 *            the article
+	 * @param session
+	 *            the session
+	 * @return true, if successful
+	 */
+	public synchronized boolean hibernateData(final NewsArticle article, Session session) {
 		Transaction tx = null;
 
 		logger.debug("hibernateData: " + article.getArticleId());
@@ -597,8 +792,7 @@ public class HibernateHelper {
 			tx = session.beginTransaction();
 			tx.begin();
 
-			UsenetUser poster = createUsenetUser(article, session, location,
-					gender);
+			UsenetUser poster = createUsenetUser(article, session, location, gender);
 
 			Message message = createMessage(article, null, poster);
 
@@ -606,7 +800,8 @@ public class HibernateHelper {
 
 			tx.commit();
 
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			if (e instanceof GenericJDBCException) {
 				e = (Exception) e.getCause();
 			}
@@ -616,8 +811,7 @@ public class HibernateHelper {
 				System.err.println(" Update counts: ");
 				int[] updateCounts = buex.getUpdateCounts();
 				for (int i = 0; i < updateCounts.length; i++) {
-					System.err.println("  Statement " + i + ":"
-							+ updateCounts[i]);
+					System.err.println("  Statement " + i + ":" + updateCounts[i]);
 				}
 				System.err.println(" Message: " + buex.getMessage());
 				System.err.println(" SQLSTATE: " + buex.getSQLState());
@@ -641,7 +835,8 @@ public class HibernateHelper {
 			if (tx != null) {
 				try {
 					tx.rollback();
-				} catch (final HibernateException e1) {
+				}
+				catch (final HibernateException e1) {
 					e1.printStackTrace();
 					return false;
 				}
@@ -650,16 +845,29 @@ public class HibernateHelper {
 		return true;
 	}
 
+	/**
+	 * Run query.
+	 *
+	 * @param <T>
+	 *            the generic type
+	 * @param query
+	 *            the query
+	 * @param type
+	 *            the type
+	 * @return the vector
+	 */
 	@SuppressWarnings("unchecked")
-	public <T> Vector<T> runQuery(final Query query,Class<T> type) {
+	public <T> Vector<T> runQuery(final Query query, Class<T> type) {
 		logger.debug("runSQL: " + query);
 		// TODO create prepared statements
 		Vector<?> returnVal = null;
 		try {
 			returnVal = new Vector<T>(query.list());
-		} catch (final GenericJDBCException dbe) {
+		}
+		catch (final GenericJDBCException dbe) {
 			throw dbe;
-		} catch (final HibernateException e) {
+		}
+		catch (final HibernateException e) {
 			logger.error("Error fetching " + NewsGroup.class.getName(), e);
 		}
 		if (null == returnVal) {
@@ -668,19 +876,57 @@ public class HibernateHelper {
 		return (Vector<T>) returnVal;
 	}
 
-	public <T> Vector<T> runQuery(final String query, Session hibernateSession, Class<T> type)  {
+	/**
+	 * Run query.
+	 *
+	 * @param <T>
+	 *            the generic type
+	 * @param query
+	 *            the query
+	 * @param hibernateSession
+	 *            the hibernate session
+	 * @param type
+	 *            the type
+	 * @return the vector
+	 */
+	public <T> Vector<T> runQuery(final String query, Session hibernateSession, Class<T> type) {
 		logger.debug("runSQL: " + query);
 		final Query createQuery = hibernateSession.createQuery(query);
 		return runQuery(createQuery, type);
 	}
 
+	/**
+	 * Run sql query.
+	 *
+	 * @param <T>
+	 *            the generic type
+	 * @param query
+	 *            the query
+	 * @param session
+	 *            the session
+	 * @param type
+	 *            the type
+	 * @return the list
+	 */
 	public <T> List<T> runSQLQuery(final String query, Session session, Class<T> type) {
 		logger.debug("runSQL: " + query);
-		return runQuery(session.createSQLQuery(query),type);
+		return runQuery(session.createSQLQuery(query), type);
 	}
 
-	public synchronized void storeNewsgroups(final List<String> newsgroupsList,
-			Message message, final Session session) throws HibernateException {
+	/**
+	 * Store newsgroups.
+	 *
+	 * @param newsgroupsList
+	 *            the newsgroups list
+	 * @param message
+	 *            the message
+	 * @param session
+	 *            the session
+	 * @throws HibernateException
+	 *             the hibernate exception
+	 */
+	public synchronized void storeNewsgroups(final List<String> newsgroupsList, Message message,
+	        final Session session) throws HibernateException {
 		message = findOrCreateMessage(message, session);
 
 		final ListIterator<String> iter = newsgroupsList.listIterator();
@@ -688,8 +934,7 @@ public class HibernateHelper {
 			final String groupName = iter.next().trim();
 
 			if (groupName.trim().length() > 0) {
-				final NewsGroup group = findOrCreateNewsGroup(session,
-						groupName);
+				final NewsGroup group = findOrCreateNewsGroup(session, groupName);
 				if (null != message) {
 					Set<NewsGroup> newsgroups = message.getNewsgroups();
 					if (null == newsgroups) {
@@ -699,8 +944,7 @@ public class HibernateHelper {
 					newsgroups.add(group);
 					session.saveOrUpdate(message);
 
-					Topic topic = findOrCreateTopic(session, message
-							.getSubject());
+					Topic topic = findOrCreateTopic(session, message.getSubject());
 
 					Set<Message> groupMessages = group.getMessages();
 					if (null == groupMessages) {
@@ -735,9 +979,19 @@ public class HibernateHelper {
 		}
 	}
 
-	public List<NewsGroup> storeNewsgroups(
-			final Set<NNTPNewsGroup> newsgroupsList, Session session)
-			throws HibernateException {
+	/**
+	 * Store newsgroups.
+	 *
+	 * @param newsgroupsList
+	 *            the newsgroups list
+	 * @param session
+	 *            the session
+	 * @return the list
+	 * @throws HibernateException
+	 *             the hibernate exception
+	 */
+	public List<NewsGroup> storeNewsgroups(final Set<NNTPNewsGroup> newsgroupsList, Session session)
+	        throws HibernateException {
 		final Iterator<NNTPNewsGroup> iter = newsgroupsList.iterator();
 		final List<NewsGroup> groups = new Vector<NewsGroup>();
 
@@ -746,8 +1000,7 @@ public class HibernateHelper {
 			final String groupName = sourceGroup.getNewsgroup().trim();
 
 			if (groupName.trim().length() > 0) {
-				final NewsGroup group = findOrCreateNewsGroup(session,
-						groupName);
+				final NewsGroup group = findOrCreateNewsGroup(session, groupName);
 
 				// Add some stats to the news group
 				group.setLastMessageTotal(sourceGroup.getArticleCount());
@@ -757,10 +1010,8 @@ public class HibernateHelper {
 				session.saveOrUpdate(group);
 				session.flush();
 
-				logger.debug("Stored " + group.getId() + " "
-						+ group.getLastMessageTotal() + " "
-						+ group.getFirstMessage() + " "
-						+ group.getLastMessage());
+				logger.debug("Stored " + group.getId() + " " + group.getLastMessageTotal() + " "
+				        + group.getFirstMessage() + " " + group.getLastMessage());
 				// groups.add(group);
 			}
 		}

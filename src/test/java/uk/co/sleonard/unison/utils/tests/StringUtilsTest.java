@@ -47,7 +47,8 @@ public class StringUtilsTest {
 	/**
 	 * Test compress decompress.
 	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
 	public void testCompressDecompress() throws IOException {
@@ -60,7 +61,8 @@ public class StringUtilsTest {
 	/**
 	 * Test decompress if null.
 	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
 	public void testDecompressIfNull() throws IOException {

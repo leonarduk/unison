@@ -10,12 +10,12 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.ibm.icu.util.Calendar;
+
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
-
-import com.ibm.icu.util.Calendar;
 
 /**
  * The Class MessageTest.

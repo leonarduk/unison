@@ -8,16 +8,35 @@ import java.io.File;
 
 import javax.swing.filechooser.FileFilter;
 
+/**
+ * The Class SimpleFileFilter.
+ */
 public class SimpleFileFilter extends FileFilter {
 
+	/** The description. */
 	String description;
 
+	/** The extensions. */
 	String[] extensions;
 
+	/**
+	 * Instantiates a new simple file filter.
+	 *
+	 * @param ext
+	 *            the ext
+	 */
 	public SimpleFileFilter(final String ext) {
 		this(new String[] { ext }, null);
 	}
 
+	/**
+	 * Instantiates a new simple file filter.
+	 *
+	 * @param exts
+	 *            the exts
+	 * @param descr
+	 *            the descr
+	 */
 	public SimpleFileFilter(final String[] exts, final String descr) {
 		// Clone and lowercase the extensions
 		this.extensions = new String[exts.length];
@@ -28,6 +47,11 @@ public class SimpleFileFilter extends FileFilter {
 		this.description = (descr == null ? exts[0] + " files" : descr);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
+	 */
 	@Override
 	public boolean accept(final File f) {
 		// We always allow directories, regardless of their extension
@@ -45,6 +69,11 @@ public class SimpleFileFilter extends FileFilter {
 		return false;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.swing.filechooser.FileFilter#getDescription()
+	 */
 	@Override
 	public String getDescription() {
 		return this.description;

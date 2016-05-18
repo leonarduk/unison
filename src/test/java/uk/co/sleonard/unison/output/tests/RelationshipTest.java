@@ -1,6 +1,8 @@
 package uk.co.sleonard.unison.output.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +16,9 @@ public class RelationshipTest {
 
 	/**
 	 * Setup.
+	 *
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Before
 	public void setUp() throws Exception {

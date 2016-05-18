@@ -17,10 +17,14 @@ import uk.co.sleonard.unison.input.NewsGroupReader;
  */
 public class NewsGroupReaderTest {
 
+	/** The news group. */
 	private NewsGroupReader newsGroup;
 
 	/**
 	 * Setup.
+	 *
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Before
 	public void setUp() throws Exception {

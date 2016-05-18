@@ -3,8 +3,7 @@
  *
  * Created on 24 October 2007, 18:10
  *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
+ * To change this template, choose Tools | Template Manager and open the template in the editor.
  */
 
 package uk.co.sleonard.unison.input;
@@ -21,61 +20,88 @@ import uk.co.sleonard.unison.gui.UNISoNException;
 import uk.co.sleonard.unison.gui.UNISoNLogger;
 
 /**
- * 
+ * The Class DataHibernatorWorker.
+ *
  * @author steve
  */
 public class DataHibernatorWorker extends SwingWorker {
 
+	/** The logger. */
 	private static Logger logger = Logger.getLogger("DataHibernatorWorker");
 
+	/** The numberof hibernators. */
 	private static int numberofHibernators = 10;
 
+	/** The reader. */
 	private final NewsGroupReader reader;
 
+	/** The save to database. */
 	private boolean saveToDatabase = true;
 
-	/** Creates a new instance of DataHibernatorWorker */
+	/**
+	 * Creates a new instance of DataHibernatorWorker.
+	 *
+	 * @param reader
+	 *            the reader
+	 */
 	public DataHibernatorWorker(final NewsGroupReader reader) {
 		super("DataHibernator");
 		this.reader = reader;
-		DataHibernatorWorker.logger.debug("Creating " + this.getClass() + " "
-				+ reader.getNumberOfMessages());
+		DataHibernatorWorker.logger
+		        .debug("Creating " + this.getClass() + " " + reader.getNumberOfMessages());
 		this.start();
 	}
 
+	/** The log. */
 	static UNISoNLogger log;
 
+	/**
+	 * Sets the logger.
+	 *
+	 * @param logger
+	 *            the new logger
+	 */
 	public static void setLogger(UNISoNLogger logger) {
 		DataHibernatorWorker.log = logger;
 	}
 
+	/**
+	 * Start hibernators.
+	 */
 	public synchronized static void startHibernators() {
 		while (DataHibernatorWorker.workers.size() < numberofHibernators) {
-			DataHibernatorWorker.workers.add(new DataHibernatorWorker(
-					UNISoNController.getInstance().getNntpReader()));
+			DataHibernatorWorker.workers
+			        .add(new DataHibernatorWorker(UNISoNController.getInstance().getNntpReader()));
 		}
 	}
 
+	/**
+	 * Stop download.
+	 */
 	public static void stopDownload() {
-		for (final ListIterator<DataHibernatorWorker> iter = workers
-				.listIterator(); iter.hasNext();) {
+		for (final ListIterator<DataHibernatorWorker> iter = workers.listIterator(); iter
+		        .hasNext();) {
 			iter.next().interrupt();
 		}
 	}
 
+	/** The workers. */
 	private static ArrayList<DataHibernatorWorker> workers = new ArrayList<DataHibernatorWorker>();
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see uk.co.sleonard.unison.input.SwingWorker#construct()
+	 */
 	@Override
 	public Object construct() {
-		final LinkedBlockingQueue<NewsArticle> queue = UNISoNController
-				.getInstance().getQueue();
-		DataHibernatorWorker.logger.debug("construct : " + this.saveToDatabase
-				+ " queue " + queue.size());
+		final LinkedBlockingQueue<NewsArticle> queue = UNISoNController.getInstance().getQueue();
+		DataHibernatorWorker.logger
+		        .debug("construct : " + this.saveToDatabase + " queue " + queue.size());
 
 		try {
 			// HAve one session per worker rather than per message
-			Session session = UNISoNController.getInstance().helper()
-					.getHibernateSession();
+			Session session = UNISoNController.getInstance().helper().getHibernateSession();
 			while (this.saveToDatabase) {
 
 				while (!queue.isEmpty()) {
@@ -86,13 +112,14 @@ public class DataHibernatorWorker extends SwingWorker {
 
 					final NewsArticle article = pollForMessage(queue);
 					if (null != article) {
-						DataHibernatorWorker.logger.debug("Hibernating "
-								+ article.getArticleId() + " " + queue.size());
+						DataHibernatorWorker.logger.debug(
+						        "Hibernating " + article.getArticleId() + " " + queue.size());
 
-						if (UNISoNController.getInstance().helper()
-								.hibernateData(article, session)) {
+						if (UNISoNController.getInstance().helper().hibernateData(article,
+						        session)) {
 							this.reader.incrementMessagesStored();
-						} else {
+						}
+						else {
 							this.reader.incrementMessagesSkipped();
 						}
 						this.reader.showDownloadStatus();
@@ -107,22 +134,34 @@ public class DataHibernatorWorker extends SwingWorker {
 				}
 			}
 			DataHibernatorWorker.workers.remove(this);
-			if (DataHibernatorWorker.workers.size() == 0){
+			if (DataHibernatorWorker.workers.size() == 0) {
 				log.alert("Download complete");
 			}
-		} catch (final InterruptedException e) {
+		}
+		catch (final InterruptedException e) {
 			return ("Interrupted");
-		} catch (UNISoNException e) {
+		}
+		catch (UNISoNException e) {
 			log.alert("Error: " + e.getMessage());
 		}
 		return ("Completed");
 	}
 
+	/**
+	 * Poll for message.
+	 *
+	 * @param queue
+	 *            the queue
+	 * @return the news article
+	 */
 	private synchronized NewsArticle pollForMessage(final LinkedBlockingQueue<NewsArticle> queue) {
 		final NewsArticle article = queue.poll();
 		return article;
 	}
 
+	/**
+	 * Stop hibernating data.
+	 */
 	public void stopHibernatingData() {
 		DataHibernatorWorker.logger.warn("StopHibernatingData");
 		this.saveToDatabase = false;

@@ -1,15 +1,22 @@
 package uk.co.sleonard.unison.output.tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import uk.co.sleonard.unison.gui.UNISoNException;
 import uk.co.sleonard.unison.output.PajekNetworkFile;
 import uk.co.sleonard.unison.output.Relationship;
 
@@ -35,6 +42,20 @@ public class PajekNetworkFileTest {
 	}
 
 	/**
+	 * test getPreviewPanel
+	 * Ignored by Error (No X11 DISPLAY) in Travis CI
+	 */
+	@Ignore
+	@Test
+	public void testGetPreviewPanel() {
+		try {
+			assertNotNull(this.file.getPreviewPanel());
+		} catch (UNISoNException e) {
+			fail("ERROR : " + e.getMessage());
+		}
+	}
+
+	/**
 	 * test addRelationship.
 	 */
 	@Test
@@ -51,14 +72,7 @@ public class PajekNetworkFileTest {
 	 */
 	@Test
 	public void testCreateDirectedLinks() {
-		final Vector<Vector<String>> nodePairs = new Vector<>();
-		Vector<String> vector = new Vector<>();
-		vector.addElement("Alf");
-		vector.addElement("Bob");
-		vector.addElement("Carl");
-		vector.addElement("Carol");
-		nodePairs.addElement(new Vector<String>(vector));
-		nodePairs.addElement(new Vector<String>(vector));
+		final Vector<Vector<String>> nodePairs = generateNodePairs();
 		this.file.createDirectedLinks(nodePairs);
 		assertEquals(2, nodePairs.size());
 	}
@@ -68,16 +82,28 @@ public class PajekNetworkFileTest {
 	 */
 	@Test
 	public void testCreateUndirectedLinks() {
-		final Vector<Vector<String>> nodePairs = new Vector<>();
-		Vector<String> vector = new Vector<>();
-		vector.addElement("Erick");
-		vector.addElement("John");
-		vector.addElement("Katy");
-		vector.addElement("Jonny");
-		nodePairs.addElement(new Vector<String>(vector));
-		nodePairs.addElement(new Vector<String>(vector));
+		final Vector<Vector<String>> nodePairs = generateNodePairs();
 		this.file.createUndirectedLinks(nodePairs);
 		assertEquals(2, nodePairs.size());
+	}
+
+	/**
+	 * Test getFilename
+	 */
+	@Test
+	public void testGetFilename() {
+		String expected = "UnitTest.net";
+		testSaveToFile();
+		assertEquals(expected, this.file.getFilename());
+	}
+
+	/**
+	 * Test getFileSuffix
+	 */
+	@Test
+	public void testGetFileSuffix() {
+		String expected = ".net";
+		assertEquals(expected, this.file.getFileSuffix());
 	}
 
 	/**
@@ -89,12 +115,10 @@ public class PajekNetworkFileTest {
 		nodePairs.put("Alf", "Bertie");
 		nodePairs.put("Bertie", "Charlie");
 		nodePairs.put("Charlie", "Bertie");
-
 		nodePairs.put("Bertie", "Charlie");
 		nodePairs.put("Derek", "");
-
-		// List links = file.createDirectedLinks(nodePairs);
 		this.file.saveToFile("UnitTest");
+		this.file.saveToFile("UnitTest.net");
 	}
 
 	/**
@@ -102,9 +126,32 @@ public class PajekNetworkFileTest {
 	 */
 	@Test
 	public void testWriteData() {
-		final Vector<Vector<String>> nodePairs = new Vector<Vector<String>>();
+		final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		final Vector<Vector<String>> nodePairs = generateNodePairs();
 		this.file.createDirectedLinks(nodePairs);
-		this.file.writeData(System.out);
+		this.file.writeData(new PrintStream(outContent));
+		assertTrue(outContent.toString().contains("*Vertices"));
+		this.file.createUndirectedLinks(nodePairs);
+		this.file.writeData(new PrintStream(outContent));
+		assertTrue(outContent.toString().contains("*Edges"));
+		assertTrue(outContent.toString().contains("*Arcs"));
+
+	}
+
+	/**
+	 * Generate Vector<Vector<String>> with test data.
+	 * @return Vector<Vector<String>> filled.
+	 */
+	private Vector<Vector<String>> generateNodePairs() {
+		final Vector<Vector<String>> nodePairs = new Vector<>();
+		Vector<String> vector = new Vector<>();
+		vector.addElement("Alf");
+		vector.addElement("Bob");
+		vector.addElement("Carl");
+		vector.addElement("Carol");
+		nodePairs.addElement(new Vector<String>(vector));
+		nodePairs.addElement(new Vector<String>(vector));
+		return nodePairs;
 	}
 
 }

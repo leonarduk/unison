@@ -40,5 +40,19 @@ public class EmailAddressTest {
 		EmailAddress actual = new EmailAddress(null, null, expected);
 		assertEquals(expected, actual.getIpAddress());
 	}
-
+	
+	/**
+	 * Test HashCode.
+	 */
+	@Test
+	public void testHashCode() {
+		EmailAddress actual = new EmailAddress("user", "email@corporate.com", "127.0.0.1");
+		assertEquals(2123816993, actual.hashCode());
+		actual = new EmailAddress("user", "email@corporate.com", null);
+		assertEquals(-1612454402, actual.hashCode());
+		actual = new EmailAddress("user", null, null);
+		assertEquals(3629098, actual.hashCode());
+		actual = new EmailAddress(null, null, null);
+		assertEquals(29791, actual.hashCode());
+	}
 }

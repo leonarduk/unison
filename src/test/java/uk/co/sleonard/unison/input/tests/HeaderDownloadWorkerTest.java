@@ -117,6 +117,7 @@ public class HeaderDownloadWorkerTest {
 	 * @throws UNISoNException Signals that an exception has occurred.
 	 */
 	@Test
+	@Ignore
 	public void testInitialise() throws UNISoNException {
 
 		NewsGroupReader ngr = mock(NewsGroupReader.class);

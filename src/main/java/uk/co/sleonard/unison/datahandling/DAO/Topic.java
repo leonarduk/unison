@@ -19,7 +19,7 @@ public class Topic implements java.io.Serializable {
 	private int id;
 
 	/** The newsgroups. */
-	private Set<NewsGroup> newsgroups = new HashSet<NewsGroup>(0);
+	private Set<NewsGroup> newsgroups = new HashSet<>(0);
 
 	/** The subject. */
 	private String subject;
@@ -67,7 +67,7 @@ public class Topic implements java.io.Serializable {
 			return false;
 		}
 		final Topic that = (Topic) object;
-		if (this.getId() != that.getId() || !this.getSubject().equals(that.getSubject())) {
+		if ((this.getId() != that.getId()) || !this.getSubject().equals(that.getSubject())) {
 			return false;
 		}
 		if (!this.getNewsgroups().containsAll(that.getNewsgroups())
@@ -112,7 +112,7 @@ public class Topic implements java.io.Serializable {
 	@Override
 	public int hashCode() {
 		int hashCode = 0;
-		hashCode = 29 * hashCode + this.id;
+		hashCode = (29 * hashCode) + this.id;
 
 		return hashCode;
 	}

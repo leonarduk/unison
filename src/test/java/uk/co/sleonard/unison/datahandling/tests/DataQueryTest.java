@@ -40,8 +40,8 @@ public class DataQueryTest {
 	 */
 	@Before
 	public void setUp() {
-		helper = mock(HibernateHelper.class);
-		dataQuery = new DataQuery(helper);
+		this.helper = mock(HibernateHelper.class);
+		this.dataQuery = new DataQuery(this.helper);
 	}
 
 	/**
@@ -56,9 +56,9 @@ public class DataQueryTest {
 		boolean filtered = true;
 		Vector locations = new Vector<Location>();
 		locations.addElement(new Location());
-		when(helper.runQuery(Matchers.anyString(), Matchers.any(Session.class), 
+		when(this.helper.runQuery(Matchers.anyString(), Matchers.any(Session.class), 
 				Matchers.<Class<Location>>any())).thenReturn(locations);
-		Vector<Location> actual = dataQuery.getLocations(countries, session, filtered);
+		Vector<Location> actual = this.dataQuery.getLocations(countries, session, filtered);
 		Vector expected = locations;
 		assertEquals(expected, actual);
 	}
@@ -70,7 +70,7 @@ public class DataQueryTest {
 	public void testGetLocationString() {
 		Vector<String> countries = new Vector<>();
 		countries.addElement("England");
-		String actual = dataQuery.getLocationsSQL(countries).toString();
+		String actual = this.dataQuery.getLocationsSQL(countries).toString();
 		String expected = " FROM uk.co.sleonard.unison.datahandling.DAO.Location where country in ( 'England') ";
 		assertEquals(expected, actual);
 	}
@@ -84,15 +84,15 @@ public class DataQueryTest {
 		Vector<Message> messagesEmpty = new Vector<>();
 
 		Message message = mock(Message.class);
-		when(message.getId()).thenReturn(1);
+		when(Integer.valueOf(message.getId())).thenReturn(Integer.valueOf(1));
 		messages.add(message);
-		assertEquals("'1'", dataQuery.getMessageIdsString(messages).toString()); // 1
+		assertEquals("'1'", this.dataQuery.getMessageIdsString(messages).toString()); // 1
 																					// object
 		messages.add(message);
-		String test = dataQuery.getMessageIdsString(messages).toString();
-		assertEquals(true, test.contains(",")); // 2 objects
-		assertNotNull(dataQuery.getMessageIdsString(null)); // If null
-		assertNotNull(dataQuery.getMessageIdsString(messagesEmpty)); // If size
+		String test = this.dataQuery.getMessageIdsString(messages).toString();
+		assertEquals(Boolean.valueOf(true), Boolean.valueOf(test.contains(","))); // 2 objects
+		assertNotNull(this.dataQuery.getMessageIdsString(null)); // If null
+		assertNotNull(this.dataQuery.getMessageIdsString(messagesEmpty)); // If size
 																		// <= 0
 
 	}
@@ -115,20 +115,20 @@ public class DataQueryTest {
 		countries.add("Brazil");
 		Session session = mock(Session.class);
 		boolean filtered = true;
-		when(helper.runQuery(Matchers.anyString(), Matchers.any(Session.class), Matchers.<Class<Message>>any())).thenReturn(messages);
-		Vector<Message> actual = dataQuery.getMessages(messages, users, session, date, date, filtered, news, countries); // If
+		when(this.helper.runQuery(Matchers.anyString(), Matchers.any(Session.class), Matchers.<Class<Message>>any())).thenReturn(messages);
+		Vector<Message> actual = this.dataQuery.getMessages(messages, users, session, date, date, filtered, news, countries); // If
 																															// filtered
 																															// is
 																															// true
 		Vector expected = messages;
 		assertEquals(expected, actual);
 		filtered = false;
-		actual = dataQuery.getMessages(messages, users, session, date, date, filtered, news, countries); // If
+		actual = this.dataQuery.getMessages(messages, users, session, date, date, filtered, news, countries); // If
 																											// filtered
 																											// is
 																											// false
 		assertEquals(expected, actual);
-		actual = dataQuery.getMessages(null, null, session, null, null, filtered, null, null); // If
+		actual = this.dataQuery.getMessages(null, null, session, null, null, filtered, null, null); // If
 																								// all
 																								// parameters
 																								// is
@@ -143,9 +143,9 @@ public class DataQueryTest {
 	public void testJoin() {
 		List<String> words = new ArrayList<>();
 		words.add("apple");
-		assertEquals("apple", dataQuery.join(words, "-"));
+		assertEquals("apple", this.dataQuery.join(words, "-"));
 		words.add("pear");
-		assertEquals("apple-pear", dataQuery.join(words, "-"));
+		assertEquals("apple-pear", this.dataQuery.join(words, "-"));
 	}
 
 	/**
@@ -156,15 +156,15 @@ public class DataQueryTest {
 		Vector<UsenetUser> users = new Vector<>();
 		Vector<UsenetUser> usersEmpty = new Vector<>();
 		UsenetUser user = mock(UsenetUser.class);
-		when(user.getId()).thenReturn(1);
+		when(Integer.valueOf(user.getId())).thenReturn(Integer.valueOf(1));
 		users.add(user);
-		assertEquals("'1'", dataQuery.getUsenetUserIdsString(users).toString()); // 1
+		assertEquals("'1'", this.dataQuery.getUsenetUserIdsString(users).toString()); // 1
 																					// object
 		users.add(user);
-		String test = dataQuery.getUsenetUserIdsString(users).toString();
-		assertEquals(true, test.contains(",")); // 2 objects
-		assertNotNull(dataQuery.getUsenetUserIdsString(null)); // If null
-		assertNotNull(dataQuery.getUsenetUserIdsString(usersEmpty)); // If size
+		String test = this.dataQuery.getUsenetUserIdsString(users).toString();
+		assertEquals(Boolean.valueOf(true), Boolean.valueOf(test.contains(","))); // 2 objects
+		assertNotNull(this.dataQuery.getUsenetUserIdsString(null)); // If null
+		assertNotNull(this.dataQuery.getUsenetUserIdsString(usersEmpty)); // If size
 																		// <= 0
 	}
 

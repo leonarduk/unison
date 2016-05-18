@@ -22,30 +22,6 @@ import java.util.zip.ZipOutputStream;
 public class StringUtils {
 
 	/**
-	 * Convert string to list.
-	 *
-	 * @param field
-	 *            the field
-	 * @param delimiters
-	 *            the delimiters
-	 * @return the vector
-	 */
-	public static Vector<String> convertStringToList(final String field, final String delimiters) {
-		final Vector<String> list = new Vector<String>();
-		if (null == field) {
-			return list;
-		}
-		final StringTokenizer fields = new StringTokenizer(field, delimiters);
-
-		while (fields.hasMoreElements()) {
-			final String nextToken = fields.nextToken();
-			list.add(nextToken);
-			// System.out.println("Adding " + nextToken);
-		}
-		return list;
-	}
-
-	/**
 	 * Compress.
 	 *
 	 * @param str
@@ -80,6 +56,30 @@ public class StringUtils {
 			words.add(tok.nextToken());
 		}
 		return words;
+	}
+
+	/**
+	 * Convert string to list.
+	 *
+	 * @param field
+	 *            the field
+	 * @param delimiters
+	 *            the delimiters
+	 * @return the vector
+	 */
+	public static Vector<String> convertStringToList(final String field, final String delimiters) {
+		final Vector<String> list = new Vector<String>();
+		if (null == field) {
+			return list;
+		}
+		final StringTokenizer fields = new StringTokenizer(field, delimiters);
+
+		while (fields.hasMoreElements()) {
+			final String nextToken = fields.nextToken();
+			list.add(nextToken);
+			// System.out.println("Adding " + nextToken);
+		}
+		return list;
 	}
 
 	/**
@@ -133,28 +133,28 @@ public class StringUtils {
 
 	/**
 	 * Read the properties file on src/main/resource and process to String Array.
-	 * 
+	 *
 	 * @author Elton <elton_12_nunes@hotmail.com>
 	 * @return Return the server list on Array
 	 */
 	public static String[] loadServerList() {
 
-		Properties prop = new Properties();
+		final Properties prop = new Properties();
 
 		try {
-			String file = "servers.properties";
-			InputStream resources = ClassLoader.getSystemResourceAsStream(file);
+			final String file = "servers.properties";
+			final InputStream resources = ClassLoader.getSystemResourceAsStream(file);
 			if (null == resources) {
 				throw new IOException("can't find " + file);
 			}
 			prop.load(resources);
-			List<String> list = convertCommasToList(prop.getProperty("servers"));
+			final List<String> list = StringUtils.convertCommasToList(prop.getProperty("servers"));
 
-			String[] listServers = list.toArray(new String[list.size()]);
+			final String[] listServers = list.toArray(new String[list.size()]);
 
 			return listServers;
 		}
-		catch (IOException io) {
+		catch (final IOException io) {
 			io.printStackTrace();
 		}
 

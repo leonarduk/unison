@@ -5,12 +5,6 @@ package uk.co.sleonard.unison.datahandling.DAO;
  */
 public class DownloadRequest {
 
-	/** The usenet id. */
-	private String usenetID;
-
-	/** The mode. */
-	private DownloadMode mode;
-
 	/**
 	 * The Enum DownloadMode.
 	 */
@@ -22,6 +16,12 @@ public class DownloadRequest {
 		ALL
 	}
 
+	/** The usenet id. */
+	private final String usenetID;
+
+	/** The mode. */
+	private final DownloadMode mode;
+
 	/**
 	 * Instantiates a new download request.
 	 *
@@ -30,18 +30,9 @@ public class DownloadRequest {
 	 * @param mode
 	 *            the mode
 	 */
-	public DownloadRequest(String usenetID, DownloadMode mode) {
+	public DownloadRequest(final String usenetID, final DownloadMode mode) {
 		this.mode = mode;
 		this.usenetID = usenetID;
-	}
-
-	/**
-	 * Gets the usenet id.
-	 *
-	 * @return the usenet id
-	 */
-	public String getUsenetID() {
-		return usenetID;
 	}
 
 	/**
@@ -50,6 +41,15 @@ public class DownloadRequest {
 	 * @return the mode
 	 */
 	public DownloadMode getMode() {
-		return mode;
+		return this.mode;
+	}
+
+	/**
+	 * Gets the usenet id.
+	 *
+	 * @return the usenet id
+	 */
+	public String getUsenetID() {
+		return this.usenetID;
 	}
 }

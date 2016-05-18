@@ -73,8 +73,8 @@ public class HibernateHelper {
 	private static boolean firstConnect = true;
 
 	/** The Constant GUI_ARGS. */
-	public static final String GUI_ARGS[] = { "-driver", dbDriver, "-url", DB_URL, "-user",
-	        dbUser };
+	public static final String GUI_ARGS[] = { "-driver", HibernateHelper.dbDriver, "-url",
+	        HibernateHelper.DB_URL, "-user", HibernateHelper.dbUser };
 
 	/** The Constant HIBERNATE_CONNECTION_URL. */
 	private static final String HIBERNATE_CONNECTION_URL = "hibernate.connection.url";
@@ -92,13 +92,13 @@ public class HibernateHelper {
 	 *            the arguments
 	 */
 	public static void main(final String[] args) {
-		HibernateHelper helper = new HibernateHelper(null);
+		final HibernateHelper helper = new HibernateHelper(null);
 		helper.generateSchema();
-		DatabaseManagerSwing.main(GUI_ARGS);
+		DatabaseManagerSwing.main(HibernateHelper.GUI_ARGS);
 	}
 
 	/** The controller. */
-	private UNISoNController controller;
+	private final UNISoNController controller;
 
 	/**
 	 * Instantiates a new hibernate helper.
@@ -106,7 +106,7 @@ public class HibernateHelper {
 	 * @param controller
 	 *            the controller
 	 */
-	public HibernateHelper(UNISoNController controller) {
+	public HibernateHelper(final UNISoNController controller) {
 		this.controller = controller;
 	}
 
@@ -117,7 +117,7 @@ public class HibernateHelper {
 	 *             the hibernate exception
 	 */
 	public void closeHibernateSessionFactory() throws HibernateException {
-		sessionFactory.close();
+		HibernateHelper.sessionFactory.close();
 	}
 
 	/**
@@ -129,13 +129,13 @@ public class HibernateHelper {
 	 *            the session
 	 * @return the location
 	 */
-	private synchronized Location createLocation(final NewsArticle article, Session session) {
+	private synchronized Location createLocation(final NewsArticle article, final Session session) {
 		Location location;
-		IpAddress ip = findOrCreateIpAddress(article, session);
+		final IpAddress ip = this.findOrCreateIpAddress(article, session);
 		location = ip.getLocation();
 		if (null == location) {
 			// create location to find city (does web lookup)
-			location = findOrCreateLocation(session, ip);
+			location = this.findOrCreateLocation(session, ip);
 		}
 		return location;
 	}
@@ -180,8 +180,8 @@ public class HibernateHelper {
 			final String countryCode = fieldMap.get("Country Code");
 			final boolean guessed = Boolean.getBoolean(fieldMap.get("Guessed"));
 
-			Vector<UsenetUser> posters = null;// new Vector<UsenetUser>();
-			Vector<IpAddress> ips = null;// new Vector<IpAddress>();
+			final Vector<UsenetUser> posters = null;// new Vector<UsenetUser>();
+			final Vector<IpAddress> ips = null;// new Vector<IpAddress>();
 
 			location = new Location(city, country, countryCode, guessed, posters, ips);
 
@@ -208,8 +208,8 @@ public class HibernateHelper {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	private Message createMessage(final NewsArticle article, Topic topic, UsenetUser poster)
-	        throws UNISoNException {
+	private Message createMessage(final NewsArticle article, final Topic topic,
+	        final UsenetUser poster) throws UNISoNException {
 		Message message;
 		byte[] body = null;
 		if (null != article.getContent()) {
@@ -217,7 +217,7 @@ public class HibernateHelper {
 			try {
 				body = StringUtils.compress(article.getContent().toString());
 			}
-			catch (IOException e) {
+			catch (final IOException e) {
 				throw new UNISoNException("Failed to compress message", e);
 			}
 		}
@@ -240,13 +240,13 @@ public class HibernateHelper {
 	 *            the gender
 	 * @return the usenet user
 	 */
-	private synchronized UsenetUser createUsenetUser(final NewsArticle article, Session session,
-	        Location location, String gender) {
+	private synchronized UsenetUser createUsenetUser(final NewsArticle article,
+	        final Session session, Location location, final String gender) {
 		// Add location details if got all details
 		if (article.isFullHeader()) {
-			location = createLocation(article, session);
+			location = this.createLocation(article, session);
 		}
-		UsenetUser poster = findOrCreateUsenetUser(article, session, gender);
+		final UsenetUser poster = this.findOrCreateUsenetUser(article, session, gender);
 		if (null == poster.getLocation() || !poster.getLocation().equals(location)) {
 			poster.setLocation(location);
 			poster.setLocation(location);
@@ -268,10 +268,10 @@ public class HibernateHelper {
 	 * @throws GenericJDBCException
 	 *             the generic jdbc exception
 	 */
-	public <T> List<T> fetchAll(final Class<T> classtype, Session session)
+	public <T> List<T> fetchAll(final Class<T> classtype, final Session session)
 	        throws GenericJDBCException {
 		final String query = "from " + classtype.getName();
-		final List<T> returnVal = runQuery(query, session, classtype);
+		final List<T> returnVal = this.runQuery(query, session, classtype);
 		return returnVal;
 	}
 
@@ -285,9 +285,9 @@ public class HibernateHelper {
 	 *             the generic jdbc exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<NewsGroup> fetchBaseNewsGroups(Session session) throws GenericJDBCException {
+	public List<NewsGroup> fetchBaseNewsGroups(final Session session) throws GenericJDBCException {
 		final String query = "from " + NewsGroup.class.getName() + " where lastnode is true";
-		final List<NewsGroup> returnVal = runQuery(query, session, NewsGroup.class);
+		final List<NewsGroup> returnVal = this.runQuery(query, session, NewsGroup.class);
 		return returnVal;
 	}
 
@@ -337,7 +337,7 @@ public class HibernateHelper {
 		try {
 			uniqueResult = query.uniqueResult();
 		}
-		catch (NonUniqueResultException e) {
+		catch (final NonUniqueResultException e) {
 			throw new RuntimeException(
 			        "Got non-unique result for " + key + " on " + objclass.getName() + " " + e);
 		}
@@ -368,7 +368,7 @@ public class HibernateHelper {
 			uniqueResult = query.uniqueResult();
 
 		}
-		catch (NonUniqueResultException e) {
+		catch (final NonUniqueResultException e) {
 			throw new RuntimeException(
 			        "Got non-unique result for " + key + " on " + objclass.getName() + " " + e);
 		}
@@ -385,9 +385,10 @@ public class HibernateHelper {
 	 * @return the ip address
 	 */
 	private synchronized IpAddress findOrCreateIpAddress(final NewsArticle article,
-	        Session session) {
+	        final Session session) {
 		// If user is new, then location might be too
-		IpAddress ip = (IpAddress) findByKey(article.getPostingHost(), session, IpAddress.class);
+		IpAddress ip = (IpAddress) this.findByKey(article.getPostingHost(), session,
+		        IpAddress.class);
 
 		if (null == ip) {
 			ip = new IpAddress(article.getPostingHost(), null);
@@ -405,13 +406,14 @@ public class HibernateHelper {
 	 *            the ip address
 	 * @return the location
 	 */
-	private synchronized Location findOrCreateLocation(Session session, IpAddress ipAddress) {
+	private synchronized Location findOrCreateLocation(final Session session,
+	        final IpAddress ipAddress) {
 		Location location;
-		location = createLocation(ipAddress.getIpAddress());
+		location = this.createLocation(ipAddress.getIpAddress());
 
 		// find if location was already created for another
 		// IP
-		final Location dbLocation = (Location) findByKey(location.getCity(), session,
+		final Location dbLocation = (Location) this.findByKey(location.getCity(), session,
 		        Location.class);
 		if (null != dbLocation) {
 			location = dbLocation;
@@ -435,14 +437,15 @@ public class HibernateHelper {
 	 *            the session
 	 * @return the message
 	 */
-	private synchronized Message findOrCreateMessage(final Message aMessage, Session session) {
-		String key = aMessage.getUsenetMessageID();
+	private synchronized Message findOrCreateMessage(final Message aMessage,
+	        final Session session) {
+		final String key = aMessage.getUsenetMessageID();
 		// if (messages.containsKey(key)) {
 		// return messages.get(key);
 		// }
 		Message message = null;
 		try {
-			message = (Message) findByKey(key, session, Message.class);
+			message = (Message) this.findByKey(key, session, Message.class);
 			if (null == message) {
 				session.saveOrUpdate(aMessage.getPoster());
 				message = aMessage;
@@ -450,8 +453,8 @@ public class HibernateHelper {
 				// messagesCache.put(key, message);
 			}
 		}
-		catch (ObjectNotFoundException e) {
-			logger.warn(message.getPoster(), e);
+		catch (final ObjectNotFoundException e) {
+			HibernateHelper.logger.warn(message.getPoster(), e);
 		}
 		return message;
 
@@ -484,11 +487,11 @@ public class HibernateHelper {
 				fullName += ".";
 			}
 			fullName += namePart;
-			group = (NewsGroup) findByKey(fullName, session, NewsGroup.class);
+			group = (NewsGroup) this.findByKey(fullName, session, NewsGroup.class);
 			if (null == group) {
-				HashSet<Topic> topics = null; // new HashSet<Topic>();
+				final HashSet<Topic> topics = null; // new HashSet<Topic>();
 				// session.saveOrUpdate(topics);
-				HashSet<Message> messages = null;// new HashSet<Message>();
+				final HashSet<Message> messages = null;// new HashSet<Message>();
 				// session.saveOrUpdate(messages);
 				group = new NewsGroup(namePart, lastGroup, topics, messages, -1, -1, -1, -1,
 				        fullName, false);
@@ -515,9 +518,9 @@ public class HibernateHelper {
 	private synchronized Topic findOrCreateTopic(final Session session, String subject) {
 		Topic topic = null;
 		subject = subject.replaceAll("Re: ", "").trim();
-		topic = (Topic) findByKey(subject, session, Topic.class);
+		topic = (Topic) this.findByKey(subject, session, Topic.class);
 		if (null == topic) {
-			HashSet<NewsGroup> groups = null; // new HashSet<NewsGroup>();
+			final HashSet<NewsGroup> groups = null; // new HashSet<NewsGroup>();
 			topic = new Topic(subject, groups);
 			session.saveOrUpdate(topic);
 		}
@@ -536,13 +539,13 @@ public class HibernateHelper {
 	 * @return the usenet user
 	 */
 	private synchronized UsenetUser findOrCreateUsenetUser(final NewsArticle article,
-	        Session session, String gender) {
+	        final Session session, final String gender) {
 		// Need to create a user to get the correctly formatted email
 		// for the key
-		EmailAddress emailAddress = UsenetUserHelper.parseFromField(article.getFrom(),
+		final EmailAddress emailAddress = UsenetUserHelper.parseFromField(article.getFrom(),
 		        article.getPostingHost());
 		UsenetUser poster = null;
-		poster = (UsenetUser) findByKey(emailAddress.getEmail(), session, UsenetUser.class);
+		poster = (UsenetUser) this.findByKey(emailAddress.getEmail(), session, UsenetUser.class);
 
 		if (null == poster) {
 			poster = new UsenetUser(emailAddress.getName(), emailAddress.getEmail(),
@@ -558,9 +561,9 @@ public class HibernateHelper {
 	public void generateSchema() {
 		Configuration config;
 		try {
-			config = getHibernateConfig();
-			Session session = getHibernateSession();
-			Transaction tx = session.beginTransaction();
+			config = this.getHibernateConfig();
+			final Session session = this.getHibernateSession();
+			final Transaction tx = session.beginTransaction();
 			final SchemaExport sch = new SchemaExport(config);
 			sch.create(true, true);
 			tx.commit();
@@ -607,16 +610,16 @@ public class HibernateHelper {
 		// "com.sun.jndi.fscontext.RefFSContextFactory");
 		// env.put(Context.PROVIDER_URL, "file:/");
 		// Context initialContext = new InitialContext(env);
-		Configuration config = new Configuration().configure();
+		final Configuration config = new Configuration().configure();
 
 		// show what config we have just read in
 		final Properties props = config.getProperties();
 
-		if (firstConnect) {
+		if (HibernateHelper.firstConnect) {
 			// will be like jdbc:hsqldb:file:<filelocation>
-			final String connUrl = props.getProperty(HIBERNATE_CONNECTION_URL);
+			final String connUrl = props.getProperty(HibernateHelper.HIBERNATE_CONNECTION_URL);
 			final String dbLocation = connUrl.replaceFirst("jdbc:hsqldb:file:", "");
-			logger.warn("DB: " + dbLocation);
+			HibernateHelper.logger.warn("DB: " + dbLocation);
 
 			final String dbLockFileName = dbLocation + ".lck";
 			final File dbLock = new File(dbLockFileName);
@@ -635,8 +638,8 @@ public class HibernateHelper {
 
 				final String[] options = { defaultOption, "Quit" };
 				final String title = "Database locked";
-				if (null != controller) {
-					final int response = controller.askQuestion(question, options, title,
+				if (null != this.controller) {
+					final int response = this.controller.askQuestion(question, options, title,
 					        defaultOption);
 					switch (response) {
 						case 0: // delete
@@ -652,16 +655,16 @@ public class HibernateHelper {
 					dbLock.delete();
 				}
 			}
-			firstConnect = false;
+			HibernateHelper.firstConnect = false;
 			final String dbSchemaFile = dbLocation + ".script";
 			final File dbSchema = new File(dbSchemaFile);
 
 			if (!dbSchema.exists()) {
-				logger.warn("No database - creating now");
-				generateSchema();
+				HibernateHelper.logger.warn("No database - creating now");
+				this.generateSchema();
 			}
 		}
-		logger.debug("getHibernateConfig");
+		HibernateHelper.logger.debug("getHibernateConfig");
 		return config;
 	}
 
@@ -674,27 +677,27 @@ public class HibernateHelper {
 	 */
 	@SuppressWarnings("deprecation")
 	public synchronized Session getHibernateSession() throws UNISoNException {
-		logger.debug("getHibernateSession");
-		if (null == sessionFactory) {
+		HibernateHelper.logger.debug("getHibernateSession");
+		if (null == HibernateHelper.sessionFactory) {
 			try {
-				final Configuration config = getHibernateConfig();
+				final Configuration config = this.getHibernateConfig();
 
 				// FIXME - couldn't stop the NoInitialContext warning so this
 				// hack will stop it being displayed
-				Level level = Category.getRoot().getLevel();
+				final Level level = Category.getRoot().getLevel();
 				Category.getRoot().setLevel(Level.FATAL);
-				sessionFactory = config.buildSessionFactory();
+				HibernateHelper.sessionFactory = config.buildSessionFactory();
 				Category.getRoot().setLevel(level);
 
 			}
-			catch (Throwable e) {
+			catch (final Throwable e) {
 				e.printStackTrace();
 				throw new UNISoNException("Failed to connect to DB", e);
 			}
 		}
-		logger.debug("getHibernateSession");
+		HibernateHelper.logger.debug("getHibernateSession");
 
-		return sessionFactory.openSession();
+		return HibernateHelper.sessionFactory.openSession();
 
 	}
 
@@ -711,13 +714,14 @@ public class HibernateHelper {
 	 *            the session
 	 * @return the list results
 	 */
-	public <T> Vector<ResultRow> getListResults(String query, Class<T> type, Session session) {
-		List<T> resultsRows = runSQLQuery(query, session, type);
-		Vector<ResultRow> resultsVector = new Vector<ResultRow>();
-		for (Object next : resultsRows) {
-			Object[] results = (Object[]) next;
-			String key = (String) results[0];
-			int count = Integer.parseInt(results[1].toString());
+	public <T> Vector<ResultRow> getListResults(final String query, final Class<T> type,
+	        final Session session) {
+		final List<T> resultsRows = this.runSQLQuery(query, session, type);
+		final Vector<ResultRow> resultsVector = new Vector<ResultRow>();
+		for (final Object next : resultsRows) {
+			final Object[] results = (Object[]) next;
+			final String key = (String) results[0];
+			final int count = Integer.parseInt(results[1].toString());
 			resultsVector.add(new ResultRow(key, count, type));
 		}
 		return resultsVector;
@@ -732,7 +736,7 @@ public class HibernateHelper {
 	 *            the session
 	 * @return the newsgroup by full name
 	 */
-	public NewsGroup getNewsgroupByFullName(final String groupName, Session session) {
+	public NewsGroup getNewsgroupByFullName(final String groupName, final Session session) {
 		final Query query = session
 		        .createQuery("from " + NewsGroup.class.getName() + " where fullname=?");
 
@@ -781,22 +785,22 @@ public class HibernateHelper {
 	 *            the session
 	 * @return true, if successful
 	 */
-	public synchronized boolean hibernateData(final NewsArticle article, Session session) {
+	public synchronized boolean hibernateData(final NewsArticle article, final Session session) {
 		Transaction tx = null;
 
-		logger.debug("hibernateData: " + article.getArticleId());
+		HibernateHelper.logger.debug("hibernateData: " + article.getArticleId());
 
-		Location location = null;
-		String gender = null;
+		final Location location = null;
+		final String gender = null;
 		try {
 			tx = session.beginTransaction();
 			tx.begin();
 
-			UsenetUser poster = createUsenetUser(article, session, location, gender);
+			final UsenetUser poster = this.createUsenetUser(article, session, location, gender);
 
-			Message message = createMessage(article, null, poster);
+			final Message message = this.createMessage(article, null, poster);
 
-			storeNewsgroups(article.getNewsgroupsList(), message, session);
+			this.storeNewsgroups(article.getNewsgroupsList(), message, session);
 
 			tx.commit();
 
@@ -806,10 +810,10 @@ public class HibernateHelper {
 				e = (Exception) e.getCause();
 			}
 			if (e instanceof BatchUpdateException) {
-				BatchUpdateException buex = (BatchUpdateException) e;
+				final BatchUpdateException buex = (BatchUpdateException) e;
 				System.err.println("Contents of BatchUpdateException:");
 				System.err.println(" Update counts: ");
-				int[] updateCounts = buex.getUpdateCounts();
+				final int[] updateCounts = buex.getUpdateCounts();
 				for (int i = 0; i < updateCounts.length; i++) {
 					System.err.println("  Statement " + i + ":" + updateCounts[i]);
 				}
@@ -830,7 +834,7 @@ public class HibernateHelper {
 				}
 
 			}
-			logger.error("Failed to store message", e);
+			HibernateHelper.logger.error("Failed to store message", e);
 			e.printStackTrace();
 			if (tx != null) {
 				try {
@@ -857,8 +861,8 @@ public class HibernateHelper {
 	 * @return the vector
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> Vector<T> runQuery(final Query query, Class<T> type) {
-		logger.debug("runSQL: " + query);
+	public <T> Vector<T> runQuery(final Query query, final Class<T> type) {
+		HibernateHelper.logger.debug("runSQL: " + query);
 		// TODO create prepared statements
 		Vector<?> returnVal = null;
 		try {
@@ -868,7 +872,7 @@ public class HibernateHelper {
 			throw dbe;
 		}
 		catch (final HibernateException e) {
-			logger.error("Error fetching " + NewsGroup.class.getName(), e);
+			HibernateHelper.logger.error("Error fetching " + NewsGroup.class.getName(), e);
 		}
 		if (null == returnVal) {
 			returnVal = new Vector<Object>();
@@ -889,10 +893,11 @@ public class HibernateHelper {
 	 *            the type
 	 * @return the vector
 	 */
-	public <T> Vector<T> runQuery(final String query, Session hibernateSession, Class<T> type) {
-		logger.debug("runSQL: " + query);
+	public <T> Vector<T> runQuery(final String query, final Session hibernateSession,
+	        final Class<T> type) {
+		HibernateHelper.logger.debug("runSQL: " + query);
 		final Query createQuery = hibernateSession.createQuery(query);
-		return runQuery(createQuery, type);
+		return this.runQuery(createQuery, type);
 	}
 
 	/**
@@ -908,9 +913,9 @@ public class HibernateHelper {
 	 *            the type
 	 * @return the list
 	 */
-	public <T> List<T> runSQLQuery(final String query, Session session, Class<T> type) {
-		logger.debug("runSQL: " + query);
-		return runQuery(session.createSQLQuery(query), type);
+	public <T> List<T> runSQLQuery(final String query, final Session session, final Class<T> type) {
+		HibernateHelper.logger.debug("runSQL: " + query);
+		return this.runQuery(session.createSQLQuery(query), type);
 	}
 
 	/**
@@ -927,14 +932,14 @@ public class HibernateHelper {
 	 */
 	public synchronized void storeNewsgroups(final List<String> newsgroupsList, Message message,
 	        final Session session) throws HibernateException {
-		message = findOrCreateMessage(message, session);
+		message = this.findOrCreateMessage(message, session);
 
 		final ListIterator<String> iter = newsgroupsList.listIterator();
 		while (iter.hasNext()) {
 			final String groupName = iter.next().trim();
 
 			if (groupName.trim().length() > 0) {
-				final NewsGroup group = findOrCreateNewsGroup(session, groupName);
+				final NewsGroup group = this.findOrCreateNewsGroup(session, groupName);
 				if (null != message) {
 					Set<NewsGroup> newsgroups = message.getNewsgroups();
 					if (null == newsgroups) {
@@ -944,7 +949,7 @@ public class HibernateHelper {
 					newsgroups.add(group);
 					session.saveOrUpdate(message);
 
-					Topic topic = findOrCreateTopic(session, message.getSubject());
+					final Topic topic = this.findOrCreateTopic(session, message.getSubject());
 
 					Set<Message> groupMessages = group.getMessages();
 					if (null == groupMessages) {
@@ -973,7 +978,7 @@ public class HibernateHelper {
 
 				}
 				// adding this just in case
-				logger.debug("Stored " + group + " " + group.getId());
+				HibernateHelper.logger.debug("Stored " + group + " " + group.getId());
 				// groups.add(group);
 			}
 		}
@@ -990,8 +995,8 @@ public class HibernateHelper {
 	 * @throws HibernateException
 	 *             the hibernate exception
 	 */
-	public List<NewsGroup> storeNewsgroups(final Set<NNTPNewsGroup> newsgroupsList, Session session)
-	        throws HibernateException {
+	public List<NewsGroup> storeNewsgroups(final Set<NNTPNewsGroup> newsgroupsList,
+	        final Session session) throws HibernateException {
 		final Iterator<NNTPNewsGroup> iter = newsgroupsList.iterator();
 		final List<NewsGroup> groups = new Vector<NewsGroup>();
 
@@ -1000,7 +1005,7 @@ public class HibernateHelper {
 			final String groupName = sourceGroup.getNewsgroup().trim();
 
 			if (groupName.trim().length() > 0) {
-				final NewsGroup group = findOrCreateNewsGroup(session, groupName);
+				final NewsGroup group = this.findOrCreateNewsGroup(session, groupName);
 
 				// Add some stats to the news group
 				group.setLastMessageTotal(sourceGroup.getArticleCount());
@@ -1010,8 +1015,9 @@ public class HibernateHelper {
 				session.saveOrUpdate(group);
 				session.flush();
 
-				logger.debug("Stored " + group.getId() + " " + group.getLastMessageTotal() + " "
-				        + group.getFirstMessage() + " " + group.getLastMessage());
+				HibernateHelper.logger
+				        .debug("Stored " + group.getId() + " " + group.getLastMessageTotal() + " "
+				                + group.getFirstMessage() + " " + group.getLastMessage());
 				// groups.add(group);
 			}
 		}

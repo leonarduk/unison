@@ -6,13 +6,13 @@ import javax.swing.SwingUtilities;
 
 /**
  * from http://java.sun.com/products/jfc/tsc/articles/threads/threads2.html
- * 
+ *
  * This is the 3rd version of SwingWorker (also known as SwingWorker 3), an abstract class that you
  * subclass to perform GUI-related work in a dedicated thread. For instructions on using this class,
  * see:
- * 
+ *
  * http://java.sun.com/docs/books/tutorial/uiswing/misc/threads.html
- * 
+ *
  * Note that the API changed slightly in the 3rd version: You must now invoke start() on the
  * SwingWorker after creating it.
  */
@@ -64,7 +64,7 @@ public abstract class SwingWorker extends Observable implements Runnable {
 	 * @param name
 	 *            the name
 	 */
-	public SwingWorker(String name) {
+	public SwingWorker(final String name) {
 		final Thread t = new Thread(this, name);
 		this.threadVar = new ThreadVar(t);
 	}
@@ -86,7 +86,7 @@ public abstract class SwingWorker extends Observable implements Runnable {
 	/**
 	 * Return the value created by the <code>construct</code> method. Returns null if either the
 	 * constructing thread or the current thread was interrupted before a value was produced.
-	 * 
+	 *
 	 * @return the value created by the <code>construct</code> method
 	 */
 	public Object get() {
@@ -128,7 +128,7 @@ public abstract class SwingWorker extends Observable implements Runnable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override
@@ -139,12 +139,7 @@ public abstract class SwingWorker extends Observable implements Runnable {
 		finally {
 			this.threadVar.clear();
 		}
-		final Runnable doFinished = new Runnable() {
-			@Override
-			public void run() {
-				SwingWorker.this.finished();
-			}
-		};
+		final Runnable doFinished = () -> SwingWorker.this.finished();
 
 		SwingUtilities.invokeLater(doFinished);
 	}

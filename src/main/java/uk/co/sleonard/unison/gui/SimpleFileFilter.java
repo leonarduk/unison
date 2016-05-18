@@ -44,12 +44,12 @@ public class SimpleFileFilter extends FileFilter {
 			this.extensions[i] = exts[i].toLowerCase();
 		}
 		// Make sure we have a valid (if simplistic) description
-		this.description = (descr == null ? exts[0] + " files" : descr);
+		this.description = descr == null ? exts[0] + " files" : descr;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
 	 */
 	@Override
@@ -71,7 +71,7 @@ public class SimpleFileFilter extends FileFilter {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.swing.filechooser.FileFilter#getDescription()
 	 */
 	@Override

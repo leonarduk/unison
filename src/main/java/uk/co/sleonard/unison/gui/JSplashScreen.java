@@ -40,7 +40,7 @@ public class JSplashScreen extends JDialog {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
@@ -64,12 +64,12 @@ public class JSplashScreen extends JDialog {
 	 * @param frame
 	 *            the frame
 	 */
-	public JSplashScreen(String description, JFrame frame) {
+	public JSplashScreen(final String description, final JFrame frame) {
 		super(frame, description, false);
 
 		final JPanel PanelForBorder = new JPanel(new BorderLayout());
 		PanelForBorder.setLayout(new BorderLayout());
-		JLabel image = new JLabel(description);
+		final JLabel image = new JLabel(description);
 		image.setVisible(true);
 		PanelForBorder.add(image, BorderLayout.CENTER);
 		PanelForBorder.add(this.statusBar = new JProgressBar(0, 100), BorderLayout.SOUTH);
@@ -81,7 +81,7 @@ public class JSplashScreen extends JDialog {
 
 		// Plonk it on center of screen
 		final Dimension WindowSize = this.getSize();
-		Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		final Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
 		this.setBounds((ScreenSize.width - WindowSize.width) / 2,
 		        (ScreenSize.height - WindowSize.height) / 2, WindowSize.width, WindowSize.height);

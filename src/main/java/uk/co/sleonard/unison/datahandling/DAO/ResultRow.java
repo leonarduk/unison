@@ -6,13 +6,13 @@ package uk.co.sleonard.unison.datahandling.DAO;
 public class ResultRow implements Comparable<ResultRow> {
 
 	/** The key. */
-	private Object key;
+	private final Object key;
 
 	/** The type. */
-	private Class<?> type;
+	private final Class<?> type;
 
 	/** The count. */
-	private int count;
+	private final int count;
 
 	/**
 	 * Instantiates a new result row.
@@ -24,7 +24,7 @@ public class ResultRow implements Comparable<ResultRow> {
 	 * @param type
 	 *            the type
 	 */
-	public ResultRow(Object key, int count, Class<?> type) {
+	public ResultRow(final Object key, final int count, final Class<?> type) {
 		this.key = key;
 		this.type = type;
 		this.count = count;
@@ -32,30 +32,44 @@ public class ResultRow implements Comparable<ResultRow> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
+	 *
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
-	public String toString() {
-		return getCount() + " " + getKey();
+	public int compareTo(final ResultRow that) {
+		// reverse order to get top ones first
+		return -(this.count - that.count);
 	}
 
-	/**
-	 * Gets the key.
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @return the key
+	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
-	public Object getKey() {
-		return key;
-	}
-
-	/**
-	 * Gets the type.
-	 *
-	 * @return the type
-	 */
-	public Class<?> getType() {
-		return type;
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		final ResultRow other = (ResultRow) obj;
+		if (this.count != other.count) {
+			return false;
+		}
+		if (this.key == null) {
+			if (other.key != null) {
+				return false;
+			}
+		}
+		else if (!this.key.equals(other.key)) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -64,51 +78,49 @@ public class ResultRow implements Comparable<ResultRow> {
 	 * @return the count
 	 */
 	public int getCount() {
-		return count;
+		return this.count;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	/**
+	 * Gets the key.
+	 *
+	 * @return the key
 	 */
-	@Override
-	public int compareTo(ResultRow that) {
-		// reverse order to get top ones first
-		return -(this.count - that.count);
+	public Object getKey() {
+		return this.key;
+	}
+
+	/**
+	 * Gets the type.
+	 *
+	 * @return the type
+	 */
+	public Class<?> getType() {
+		return this.type;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + count;
-		result = prime * result + ((key == null) ? 0 : key.hashCode());
+		result = prime * result + this.count;
+		result = prime * result + (this.key == null ? 0 : this.key.hashCode());
 		return result;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
+	 *
+	 * @see java.lang.Object#toString()
 	 */
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
-		ResultRow other = (ResultRow) obj;
-		if (count != other.count) return false;
-		if (key == null) {
-			if (other.key != null) return false;
-		}
-		else if (!key.equals(other.key)) return false;
-		return true;
+	public String toString() {
+		return this.getCount() + " " + this.getKey();
 	}
 
 }

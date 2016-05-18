@@ -31,7 +31,7 @@ public class GUIItem<T> {
 	 *            the helper
 	 * @return the GUI list
 	 */
-	public static Vector<GUIItem<?>> getGUIList(final List<?> list, HibernateHelper helper) {
+	public static Vector<GUIItem<?>> getGUIList(final List<?> list, final HibernateHelper helper) {
 		final Vector<GUIItem<?>> returnList = new Vector<GUIItem<?>>();
 
 		for (final ListIterator<?> iter = list.listIterator(); iter.hasNext();) {
@@ -57,7 +57,8 @@ public class GUIItem<T> {
 	 *            the helper
 	 * @return the GUI list
 	 */
-	public static Vector<GUIItem<?>> getGUIList(final Object[] array, HibernateHelper helper) {
+	public static Vector<GUIItem<?>> getGUIList(final Object[] array,
+	        final HibernateHelper helper) {
 		return GUIItem.getGUIList(Arrays.asList(array), helper);
 	}
 
@@ -91,7 +92,7 @@ public class GUIItem<T> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

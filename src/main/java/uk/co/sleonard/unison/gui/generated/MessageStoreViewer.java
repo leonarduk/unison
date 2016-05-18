@@ -152,37 +152,6 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	/** The topics scroll pane. */
 	private javax.swing.JScrollPane topicsScrollPane;
 
-	// End of variables declaration//GEN-END:variables
-	/**
-	 * Creates new form MessageStoreViewer.
-	 */
-	public MessageStoreViewer() {
-		this.initComponents();
-
-		Dimension size = sentDateField.getPreferredSize();
-		sentDateField.setMaximumSize(size);
-		sentDateField.setPreferredSize(size);
-		subjectField.setMaximumSize(size);
-		subjectField.setPreferredSize(size);
-		senderField.setMaximumSize(size);
-		senderField.setPreferredSize(size);
-
-		try {
-
-			session = UNISoNController.getInstance().helper().getHibernateSession();
-
-			// FIXME disable all non-workng parts
-			// headersButton.setVisible(false);
-			getBodyButton.setVisible(false);
-			missingMessagesCheck.setVisible(false);
-
-			switchFilter(filterToggle.isSelected());
-		}
-		catch (UNISoNException e) {
-			UNISoNController.getInstance().showAlert("Error :" + e.getMessage());
-		}
-	}
-
 	/** The session. */
 	private Session session;
 
@@ -193,7 +162,38 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	private TreeNode topicRoot;
 
 	/** The parser. */
-	private HttpDateObject parser = new HttpDateObject();
+	private final HttpDateObject parser = new HttpDateObject();
+
+	// End of variables declaration//GEN-END:variables
+	/**
+	 * Creates new form MessageStoreViewer.
+	 */
+	public MessageStoreViewer() {
+		this.initComponents();
+
+		final Dimension size = this.sentDateField.getPreferredSize();
+		this.sentDateField.setMaximumSize(size);
+		this.sentDateField.setPreferredSize(size);
+		this.subjectField.setMaximumSize(size);
+		this.subjectField.setPreferredSize(size);
+		this.senderField.setMaximumSize(size);
+		this.senderField.setPreferredSize(size);
+
+		try {
+
+			this.session = UNISoNController.getInstance().helper().getHibernateSession();
+
+			// FIXME disable all non-workng parts
+			// headersButton.setVisible(false);
+			this.getBodyButton.setVisible(false);
+			this.missingMessagesCheck.setVisible(false);
+
+			this.switchFilter(this.filterToggle.isSelected());
+		}
+		catch (final UNISoNException e) {
+			UNISoNController.getInstance().showAlert("Error :" + e.getMessage());
+		}
+	}
 
 	/**
 	 * Adds the child node.
@@ -256,12 +256,12 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see uk.co.sleonard.unison.gui.UNISoNLogger#alert(java.lang.String)
 	 */
 	@Override
-	public void alert(String message) {
-		log(message);
+	public void alert(final String message) {
+		this.log(message);
 		UNISoNController.getInstance().showAlert(message);
 	}
 
@@ -279,21 +279,19 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 * @return the sets the
 	 */
 	private Set<Message> createMessageHierarchy(final Set<Message> set, final TreeNode root,
-	        final Object matchId, boolean fillInMissing) {
+	        final Object matchId, final boolean fillInMissing) {
 		final Set<TreeNode> matches = new HashSet<TreeNode>();
 		final Set<Message> copy = new HashSet<Message>(set);
 
-		for (final Iterator<Message> iter = set.iterator(); iter.hasNext();) {
-			final Message next = iter.next();
-
+		for (final Message next : set) {
 			// compare to the last refered message, ie. the one they replied to
 			String previousId = "ROOT";
 			try {
-				List<String> msgList = StringUtils.convertStringToList(next.getReferencedMessages(),
-				        " ");
+				final List<String> msgList = StringUtils
+				        .convertStringToList(next.getReferencedMessages(), " ");
 
 				if (msgList.size() > 0) {
-					String lastMessageId = msgList.get(0);
+					final String lastMessageId = msgList.get(0);
 					if (fillInMissing) {
 						previousId = lastMessageId;
 
@@ -314,8 +312,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 			}
 		}
 		Set<Message> remainder = new HashSet<Message>(copy);
-		for (final Iterator<TreeNode> iter = matches.iterator(); iter.hasNext();) {
-			final TreeNode next = iter.next();
+		for (final TreeNode next : matches) {
 			remainder = this.createMessageHierarchy(remainder, next,
 			        ((Message) next.getUserObject()).getUsenetMessageID(), fillInMissing);
 		}
@@ -328,11 +325,11 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 * @param evt
 	 *            the evt
 	 */
-	private void crosspostComboBoxActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_crosspostComboBoxActionPerformed
-		UNISoNController controller = UNISoNController.getInstance();
-		NewsGroup selectedGroup = (NewsGroup) crosspostComboBox.getSelectedItem();
+	private void crosspostComboBoxActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_crosspostComboBoxActionPerformed
+		final UNISoNController controller = UNISoNController.getInstance();
+		final NewsGroup selectedGroup = (NewsGroup) this.crosspostComboBox.getSelectedItem();
 		controller.setSelectedNewsgroup(selectedGroup);
-		refreshTopicHierarchy();
+		this.refreshTopicHierarchy();
 		// controller.showAlert("You chose " + selectedGroup);
 	}// GEN-LAST:event_crosspostComboBoxActionPerformed
 
@@ -344,13 +341,14 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 * @param fillInMissing
 	 *            the fill in missing
 	 */
-	protected void expandNode(final TreeNode root, boolean fillInMissing) {
+	protected void expandNode(final TreeNode root, final boolean fillInMissing) {
 
 		final Object userObject = root.getUserObject();
 		if (userObject instanceof Topic) {
 			final Topic topic = (Topic) userObject;
-			this.createMessageHierarchy(UNISoNController.getInstance().getMessages(topic, session),
-			        root, "ROOT", fillInMissing);
+			this.createMessageHierarchy(
+			        UNISoNController.getInstance().getMessages(topic, this.session), root, "ROOT",
+			        fillInMissing);
 		}
 	}
 
@@ -360,11 +358,11 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 * @param evt
 	 *            the evt
 	 */
-	private void filterToggleActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_filterToggleActionPerformed
+	private void filterToggleActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_filterToggleActionPerformed
 		try {
-			switchFilter(filterToggle.isSelected());
+			this.switchFilter(this.filterToggle.isSelected());
 		}
-		catch (UNISoNException e) {
+		catch (final UNISoNException e) {
 			UNISoNController.getInstance().showAlert("Error :" + e.getMessage());
 		}
 	}// GEN-LAST:event_filterToggleActionPerformed
@@ -376,7 +374,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 *            the evt
 	 * @return the body button action performed
 	 */
-	private void getBodyButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_getBodyButtonActionPerformed
+	private void getBodyButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_getBodyButtonActionPerformed
 		// TODO add your handling code here:
 	}// GEN-LAST:event_getBodyButtonActionPerformed
 
@@ -410,7 +408,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 * @param evt
 	 *            the evt
 	 */
-	private void groupsHierarchyValueChanged(javax.swing.event.TreeSelectionEvent evt) {// GEN-FIRST:event_groupsHierarchyValueChanged
+	private void groupsHierarchyValueChanged(final javax.swing.event.TreeSelectionEvent evt) {// GEN-FIRST:event_groupsHierarchyValueChanged
 		final TreePath tp = evt.getPath();
 		final TreeNode root = (TreeNode) tp.getLastPathComponent();
 
@@ -422,7 +420,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 			UNISoNController.getInstance().setSelectedNewsgroup((String) root.getUserObject());
 		}
 
-		notifySelectedNewsGroupObservers();
+		this.notifySelectedNewsGroupObservers();
 	}// GEN-LAST:event_groupsHierarchyValueChanged
 
 	/**
@@ -431,9 +429,9 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 * @param evt
 	 *            the evt
 	 */
-	private void headersButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_headersButtonActionPerformed
+	private void headersButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_headersButtonActionPerformed
 		try {
-			for (Message message : UNISoNController.getInstance().getMessagesFilter()) {
+			for (final Message message : UNISoNController.getInstance().getMessagesFilter()) {
 				// only download for messages that need it
 				if (null == message.getPoster().getLocation()) {
 					FullDownloadWorker.addDownloadRequest(message.getUsenetMessageID(),
@@ -442,8 +440,8 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 				}
 			}
 		}
-		catch (UNISoNException e) {
-			alert("Failed to download extra fields: " + e.getMessage());
+		catch (final UNISoNException e) {
+			this.alert("Failed to download extra fields: " + e.getMessage());
 		}
 	}// GEN-LAST:event_headersButtonActionPerformed
 
@@ -465,215 +463,172 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	// <editor-fold defaultstate="collapsed" desc=" Generated Code
 	// ">//GEN-BEGIN:initComponents
 	private void initComponents() {
-		groupsScrollPane = new javax.swing.JScrollPane();
+		this.groupsScrollPane = new javax.swing.JScrollPane();
 		this.newsgroupTreeRoot = new TreeNode(null, "NewsGroups                                 ");
-		groupsHierarchy = new javax.swing.JTree(this.newsgroupTreeRoot);
-		bodyScrollPane = new javax.swing.JScrollPane();
-		bodyPane = new javax.swing.JTextArea();
-		topicsScrollPane = new javax.swing.JScrollPane();
-		topicRoot = new TreeNode(null, "Topics");
-		topicsHierarchy = new javax.swing.JTree(this.topicRoot);
-		senderLabel = new javax.swing.JLabel();
-		sentDateLabel = new javax.swing.JLabel();
-		senderField = new javax.swing.JTextField();
-		sentDateField = new javax.swing.JTextField();
-		subjectLabel = new javax.swing.JLabel();
-		subjectField = new javax.swing.JTextField();
-		locationLabel = new javax.swing.JLabel();
-		locationField = new javax.swing.JTextField();
-		crosspostComboBox = new javax.swing.JComboBox();
-		statsTabPane = new javax.swing.JTabbedPane();
-		topPostersScrollPane = new javax.swing.JScrollPane();
-		topPostersList = new javax.swing.JList();
-		topGroupsScrollPane = new javax.swing.JScrollPane();
-		topGroupsList = new javax.swing.JList();
-		topCountriesScrollPane = new javax.swing.JScrollPane();
-		topCountriesList = new javax.swing.JList();
-		fromDateLabel = new javax.swing.JLabel();
-		todateLabel = new javax.swing.JLabel();
-		fromDateField = new javax.swing.JTextField();
-		toDateField = new javax.swing.JTextField();
-		missingMessagesCheck = new javax.swing.JCheckBox();
-		refreshButton = new javax.swing.JButton();
-		getBodyButton = new javax.swing.JButton();
-		headersButton = new javax.swing.JButton();
-		filterToggle = new javax.swing.JToggleButton();
+		this.groupsHierarchy = new javax.swing.JTree(this.newsgroupTreeRoot);
+		this.bodyScrollPane = new javax.swing.JScrollPane();
+		this.bodyPane = new javax.swing.JTextArea();
+		this.topicsScrollPane = new javax.swing.JScrollPane();
+		this.topicRoot = new TreeNode(null, "Topics");
+		this.topicsHierarchy = new javax.swing.JTree(this.topicRoot);
+		this.senderLabel = new javax.swing.JLabel();
+		this.sentDateLabel = new javax.swing.JLabel();
+		this.senderField = new javax.swing.JTextField();
+		this.sentDateField = new javax.swing.JTextField();
+		this.subjectLabel = new javax.swing.JLabel();
+		this.subjectField = new javax.swing.JTextField();
+		this.locationLabel = new javax.swing.JLabel();
+		this.locationField = new javax.swing.JTextField();
+		this.crosspostComboBox = new javax.swing.JComboBox();
+		this.statsTabPane = new javax.swing.JTabbedPane();
+		this.topPostersScrollPane = new javax.swing.JScrollPane();
+		this.topPostersList = new javax.swing.JList();
+		this.topGroupsScrollPane = new javax.swing.JScrollPane();
+		this.topGroupsList = new javax.swing.JList();
+		this.topCountriesScrollPane = new javax.swing.JScrollPane();
+		this.topCountriesList = new javax.swing.JList();
+		this.fromDateLabel = new javax.swing.JLabel();
+		this.todateLabel = new javax.swing.JLabel();
+		this.fromDateField = new javax.swing.JTextField();
+		this.toDateField = new javax.swing.JTextField();
+		this.missingMessagesCheck = new javax.swing.JCheckBox();
+		this.refreshButton = new javax.swing.JButton();
+		this.getBodyButton = new javax.swing.JButton();
+		this.headersButton = new javax.swing.JButton();
+		this.filterToggle = new javax.swing.JToggleButton();
 
-		setPreferredSize(new java.awt.Dimension(461, 281));
-		groupsHierarchy.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
-			@Override
-			public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
-				groupsHierarchyValueChanged(evt);
-			}
-		});
+		this.setPreferredSize(new java.awt.Dimension(461, 281));
+		this.groupsHierarchy.addTreeSelectionListener(
+		        evt -> MessageStoreViewer.this.groupsHierarchyValueChanged(evt));
 
-		groupsScrollPane.setViewportView(groupsHierarchy);
+		this.groupsScrollPane.setViewportView(this.groupsHierarchy);
 
-		bodyPane.setColumns(20);
-		bodyPane.setEditable(false);
-		bodyPane.setRows(5);
-		bodyScrollPane.setViewportView(bodyPane);
+		this.bodyPane.setColumns(20);
+		this.bodyPane.setEditable(false);
+		this.bodyPane.setRows(5);
+		this.bodyScrollPane.setViewportView(this.bodyPane);
 
-		topicsHierarchy.setAutoscrolls(true);
-		topicsHierarchy.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
-			@Override
-			public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
-				topicsHierarchyValueChanged(evt);
-			}
-		});
+		this.topicsHierarchy.setAutoscrolls(true);
+		this.topicsHierarchy.addTreeSelectionListener(
+		        evt -> MessageStoreViewer.this.topicsHierarchyValueChanged(evt));
 
-		topicsScrollPane.setViewportView(topicsHierarchy);
+		this.topicsScrollPane.setViewportView(this.topicsHierarchy);
 
-		senderLabel.setText("Sender");
+		this.senderLabel.setText("Sender");
 
-		sentDateLabel.setText("Sent ");
+		this.sentDateLabel.setText("Sent ");
 
-		senderField.setEditable(false);
+		this.senderField.setEditable(false);
 
-		sentDateField.setEditable(false);
+		this.sentDateField.setEditable(false);
 
-		subjectLabel.setText("Subject");
+		this.subjectLabel.setText("Subject");
 
-		subjectField.setEditable(false);
+		this.subjectField.setEditable(false);
 
-		locationLabel.setText("Location");
+		this.locationLabel.setText("Location");
 
-		locationField.setEditable(false);
+		this.locationField.setEditable(false);
 
-		crosspostComboBox.addActionListener(new java.awt.event.ActionListener() {
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				crosspostComboBoxActionPerformed(evt);
-			}
-		});
+		this.crosspostComboBox.addActionListener(
+		        evt -> MessageStoreViewer.this.crosspostComboBoxActionPerformed(evt));
 
-		topPostersList.setModel(new javax.swing.AbstractListModel() {
+		this.topPostersList.setModel(new javax.swing.AbstractListModel() {
 			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
 
 			@Override
+			public Object getElementAt(final int i) {
+				return this.strings[i];
+			}
+
+			@Override
 			public int getSize() {
-				return strings.length;
-			}
-
-			@Override
-			public Object getElementAt(int i) {
-				return strings[i];
+				return this.strings.length;
 			}
 		});
-		topPostersList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-			@Override
-			public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-				topPostersListValueChanged(evt);
-			}
-		});
+		this.topPostersList.addListSelectionListener(
+		        evt -> MessageStoreViewer.this.topPostersListValueChanged(evt));
 
-		topPostersScrollPane.setViewportView(topPostersList);
+		this.topPostersScrollPane.setViewportView(this.topPostersList);
 
-		statsTabPane.addTab(" Posters", topPostersScrollPane);
+		this.statsTabPane.addTab(" Posters", this.topPostersScrollPane);
 
-		topGroupsList.setModel(new javax.swing.AbstractListModel() {
+		this.topGroupsList.setModel(new javax.swing.AbstractListModel() {
 			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
 
 			@Override
+			public Object getElementAt(final int i) {
+				return this.strings[i];
+			}
+
+			@Override
 			public int getSize() {
-				return strings.length;
-			}
-
-			@Override
-			public Object getElementAt(int i) {
-				return strings[i];
+				return this.strings.length;
 			}
 		});
-		topGroupsList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-			@Override
-			public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-				topGroupsListValueChanged(evt);
-			}
-		});
+		this.topGroupsList.addListSelectionListener(
+		        evt -> MessageStoreViewer.this.topGroupsListValueChanged(evt));
 
-		topGroupsScrollPane.setViewportView(topGroupsList);
+		this.topGroupsScrollPane.setViewportView(this.topGroupsList);
 
-		statsTabPane.addTab("Groups", topGroupsScrollPane);
+		this.statsTabPane.addTab("Groups", this.topGroupsScrollPane);
 
-		topCountriesList.setModel(new javax.swing.AbstractListModel() {
+		this.topCountriesList.setModel(new javax.swing.AbstractListModel() {
 			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
 
 			@Override
+			public Object getElementAt(final int i) {
+				return this.strings[i];
+			}
+
+			@Override
 			public int getSize() {
-				return strings.length;
-			}
-
-			@Override
-			public Object getElementAt(int i) {
-				return strings[i];
+				return this.strings.length;
 			}
 		});
-		topCountriesList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-			@Override
-			public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-				topCountriesListValueChanged(evt);
-			}
-		});
+		this.topCountriesList.addListSelectionListener(
+		        evt -> MessageStoreViewer.this.topCountriesListValueChanged(evt));
 
-		topCountriesScrollPane.setViewportView(topCountriesList);
+		this.topCountriesScrollPane.setViewportView(this.topCountriesList);
 
-		statsTabPane.addTab("Countries", topCountriesScrollPane);
+		this.statsTabPane.addTab("Countries", this.topCountriesScrollPane);
 
-		fromDateLabel.setText("Date from : ");
+		this.fromDateLabel.setText("Date from : ");
 
-		todateLabel.setText("Date To:");
+		this.todateLabel.setText("Date To:");
 
-		fromDateField.setToolTipText("In YYYYMMDD format, e.g. 20070101");
+		this.fromDateField.setToolTipText("In YYYYMMDD format, e.g. 20070101");
 
-		toDateField.setToolTipText("In YYYYMMDD format, e.g. 20070101");
+		this.toDateField.setToolTipText("In YYYYMMDD format, e.g. 20070101");
 
-		missingMessagesCheck.setText("Show ");
-		missingMessagesCheck.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-		missingMessagesCheck.setMargin(new java.awt.Insets(0, 0, 0, 0));
-		missingMessagesCheck.addItemListener(new java.awt.event.ItemListener() {
-			@Override
-			public void itemStateChanged(java.awt.event.ItemEvent evt) {
-				missingMessagesCheckItemStateChanged(evt);
-			}
-		});
+		this.missingMessagesCheck.setText("Show ");
+		this.missingMessagesCheck
+		        .setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+		this.missingMessagesCheck.setMargin(new java.awt.Insets(0, 0, 0, 0));
+		this.missingMessagesCheck.addItemListener(
+		        evt -> MessageStoreViewer.this.missingMessagesCheckItemStateChanged(evt));
 
-		refreshButton.setText("Refresh Data");
-		refreshButton.addActionListener(new java.awt.event.ActionListener() {
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				refreshButtonActionPerformed(evt);
-			}
-		});
+		this.refreshButton.setText("Refresh Data");
+		this.refreshButton.addActionListener(
+		        evt -> MessageStoreViewer.this.refreshButtonActionPerformed(evt));
 
-		getBodyButton.setText("Get Body");
-		getBodyButton.addActionListener(new java.awt.event.ActionListener() {
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				getBodyButtonActionPerformed(evt);
-			}
-		});
+		this.getBodyButton.setText("Get Body");
+		this.getBodyButton.addActionListener(
+		        evt -> MessageStoreViewer.this.getBodyButtonActionPerformed(evt));
 
-		headersButton.setText("Get Extras");
-		headersButton.setToolTipText(
+		this.headersButton.setText("Get Extras");
+		this.headersButton.setToolTipText(
 		        "Download extra fields: location and crossposts for messages in filter");
-		headersButton.addActionListener(new java.awt.event.ActionListener() {
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				headersButtonActionPerformed(evt);
-			}
-		});
+		this.headersButton.addActionListener(
+		        evt -> MessageStoreViewer.this.headersButtonActionPerformed(evt));
 
-		filterToggle.setText("Filter");
-		filterToggle.setToolTipText(
+		this.filterToggle.setText("Filter");
+		this.filterToggle.setToolTipText(
 		        "Enter date values, select groups or posters in lists, or combination then click filter");
-		filterToggle.addActionListener(new java.awt.event.ActionListener() {
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				filterToggleActionPerformed(evt);
-			}
-		});
+		this.filterToggle
+		        .addActionListener(evt -> MessageStoreViewer.this.filterToggleActionPerformed(evt));
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+		final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(
 		        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
@@ -682,48 +637,48 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 		                        .addGroup(layout
 		                                .createParallelGroup(
 		                                        javax.swing.GroupLayout.Alignment.LEADING, false)
-		                                .addComponent(topicsScrollPane,
+		                                .addComponent(this.topicsScrollPane,
 		                                        javax.swing.GroupLayout.DEFAULT_SIZE, 179,
 		                                        Short.MAX_VALUE)
-		                                .addComponent(groupsScrollPane,
+		                                .addComponent(this.groupsScrollPane,
 		                                        javax.swing.GroupLayout.DEFAULT_SIZE, 179,
 		                                        Short.MAX_VALUE))
 		                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 		                        .addGroup(layout
 		                                .createParallelGroup(
 		                                        javax.swing.GroupLayout.Alignment.LEADING, false)
-		                                .addComponent(bodyScrollPane,
+		                                .addComponent(this.bodyScrollPane,
 		                                        javax.swing.GroupLayout.DEFAULT_SIZE, 175,
 		                                        Short.MAX_VALUE)
 		                                .addGroup(layout.createSequentialGroup().addGap(4, 4, 4)
-		                                        .addComponent(crosspostComboBox,
+		                                        .addComponent(this.crosspostComboBox,
 		                                                javax.swing.GroupLayout.PREFERRED_SIZE, 171,
 		                                                javax.swing.GroupLayout.PREFERRED_SIZE))
 		                                .addGroup(layout.createSequentialGroup()
 		                                        .addGroup(layout
 		                                                .createParallelGroup(
 		                                                        javax.swing.GroupLayout.Alignment.LEADING)
-		                                                .addComponent(subjectLabel)
-		                                                .addComponent(locationLabel)
-		                                                .addComponent(sentDateLabel)
-		                                                .addComponent(senderLabel))
+		                                                .addComponent(this.subjectLabel)
+		                                                .addComponent(this.locationLabel)
+		                                                .addComponent(this.sentDateLabel)
+		                                                .addComponent(this.senderLabel))
 		                                        .addGap(9, 9, 9)
 		                                        .addGroup(layout
 		                                                .createParallelGroup(
 		                                                        javax.swing.GroupLayout.Alignment.LEADING,
 		                                                        false)
-		                                                .addComponent(subjectField,
+		                                                .addComponent(this.subjectField,
 		                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
 		                                                        118, Short.MAX_VALUE)
-		                                                .addComponent(senderField)
-		                                                .addComponent(locationField)
-		                                                .addComponent(sentDateField))))
+		                                                .addComponent(this.senderField)
+		                                                .addComponent(this.locationField)
+		                                                .addComponent(this.sentDateField))))
 		                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 		                        .addGroup(layout
 		                                .createParallelGroup(
 		                                        javax.swing.GroupLayout.Alignment.LEADING, false)
 		                                .addGroup(layout.createSequentialGroup()
-		                                        .addComponent(statsTabPane,
+		                                        .addComponent(this.statsTabPane,
 		                                                javax.swing.GroupLayout.PREFERRED_SIZE, 179,
 		                                                javax.swing.GroupLayout.PREFERRED_SIZE)
 		                                        .addPreferredGap(
@@ -733,25 +688,25 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 		                                        .addGroup(layout
 		                                                .createParallelGroup(
 		                                                        javax.swing.GroupLayout.Alignment.LEADING)
-		                                                .addComponent(todateLabel)
-		                                                .addComponent(fromDateLabel))
+		                                                .addComponent(this.todateLabel)
+		                                                .addComponent(this.fromDateLabel))
 		                                        .addPreferredGap(
 		                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 		                                        .addGroup(layout
 		                                                .createParallelGroup(
 		                                                        javax.swing.GroupLayout.Alignment.TRAILING)
-		                                                .addComponent(toDateField,
+		                                                .addComponent(this.toDateField,
 		                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
 		                                                        118, Short.MAX_VALUE)
-		                                                .addComponent(fromDateField,
+		                                                .addComponent(this.fromDateField,
 		                                                        javax.swing.GroupLayout.Alignment.LEADING,
 		                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
 		                                                        118, Short.MAX_VALUE)))
 		                                .addGroup(layout.createSequentialGroup()
-		                                        .addComponent(refreshButton)
+		                                        .addComponent(this.refreshButton)
 		                                        .addPreferredGap(
 		                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-		                                        .addComponent(getBodyButton))
+		                                        .addComponent(this.getBodyButton))
 		                                .addGroup(layout.createSequentialGroup()
 		                                        .addPreferredGap(
 		                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -759,45 +714,45 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 		                                                .createParallelGroup(
 		                                                        javax.swing.GroupLayout.Alignment.LEADING,
 		                                                        false)
-		                                                .addComponent(filterToggle,
+		                                                .addComponent(this.filterToggle,
 		                                                        javax.swing.GroupLayout.Alignment.TRAILING,
 		                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
 		                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
 		                                                        Short.MAX_VALUE)
-		                                                .addComponent(headersButton,
+		                                                .addComponent(this.headersButton,
 		                                                        javax.swing.GroupLayout.Alignment.TRAILING,
 		                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
 		                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
 		                                                        Short.MAX_VALUE))
 		                                        .addGap(26, 26, 26)
-		                                        .addComponent(missingMessagesCheck)
+		                                        .addComponent(this.missingMessagesCheck)
 		                                        .addGap(29, 29, 29)))
 		                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
 		                                Short.MAX_VALUE)));
 
 		layout.linkSize(javax.swing.SwingConstants.HORIZONTAL,
-		        new java.awt.Component[] { filterToggle, refreshButton });
-
-		layout.linkSize(javax.swing.SwingConstants.HORIZONTAL,
-		        new java.awt.Component[] { bodyScrollPane, statsTabPane, topicsScrollPane });
+		        new java.awt.Component[] { this.filterToggle, this.refreshButton });
 
 		layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {
-		        locationField, senderField, sentDateField, subjectField });
+		        this.bodyScrollPane, this.statsTabPane, this.topicsScrollPane });
+
+		layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {
+		        this.locationField, this.senderField, this.sentDateField, this.subjectField });
 
 		layout.setVerticalGroup(layout
 		        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 		        .addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout
 		                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-		                .addComponent(groupsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 142,
-		                        javax.swing.GroupLayout.PREFERRED_SIZE)
+		                .addComponent(this.groupsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE,
+		                        142, javax.swing.GroupLayout.PREFERRED_SIZE)
 		                .addGroup(layout.createSequentialGroup().addGroup(layout
 		                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 		                        .addGroup(layout.createSequentialGroup()
 		                                .addGroup(layout
 		                                        .createParallelGroup(
 		                                                javax.swing.GroupLayout.Alignment.BASELINE)
-		                                        .addComponent(subjectLabel)
-		                                        .addComponent(subjectField,
+		                                        .addComponent(this.subjectLabel)
+		                                        .addComponent(this.subjectField,
 		                                                javax.swing.GroupLayout.PREFERRED_SIZE,
 		                                                javax.swing.GroupLayout.DEFAULT_SIZE,
 		                                                javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -806,8 +761,8 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 		                                .addGroup(layout
 		                                        .createParallelGroup(
 		                                                javax.swing.GroupLayout.Alignment.BASELINE)
-		                                        .addComponent(sentDateLabel)
-		                                        .addComponent(sentDateField,
+		                                        .addComponent(this.sentDateLabel)
+		                                        .addComponent(this.sentDateField,
 		                                                javax.swing.GroupLayout.PREFERRED_SIZE,
 		                                                javax.swing.GroupLayout.DEFAULT_SIZE,
 		                                                javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -816,20 +771,20 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 		                                .addGroup(layout
 		                                        .createParallelGroup(
 		                                                javax.swing.GroupLayout.Alignment.BASELINE)
-		                                        .addComponent(senderLabel)
-		                                        .addComponent(senderField,
+		                                        .addComponent(this.senderLabel)
+		                                        .addComponent(this.senderField,
 		                                                javax.swing.GroupLayout.PREFERRED_SIZE,
 		                                                javax.swing.GroupLayout.DEFAULT_SIZE,
 		                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-		                                        .addComponent(headersButton))
+		                                        .addComponent(this.headersButton))
 		                                .addPreferredGap(
 		                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 		                                .addGroup(layout
 		                                        .createParallelGroup(
 		                                                javax.swing.GroupLayout.Alignment.BASELINE)
-		                                        .addComponent(locationLabel)
-		                                        .addComponent(filterToggle)
-		                                        .addComponent(locationField,
+		                                        .addComponent(this.locationLabel)
+		                                        .addComponent(this.filterToggle)
+		                                        .addComponent(this.locationField,
 		                                                javax.swing.GroupLayout.PREFERRED_SIZE,
 		                                                javax.swing.GroupLayout.DEFAULT_SIZE,
 		                                                javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -837,8 +792,8 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 		                                .addGroup(layout
 		                                        .createParallelGroup(
 		                                                javax.swing.GroupLayout.Alignment.BASELINE)
-		                                        .addComponent(fromDateLabel)
-		                                        .addComponent(fromDateField,
+		                                        .addComponent(this.fromDateLabel)
+		                                        .addComponent(this.fromDateField,
 		                                                javax.swing.GroupLayout.PREFERRED_SIZE,
 		                                                javax.swing.GroupLayout.DEFAULT_SIZE,
 		                                                javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -847,29 +802,33 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 		                                .addGroup(layout
 		                                        .createParallelGroup(
 		                                                javax.swing.GroupLayout.Alignment.BASELINE)
-		                                        .addComponent(todateLabel).addComponent(toDateField,
+		                                        .addComponent(this.todateLabel)
+		                                        .addComponent(this.toDateField,
 		                                                javax.swing.GroupLayout.PREFERRED_SIZE,
 		                                                javax.swing.GroupLayout.DEFAULT_SIZE,
 		                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-		                                .addGap(21, 21, 21).addComponent(missingMessagesCheck)))
+		                                .addGap(21, 21, 21)
+		                                .addComponent(this.missingMessagesCheck)))
 		                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 		                        .addGroup(layout
 		                                .createParallelGroup(
 		                                        javax.swing.GroupLayout.Alignment.BASELINE)
-		                                .addComponent(refreshButton).addComponent(getBodyButton)
-		                                .addComponent(crosspostComboBox,
+		                                .addComponent(this.refreshButton)
+		                                .addComponent(this.getBodyButton)
+		                                .addComponent(this.crosspostComboBox,
 		                                        javax.swing.GroupLayout.PREFERRED_SIZE,
 		                                        javax.swing.GroupLayout.DEFAULT_SIZE,
 		                                        javax.swing.GroupLayout.PREFERRED_SIZE))))
 		                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 		                .addGroup(layout
 		                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-		                        .addComponent(topicsScrollPane,
+		                        .addComponent(this.topicsScrollPane,
 		                                javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
-		                        .addComponent(statsTabPane, javax.swing.GroupLayout.DEFAULT_SIZE,
-		                                121, Short.MAX_VALUE)
-		                        .addComponent(bodyScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE,
-		                                121, Short.MAX_VALUE))));
+		                        .addComponent(this.statsTabPane,
+		                                javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+		                        .addComponent(this.bodyScrollPane,
+		                                javax.swing.GroupLayout.DEFAULT_SIZE, 121,
+		                                Short.MAX_VALUE))));
 	}// </editor-fold>//GEN-END:initComponents
 
 	/**
@@ -889,11 +848,11 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see uk.co.sleonard.unison.gui.UNISoNLogger#log(java.lang.String)
 	 */
 	@Override
-	public void log(String message) {
+	public void log(final String message) {
 		// notesArea.append(message + "\n");
 	}
 
@@ -903,7 +862,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 * @param evt
 	 *            the evt
 	 */
-	private void missingMessagesCheckItemStateChanged(java.awt.event.ItemEvent evt) {// GEN-FIRST:event_missingMessagesCheckItemStateChanged
+	private void missingMessagesCheckItemStateChanged(final java.awt.event.ItemEvent evt) {// GEN-FIRST:event_missingMessagesCheckItemStateChanged
 		// TODO add your handling code here:
 	}// GEN-LAST:event_missingMessagesCheckItemStateChanged
 
@@ -927,7 +886,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 * @param evt
 	 *            the evt
 	 */
-	private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_refreshButtonActionPerformed
+	private void refreshButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_refreshButtonActionPerformed
 		UNISoNController.getInstance().refreshDataFromDatabase();
 	}// GEN-LAST:event_refreshButtonActionPerformed
 
@@ -1004,17 +963,17 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	protected void refreshNewsGroupHierarchy() {
 		this.newsgroupTreeRoot.removeAllChildren();
 		// FIXME split out from name - ignore db stuff
-		UNISoNController controller = UNISoNController.getInstance();
-		HashMap<String, TreeNode> nodeMap = new HashMap<String, TreeNode>();
+		final UNISoNController controller = UNISoNController.getInstance();
+		final HashMap<String, TreeNode> nodeMap = new HashMap<String, TreeNode>();
 
-		List<NewsGroup> newsgroupFilter = new ArrayList<NewsGroup>();
+		final List<NewsGroup> newsgroupFilter = new ArrayList<NewsGroup>();
 		newsgroupFilter.addAll(controller.getNewsgroupFilter());
 		Collections.sort(newsgroupFilter);
 
-		for (NewsGroup group : newsgroupFilter) {
+		for (final NewsGroup group : newsgroupFilter) {
 			final String[] nameparts = group.getFullName().split("\\.");
 			String pathSoFar = "";
-			TreeNode parent = newsgroupTreeRoot;
+			TreeNode parent = this.newsgroupTreeRoot;
 
 			for (final String namePart : nameparts) {
 				if (!pathSoFar.equals("")) {
@@ -1084,7 +1043,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 * Refresh top countries.
 	 */
 	private void refreshTopCountries() {
-		List<ResultRow> results = UNISoNController.getInstance().getTopCountriesList();
+		final List<ResultRow> results = UNISoNController.getInstance().getTopCountriesList();
 
 		this.topCountriesList.setModel(this.getListModel(results));
 	}
@@ -1093,7 +1052,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 * Refresh top groups.
 	 */
 	private void refreshTopGroups() {
-		List<ResultRow> results = UNISoNController.getInstance().getTopGroupsList();
+		final List<ResultRow> results = UNISoNController.getInstance().getTopGroupsList();
 
 		this.topGroupsList.setModel(this.getListModel(results));
 	}
@@ -1106,13 +1065,13 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 
 		this.topicRoot.removeAllChildren();
 
-		UNISoNController controller = UNISoNController.getInstance();
-		NewsGroup selectedNewsgroup = controller.getSelectedNewsgroup();
+		final UNISoNController controller = UNISoNController.getInstance();
+		final NewsGroup selectedNewsgroup = controller.getSelectedNewsgroup();
 		if (null != selectedNewsgroup) {
 			this.topicRoot.setName(selectedNewsgroup.getFullName());
-			Set<Topic> topics = selectedNewsgroup.getTopics();
-			Set<Topic> topicsFilter = controller.getTopicsFilter();
-			for (Topic topic : topics) {
+			final Set<Topic> topics = selectedNewsgroup.getTopics();
+			final Set<Topic> topicsFilter = controller.getTopicsFilter();
+			for (final Topic topic : topics) {
 				if (null == topicsFilter || topicsFilter.contains(topic)) {
 					final int lastIndex = topic.getSubject().length();
 					this.addChildNode(this.topicRoot, topic,
@@ -1133,7 +1092,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 * Refresh top posters.
 	 */
 	private void refreshTopPosters() {
-		Vector<ResultRow> results = UNISoNController.getInstance().getTopPosters();
+		final Vector<ResultRow> results = UNISoNController.getInstance().getTopPosters();
 
 		this.topPostersList.setModel(this.getListModel(results));
 	}
@@ -1147,58 +1106,58 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 *             the UNI so n exception
 	 */
 	@SuppressWarnings("unchecked")
-	private void switchFilter(boolean on) throws UNISoNException {
+	private void switchFilter(final boolean on) throws UNISoNException {
 		try {
-			UNISoNController controller = UNISoNController.getInstance();
+			final UNISoNController controller = UNISoNController.getInstance();
 
 			if (on) {
-				Date fromDate = parser.parseDate(fromDateField.getText());
-				Date toDate = parser.parseDate(toDateField.getText());
+				final Date fromDate = this.parser.parseDate(this.fromDateField.getText());
+				final Date toDate = this.parser.parseDate(this.toDateField.getText());
 				controller.setDates(fromDate, toDate);
 
-				Object[] selectedCountries = topCountriesList.getSelectedValues();
-				Set<String> countries = new HashSet<String>();
-				for (Object country : selectedCountries) {
-					GUIItem<ResultRow> row = (GUIItem<ResultRow>) country;
-					String selectedcountry = (String) row.getItem().getKey();
+				final Object[] selectedCountries = this.topCountriesList.getSelectedValues();
+				final Set<String> countries = new HashSet<String>();
+				for (final Object country : selectedCountries) {
+					final GUIItem<ResultRow> row = (GUIItem<ResultRow>) country;
+					final String selectedcountry = (String) row.getItem().getKey();
 					countries.add(selectedcountry);
 				}
 				controller.setSelectedCountries(countries);
 
-				Object[] selectedNewsgroups = topGroupsList.getSelectedValues();
-				Vector<NewsGroup> groups = new Vector<NewsGroup>();
-				for (Object group : selectedNewsgroups) {
-					GUIItem<ResultRow> row = (GUIItem<ResultRow>) group;
-					NewsGroup selectedgroup = (NewsGroup) row.getItem().getKey();
+				final Object[] selectedNewsgroups = this.topGroupsList.getSelectedValues();
+				final Vector<NewsGroup> groups = new Vector<NewsGroup>();
+				for (final Object group : selectedNewsgroups) {
+					final GUIItem<ResultRow> row = (GUIItem<ResultRow>) group;
+					final NewsGroup selectedgroup = (NewsGroup) row.getItem().getKey();
 					groups.add(selectedgroup);
 				}
 				controller.setSelectedNewsgroups(groups);
 
-				Object[] selectedPosters = topPostersList.getSelectedValues();
-				Vector<UsenetUser> posters = new Vector<UsenetUser>();
-				for (Object poster : selectedPosters) {
-					GUIItem<ResultRow> row = (GUIItem<ResultRow>) poster;
-					UsenetUser selectedUser = (UsenetUser) row.getItem().getKey();
+				final Object[] selectedPosters = this.topPostersList.getSelectedValues();
+				final Vector<UsenetUser> posters = new Vector<UsenetUser>();
+				for (final Object poster : selectedPosters) {
+					final GUIItem<ResultRow> row = (GUIItem<ResultRow>) poster;
+					final UsenetUser selectedUser = (UsenetUser) row.getItem().getKey();
 					posters.add(selectedUser);
 				}
 				controller.setSelectedPosters(posters);
-				filterToggle.setText("Filtered");
-				filterToggle.setToolTipText("Click again to remove filter");
-				refreshButton.setEnabled(false);
+				this.filterToggle.setText("Filtered");
+				this.filterToggle.setToolTipText("Click again to remove filter");
+				this.refreshButton.setEnabled(false);
 			}
 			else {
-				filterToggle.setText("Filter");
-				filterToggle.setToolTipText(
+				this.filterToggle.setText("Filter");
+				this.filterToggle.setToolTipText(
 				        "Enter date values, select groups or posters in lists, or combination then click filter");
-				refreshButton.setEnabled(true);
+				this.refreshButton.setEnabled(true);
 			}
-			fromDateField.setEditable(!on);
-			toDateField.setEditable(!on);
+			this.fromDateField.setEditable(!on);
+			this.toDateField.setEditable(!on);
 			controller.switchFiltered(on);
 		}
-		catch (ParseException e) {
-			alert("Failed to parse date : " + e.getMessage());
-			filterToggle.setSelected(false);
+		catch (final ParseException e) {
+			this.alert("Failed to parse date : " + e.getMessage());
+			this.filterToggle.setSelected(false);
 		}
 	}
 
@@ -1208,7 +1167,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 * @param evt
 	 *            the evt
 	 */
-	private void topCountriesListValueChanged(javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_topCountriesListValueChanged
+	private void topCountriesListValueChanged(final javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_topCountriesListValueChanged
 		// TODO add your handling code here:
 	}// GEN-LAST:event_topCountriesListValueChanged
 
@@ -1218,7 +1177,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 * @param evt
 	 *            the evt
 	 */
-	private void topGroupsListValueChanged(javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_topGroupsListValueChanged
+	private void topGroupsListValueChanged(final javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_topGroupsListValueChanged
 		// TODO add your handling code here:
 	}// GEN-LAST:event_topGroupsListValueChanged
 
@@ -1228,7 +1187,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 * @param evt
 	 *            the evt
 	 */
-	private void topicsHierarchyValueChanged(javax.swing.event.TreeSelectionEvent evt) {// GEN-FIRST:event_topicsHierarchyValueChanged
+	private void topicsHierarchyValueChanged(final javax.swing.event.TreeSelectionEvent evt) {// GEN-FIRST:event_topicsHierarchyValueChanged
 		final TreePath tp = evt.getPath();
 		final TreeNode root = (TreeNode) tp.getLastPathComponent();
 
@@ -1241,7 +1200,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 		else {
 			this.expandNode(root, this.missingMessagesCheck.isSelected());
 		}
-		notifySelectedMessageObservers();
+		this.notifySelectedMessageObservers();
 	}// GEN-LAST:event_topicsHierarchyValueChanged
 
 	/**
@@ -1250,18 +1209,18 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 * @param evt
 	 *            the evt
 	 */
-	private void topPostersListValueChanged(javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_topPostersListValueChanged
+	private void topPostersListValueChanged(final javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_topPostersListValueChanged
 		// TODO add your handling code here:
 	}// GEN-LAST:event_topPostersListValueChanged
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
 	 */
 	@Override
-	public void update(Observable observable, Object arg1) {
-		refreshGUIData();
+	public void update(final Observable observable, final Object arg1) {
+		this.refreshGUIData();
 	}
 
 }

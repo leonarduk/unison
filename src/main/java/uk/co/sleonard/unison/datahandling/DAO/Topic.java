@@ -10,42 +10,10 @@ import java.util.Set;
  */
 public class Topic implements java.io.Serializable {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/**
+	 *
 	 */
-	@Override
-	public boolean equals(Object object) {
-		if (this == object) {
-			return true;
-		}
-		if (!(object instanceof Topic)) {
-			return false;
-		}
-		final Topic that = (Topic) object;
-		if (this.getId() != that.getId() || !this.getSubject().equals(that.getSubject())) {
-			return false;
-		}
-		if (!this.getNewsgroups().containsAll(that.getNewsgroups())
-		        || !that.getNewsgroups().containsAll(this.getNewsgroups())) {
-			return false;
-		}
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		int hashCode = 0;
-		hashCode = 29 * hashCode + id;
-
-		return hashCode;
-	}
+	private static final long serialVersionUID = -4646650675535168051L;
 
 	/** The id. */
 	private int id;
@@ -60,16 +28,6 @@ public class Topic implements java.io.Serializable {
 	 * Instantiates a new topic.
 	 */
 	public Topic() {
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return getSubject();
 	}
 
 	/**
@@ -93,6 +51,30 @@ public class Topic implements java.io.Serializable {
 	public Topic(final String subject, final Set<NewsGroup> newsgroups) {
 		this.subject = subject;
 		this.newsgroups = newsgroups;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (!(object instanceof Topic)) {
+			return false;
+		}
+		final Topic that = (Topic) object;
+		if (this.getId() != that.getId() || !this.getSubject().equals(that.getSubject())) {
+			return false;
+		}
+		if (!this.getNewsgroups().containsAll(that.getNewsgroups())
+		        || !that.getNewsgroups().containsAll(this.getNewsgroups())) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -120,6 +102,19 @@ public class Topic implements java.io.Serializable {
 	 */
 	public String getSubject() {
 		return this.subject;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		int hashCode = 0;
+		hashCode = 29 * hashCode + this.id;
+
+		return hashCode;
 	}
 
 	/**
@@ -150,6 +145,16 @@ public class Topic implements java.io.Serializable {
 	 */
 	public void setSubject(final String subject) {
 		this.subject = subject;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return this.getSubject();
 	}
 
 }

@@ -8,39 +8,9 @@ package uk.co.sleonard.unison.datahandling.DAO;
 public class IpAddress implements java.io.Serializable {
 
 	/**
-	 * Need to implement this to avoid NonUniqueObjectException //TODO
-	 * http://forum.springframework.org/showthread.php?t=22261
 	 *
-	 * @return the int
 	 */
-	@Override
-	public int hashCode() {
-		int hashCode = 0;
-		hashCode = 29 * hashCode + id;
-
-		return hashCode;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object object) {
-		if (this == object) {
-			return true;
-		}
-		if (!(object instanceof IpAddress)) {
-			return false;
-		}
-		final IpAddress that = (IpAddress) object;
-		if (this.getId() != that.getId() || !this.getIpAddress().equals(that.getIpAddress())
-		        || !this.getLocation().equals(that.getLocation())) {
-			return false;
-		}
-		return true;
-	}
+	private static final long serialVersionUID = -7969874241047620708L;
 
 	/** The id. */
 	private int id;
@@ -80,6 +50,27 @@ public class IpAddress implements java.io.Serializable {
 		this.location = location;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (!(object instanceof IpAddress)) {
+			return false;
+		}
+		final IpAddress that = (IpAddress) object;
+		if (this.getId() != that.getId() || !this.getIpAddress().equals(that.getIpAddress())
+		        || !this.getLocation().equals(that.getLocation())) {
+			return false;
+		}
+		return true;
+	}
+
 	/**
 	 * Gets the id.
 	 *
@@ -105,6 +96,20 @@ public class IpAddress implements java.io.Serializable {
 	 */
 	public Location getLocation() {
 		return this.location;
+	}
+
+	/**
+	 * Need to implement this to avoid NonUniqueObjectException //TODO
+	 * http://forum.springframework.org/showthread.php?t=22261
+	 *
+	 * @return the int
+	 */
+	@Override
+	public int hashCode() {
+		int hashCode = 0;
+		hashCode = 29 * hashCode + this.id;
+
+		return hashCode;
 	}
 
 	/**

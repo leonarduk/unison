@@ -6,13 +6,13 @@ package uk.co.sleonard.unison.datahandling.DAO;
 public class EmailAddress {
 
 	/** The name. */
-	private String name;
+	private final String name;
 
 	/** The email. */
-	private String email;
+	private final String email;
 
 	/** The ip address. */
-	private String ipAddress;
+	private final String ipAddress;
 
 	/**
 	 * Instantiates a new email address.
@@ -24,19 +24,54 @@ public class EmailAddress {
 	 * @param ip
 	 *            the ip
 	 */
-	public EmailAddress(String name, String email, String ip) {
+	public EmailAddress(final String name, final String email, final String ip) {
 		this.name = name;
 		this.email = email;
 		this.ipAddress = ip;
 	}
 
-	/**
-	 * Gets the name.
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @return the name
+	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
-	public String getName() {
-		return name;
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		final EmailAddress other = (EmailAddress) obj;
+		if (this.email == null) {
+			if (other.email != null) {
+				return false;
+			}
+		}
+		else if (!this.email.equals(other.email)) {
+			return false;
+		}
+		if (this.ipAddress == null) {
+			if (other.ipAddress != null) {
+				return false;
+			}
+		}
+		else if (!this.ipAddress.equals(other.ipAddress)) {
+			return false;
+		}
+		if (this.name == null) {
+			if (other.name != null) {
+				return false;
+			}
+		}
+		else if (!this.name.equals(other.name)) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -45,7 +80,7 @@ public class EmailAddress {
 	 * @return the email
 	 */
 	public String getEmail() {
-		return email;
+		return this.email;
 	}
 
 	/**
@@ -54,47 +89,30 @@ public class EmailAddress {
 	 * @return the ip address
 	 */
 	public String getIpAddress() {
-		return ipAddress;
+		return this.ipAddress;
+	}
+
+	/**
+	 * Gets the name.
+	 *
+	 * @return the name
+	 */
+	public String getName() {
+		return this.name;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((ipAddress == null) ? 0 : ipAddress.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + (this.email == null ? 0 : this.email.hashCode());
+		result = prime * result + (this.ipAddress == null ? 0 : this.ipAddress.hashCode());
+		result = prime * result + (this.name == null ? 0 : this.name.hashCode());
 		return result;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
-		EmailAddress other = (EmailAddress) obj;
-		if (email == null) {
-			if (other.email != null) return false;
-		}
-		else if (!email.equals(other.email)) return false;
-		if (ipAddress == null) {
-			if (other.ipAddress != null) return false;
-		}
-		else if (!ipAddress.equals(other.ipAddress)) return false;
-		if (name == null) {
-			if (other.name != null) return false;
-		}
-		else if (!name.equals(other.name)) return false;
-		return true;
 	}
 }

@@ -12,61 +12,9 @@ import java.util.Set;
 public class Message implements java.io.Serializable {
 
 	/**
-	 * Need to implement this to avoid NonUniqueObjectException //TODO
-	 * http://forum.springframework.org/showthread.php?t=22261
 	 *
-	 * @return the int
 	 */
-	@Override
-	public int hashCode() {
-		int hashCode = 0;
-		hashCode = 29 * hashCode + id;
-
-		return hashCode;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object object) {
-		if (this == object) {
-			return true;
-		}
-		if (!(object instanceof Message)) {
-			return false;
-		}
-		final Message that = (Message) object;
-		if (this.getId() != that.getId()
-		        || (null != this.getMessageBody()
-		                && !this.getMessageBody().equals(that.getMessageBody()))
-		        || !this.getTopic().equals(that.getTopic())
-		        || !this.getUsenetMessageID().equals(that.getUsenetMessageID())
-		        || !this.getDateCreated().equals(that.getDateCreated())
-		        || !this.getReferencedMessages().equals(that.getReferencedMessages())
-		        || !this.getPoster().equals(that.getPoster())
-		        || !this.getSubject().equals(this.getSubject())) {
-			return false;
-		}
-		if (!this.getNewsgroups().containsAll(that.getNewsgroups())
-		        || !that.getNewsgroups().containsAll(this.getNewsgroups())) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return getSubject() + ":" + poster;
-	}
+	private static final long serialVersionUID = -4828381724935020136L;
 
 	/** The Date created. */
 	private Date DateCreated;
@@ -160,6 +108,39 @@ public class Message implements java.io.Serializable {
 		this.MessageBody = MessageBody;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (!(object instanceof Message)) {
+			return false;
+		}
+		final Message that = (Message) object;
+		if (this.getId() != that.getId()
+		        || null != this.getMessageBody()
+		                && !this.getMessageBody().equals(that.getMessageBody())
+		        || !this.getTopic().equals(that.getTopic())
+		        || !this.getUsenetMessageID().equals(that.getUsenetMessageID())
+		        || !this.getDateCreated().equals(that.getDateCreated())
+		        || !this.getReferencedMessages().equals(that.getReferencedMessages())
+		        || !this.getPoster().equals(that.getPoster())
+		        || !this.getSubject().equals(this.getSubject())) {
+			return false;
+		}
+		if (!this.getNewsgroups().containsAll(that.getNewsgroups())
+		        || !that.getNewsgroups().containsAll(this.getNewsgroups())) {
+			return false;
+		}
+
+		return true;
+	}
+
 	/**
 	 * Gets the date created.
 	 *
@@ -239,6 +220,20 @@ public class Message implements java.io.Serializable {
 	 */
 	public String getUsenetMessageID() {
 		return this.UsenetMessageID;
+	}
+
+	/**
+	 * Need to implement this to avoid NonUniqueObjectException //TODO
+	 * http://forum.springframework.org/showthread.php?t=22261
+	 *
+	 * @return the int
+	 */
+	@Override
+	public int hashCode() {
+		int hashCode = 0;
+		hashCode = 29 * hashCode + this.id;
+
+		return hashCode;
 	}
 
 	/**
@@ -329,6 +324,16 @@ public class Message implements java.io.Serializable {
 	 */
 	public void setUsenetMessageID(final String UsenetMessageID) {
 		this.UsenetMessageID = UsenetMessageID;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return this.getSubject() + ":" + this.poster;
 	}
 
 }

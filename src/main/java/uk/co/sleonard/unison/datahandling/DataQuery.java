@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package uk.co.sleonard.unison.datahandling;
 
@@ -26,38 +26,6 @@ import uk.co.sleonard.unison.gui.UNISoNController;
  */
 public class DataQuery {
 
-	/** The logger. */
-	private static Logger logger = Logger.getLogger("DataQuery");
-
-	/** The helper. */
-	private HibernateHelper helper;
-
-	/**
-	 * Instantiates a new data query.
-	 */
-	protected DataQuery() {
-		this(UNISoNController.getInstance().helper());
-	}
-
-	/**
-	 * Instantiates a new data query.
-	 *
-	 * @param helper
-	 *            the helper
-	 */
-	public DataQuery(HibernateHelper helper) {
-		this.helper = helper;
-	}
-
-	/**
-	 * Gets the single instance of DataQuery.
-	 *
-	 * @return single instance of DataQuery
-	 */
-	public static DataQuery getInstance() {
-		return DataQueryHelper.getInstance();
-	}
-
 	/**
 	 * The Class DataQueryHelper.
 	 */
@@ -72,8 +40,43 @@ public class DataQuery {
 		 * @return single instance of DataQueryHelper
 		 */
 		static DataQuery getInstance() {
-			return instance;
+			return DataQueryHelper.instance;
 		}
+	}
+
+	/** The logger. */
+	private static Logger logger = Logger.getLogger("DataQuery");
+
+	/**
+	 * Gets the single instance of DataQuery.
+	 *
+	 * @return single instance of DataQuery
+	 */
+	public static DataQuery getInstance() {
+		return DataQueryHelper.getInstance();
+	}
+
+	/** The helper. */
+	private final HibernateHelper helper;
+
+	/** The yyyy mmdd formatter. */
+	SimpleDateFormat yyyyMMDDFormatter = new SimpleDateFormat("yyyy-MM-dd");
+
+	/**
+	 * Instantiates a new data query.
+	 */
+	protected DataQuery() {
+		this(UNISoNController.getInstance().helper());
+	}
+
+	/**
+	 * Instantiates a new data query.
+	 *
+	 * @param helper
+	 *            the helper
+	 */
+	public DataQuery(final HibernateHelper helper) {
+		this.helper = helper;
 	}
 
 	/**
@@ -122,14 +125,13 @@ public class DataQuery {
 	 *            the filtered
 	 * @return the locations
 	 */
-	@SuppressWarnings("unchecked")
-	public Vector<Location> getLocations(final Vector<String> countries, Session session,
-	        boolean filtered) {
+	public Vector<Location> getLocations(final Vector<String> countries, final Session session,
+	        final boolean filtered) {
 		DataQuery.logger.debug("getLocations : " + countries);
 		if (filtered && null != countries && countries.size() > 0) {
-			final StringBuffer sqlBuffer = getLocationsSQL(countries);
+			final StringBuffer sqlBuffer = this.getLocationsSQL(countries);
 
-			return helper.runQuery(sqlBuffer.toString(), session, Location.class);
+			return this.helper.runQuery(sqlBuffer.toString(), session, Location.class);
 		}
 		return null;
 	}
@@ -142,8 +144,8 @@ public class DataQuery {
 	 * @return the locations sql
 	 */
 	public StringBuffer getLocationsSQL(final Vector<String> countries) {
-		final StringBuffer sqlBuffer = getBaseQuery(Location.class);
-		if ((null != countries)) {
+		final StringBuffer sqlBuffer = this.getBaseQuery(Location.class);
+		if (null != countries) {
 			sqlBuffer.append(" where country in ( ");
 			sqlBuffer.append("'" + countries.get(0) + "'");
 			if (countries.size() > 1) {
@@ -167,7 +169,7 @@ public class DataQuery {
 		DataQuery.logger.debug("getMessageIdsString");
 
 		final StringBuffer buf = new StringBuffer();
-		if ((users != null) && (users.size() > 0)) {
+		if (users != null && users.size() > 0) {
 			buf.append("'" + users.get(0).getId() + "'");
 			if (users.size() > 1) {
 				for (int i = 1; i < users.size(); i++) {
@@ -201,73 +203,55 @@ public class DataQuery {
 	 */
 	@SuppressWarnings("unchecked")
 	public Vector<Message> getMessages(final Vector<Message> messages,
-	        final Vector<UsenetUser> users, Session session, Date fromDate, Date toDate,
-	        boolean filtered, List<NewsGroup> newsgroups, Set<String> countries) {
+	        final Vector<UsenetUser> users, final Session session, final Date fromDate,
+	        final Date toDate, final boolean filtered, final List<NewsGroup> newsgroups,
+	        final Set<String> countries) {
 		DataQuery.logger.debug("getMessages");
 
-		StringBuffer sqlBuffer = getBaseQuery(Message.class);
+		StringBuffer sqlBuffer = this.getBaseQuery(Message.class);
 		sqlBuffer.append(" as message ");
 
 		if (filtered) {
 			final Vector<String> whereClauses = new Vector<String>();
-			if ((null != users && users.size() > 0)) {
+			if (null != users && users.size() > 0) {
 				sqlBuffer.append(" left join fetch message.poster as usenetuser ");
-				whereClauses.add(" usenetuser.id in ( " + getUsenetUserIdsString(users) + ") ");
+				whereClauses
+				        .add(" usenetuser.id in ( " + this.getUsenetUserIdsString(users) + ") ");
 			}
 
-			if ((null != countries && countries.size() > 0)) {
+			if (null != countries && countries.size() > 0) {
 				sqlBuffer.append(" left join fetch message.poster.location as location ");
-				whereClauses.add(" location.Country in ('" + join(countries, "','") + "') ");
+				whereClauses.add(" location.Country in ('" + this.join(countries, "','") + "') ");
 			}
-			if ((null != newsgroups) && (newsgroups.size() > 0)) {
+			if (null != newsgroups && newsgroups.size() > 0) {
 				sqlBuffer.append(" left join fetch message.newsgroups as newsgroup ");
-				whereClauses.add(" newsgroup.id in ( " + getNewsGroupIdsString(newsgroups) + ") ");
+				whereClauses
+				        .add(" newsgroup.id in ( " + this.getNewsGroupIdsString(newsgroups) + ") ");
 			}
 
-			if ((null != messages) && (messages.size() > 0)) {
-				whereClauses.add(" message.id in ( " + getMessageIdsString(messages) + ") ");
+			if (null != messages && messages.size() > 0) {
+				whereClauses.add(" message.id in ( " + this.getMessageIdsString(messages) + ") ");
 			}
 
 			if (null != fromDate) {
-				whereClauses.add(
-				        " message.DateCreated >= '" + yyyyMMDDFormatter.format(fromDate) + "'");
+				whereClauses.add(" message.DateCreated >= '"
+				        + this.yyyyMMDDFormatter.format(fromDate) + "'");
 			}
 
 			if (null != toDate) {
-				Calendar cal = Calendar.getInstance();
+				final Calendar cal = Calendar.getInstance();
 				cal.setTime(toDate);
 				cal.add(Calendar.DAY_OF_MONTH, 1);
 
-				whereClauses.add(
-				        " message.DateCreated < '" + yyyyMMDDFormatter.format(cal.getTime()) + "'");
+				whereClauses.add(" message.DateCreated < '"
+				        + this.yyyyMMDDFormatter.format(cal.getTime()) + "'");
 			}
 
 			if (whereClauses.size() > 0) {
-				sqlBuffer = addWhereClause(sqlBuffer, whereClauses);
+				sqlBuffer = this.addWhereClause(sqlBuffer, whereClauses);
 			}
 		}
-		return helper.runQuery(sqlBuffer.toString(), session, Message.class);
-	}
-
-	/**
-	 * Join.
-	 *
-	 * @param s
-	 *            the s
-	 * @param delimiter
-	 *            the delimiter
-	 * @return the string
-	 */
-	public String join(Collection s, String delimiter) {
-		StringBuffer buffer = new StringBuffer();
-		Iterator<String> iter = s.iterator();
-		while (iter.hasNext()) {
-			buffer.append(iter.next());
-			if (iter.hasNext()) {
-				buffer.append(delimiter);
-			}
-		}
-		return buffer.toString();
+		return this.helper.runQuery(sqlBuffer.toString(), session, Message.class);
 	}
 
 	/**
@@ -277,9 +261,9 @@ public class DataQuery {
 	 *            the newsgroups
 	 * @return the news group ids string
 	 */
-	private String getNewsGroupIdsString(List<NewsGroup> newsgroups) {
+	private String getNewsGroupIdsString(final List<NewsGroup> newsgroups) {
 		final StringBuffer buf = new StringBuffer();
-		if ((newsgroups != null) && (newsgroups.size() > 0)) {
+		if (newsgroups != null && newsgroups.size() > 0) {
 			buf.append("'" + newsgroups.get(0).getId() + "'");
 			if (newsgroups.size() > 1) {
 				for (int i = 1; i < newsgroups.size(); i++) {
@@ -289,9 +273,6 @@ public class DataQuery {
 		}
 		return buf.toString();
 	}
-
-	/** The yyyy mmdd formatter. */
-	SimpleDateFormat yyyyMMDDFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
 	/**
 	 * Gets the usenet user ids string.
@@ -304,7 +285,7 @@ public class DataQuery {
 		DataQuery.logger.debug("getUsenetUserIdsString");
 
 		final StringBuffer buf = new StringBuffer();
-		if ((users != null) && (users.size() > 0)) {
+		if (users != null && users.size() > 0) {
 			buf.append("'" + users.get(0).getId() + "'");
 			if (users.size() > 1) {
 				for (int i = 1; i < users.size(); i++) {
@@ -317,17 +298,38 @@ public class DataQuery {
 	}
 
 	/**
+	 * Join.
+	 *
+	 * @param s
+	 *            the s
+	 * @param delimiter
+	 *            the delimiter
+	 * @return the string
+	 */
+	public String join(final Collection s, final String delimiter) {
+		final StringBuffer buffer = new StringBuffer();
+		final Iterator<String> iter = s.iterator();
+		while (iter.hasNext()) {
+			buffer.append(iter.next());
+			if (iter.hasNext()) {
+				buffer.append(delimiter);
+			}
+		}
+		return buffer.toString();
+	}
+
+	/**
 	 * Test locations.
 	 *
 	 * @param session
 	 *            the session
 	 * @return the vector
 	 */
-	public Vector<Location> testLocations(Session session) {
+	public Vector<Location> testLocations(final Session session) {
 		DataQuery.logger.debug("testLocations");
 
 		DataQuery.logger.warn("ALL COUNTRIES");
-		DataQuery dataQuery = getInstance();
+		final DataQuery dataQuery = DataQuery.getInstance();
 		DataQuery.logger.warn(dataQuery.getLocations(null, session, true));
 
 		DataQuery.logger.warn("UNITED STATES");

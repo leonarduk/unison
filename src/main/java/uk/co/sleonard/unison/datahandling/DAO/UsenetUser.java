@@ -7,39 +7,10 @@ package uk.co.sleonard.unison.datahandling.DAO;
  */
 public class UsenetUser implements java.io.Serializable {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/**
+	 *
 	 */
-	@Override
-	public boolean equals(Object object) {
-		if (this == object) {
-			return true;
-		}
-		if (!(object instanceof UsenetUser)) {
-			return false;
-		}
-		final UsenetUser that = (UsenetUser) object;
-		if (this.getId() != that.getId() || !this.getEmail().equals(that.getEmail())
-		        || !this.getName().equals(that.getName())) {
-			return false;
-		}
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		int hashCode = 0;
-		hashCode = 29 * hashCode + id;
-
-		return hashCode;
-	}
+	private static final long serialVersionUID = 6240031352036083751L;
 
 	/** The email. */
 	private String email;
@@ -58,16 +29,6 @@ public class UsenetUser implements java.io.Serializable {
 
 	/** The name. */
 	private String name;
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return getName() + "(" + getEmail() + ")";
-	}
 
 	/**
 	 * Instantiates a new usenet user.
@@ -112,6 +73,27 @@ public class UsenetUser implements java.io.Serializable {
 		this.ipaddress = ipaddress;
 		this.gender = gender;
 		this.location = location;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (!(object instanceof UsenetUser)) {
+			return false;
+		}
+		final UsenetUser that = (UsenetUser) object;
+		if (this.getId() != that.getId() || !this.getEmail().equals(that.getEmail())
+		        || !this.getName().equals(that.getName())) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -166,6 +148,19 @@ public class UsenetUser implements java.io.Serializable {
 	 */
 	public String getName() {
 		return this.name;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		int hashCode = 0;
+		hashCode = 29 * hashCode + this.id;
+
+		return hashCode;
 	}
 
 	/**
@@ -226,6 +221,16 @@ public class UsenetUser implements java.io.Serializable {
 	 */
 	public void setName(final String name) {
 		this.name = name;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return this.getName() + "(" + this.getEmail() + ")";
 	}
 
 }

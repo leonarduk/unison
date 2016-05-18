@@ -7,40 +7,14 @@ import java.util.Set;
 
 /**
  * Represents a news group e.g. soc.senior.issues
- * 
+ *
  */
 public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/**
+	 *
 	 */
-	@Override
-	public boolean equals(Object object) {
-		if (!(object instanceof NewsGroup)) {
-			return false;
-		}
-		final NewsGroup that = (NewsGroup) object;
-		if (!this.getFullName().equals(that.getFullName())) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		int hashCode = 0;
-		hashCode = 29 * hashCode + id;
-
-		return hashCode;
-	}
+	private static final long serialVersionUID = -8526704874026184061L;
 
 	/** The first message. */
 
@@ -133,6 +107,34 @@ public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
 		this.lastNode = lastNode;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(final NewsGroup that) {
+		return this.getFullName().compareTo(that.getFullName());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if (!(object instanceof NewsGroup)) {
+			return false;
+		}
+		final NewsGroup that = (NewsGroup) object;
+		if (!this.getFullName().equals(that.getFullName())) {
+			return false;
+		}
+
+		return true;
+	}
+
 	/**
 	 * Gets the first message.
 	 *
@@ -221,6 +223,19 @@ public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
 	 */
 	public Set<Topic> getTopics() {
 		return this.topics;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		int hashCode = 0;
+		hashCode = 29 * hashCode + this.id;
+
+		return hashCode;
 	}
 
 	/**
@@ -349,17 +364,7 @@ public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
 	 */
 	@Override
 	public String toString() {
-		return getFullName();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	@Override
-	public int compareTo(NewsGroup that) {
-		return this.getFullName().compareTo(that.getFullName());
+		return this.getFullName();
 	}
 
 }

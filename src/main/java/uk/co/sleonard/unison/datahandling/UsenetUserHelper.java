@@ -29,15 +29,15 @@ public class UsenetUserHelper {
 	        final String gender, String ipAddress) {
 		EmailAddress emailAddress = null;
 
-		if ((null == ipAddress) || ipAddress.equals("")) {
+		if (null == ipAddress || ipAddress.equals("")) {
 			ipAddress = "UNKNOWN";
 		}
 
 		// TODO throw exception here instead?
 		// can only create if have either name or email
-		if ((null != email) || (null != name)) {
+		if (null != email || null != name) {
 			// create name from email if missing
-			if ((null == name) || name.equals("")) {
+			if (null == name || name.equals("")) {
 				// if just email address
 				final int atIndex = email.indexOf("@");
 				if (atIndex > -1) {
@@ -49,7 +49,7 @@ public class UsenetUserHelper {
 				}
 			}
 			// create email from name and ipAddress if missing
-			if ((null == email) || email.equals("")) {
+			if (null == email || email.equals("")) {
 				email = name + "@" + ipAddress;
 			}
 
@@ -57,41 +57,6 @@ public class UsenetUserHelper {
 		}
 		return emailAddress;
 
-	}
-
-	/**
-	 * Parses the from field.
-	 *
-	 * @param emailString
-	 *            the email string
-	 * @param ipAddress
-	 *            the ip address
-	 * @return the email address
-	 */
-	public static EmailAddress parseFromField(String emailString, final String ipAddress) {
-
-		UsenetUserHelper.logger.debug("createUser: " + emailString + " " + ipAddress);
-
-		emailString = emailString.replaceAll("\"", "");
-
-		EmailAddress emailAddress = UsenetUserHelper.createUserByRemovingBrackets(emailString, "<",
-		        ">", ipAddress);
-
-		if (null != emailAddress) {
-			return emailAddress;
-		}
-
-		emailAddress = UsenetUserHelper.createUserByRemovingBrackets(emailString, "(", ")",
-		        ipAddress);
-
-		if (null != emailAddress) {
-			return emailAddress;
-		}
-
-		emailAddress = UsenetUserHelper.augmentDataAndCreateUser(null, emailString, null,
-		        ipAddress);
-
-		return emailAddress;
 	}
 
 	/**
@@ -152,11 +117,47 @@ public class UsenetUserHelper {
 				        ipAddress);
 			}
 		}
-		catch (Exception e) {
-			logger.warn("Couldn't parse " + emailString + " so using it for name and email");
+		catch (final Exception e) {
+			UsenetUserHelper.logger
+			        .warn("Couldn't parse " + emailString + " so using it for name and email");
 			emailAddress = new EmailAddress(emailString, emailString, ipAddress);
 
 		}
+		return emailAddress;
+	}
+
+	/**
+	 * Parses the from field.
+	 *
+	 * @param emailString
+	 *            the email string
+	 * @param ipAddress
+	 *            the ip address
+	 * @return the email address
+	 */
+	public static EmailAddress parseFromField(String emailString, final String ipAddress) {
+
+		UsenetUserHelper.logger.debug("createUser: " + emailString + " " + ipAddress);
+
+		emailString = emailString.replaceAll("\"", "");
+
+		EmailAddress emailAddress = UsenetUserHelper.createUserByRemovingBrackets(emailString, "<",
+		        ">", ipAddress);
+
+		if (null != emailAddress) {
+			return emailAddress;
+		}
+
+		emailAddress = UsenetUserHelper.createUserByRemovingBrackets(emailString, "(", ")",
+		        ipAddress);
+
+		if (null != emailAddress) {
+			return emailAddress;
+		}
+
+		emailAddress = UsenetUserHelper.augmentDataAndCreateUser(null, emailString, null,
+		        ipAddress);
+
 		return emailAddress;
 	}
 

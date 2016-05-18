@@ -37,9 +37,6 @@ public class NewsGroupReader implements UNISoNLogger {
 	// }
 	private static Logger logger = Logger.getLogger("NewsGroupReader");
 
-	/** The client. */
-	public NewsClient client;
-
 	/**
 	 * The main method.
 	 *
@@ -51,7 +48,7 @@ public class NewsGroupReader implements UNISoNLogger {
 	public static void main(final String args[]) throws Exception {
 		/*
 		 * Chosen from http://freeusenetnews.com/newspage.html
-		 * 
+		 *
 		 * or http://www.elfqrin.com/hacklab/pages/nntpserv.php
 		 */
 		final String host = "freetext.usenetserver.com";
@@ -76,6 +73,9 @@ public class NewsGroupReader implements UNISoNLogger {
 
 	}
 
+	/** The client. */
+	public NewsClient client;
+
 	/** The message count. */
 	private int messageCount;
 
@@ -95,8 +95,27 @@ public class NewsGroupReader implements UNISoNLogger {
 	 * @param controller
 	 *            the controller
 	 */
-	public NewsGroupReader(UNISoNController controller) {
+	public NewsGroupReader(final UNISoNController controller) {
 		this.client = new NewsClient();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see uk.co.sleonard.unison.gui.UNISoNLogger#alert(java.lang.String)
+	 */
+	@Override
+	public void alert(final String message) {
+		NewsGroupReader.logger.warn(message);
+	}
+
+	/**
+	 * Gets the message count.
+	 *
+	 * @return the message count
+	 */
+	public int getMessageCount() {
+		return this.messageCount;
 	}
 
 	/**
@@ -149,6 +168,16 @@ public class NewsGroupReader implements UNISoNLogger {
 		return this.client.isConnected();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see uk.co.sleonard.unison.gui.UNISoNLogger#log(java.lang.String)
+	 */
+	@Override
+	public void log(final String message) {
+		NewsGroupReader.logger.info(message);
+	}
+
 	/**
 	 * Sets the downloader finished.
 	 *
@@ -159,38 +188,6 @@ public class NewsGroupReader implements UNISoNLogger {
 		// throw new RuntimeException("not implemented");
 	}
 
-	/**
-	 * Show download status.
-	 */
-	public synchronized void showDownloadStatus() {
-		final int i = this.getMessagesSkipped() + this.getMessagesStored();
-
-		if (this.getMessageCount() > 0) {
-			final int progress = (i * 100) / this.getMessageCount();
-			UNISoNController.getInstance().setDownloadingState(progress);
-		}
-
-	}
-
-	/**
-	 * Sets the message count.
-	 *
-	 * @param messageCount
-	 *            the new message count
-	 */
-	public void setMessageCount(int messageCount) {
-		this.messageCount = messageCount;
-	}
-
-	/**
-	 * Gets the message count.
-	 *
-	 * @return the message count
-	 */
-	public int getMessageCount() {
-		return messageCount;
-	}
-
 	// public void startDownload(String newsgroup, Date toDate, Date fromDate)
 	// throws UNISoNException {
 	// Set<NNTPNewsGroup> listNewsgroups = UNISoNController.getInstance()
@@ -199,24 +196,27 @@ public class NewsGroupReader implements UNISoNLogger {
 	// toDate, this);
 	// }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see uk.co.sleonard.unison.gui.UNISoNLogger#alert(java.lang.String)
+	/**
+	 * Sets the message count.
+	 *
+	 * @param messageCount
+	 *            the new message count
 	 */
-	@Override
-	public void alert(String message) {
-		logger.warn(message);
+	public void setMessageCount(final int messageCount) {
+		this.messageCount = messageCount;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see uk.co.sleonard.unison.gui.UNISoNLogger#log(java.lang.String)
+	/**
+	 * Show download status.
 	 */
-	@Override
-	public void log(String message) {
-		logger.info(message);
+	public synchronized void showDownloadStatus() {
+		final int i = this.getMessagesSkipped() + this.getMessagesStored();
+
+		if (this.getMessageCount() > 0) {
+			final int progress = i * 100 / this.getMessageCount();
+			UNISoNController.getInstance().setDownloadingState(progress);
+		}
+
 	}
 
 }

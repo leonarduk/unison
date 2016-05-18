@@ -52,6 +52,13 @@ public class NewsArticle implements Comparable<Object> {
 
 	/**
 	 * Instantiates a new news article.
+	 */
+	public NewsArticle() {
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * Instantiates a new news article.
 	 *
 	 * @param article
 	 *            the article
@@ -71,19 +78,6 @@ public class NewsArticle implements Comparable<Object> {
 
 		this.setFrom(article.getFrom());
 		this.setSubject(article.getSubject());
-	}
-
-	/**
-	 * If downloaded using XOVER, then crosspost details, posting host (ussed for location) and
-	 * content will be empty.
-	 *
-	 * @return true, if is full header
-	 */
-	public boolean isFullHeader() {
-		if (null == postingHost) {
-			return false;
-		}
-		return true;
 	}
 
 	/**
@@ -124,16 +118,9 @@ public class NewsArticle implements Comparable<Object> {
 		this.setPostingHost(postingHost);
 	}
 
-	/**
-	 * Instantiates a new news article.
-	 */
-	public NewsArticle() {
-		// TODO Auto-generated constructor stub
-	}
-
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
@@ -270,6 +257,19 @@ public class NewsArticle implements Comparable<Object> {
 	}
 
 	/**
+	 * If downloaded using XOVER, then crosspost details, posting host (ussed for location) and
+	 * content will be empty.
+	 *
+	 * @return true, if is full header
+	 */
+	public boolean isFullHeader() {
+		if (null == this.postingHost) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
 	 * Sets the article id.
 	 *
 	 * @param articleId
@@ -390,7 +390,7 @@ public class NewsArticle implements Comparable<Object> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -406,8 +406,8 @@ public class NewsArticle implements Comparable<Object> {
 		buf.append("\nCrossposts: " + this.getNewsgroupsList());
 		buf.append("\nReferences: " + this.getReferencesList());
 
-		if (null != getContent()) {
-			buf.append(getContent());
+		if (null != this.getContent()) {
+			buf.append(this.getContent());
 		}
 		return buf.toString();
 	}

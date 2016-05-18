@@ -37,20 +37,6 @@ public class PajekNetworkFile {
 	}
 
 	/**
-	 * Gets the preview panel.
-	 *
-	 * @return the preview panel
-	 * @throws UNISoNException
-	 *             the UNI so n exception
-	 */
-	public GraphPreviewPanel getPreviewPanel() throws UNISoNException {
-		GraphPreviewPanel graphPreviewPanel = new GraphPreviewPanel(vertices, directedLinks);
-		graphPreviewPanel.setVisible(true);
-		graphPreviewPanel.setSize(graphPreviewPanel.getPreferredSize());
-		return graphPreviewPanel;
-	}
-
-	/**
 	 * Instantiates a new pajek network file.
 	 */
 	public PajekNetworkFile() {
@@ -113,6 +99,19 @@ public class PajekNetworkFile {
 	}
 
 	/**
+	 * Creates the directed links.
+	 *
+	 * @param tableData
+	 *            the table data
+	 * @return the list
+	 */
+	public List<Relationship> createDirectedLinks(final Vector<Vector<String>> tableData) {
+		this.directedLinks = this.createLinks(tableData, this.directedLinks);
+
+		return this.directedLinks;
+	}
+
+	/**
 	 * Creates the links.
 	 *
 	 * @param nodePairs
@@ -132,7 +131,7 @@ public class PajekNetworkFile {
 
 			// System.out.println(key + " " + value);
 
-			if ((null != value) && !value.equals("")) {
+			if (null != value && !value.equals("")) {
 				this.addRelationship(key, value, links);
 			}
 			else {
@@ -140,6 +139,51 @@ public class PajekNetworkFile {
 			}
 		}
 		return links;
+	}
+
+	/**
+	 * Creates the undirected links.
+	 *
+	 * @param tableData
+	 *            the table data
+	 * @return the list
+	 */
+	public List<Relationship> createUndirectedLinks(final Vector<Vector<String>> tableData) {
+		this.undirectedLinks = this.createLinks(tableData, this.undirectedLinks);
+		return this.undirectedLinks;
+	}
+
+	/**
+	 * Gets the filename.
+	 *
+	 * @return the filename
+	 */
+	public String getFilename() {
+		return this.filename;
+	}
+
+	/**
+	 * Gets the file suffix.
+	 *
+	 * @return the file suffix
+	 */
+	public String getFileSuffix() {
+		return this.SUFFIX;
+	}
+
+	/**
+	 * Gets the preview panel.
+	 *
+	 * @return the preview panel
+	 * @throws UNISoNException
+	 *             the UNI so n exception
+	 */
+	public GraphPreviewPanel getPreviewPanel() throws UNISoNException {
+		final GraphPreviewPanel graphPreviewPanel = new GraphPreviewPanel(this.vertices,
+		        this.directedLinks);
+		graphPreviewPanel.setVisible(true);
+		graphPreviewPanel.setSize(graphPreviewPanel.getPreferredSize());
+		return graphPreviewPanel;
 	}
 
 	/**
@@ -151,6 +195,36 @@ public class PajekNetworkFile {
 	 */
 	private int getVerticeIndex(final String ownerName) {
 		return this.vertices.indexOf(ownerName) + 1;
+	}
+
+	/**
+	 * Save to file.
+	 *
+	 * @param filename
+	 *            the filename
+	 */
+	public void saveToFile(String filename) {
+		if (!filename.endsWith(this.SUFFIX)) {
+			filename += this.SUFFIX;
+		}
+		this.filename = filename;
+		FileOutputStream out; // declare a file output object
+		PrintStream p; // declare a print stream object
+
+		// Create a new file output stream
+		try {
+			out = new FileOutputStream(filename);
+
+			// Connect print stream to the output stream
+			p = new PrintStream(out);
+			this.writeData(p);
+
+			p.close();
+		}
+		catch (final FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Saved to " + filename);
 	}
 
 	/**
@@ -192,79 +266,6 @@ public class PajekNetworkFile {
 				        .println(link.getOwner() + " " + link.getTarget() + " " + link.getValue());
 			}
 		}
-	}
-
-	/**
-	 * Creates the directed links.
-	 *
-	 * @param tableData
-	 *            the table data
-	 * @return the list
-	 */
-	public List<Relationship> createDirectedLinks(final Vector<Vector<String>> tableData) {
-		this.directedLinks = this.createLinks(tableData, this.directedLinks);
-
-		return this.directedLinks;
-	}
-
-	/**
-	 * Creates the undirected links.
-	 *
-	 * @param tableData
-	 *            the table data
-	 * @return the list
-	 */
-	public List<Relationship> createUndirectedLinks(final Vector<Vector<String>> tableData) {
-		this.undirectedLinks = this.createLinks(tableData, this.undirectedLinks);
-		return this.undirectedLinks;
-	}
-
-	/**
-	 * Gets the filename.
-	 *
-	 * @return the filename
-	 */
-	public String getFilename() {
-		return this.filename;
-	}
-
-	/**
-	 * Gets the file suffix.
-	 *
-	 * @return the file suffix
-	 */
-	public String getFileSuffix() {
-		return this.SUFFIX;
-	}
-
-	/**
-	 * Save to file.
-	 *
-	 * @param filename
-	 *            the filename
-	 */
-	public void saveToFile(String filename) {
-		if (!filename.endsWith(this.SUFFIX)) {
-			filename += this.SUFFIX;
-		}
-		this.filename = filename;
-		FileOutputStream out; // declare a file output object
-		PrintStream p; // declare a print stream object
-
-		// Create a new file output stream
-		try {
-			out = new FileOutputStream(filename);
-
-			// Connect print stream to the output stream
-			p = new PrintStream(out);
-			this.writeData(p);
-
-			p.close();
-		}
-		catch (final FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		System.out.println("Saved to " + filename);
 	}
 
 }

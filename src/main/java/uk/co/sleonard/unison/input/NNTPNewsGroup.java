@@ -24,16 +24,6 @@ public final class NNTPNewsGroup implements Comparable<NNTPNewsGroup> {
 	 **************************************************************************/
 	public static final int UNKNOWN_POSTING_PERMISSION = 0;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return getNewsgroup() + " (" + getArticleCount() + ")";
-	}
-
 	/** The __estimated article count. */
 	private int __estimatedArticleCount;
 
@@ -112,7 +102,7 @@ public final class NNTPNewsGroup implements Comparable<NNTPNewsGroup> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
@@ -124,19 +114,21 @@ public final class NNTPNewsGroup implements Comparable<NNTPNewsGroup> {
 	 * Get the estimated number of articles in the newsgroup. The accuracy of this value will depend
 	 * on the server implementation.
 	 * <p>
-	 * 
+	 *
 	 * @return The estimated number of articles in the newsgroup.
 	 **************************************************************************/
 	public int getArticleCount() {
-		int total = __lastArticle - __firstArticle;
-		if (total < this.__estimatedArticleCount) return total;
+		final int total = this.__lastArticle - this.__firstArticle;
+		if (total < this.__estimatedArticleCount) {
+			return total;
+		}
 		return this.__estimatedArticleCount;
 	}
 
 	/***************************************************************************
 	 * Get the number of the first article in the newsgroup.
 	 * <p>
-	 * 
+	 *
 	 * @return The number of the first article in the newsgroup.
 	 **************************************************************************/
 	public int getFirstArticle() {
@@ -146,7 +138,7 @@ public final class NNTPNewsGroup implements Comparable<NNTPNewsGroup> {
 	/***************************************************************************
 	 * Get the number of the last article in the newsgroup.
 	 * <p>
-	 * 
+	 *
 	 * @return The number of the last article in the newsgroup.
 	 **************************************************************************/
 	public int getLastArticle() {
@@ -156,7 +148,7 @@ public final class NNTPNewsGroup implements Comparable<NNTPNewsGroup> {
 	/***************************************************************************
 	 * Get the newsgroup name.
 	 * <p>
-	 * 
+	 *
 	 * @return The name of the newsgroup.
 	 **************************************************************************/
 	public String getNewsgroup() {
@@ -167,11 +159,21 @@ public final class NNTPNewsGroup implements Comparable<NNTPNewsGroup> {
 	 * Get the posting permission of the newsgroup. This will be one of the
 	 * <code> POSTING_PERMISSION </code> constants.
 	 * <p>
-	 * 
+	 *
 	 * @return The posting permission status of the newsgroup.
 	 **************************************************************************/
 	public int getPostingPermission() {
 		return this.__postingPermission;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return this.getNewsgroup() + " (" + this.getArticleCount() + ")";
 	}
 
 	/*

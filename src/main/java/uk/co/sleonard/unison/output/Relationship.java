@@ -46,8 +46,8 @@ public class Relationship {
 
 		// Not interested in value - if we have this link
 		// already we will just add to this one
-		if ((other.getOwner() == this.getOwner()) && (other.getTarget() == this.getTarget())
-		        && (other.isDirected() == this.isDirected())) {
+		if (other.getOwner() == this.getOwner() && other.getTarget() == this.getTarget()
+		        && other.isDirected() == this.isDirected()) {
 			return true;
 		}
 
@@ -124,7 +124,7 @@ public class Relationship {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

@@ -27,11 +27,70 @@ import uk.co.sleonard.unison.utils.HttpDateObject;
  */
 public class FullDownloadWorker extends SwingWorker {
 
-	/** The client. */
-	private final NewsClient client;
-
 	/** The start index. */
 	private static int startIndex = 0;
+
+	/** The download queue. */
+	private static LinkedBlockingQueue<DownloadRequest> downloadQueue = new LinkedBlockingQueue<DownloadRequest>();
+
+	/** The log. */
+	private static UNISoNLogger log;
+
+	/** The Constant downloaders. */
+	private final static ArrayList<FullDownloadWorker> downloaders = new ArrayList<FullDownloadWorker>();
+
+	/**
+	 * Adds the download request.
+	 *
+	 * @param usenetID
+	 *            the usenet id
+	 * @param mode
+	 *            the mode
+	 * @param log
+	 *            the log
+	 * @throws UNISoNException
+	 *             the UNI so n exception
+	 */
+	public synchronized static void addDownloadRequest(final String usenetID,
+	        final DownloadMode mode, final UNISoNLogger log) throws UNISoNException {
+		final DownloadRequest request = new DownloadRequest(usenetID, mode);
+
+		FullDownloadWorker.log = log;
+		FullDownloadWorker.downloadQueue.add(request);
+		if (FullDownloadWorker.downloaders.size() < 1) {
+			FullDownloadWorker.startDownloaders(1);
+		}
+		DataHibernatorWorker.startHibernators();
+	}
+
+	/**
+	 * Queue size.
+	 *
+	 * @return the int
+	 */
+	public static int queueSize() {
+		return FullDownloadWorker.downloadQueue.size();
+	}
+
+	/**
+	 * Start downloaders.
+	 *
+	 * @param numberOfDownloaders
+	 *            the number of downloaders
+	 * @throws UNISoNException
+	 *             the UNI so n exception
+	 */
+	public static void startDownloaders(final int numberOfDownloaders) throws UNISoNException {
+
+		for (int i = 0; i < numberOfDownloaders; i++) {
+			final String host = UNISoNController.getInstance().getNntpHost();
+			FullDownloadWorker.downloaders
+			        .add(new FullDownloadWorker(host, UNISoNController.getInstance().getQueue()));
+		}
+	}
+
+	/** The client. */
+	private final NewsClient client;
 
 	/** The download. */
 	private boolean download = true;
@@ -46,54 +105,24 @@ public class FullDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	public FullDownloadWorker(final String server, LinkedBlockingQueue<NewsArticle> outQueue)
+	public FullDownloadWorker(final String server, final LinkedBlockingQueue<NewsArticle> outQueue)
 	        throws UNISoNException {
 		super("FullDownload");
-		startIndex++;
+		FullDownloadWorker.startIndex++;
 		this.client = new NewsClient();
 		try {
 			this.client.connect(server);
 		}
-		catch (IOException e) {
+		catch (final IOException e) {
 			throw new UNISoNException(e);
 		}
 
 		this.start();
 	}
 
-	/** The download queue. */
-	private static LinkedBlockingQueue<DownloadRequest> downloadQueue = new LinkedBlockingQueue<DownloadRequest>();
-
-	/** The log. */
-	private static UNISoNLogger log;
-
-	/**
-	 * Adds the download request.
-	 *
-	 * @param usenetID
-	 *            the usenet id
-	 * @param mode
-	 *            the mode
-	 * @param log
-	 *            the log
-	 * @throws UNISoNException
-	 *             the UNI so n exception
-	 */
-	public synchronized static void addDownloadRequest(String usenetID, DownloadMode mode,
-	        UNISoNLogger log) throws UNISoNException {
-		DownloadRequest request = new DownloadRequest(usenetID, mode);
-
-		FullDownloadWorker.log = log;
-		downloadQueue.add(request);
-		if (downloaders.size() < 1) {
-			startDownloaders(1);
-		}
-		DataHibernatorWorker.startHibernators();
-	}
-
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see uk.co.sleonard.unison.input.SwingWorker#construct()
 	 */
 	@Override
@@ -102,26 +131,27 @@ public class FullDownloadWorker extends SwingWorker {
 		System.out.println("construct");
 
 		try {
-			while (download) {
-				while (downloadQueue.size() > 0) {
-					storeNextMessage();
+			while (this.download) {
+				while (FullDownloadWorker.downloadQueue.size() > 0) {
+					this.storeNextMessage();
 				}
 				// Wait a bit. If no messages then close downloader
 				Thread.sleep(5000);
-				if (downloadQueue.size() == 0 && downloaders.size() > 1) {
-					download = false;
+				if (FullDownloadWorker.downloadQueue.size() == 0
+				        && FullDownloadWorker.downloaders.size() > 1) {
+					this.download = false;
 				}
 			}
 		}
 		catch (final InterruptedException e) {
-			return ("Interrupted");
+			return "Interrupted";
 		}
-		catch (UNISoNException e) {
+		catch (final UNISoNException e) {
 			UNISoNController.getInstance().showAlert("Error in download:" + e);
 			e.printStackTrace();
-			return ("FAIL");
+			return "FAIL";
 		}
-		return ("Completed");
+		return "Completed";
 	}
 
 	/**
@@ -148,7 +178,7 @@ public class FullDownloadWorker extends SwingWorker {
 		ignoreList.add("CANCEL-LOCK");
 
 		boolean body = false;
-		StringBuffer bodyBuffer = new StringBuffer();
+		final StringBuffer bodyBuffer = new StringBuffer();
 
 		while (st.hasMoreTokens()) {
 			final String row = st.nextToken();
@@ -157,7 +187,7 @@ public class FullDownloadWorker extends SwingWorker {
 				value += "," + row;
 			}
 			else {
-				if ((null != key) && !ignoreList.contains(key)) {
+				if (null != key && !ignoreList.contains(key)) {
 					headerFields.put(key, value);
 				}
 				final int indexOf = row.indexOf(":");
@@ -177,7 +207,7 @@ public class FullDownloadWorker extends SwingWorker {
 				else if (body) {
 					bodyBuffer.append(row + "\n");
 				}
-				if ((null != key) && !ignoreList.contains(key)) {
+				if (null != key && !ignoreList.contains(key)) {
 					value = row.replaceFirst(key + ":", "").trim();
 				}
 			}
@@ -193,7 +223,7 @@ public class FullDownloadWorker extends SwingWorker {
 		try {
 			date = HttpDateObject.getParser().parse(headerFields.get("DATE"));
 		}
-		catch (ParseException e) {
+		catch (final ParseException e) {
 			throw new UNISoNException(e);
 		}
 
@@ -237,27 +267,27 @@ public class FullDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	public NewsArticle downloadArticle(DownloadRequest request) throws UNISoNException {
+	public NewsArticle downloadArticle(final DownloadRequest request) throws UNISoNException {
 		NewsArticle article = null;
 		try {
 			switch (request.getMode()) {
 				case HEADERS:
-					article = downloadHeader(request);
+					article = this.downloadHeader(request);
 					break;
 				case ALL:
-					article = downloadFullMessage(request);
+					article = this.downloadFullMessage(request);
 					break;
 			}
 		}
-		catch (MalformedServerReplyException e) {
+		catch (final MalformedServerReplyException e) {
 			throw new UNISoNException("Failed to download message:" + e.getMessage(), e);
 		}
-		catch (Throwable e) {
+		catch (final Throwable e) {
 			throw new UNISoNException("Failed to download message:", e);
 		}
 
 		if (null == article) {
-			log.log("Skipped message " + request.getUsenetID());
+			FullDownloadWorker.log.log("Skipped message " + request.getUsenetID());
 		}
 		return article;
 	}
@@ -273,7 +303,7 @@ public class FullDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	public NewsArticle downloadFullMessage(DownloadRequest request)
+	public NewsArticle downloadFullMessage(final DownloadRequest request)
 	        throws IOException, UNISoNException {
 		Reader reader;
 		reader = this.client.retrieveArticle(request.getUsenetID());
@@ -298,7 +328,7 @@ public class FullDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	private NewsArticle downloadHeader(DownloadRequest request)
+	private NewsArticle downloadHeader(final DownloadRequest request)
 	        throws IOException, UNISoNException {
 		Reader reader;
 		reader = this.client.retrieveArticleHeader(request.getUsenetID());
@@ -314,15 +344,25 @@ public class FullDownloadWorker extends SwingWorker {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see uk.co.sleonard.unison.input.SwingWorker#finished()
 	 */
 	@Override
 	public void finished() {
-		downloaders.remove(this);
-		if (downloaders.size() == 0) {
-			log.alert("Download of extra fields complete");
+		FullDownloadWorker.downloaders.remove(this);
+		if (FullDownloadWorker.downloaders.size() == 0) {
+			FullDownloadWorker.log.alert("Download of extra fields complete");
 		}
+	}
+
+	/**
+	 * Poll queue.
+	 *
+	 * @return the download request
+	 */
+	private synchronized DownloadRequest pollQueue() {
+		final DownloadRequest request = FullDownloadWorker.downloadQueue.poll();
+		return request;
 	}
 
 	/**
@@ -354,26 +394,6 @@ public class FullDownloadWorker extends SwingWorker {
 	}
 
 	/**
-	 * Start downloaders.
-	 *
-	 * @param numberOfDownloaders
-	 *            the number of downloaders
-	 * @throws UNISoNException
-	 *             the UNI so n exception
-	 */
-	public static void startDownloaders(final int numberOfDownloaders) throws UNISoNException {
-
-		for (int i = 0; i < numberOfDownloaders; i++) {
-			String host = UNISoNController.getInstance().getNntpHost();
-			FullDownloadWorker.downloaders
-			        .add(new FullDownloadWorker(host, UNISoNController.getInstance().getQueue()));
-		}
-	}
-
-	/** The Constant downloaders. */
-	private final static ArrayList<FullDownloadWorker> downloaders = new ArrayList<FullDownloadWorker>();
-
-	/**
 	 * Store next message.
 	 *
 	 * @return true, if successful
@@ -381,37 +401,19 @@ public class FullDownloadWorker extends SwingWorker {
 	 *             the UNI so n exception
 	 */
 	private boolean storeNextMessage() throws UNISoNException {
-		DownloadRequest request = pollQueue();
+		final DownloadRequest request = this.pollQueue();
 
 		final NewsArticle article = this.downloadArticle(request);
 		if (null != article) {
-			LinkedBlockingQueue<NewsArticle> queue = UNISoNController.getInstance().getQueue();
+			final LinkedBlockingQueue<NewsArticle> queue = UNISoNController.getInstance()
+			        .getQueue();
 
-			log.log("Got:" + article.getSubject() + " " + article.getFrom() + " "
+			FullDownloadWorker.log.log("Got:" + article.getSubject() + " " + article.getFrom() + " "
 			        + article.getArticleId() + " to q: " + queue.size() + "[" + new Date());
 
 			queue.add(article);
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Poll queue.
-	 *
-	 * @return the download request
-	 */
-	private synchronized DownloadRequest pollQueue() {
-		DownloadRequest request = downloadQueue.poll();
-		return request;
-	}
-
-	/**
-	 * Queue size.
-	 *
-	 * @return the int
-	 */
-	public static int queueSize() {
-		return downloadQueue.size();
 	}
 }

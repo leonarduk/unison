@@ -10,67 +10,10 @@ import java.util.List;
  */
 public class Location implements java.io.Serializable {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		int hashCode = 0;
-		hashCode = 29 * hashCode + id;
-
-		return hashCode;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object object) {
-		if (this == object) {
-			return true;
-		}
-		if (!(object instanceof Location)) {
-			return false;
-		}
-		final Location that = (Location) object;
-		if (this.getId() != that.getId() || !this.getCity().equals(that.getCity())
-		        || !this.getCountry().equals(that.getCountry())
-		        || !this.getCountryCode().equals(this.getCountryCode())) {
-			return false;
-		}
-		if (!this.getIpAddresses().containsAll(that.getIpAddresses())
-		        || !that.getIpAddresses().containsAll(this.getIpAddresses())) {
-			return false;
-		}
-		if (!this.getPosters().containsAll(that.getPosters())
-		        || !that.getPosters().containsAll(this.getPosters())) {
-			return false;
-		}
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return getCity() + " - " + getCountryCode();
-	}
-
 	/**
-	 * Full string.
 	 *
-	 * @return the string
 	 */
-	public String fullString() {
-		return getCity() + ", " + getCountry() + " (" + getCountryCode() + ")";
-	}
+	private static final long serialVersionUID = -4937544540164453405L;
 
 	/** The City. */
 
@@ -127,6 +70,45 @@ public class Location implements java.io.Serializable {
 		this.IpAddresses = IpAddresses;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (!(object instanceof Location)) {
+			return false;
+		}
+		final Location that = (Location) object;
+		if (this.getId() != that.getId() || !this.getCity().equals(that.getCity())
+		        || !this.getCountry().equals(that.getCountry())
+		        || !this.getCountryCode().equals(this.getCountryCode())) {
+			return false;
+		}
+		if (!this.getIpAddresses().containsAll(that.getIpAddresses())
+		        || !that.getIpAddresses().containsAll(this.getIpAddresses())) {
+			return false;
+		}
+		if (!this.getPosters().containsAll(that.getPosters())
+		        || !that.getPosters().containsAll(this.getPosters())) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Full string.
+	 *
+	 * @return the string
+	 */
+	public String fullString() {
+		return this.getCity() + ", " + this.getCountry() + " (" + this.getCountryCode() + ")";
+	}
+
 	/**
 	 * Gets the city.
 	 *
@@ -179,6 +161,19 @@ public class Location implements java.io.Serializable {
 	 */
 	public List<UsenetUser> getPosters() {
 		return this.posters;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		int hashCode = 0;
+		hashCode = 29 * hashCode + this.id;
+
+		return hashCode;
 	}
 
 	/**
@@ -258,6 +253,16 @@ public class Location implements java.io.Serializable {
 	 */
 	public void setPosters(final List<UsenetUser> posters) {
 		this.posters = posters;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return this.getCity() + " - " + this.getCountryCode();
 	}
 
 }

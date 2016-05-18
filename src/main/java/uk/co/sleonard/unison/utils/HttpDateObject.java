@@ -1,16 +1,16 @@
 /*
  * HTTPDateFormat.java Copyright (C) 2004 The Free Software Foundation
- * 
+ *
  * This file is part of GNU inetlib, a library.
- * 
+ *
  * GNU inetlib is free software; you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation; either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * GNU inetlib is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this library; if
  * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
  * 02111-1307 USA
@@ -49,7 +49,7 @@ import uk.co.sleonard.unison.gui.UNISoNException;
  * HTTP date formatter and parser. Formats dates according to RFC 822 (updated by RFC 1123). Parses
  * dates according to the above, <i>or</i> RFC 1036, <i>or</i> the ANSI C <code>asctime()</code>
  * format.
- * 
+ *
  * @author <a href="mailto:dog@gnu.org">Chris Burdess</a>
  */
 public class HttpDateObject extends DateFormat {
@@ -112,7 +112,7 @@ public class HttpDateObject extends DateFormat {
 	/**
 	 * Appends the textual value for the specified field to the given string buffer. This method
 	 * should be avoided, use <code>format(Date)</code> instead.
-	 * 
+	 *
 	 * @param date
 	 *            the Date object
 	 * @param buf
@@ -199,44 +199,6 @@ public class HttpDateObject extends DateFormat {
 		field.setBeginIndex(0);
 		field.setEndIndex(buf.length());
 		return buf;
-	}
-
-	/**
-	 * Parses the date.
-	 *
-	 * @param text
-	 *            the text
-	 * @return the date
-	 * @throws ParseException
-	 *             the parse exception
-	 * @throws UNISoNException
-	 *             the UNI so n exception
-	 */
-	public Date parseDate(String text) throws ParseException, UNISoNException {
-		if (null == text || text.equals("")) {
-			return null;
-		}
-		if (text.length() == 8) {
-			DateFormat fmt = new SimpleDateFormat("yyyyMMdd");
-			try {
-				return fmt.parse(text);
-			}
-			catch (ParseException e) {
-				throw new UNISoNException("Failed to parse date:" + text, e);
-			}
-		}
-		else if (text.length() == 10 && text.contains("/")) {
-			DateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
-			try {
-				return fmt.parse(text);
-			}
-			catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
-		}
-		return parse(text);
 	}
 
 	/**
@@ -349,7 +311,7 @@ public class HttpDateObject extends DateFormat {
 					start = end + 1;
 					pos.setIndex(start);
 					end = start + 1;
-					while ((end < len) && !Character.isWhitespace(text.charAt(end))) {
+					while (end < len && !Character.isWhitespace(text.charAt(end))) {
 						end++;
 					}
 					second = Integer.parseInt(text.substring(start, end));
@@ -395,19 +357,19 @@ public class HttpDateObject extends DateFormat {
 					start = end + 1;
 					pos.setIndex(start);
 					end = start + 1;
-					while ((end < len) && !Character.isWhitespace(text.charAt(end))) {
+					while (end < len && !Character.isWhitespace(text.charAt(end))) {
 						end++;
 					}
 					second = Integer.parseInt(text.substring(start, end));
 			}
 
-			setCalendar(date, month, year, hour, minute, second);
+			this.setCalendar(date, month, year, hour, minute, second);
 
 			if (end != len) {
 				// Timezone
 				start = this.skipWhitespace(text, end + 1);
 				end = start + 1;
-				while ((end < len) && !Character.isWhitespace(text.charAt(end))) {
+				while (end < len && !Character.isWhitespace(text.charAt(end))) {
 					end++;
 				}
 				final char pm = text.charAt(start);
@@ -442,6 +404,55 @@ public class HttpDateObject extends DateFormat {
 	}
 
 	/**
+	 * Parses the date.
+	 *
+	 * @param text
+	 *            the text
+	 * @return the date
+	 * @throws ParseException
+	 *             the parse exception
+	 * @throws UNISoNException
+	 *             the UNI so n exception
+	 */
+	public Date parseDate(final String text) throws ParseException, UNISoNException {
+		if (null == text || text.equals("")) {
+			return null;
+		}
+		if (text.length() == 8) {
+			final DateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+			try {
+				return fmt.parse(text);
+			}
+			catch (final ParseException e) {
+				throw new UNISoNException("Failed to parse date:" + text, e);
+			}
+		}
+		else if (text.length() == 10 && text.contains("/")) {
+			final DateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+			try {
+				return fmt.parse(text);
+			}
+			catch (final ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+		}
+		return this.parse(text);
+	}
+
+	/**
+	 * Don't allow setting the calendar.
+	 *
+	 * @param newCalendar
+	 *            the new calendar
+	 */
+	@Override
+	public void setCalendar(final Calendar newCalendar) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
 	 * Sets the calendar.
 	 *
 	 * @param date
@@ -457,24 +468,14 @@ public class HttpDateObject extends DateFormat {
 	 * @param second
 	 *            the second
 	 */
-	public void setCalendar(int date, int month, int year, int hour, int minute, int second) {
+	public void setCalendar(final int date, final int month, final int year, final int hour,
+	        final int minute, final int second) {
 		this.calendar.set(Calendar.YEAR, year);
 		this.calendar.set(Calendar.MONTH, month);
 		this.calendar.set(Calendar.DAY_OF_MONTH, date);
 		this.calendar.set(Calendar.HOUR, hour);
 		this.calendar.set(Calendar.MINUTE, minute);
 		this.calendar.set(Calendar.SECOND, second);
-	}
-
-	/**
-	 * Don't allow setting the calendar.
-	 *
-	 * @param newCalendar
-	 *            the new calendar
-	 */
-	@Override
-	public void setCalendar(final Calendar newCalendar) {
-		throw new UnsupportedOperationException();
 	}
 
 	/**

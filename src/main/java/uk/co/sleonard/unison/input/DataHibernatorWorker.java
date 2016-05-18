@@ -32,6 +32,42 @@ public class DataHibernatorWorker extends SwingWorker {
 	/** The numberof hibernators. */
 	private static int numberofHibernators = 10;
 
+	/** The log. */
+	static UNISoNLogger log;
+
+	/** The workers. */
+	private static ArrayList<DataHibernatorWorker> workers = new ArrayList<DataHibernatorWorker>();
+
+	/**
+	 * Sets the logger.
+	 *
+	 * @param logger
+	 *            the new logger
+	 */
+	public static void setLogger(final UNISoNLogger logger) {
+		DataHibernatorWorker.log = logger;
+	}
+
+	/**
+	 * Start hibernators.
+	 */
+	public synchronized static void startHibernators() {
+		while (DataHibernatorWorker.workers.size() < DataHibernatorWorker.numberofHibernators) {
+			DataHibernatorWorker.workers
+			        .add(new DataHibernatorWorker(UNISoNController.getInstance().getNntpReader()));
+		}
+	}
+
+	/**
+	 * Stop download.
+	 */
+	public static void stopDownload() {
+		for (final ListIterator<DataHibernatorWorker> iter = DataHibernatorWorker.workers
+		        .listIterator(); iter.hasNext();) {
+			iter.next().interrupt();
+		}
+	}
+
 	/** The reader. */
 	private final NewsGroupReader reader;
 
@@ -52,45 +88,9 @@ public class DataHibernatorWorker extends SwingWorker {
 		this.start();
 	}
 
-	/** The log. */
-	static UNISoNLogger log;
-
-	/**
-	 * Sets the logger.
-	 *
-	 * @param logger
-	 *            the new logger
-	 */
-	public static void setLogger(UNISoNLogger logger) {
-		DataHibernatorWorker.log = logger;
-	}
-
-	/**
-	 * Start hibernators.
-	 */
-	public synchronized static void startHibernators() {
-		while (DataHibernatorWorker.workers.size() < numberofHibernators) {
-			DataHibernatorWorker.workers
-			        .add(new DataHibernatorWorker(UNISoNController.getInstance().getNntpReader()));
-		}
-	}
-
-	/**
-	 * Stop download.
-	 */
-	public static void stopDownload() {
-		for (final ListIterator<DataHibernatorWorker> iter = workers.listIterator(); iter
-		        .hasNext();) {
-			iter.next().interrupt();
-		}
-	}
-
-	/** The workers. */
-	private static ArrayList<DataHibernatorWorker> workers = new ArrayList<DataHibernatorWorker>();
-
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see uk.co.sleonard.unison.input.SwingWorker#construct()
 	 */
 	@Override
@@ -101,7 +101,7 @@ public class DataHibernatorWorker extends SwingWorker {
 
 		try {
 			// HAve one session per worker rather than per message
-			Session session = UNISoNController.getInstance().helper().getHibernateSession();
+			final Session session = UNISoNController.getInstance().helper().getHibernateSession();
 			while (this.saveToDatabase) {
 
 				while (!queue.isEmpty()) {
@@ -110,7 +110,7 @@ public class DataHibernatorWorker extends SwingWorker {
 						throw new InterruptedException();
 					}
 
-					final NewsArticle article = pollForMessage(queue);
+					final NewsArticle article = this.pollForMessage(queue);
 					if (null != article) {
 						DataHibernatorWorker.logger.debug(
 						        "Hibernating " + article.getArticleId() + " " + queue.size());
@@ -135,16 +135,16 @@ public class DataHibernatorWorker extends SwingWorker {
 			}
 			DataHibernatorWorker.workers.remove(this);
 			if (DataHibernatorWorker.workers.size() == 0) {
-				log.alert("Download complete");
+				DataHibernatorWorker.log.alert("Download complete");
 			}
 		}
 		catch (final InterruptedException e) {
-			return ("Interrupted");
+			return "Interrupted";
 		}
-		catch (UNISoNException e) {
-			log.alert("Error: " + e.getMessage());
+		catch (final UNISoNException e) {
+			DataHibernatorWorker.log.alert("Error: " + e.getMessage());
 		}
-		return ("Completed");
+		return "Completed";
 	}
 
 	/**

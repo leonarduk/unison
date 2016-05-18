@@ -38,7 +38,7 @@ public class TreeNode extends DefaultMutableTreeNode {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.swing.tree.DefaultMutableTreeNode#toString()
 	 */
 	@Override

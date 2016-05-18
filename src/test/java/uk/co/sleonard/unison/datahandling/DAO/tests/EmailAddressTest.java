@@ -40,7 +40,7 @@ public class EmailAddressTest {
 		EmailAddress actual = new EmailAddress(null, null, expected);
 		assertEquals(expected, actual.getIpAddress());
 	}
-	
+
 	/**
 	 * Test HashCode.
 	 */

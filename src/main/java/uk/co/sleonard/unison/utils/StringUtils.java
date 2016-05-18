@@ -2,10 +2,8 @@ package uk.co.sleonard.unison.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -14,25 +12,25 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-
 /**
  * The Class StringUtils.
  */
 /*
- * //TODO Add this reference for the compression
- * FRom http://forum.java.sun.com/thread.jspa?threadID=250124&messageID=926638
+ * //TODO Add this reference for the compression FRom
+ * http://forum.java.sun.com/thread.jspa?threadID=250124&messageID=926638
  */
 public class StringUtils {
 
 	/**
 	 * Convert string to list.
 	 *
-	 * @param field the field
-	 * @param delimiters the delimiters
+	 * @param field
+	 *            the field
+	 * @param delimiters
+	 *            the delimiters
 	 * @return the vector
 	 */
-	public static Vector<String> convertStringToList(final String field,
-			final String delimiters) {
+	public static Vector<String> convertStringToList(final String field, final String delimiters) {
 		final Vector<String> list = new Vector<String>();
 		if (null == field) {
 			return list;
@@ -50,9 +48,11 @@ public class StringUtils {
 	/**
 	 * Compress.
 	 *
-	 * @param str the str
+	 * @param str
+	 *            the str
 	 * @return the byte[]
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static final byte[] compress(final String str) throws IOException {
 		final ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -68,15 +68,14 @@ public class StringUtils {
 	/**
 	 * Convert commas to list.
 	 *
-	 * @param commaSeparatedString the comma separated string
+	 * @param commaSeparatedString
+	 *            the comma separated string
 	 * @return the list
 	 */
-	public static List<String> convertCommasToList(
-			final String commaSeparatedString) {
+	public static List<String> convertCommasToList(final String commaSeparatedString) {
 		final Vector<String> words = new Vector<String>();
 
-		final StringTokenizer tok = new StringTokenizer(commaSeparatedString,
-				",");
+		final StringTokenizer tok = new StringTokenizer(commaSeparatedString, ",");
 		while (tok.hasMoreTokens()) {
 			words.add(tok.nextToken());
 		}
@@ -86,12 +85,13 @@ public class StringUtils {
 	/**
 	 * Decompress.
 	 *
-	 * @param compressed the compressed
+	 * @param compressed
+	 *            the compressed
 	 * @return the string
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static final String decompress(final byte[] compressed)
-			throws IOException {
+	public static final String decompress(final byte[] compressed) throws IOException {
 		if (null == compressed) {
 			return null;
 		}
@@ -114,8 +114,10 @@ public class StringUtils {
 	/**
 	 * Join.
 	 *
-	 * @param strings the strings
-	 * @param delimiter the delimiter
+	 * @param strings
+	 *            the strings
+	 * @param delimiter
+	 *            the delimiter
 	 * @return the string
 	 */
 	public static String join(final String[] strings, final String delimiter) {
@@ -128,33 +130,35 @@ public class StringUtils {
 
 		return buf.toString();
 	}
-	
+
 	/**
 	 * Read the properties file on src/main/resource and process to String Array.
+	 * 
 	 * @author Elton <elton_12_nunes@hotmail.com>
 	 * @return Return the server list on Array
 	 */
-	public static String[] loadServerList(){
-		
+	public static String[] loadServerList() {
+
 		Properties prop = new Properties();
-		
-		try{
+
+		try {
 			String file = "servers.properties";
 			InputStream resources = ClassLoader.getSystemResourceAsStream(file);
-			if(null == resources){
+			if (null == resources) {
 				throw new IOException("can't find " + file);
 			}
 			prop.load(resources);
 			List<String> list = convertCommasToList(prop.getProperty("servers"));
-			
+
 			String[] listServers = list.toArray(new String[list.size()]);
-			
+
 			return listServers;
-		}catch (IOException io){
+		}
+		catch (IOException io) {
 			io.printStackTrace();
 		}
-		
-		return new String[]{"empty"};
+
+		return new String[] { "empty" };
 	}
-	
+
 }

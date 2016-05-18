@@ -4,11 +4,29 @@ import org.apache.log4j.Logger;
 
 import uk.co.sleonard.unison.datahandling.DAO.EmailAddress;
 
+/**
+ * The Class UsenetUserHelper.
+ */
 public class UsenetUserHelper {
+
+	/** The logger. */
 	private static Logger logger = Logger.getLogger("PopulateUsenetUser");
 
-	private static EmailAddress augmentDataAndCreateUser(String name,
-			String email, final String gender, String ipAddress) {
+	/**
+	 * Augment data and create user.
+	 *
+	 * @param name
+	 *            the name
+	 * @param email
+	 *            the email
+	 * @param gender
+	 *            the gender
+	 * @param ipAddress
+	 *            the ip address
+	 * @return the email address
+	 */
+	private static EmailAddress augmentDataAndCreateUser(String name, String email,
+	        final String gender, String ipAddress) {
 		EmailAddress emailAddress = null;
 
 		if ((null == ipAddress) || ipAddress.equals("")) {
@@ -24,7 +42,8 @@ public class UsenetUserHelper {
 				final int atIndex = email.indexOf("@");
 				if (atIndex > -1) {
 					name = email.substring(0, atIndex).trim();
-				} else {
+				}
+				else {
 					name = email.trim();
 					email = null;
 				}
@@ -40,37 +59,57 @@ public class UsenetUserHelper {
 
 	}
 
-	public static EmailAddress parseFromField(String emailString,
-			final String ipAddress) {
+	/**
+	 * Parses the from field.
+	 *
+	 * @param emailString
+	 *            the email string
+	 * @param ipAddress
+	 *            the ip address
+	 * @return the email address
+	 */
+	public static EmailAddress parseFromField(String emailString, final String ipAddress) {
 
-		UsenetUserHelper.logger.debug("createUser: " + emailString + " "
-				+ ipAddress);
+		UsenetUserHelper.logger.debug("createUser: " + emailString + " " + ipAddress);
 
 		emailString = emailString.replaceAll("\"", "");
 
-		EmailAddress emailAddress = UsenetUserHelper
-				.createUserByRemovingBrackets(emailString, "<", ">", ipAddress);
+		EmailAddress emailAddress = UsenetUserHelper.createUserByRemovingBrackets(emailString, "<",
+		        ">", ipAddress);
 
 		if (null != emailAddress) {
 			return emailAddress;
 		}
 
-		emailAddress = UsenetUserHelper.createUserByRemovingBrackets(
-				emailString, "(", ")", ipAddress);
+		emailAddress = UsenetUserHelper.createUserByRemovingBrackets(emailString, "(", ")",
+		        ipAddress);
 
 		if (null != emailAddress) {
 			return emailAddress;
 		}
 
-		emailAddress = UsenetUserHelper.augmentDataAndCreateUser(null,
-				emailString, null, ipAddress);
+		emailAddress = UsenetUserHelper.augmentDataAndCreateUser(null, emailString, null,
+		        ipAddress);
 
 		return emailAddress;
 	}
 
-	private static EmailAddress createUserByRemovingBrackets(
-			final String emailString, final String leftBracketString,
-			final String rightBracketString, final String ipAddress) {
+	/**
+	 * Creates the user by removing brackets.
+	 *
+	 * @param emailString
+	 *            the email string
+	 * @param leftBracketString
+	 *            the left bracket string
+	 * @param rightBracketString
+	 *            the right bracket string
+	 * @param ipAddress
+	 *            the ip address
+	 * @return the email address
+	 */
+	private static EmailAddress createUserByRemovingBrackets(final String emailString,
+	        final String leftBracketString, final String rightBracketString,
+	        final String ipAddress) {
 
 		String name = null;
 		String email = null;
@@ -85,24 +124,23 @@ public class UsenetUserHelper {
 				if (rightBracket < 0) {
 					rightBracket = emailString.length();
 				}
-				final String inBrackets = emailString.substring(
-						leftBracket + 1, rightBracket);
+				final String inBrackets = emailString.substring(leftBracket + 1, rightBracket);
 				String outsideBrackets = null;
 
 				// if email is first, then take name from after it
 				if (leftBracket == 0) {
-					outsideBrackets = emailString.substring(rightBracket + 1)
-							.trim();
-				} else {
-					outsideBrackets = emailString.substring(0, leftBracket)
-							.trim();
+					outsideBrackets = emailString.substring(rightBracket + 1).trim();
+				}
+				else {
+					outsideBrackets = emailString.substring(0, leftBracket).trim();
 				}
 
 				int atIndex = inBrackets.indexOf("@");
 				if (atIndex > -1) {
 					email = inBrackets;
 					name = outsideBrackets;
-				} else {
+				}
+				else {
 					atIndex = outsideBrackets.indexOf("@");
 					if (atIndex > -1) {
 						email = outsideBrackets;
@@ -110,12 +148,12 @@ public class UsenetUserHelper {
 					}
 				}
 
-				emailAddress = UsenetUserHelper.augmentDataAndCreateUser(name,
-						email, gender, ipAddress);
+				emailAddress = UsenetUserHelper.augmentDataAndCreateUser(name, email, gender,
+				        ipAddress);
 			}
-		} catch (Exception e) {
-			logger.warn("Couldn't parse " + emailString
-					+ " so using it for name and email");
+		}
+		catch (Exception e) {
+			logger.warn("Couldn't parse " + emailString + " so using it for name and email");
 			emailAddress = new EmailAddress(emailString, emailString, ipAddress);
 
 		}

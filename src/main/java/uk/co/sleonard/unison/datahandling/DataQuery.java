@@ -42,7 +42,8 @@ public class DataQuery {
 	/**
 	 * Instantiates a new data query.
 	 *
-	 * @param helper the helper
+	 * @param helper
+	 *            the helper
 	 */
 	public DataQuery(HibernateHelper helper) {
 		this.helper = helper;
@@ -61,7 +62,7 @@ public class DataQuery {
 	 * The Class DataQueryHelper.
 	 */
 	static class DataQueryHelper {
-		
+
 		/** The instance. */
 		static DataQuery instance = new DataQuery();
 
@@ -84,7 +85,8 @@ public class DataQuery {
 	 *            the where clauses
 	 * @return the string buffer
 	 */
-	private StringBuffer addWhereClause(final StringBuffer sqlBuffer, final Vector<String> whereClauses) {
+	private StringBuffer addWhereClause(final StringBuffer sqlBuffer,
+	        final Vector<String> whereClauses) {
 		DataQuery.logger.debug("addWhereClause");
 
 		if (whereClauses.size() > 0) {
@@ -121,12 +123,13 @@ public class DataQuery {
 	 * @return the locations
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector<Location> getLocations(final Vector<String> countries, Session session, boolean filtered) {
+	public Vector<Location> getLocations(final Vector<String> countries, Session session,
+	        boolean filtered) {
 		DataQuery.logger.debug("getLocations : " + countries);
 		if (filtered && null != countries && countries.size() > 0) {
 			final StringBuffer sqlBuffer = getLocationsSQL(countries);
 
-			return helper.runQuery(sqlBuffer.toString(), session, Location.class );
+			return helper.runQuery(sqlBuffer.toString(), session, Location.class);
 		}
 		return null;
 	}
@@ -134,7 +137,8 @@ public class DataQuery {
 	/**
 	 * Gets the locations sql.
 	 *
-	 * @param countries the countries
+	 * @param countries
+	 *            the countries
 	 * @return the locations sql
 	 */
 	public StringBuffer getLocationsSQL(final Vector<String> countries) {
@@ -196,8 +200,9 @@ public class DataQuery {
 	 * @return the messages
 	 */
 	@SuppressWarnings("unchecked")
-	public Vector<Message> getMessages(final Vector<Message> messages, final Vector<UsenetUser> users, Session session,
-			Date fromDate, Date toDate, boolean filtered, List<NewsGroup> newsgroups, Set<String> countries) {
+	public Vector<Message> getMessages(final Vector<Message> messages,
+	        final Vector<UsenetUser> users, Session session, Date fromDate, Date toDate,
+	        boolean filtered, List<NewsGroup> newsgroups, Set<String> countries) {
 		DataQuery.logger.debug("getMessages");
 
 		StringBuffer sqlBuffer = getBaseQuery(Message.class);
@@ -224,7 +229,8 @@ public class DataQuery {
 			}
 
 			if (null != fromDate) {
-				whereClauses.add(" message.DateCreated >= '" + yyyyMMDDFormatter.format(fromDate) + "'");
+				whereClauses.add(
+				        " message.DateCreated >= '" + yyyyMMDDFormatter.format(fromDate) + "'");
 			}
 
 			if (null != toDate) {
@@ -232,7 +238,8 @@ public class DataQuery {
 				cal.setTime(toDate);
 				cal.add(Calendar.DAY_OF_MONTH, 1);
 
-				whereClauses.add(" message.DateCreated < '" + yyyyMMDDFormatter.format(cal.getTime()) + "'");
+				whereClauses.add(
+				        " message.DateCreated < '" + yyyyMMDDFormatter.format(cal.getTime()) + "'");
 			}
 
 			if (whereClauses.size() > 0) {

@@ -1,6 +1,9 @@
 package uk.co.sleonard.unison.datahandling.DAO.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +19,13 @@ import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
  */
 public class LocationTest {
 
+	/** The city. */
 	private String city = "Boston";
+
+	/** The country. */
 	private String country = "United States";
+
+	/** The country code. */
 	private String countryCode = "USA";
 
 	/**
@@ -26,8 +34,7 @@ public class LocationTest {
 	@Test
 	public void testToString() {
 		String expected = city + " - " + countryCode;
-		Location actual = new Location(city, null, countryCode, true, null,
-				null);
+		Location actual = new Location(city, null, countryCode, true, null, null);
 		assertEquals(expected, actual.toString());
 	}
 
@@ -37,8 +44,7 @@ public class LocationTest {
 	@Test
 	public void testFullString() {
 		String expected = city + ", " + country + " (" + countryCode + ")";
-		Location actual = new Location(city, country, countryCode, true, null,
-				null);
+		Location actual = new Location(city, country, countryCode, true, null, null);
 		assertEquals(expected, actual.fullString());
 	}
 

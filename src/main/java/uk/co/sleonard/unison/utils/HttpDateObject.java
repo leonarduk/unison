@@ -1,39 +1,32 @@
 /*
- * HTTPDateFormat.java
- * Copyright (C) 2004 The Free Software Foundation
+ * HTTPDateFormat.java Copyright (C) 2004 The Free Software Foundation
  * 
  * This file is part of GNU inetlib, a library.
  * 
- * GNU inetlib is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * GNU inetlib is free software; you can redistribute it and/or modify it under the terms of the GNU
+ * General Public License as published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
  * 
- * GNU inetlib is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU inetlib is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
  * 
- * You should have received a copy of the GNU General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * You should have received a copy of the GNU General Public License along with this library; if
+ * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ * 02111-1307 USA
  *
- * Linking this library statically or dynamically with other modules is
- * making a combined work based on this library.  Thus, the terms and
- * conditions of the GNU General Public License cover the whole
+ * Linking this library statically or dynamically with other modules is making a combined work based
+ * on this library. Thus, the terms and conditions of the GNU General Public License cover the whole
  * combination.
  *
- * As a special exception, the copyright holders of this library give you
- * permission to link this library with independent modules to produce an
- * executable, regardless of the license terms of these independent
- * modules, and to copy and distribute the resulting executable under
- * terms of your choice, provided that you also meet, for each linked
- * independent module, the terms and conditions of the license of that
- * module.  An independent module is a module which is not derived from
- * or based on this library.  If you modify this library, you may extend
- * this exception to your version of the library, but you are not
- * obliged to do so.  If you do not wish to do so, delete this
- * exception statement from your version.
+ * As a special exception, the copyright holders of this library give you permission to link this
+ * library with independent modules to produce an executable, regardless of the license terms of
+ * these independent modules, and to copy and distribute the resulting executable under terms of
+ * your choice, provided that you also meet, for each linked independent module, the terms and
+ * conditions of the license of that module. An independent module is a module which is not derived
+ * from or based on this library. If you modify this library, you may extend this exception to your
+ * version of the library, but you are not obliged to do so. If you do not wish to do so, delete
+ * this exception statement from your version.
  */
 
 package uk.co.sleonard.unison.utils;
@@ -53,27 +46,32 @@ import java.util.TimeZone;
 import uk.co.sleonard.unison.gui.UNISoNException;
 
 /**
- * HTTP date formatter and parser. Formats dates according to RFC 822 (updated
- * by RFC 1123). Parses dates according to the above, <i>or</i> RFC 1036, <i>or</i>
- * the ANSI C <code>asctime()</code> format.
+ * HTTP date formatter and parser. Formats dates according to RFC 822 (updated by RFC 1123). Parses
+ * dates according to the above, <i>or</i> RFC 1036, <i>or</i> the ANSI C <code>asctime()</code>
+ * format.
  * 
  * @author <a href="mailto:dog@gnu.org">Chris Burdess</a>
  */
 public class HttpDateObject extends DateFormat {
 
-	static final String[] DAYS_OF_WEEK = { null, "Sun", "Mon", "Tue", "Wed",
-			"Thu", "Fri", "Sat" };
+	/** The Constant DAYS_OF_WEEK. */
+	static final String[] DAYS_OF_WEEK = { null, "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
 
+	/** The instance. */
 	private static HttpDateObject instance;
 
-	static final String[] MONTHS = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-			"Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+	/** The Constant MONTHS. */
+	static final String[] MONTHS = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+	        "Oct", "Nov", "Dec" };
 
-	/**
-	 * 
-	 */
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -4375514658403735218L;
 
+	/**
+	 * Gets the parser.
+	 *
+	 * @return the parser
+	 */
 	public static HttpDateObject getParser() {
 		if (null == HttpDateObject.instance) {
 			HttpDateObject.instance = new HttpDateObject();
@@ -82,6 +80,12 @@ public class HttpDateObject extends DateFormat {
 
 	}
 
+	/**
+	 * The main method.
+	 *
+	 * @param args
+	 *            the arguments
+	 */
 	public static void main(final String[] args) {
 		final HttpDateObject parser = HttpDateObject.getParser();
 
@@ -89,22 +93,25 @@ public class HttpDateObject extends DateFormat {
 		Date date = null;
 		try {
 			date = parser.parse(dateString);
-		} catch (final ParseException e) {
+		}
+		catch (final ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println("Was : " + dateString + " now " + date);
 	}
 
+	/**
+	 * Instantiates a new http date object.
+	 */
 	public HttpDateObject() {
 		this.calendar = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
 		this.numberFormat = new DecimalFormat();
 	}
 
 	/**
-	 * Appends the textual value for the specified field to the given string
-	 * buffer. This method should be avoided, use <code>format(Date)</code>
-	 * instead.
+	 * Appends the textual value for the specified field to the given string buffer. This method
+	 * should be avoided, use <code>format(Date)</code> instead.
 	 * 
 	 * @param date
 	 *            the Date object
@@ -115,15 +122,13 @@ public class HttpDateObject extends DateFormat {
 	 * @return the modified buffer
 	 */
 	@Override
-	public StringBuffer format(final Date date, final StringBuffer buf,
-			final FieldPosition field) {
+	public StringBuffer format(final Date date, final StringBuffer buf, final FieldPosition field) {
 		this.calendar.clear();
 		this.calendar.setTime(date);
 		buf.setLength(0);
 
 		// Day of week
-		buf.append(HttpDateObject.DAYS_OF_WEEK[this.calendar
-				.get(Calendar.DAY_OF_WEEK)]);
+		buf.append(HttpDateObject.DAYS_OF_WEEK[this.calendar.get(Calendar.DAY_OF_WEEK)]);
 		buf.append(',');
 		buf.append(' ');
 
@@ -171,14 +176,15 @@ public class HttpDateObject extends DateFormat {
 
 		// Timezone
 		// Get time offset in minutes
-		int zoneOffset = (this.calendar.get(Calendar.ZONE_OFFSET) + this.calendar
-				.get(Calendar.DST_OFFSET)) / 60000;
+		int zoneOffset = (this.calendar.get(Calendar.ZONE_OFFSET)
+		        + this.calendar.get(Calendar.DST_OFFSET)) / 60000;
 
 		// Apply + or - appropriately
 		if (zoneOffset < 0) {
 			zoneOffset = -zoneOffset;
 			buf.append('-');
-		} else {
+		}
+		else {
 			buf.append('+');
 		}
 
@@ -195,6 +201,17 @@ public class HttpDateObject extends DateFormat {
 		return buf;
 	}
 
+	/**
+	 * Parses the date.
+	 *
+	 * @param text
+	 *            the text
+	 * @return the date
+	 * @throws ParseException
+	 *             the parse exception
+	 * @throws UNISoNException
+	 *             the UNI so n exception
+	 */
 	public Date parseDate(String text) throws ParseException, UNISoNException {
 		if (null == text || text.equals("")) {
 			return null;
@@ -203,14 +220,17 @@ public class HttpDateObject extends DateFormat {
 			DateFormat fmt = new SimpleDateFormat("yyyyMMdd");
 			try {
 				return fmt.parse(text);
-			} catch (ParseException e) {
-				throw new UNISoNException("Failed to parse date:"+ text, e);
 			}
-		} else if (text.length() == 10 && text.contains("/")) {
+			catch (ParseException e) {
+				throw new UNISoNException("Failed to parse date:" + text, e);
+			}
+		}
+		else if (text.length() == 10 && text.contains("/")) {
 			DateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
 			try {
 				return fmt.parse(text);
-			} catch (ParseException e) {
+			}
+			catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
@@ -221,11 +241,12 @@ public class HttpDateObject extends DateFormat {
 
 	/**
 	 * Parses the given date in the current TimeZone.
-	 * 
+	 *
 	 * @param text
 	 *            the formatted date to be parsed
 	 * @param pos
 	 *            the current parse position
+	 * @return the date
 	 */
 	@Override
 	public Date parse(final String text, final ParsePosition pos) {
@@ -243,141 +264,141 @@ public class HttpDateObject extends DateFormat {
 			}
 			// Determine mode
 			switch (start) {
-			case 3:
-				// asctime
-				start = this.skipWhitespace(text, start);
-				pos.setIndex(start);
-				end = this.skipNonWhitespace(text, start + 1);
-				monthText = text.substring(start, end);
-				month = -1;
-				for (int i = 0; i < 12; i++) {
-					if (HttpDateObject.MONTHS[i].equals(monthText)) {
-						month = i;
-						break;
+				case 3:
+					// asctime
+					start = this.skipWhitespace(text, start);
+					pos.setIndex(start);
+					end = this.skipNonWhitespace(text, start + 1);
+					monthText = text.substring(start, end);
+					month = -1;
+					for (int i = 0; i < 12; i++) {
+						if (HttpDateObject.MONTHS[i].equals(monthText)) {
+							month = i;
+							break;
+						}
 					}
-				}
-				if (month == -1) {
-					pos.setErrorIndex(end);
-					return null;
-				}
-				// Advance to date
-				start = this.skipWhitespace(text, end + 1);
-				pos.setIndex(start);
-				end = this.skipNonWhitespace(text, start + 1);
-				date = Integer.parseInt(text.substring(start, end));
-				// Advance to hour
-				start = this.skipWhitespace(text, end + 1);
-				pos.setIndex(start);
-				end = this.skipTo(text, start + 1, ':');
-				hour = Integer.parseInt(text.substring(start, end));
-				// Advance to minute
-				start = end + 1;
-				pos.setIndex(start);
-				end = this.skipTo(text, start + 1, ':');
-				minute = Integer.parseInt(text.substring(start, end));
-				// Advance to second
-				start = end + 1;
-				pos.setIndex(start);
-				end = this.skipNonWhitespace(text, start + 1);
-				second = Integer.parseInt(text.substring(start, end));
-				// Advance to year
-				start = this.skipWhitespace(text, end + 1);
-				pos.setIndex(start);
-				end = this.skipNonWhitespace(text, start + 1);
-				year = Integer.parseInt(text.substring(start, end));
-				break;
-			case 0:
-			case 4:
-				// rfc822
-				start = this.skipWhitespace(text, start);
-				pos.setIndex(start);
-				end = this.skipNonWhitespace(text, start + 1);
-				date = Integer.parseInt(text.substring(start, end));
-				// Advance to month
-				start = this.skipWhitespace(text, end + 1);
-				pos.setIndex(start);
-				end = this.skipNonWhitespace(text, start + 1);
-				monthText = text.substring(start, end);
-				month = -1;
-				for (int i = 0; i < 12; i++) {
-					if (HttpDateObject.MONTHS[i].equals(monthText)) {
-						month = i;
-						break;
+					if (month == -1) {
+						pos.setErrorIndex(end);
+						return null;
 					}
-				}
-				if (month == -1) {
-					pos.setErrorIndex(end);
-					return null;
-				}
-				// Advance to year
-				start = this.skipWhitespace(text, end + 1);
-				pos.setIndex(start);
-				end = this.skipNonWhitespace(text, start + 1);
-				year = Integer.parseInt(text.substring(start, end));
-				// Advance to hour
-				start = this.skipWhitespace(text, end + 1);
-				pos.setIndex(start);
-				end = this.skipTo(text, start + 1, ':');
-				hour = Integer.parseInt(text.substring(start, end));
-				// Advance to minute
-				start = end + 1;
-				pos.setIndex(start);
-				end = this.skipTo(text, start + 1, ':');
-				minute = Integer.parseInt(text.substring(start, end));
-				// Advance to second
-				start = end + 1;
-				pos.setIndex(start);
-				end = start + 1;
-				while ((end < len) && !Character.isWhitespace(text.charAt(end))) {
-					end++;
-				}
-				second = Integer.parseInt(text.substring(start, end));
-				break;
-			default:
-				// rfc850(obsolete)
-				start = this.skipWhitespace(text, start);
-				pos.setIndex(start);
-				end = this.skipTo(text, start + 1, '-');
-				date = Integer.parseInt(text.substring(start, end));
-				// Advance to month
-				start = end + 1;
-				pos.setIndex(start);
-				end = this.skipTo(text, start + 1, '-');
-				monthText = text.substring(start, end);
-				month = -1;
-				for (int i = 0; i < 12; i++) {
-					if (HttpDateObject.MONTHS[i].equals(monthText)) {
-						month = i;
-						break;
+					// Advance to date
+					start = this.skipWhitespace(text, end + 1);
+					pos.setIndex(start);
+					end = this.skipNonWhitespace(text, start + 1);
+					date = Integer.parseInt(text.substring(start, end));
+					// Advance to hour
+					start = this.skipWhitespace(text, end + 1);
+					pos.setIndex(start);
+					end = this.skipTo(text, start + 1, ':');
+					hour = Integer.parseInt(text.substring(start, end));
+					// Advance to minute
+					start = end + 1;
+					pos.setIndex(start);
+					end = this.skipTo(text, start + 1, ':');
+					minute = Integer.parseInt(text.substring(start, end));
+					// Advance to second
+					start = end + 1;
+					pos.setIndex(start);
+					end = this.skipNonWhitespace(text, start + 1);
+					second = Integer.parseInt(text.substring(start, end));
+					// Advance to year
+					start = this.skipWhitespace(text, end + 1);
+					pos.setIndex(start);
+					end = this.skipNonWhitespace(text, start + 1);
+					year = Integer.parseInt(text.substring(start, end));
+					break;
+				case 0:
+				case 4:
+					// rfc822
+					start = this.skipWhitespace(text, start);
+					pos.setIndex(start);
+					end = this.skipNonWhitespace(text, start + 1);
+					date = Integer.parseInt(text.substring(start, end));
+					// Advance to month
+					start = this.skipWhitespace(text, end + 1);
+					pos.setIndex(start);
+					end = this.skipNonWhitespace(text, start + 1);
+					monthText = text.substring(start, end);
+					month = -1;
+					for (int i = 0; i < 12; i++) {
+						if (HttpDateObject.MONTHS[i].equals(monthText)) {
+							month = i;
+							break;
+						}
 					}
-				}
-				if (month == -1) {
-					pos.setErrorIndex(end);
-					return null;
-				}
-				// Advance to year
-				start = end + 1;
-				pos.setIndex(start);
-				end = this.skipNonWhitespace(text, start + 1);
-				year = 1900 + Integer.parseInt(text.substring(start, end));
-				// Advance to hour
-				start = this.skipWhitespace(text, end + 1);
-				pos.setIndex(start);
-				end = this.skipTo(text, start + 1, ':');
-				hour = Integer.parseInt(text.substring(start, end));
-				// Advance to minute
-				start = end + 1;
-				pos.setIndex(start);
-				end = this.skipTo(text, start + 1, ':');
-				minute = Integer.parseInt(text.substring(start, end));
-				// Advance to second
-				start = end + 1;
-				pos.setIndex(start);
-				end = start + 1;
-				while ((end < len) && !Character.isWhitespace(text.charAt(end))) {
-					end++;
-				}
-				second = Integer.parseInt(text.substring(start, end));
+					if (month == -1) {
+						pos.setErrorIndex(end);
+						return null;
+					}
+					// Advance to year
+					start = this.skipWhitespace(text, end + 1);
+					pos.setIndex(start);
+					end = this.skipNonWhitespace(text, start + 1);
+					year = Integer.parseInt(text.substring(start, end));
+					// Advance to hour
+					start = this.skipWhitespace(text, end + 1);
+					pos.setIndex(start);
+					end = this.skipTo(text, start + 1, ':');
+					hour = Integer.parseInt(text.substring(start, end));
+					// Advance to minute
+					start = end + 1;
+					pos.setIndex(start);
+					end = this.skipTo(text, start + 1, ':');
+					minute = Integer.parseInt(text.substring(start, end));
+					// Advance to second
+					start = end + 1;
+					pos.setIndex(start);
+					end = start + 1;
+					while ((end < len) && !Character.isWhitespace(text.charAt(end))) {
+						end++;
+					}
+					second = Integer.parseInt(text.substring(start, end));
+					break;
+				default:
+					// rfc850(obsolete)
+					start = this.skipWhitespace(text, start);
+					pos.setIndex(start);
+					end = this.skipTo(text, start + 1, '-');
+					date = Integer.parseInt(text.substring(start, end));
+					// Advance to month
+					start = end + 1;
+					pos.setIndex(start);
+					end = this.skipTo(text, start + 1, '-');
+					monthText = text.substring(start, end);
+					month = -1;
+					for (int i = 0; i < 12; i++) {
+						if (HttpDateObject.MONTHS[i].equals(monthText)) {
+							month = i;
+							break;
+						}
+					}
+					if (month == -1) {
+						pos.setErrorIndex(end);
+						return null;
+					}
+					// Advance to year
+					start = end + 1;
+					pos.setIndex(start);
+					end = this.skipNonWhitespace(text, start + 1);
+					year = 1900 + Integer.parseInt(text.substring(start, end));
+					// Advance to hour
+					start = this.skipWhitespace(text, end + 1);
+					pos.setIndex(start);
+					end = this.skipTo(text, start + 1, ':');
+					hour = Integer.parseInt(text.substring(start, end));
+					// Advance to minute
+					start = end + 1;
+					pos.setIndex(start);
+					end = this.skipTo(text, start + 1, ':');
+					minute = Integer.parseInt(text.substring(start, end));
+					// Advance to second
+					start = end + 1;
+					pos.setIndex(start);
+					end = start + 1;
+					while ((end < len) && !Character.isWhitespace(text.charAt(end))) {
+						end++;
+					}
+					second = Integer.parseInt(text.substring(start, end));
 			}
 
 			setCalendar(date, month, year, hour, minute, second);
@@ -391,17 +412,14 @@ public class HttpDateObject extends DateFormat {
 				}
 				final char pm = text.charAt(start);
 				if (Character.isLetter(pm)) {
-					final TimeZone tz = TimeZone.getTimeZone(text.substring(
-							start, end));
+					final TimeZone tz = TimeZone.getTimeZone(text.substring(start, end));
 					this.calendar.set(Calendar.ZONE_OFFSET, tz.getRawOffset());
-				} else {
+				}
+				else {
 					int zoneOffset = 0;
-					zoneOffset += 600 * Character.digit(text.charAt(++start),
-							10);
-					zoneOffset += 60 * Character
-							.digit(text.charAt(++start), 10);
-					zoneOffset += 10 * Character
-							.digit(text.charAt(++start), 10);
+					zoneOffset += 600 * Character.digit(text.charAt(++start), 10);
+					zoneOffset += 60 * Character.digit(text.charAt(++start), 10);
+					zoneOffset += 10 * Character.digit(text.charAt(++start), 10);
 					zoneOffset += Character.digit(text.charAt(++start), 10);
 					zoneOffset *= 60000; // minutes -> ms
 					if ('-' == pm) {
@@ -413,16 +431,33 @@ public class HttpDateObject extends DateFormat {
 			pos.setIndex(end);
 
 			return this.calendar.getTime();
-		} catch (final NumberFormatException e) {
+		}
+		catch (final NumberFormatException e) {
 			pos.setErrorIndex(Math.max(start, end));
-		} catch (final StringIndexOutOfBoundsException e) {
+		}
+		catch (final StringIndexOutOfBoundsException e) {
 			pos.setErrorIndex(Math.max(start, end));
 		}
 		return null;
 	}
 
-	public void setCalendar(int date, int month, int year, int hour,
-			int minute, int second) {
+	/**
+	 * Sets the calendar.
+	 *
+	 * @param date
+	 *            the date
+	 * @param month
+	 *            the month
+	 * @param year
+	 *            the year
+	 * @param hour
+	 *            the hour
+	 * @param minute
+	 *            the minute
+	 * @param second
+	 *            the second
+	 */
+	public void setCalendar(int date, int month, int year, int hour, int minute, int second) {
 		this.calendar.set(Calendar.YEAR, year);
 		this.calendar.set(Calendar.MONTH, month);
 		this.calendar.set(Calendar.DAY_OF_MONTH, date);
@@ -433,6 +468,9 @@ public class HttpDateObject extends DateFormat {
 
 	/**
 	 * Don't allow setting the calendar.
+	 *
+	 * @param newCalendar
+	 *            the new calendar
 	 */
 	@Override
 	public void setCalendar(final Calendar newCalendar) {
@@ -441,12 +479,24 @@ public class HttpDateObject extends DateFormat {
 
 	/**
 	 * Don't allow setting the NumberFormat.
+	 *
+	 * @param newNumberFormat
+	 *            the new number format
 	 */
 	@Override
 	public void setNumberFormat(final NumberFormat newNumberFormat) {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * Skip non whitespace.
+	 *
+	 * @param text
+	 *            the text
+	 * @param pos
+	 *            the pos
+	 * @return the int
+	 */
 	private int skipNonWhitespace(final String text, int pos) {
 		while (!Character.isWhitespace(text.charAt(pos))) {
 			pos++;
@@ -454,6 +504,17 @@ public class HttpDateObject extends DateFormat {
 		return pos;
 	}
 
+	/**
+	 * Skip to.
+	 *
+	 * @param text
+	 *            the text
+	 * @param pos
+	 *            the pos
+	 * @param c
+	 *            the c
+	 * @return the int
+	 */
 	private int skipTo(final String text, int pos, final char c) {
 		while (text.charAt(pos) != c) {
 			pos++;
@@ -461,6 +522,15 @@ public class HttpDateObject extends DateFormat {
 		return pos;
 	}
 
+	/**
+	 * Skip whitespace.
+	 *
+	 * @param text
+	 *            the text
+	 * @param pos
+	 *            the pos
+	 * @return the int
+	 */
 	private int skipWhitespace(final String text, int pos) {
 		while (Character.isWhitespace(text.charAt(pos))) {
 			pos++;

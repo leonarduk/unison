@@ -17,10 +17,10 @@ import uk.co.sleonard.unison.utils.HttpDateObject;
 /**
  * The Class HttpDateObject.
  */
-public class HttpDateObjectTest{
+public class HttpDateObjectTest {
 
 	/**
-	 * Test parse
+	 * Test parse.
 	 */
 	@Test
 	public void testParse() {
@@ -32,18 +32,20 @@ public class HttpDateObjectTest{
 			cal.setTime(date);
 			System.out.println(date);
 			assertEquals(28, cal.get(Calendar.DAY_OF_MONTH));
-		} catch (ParseException e) {
+		}
+		catch (ParseException e) {
 			fail("FAIL : " + e);
-		} catch (UNISoNException e) {
+		}
+		catch (UNISoNException e) {
 			fail("FAIL : " + e);
 		}
 	}
-	
+
 	/**
-	 * Test format
+	 * Test format.
 	 */
 	@Test
 	@Ignore
-	public void testFormat(){
+	public void testFormat() {
 	}
 }

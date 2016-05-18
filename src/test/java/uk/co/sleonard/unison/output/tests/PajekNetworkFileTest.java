@@ -24,10 +24,15 @@ import uk.co.sleonard.unison.output.Relationship;
  * The Class PajekNetworkFile.
  */
 public class PajekNetworkFileTest {
+
+	/** The file. */
 	private PajekNetworkFile file;
 
 	/**
 	 * Setup.
+	 *
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -36,21 +41,24 @@ public class PajekNetworkFileTest {
 
 	/**
 	 * After.
+	 *
+	 * @throws Exception
+	 *             the exception
 	 */
 	@After
 	public void tearDown() throws Exception {
 	}
 
 	/**
-	 * test getPreviewPanel
-	 * Ignored by Error (No X11 DISPLAY) in Travis CI
+	 * test getPreviewPanel Ignored by Error (No X11 DISPLAY) in Travis CI.
 	 */
 	@Ignore
 	@Test
 	public void testGetPreviewPanel() {
 		try {
 			assertNotNull(this.file.getPreviewPanel());
-		} catch (UNISoNException e) {
+		}
+		catch (UNISoNException e) {
 			fail("ERROR : " + e.getMessage());
 		}
 	}
@@ -88,7 +96,7 @@ public class PajekNetworkFileTest {
 	}
 
 	/**
-	 * Test getFilename
+	 * Test getFilename.
 	 */
 	@Test
 	public void testGetFilename() {
@@ -98,7 +106,7 @@ public class PajekNetworkFileTest {
 	}
 
 	/**
-	 * Test getFileSuffix
+	 * Test getFileSuffix.
 	 */
 	@Test
 	public void testGetFileSuffix() {
@@ -140,6 +148,7 @@ public class PajekNetworkFileTest {
 
 	/**
 	 * Generate Vector<Vector<String>> with test data.
+	 * 
 	 * @return Vector<Vector<String>> filled.
 	 */
 	private Vector<Vector<String>> generateNodePairs() {

@@ -26,10 +26,14 @@ import uk.co.sleonard.unison.utils.StringUtils;
  */
 public class FullDownloadWorkerTest {
 
+	/** The worker. */
 	private FullDownloadWorker worker;
-	
+
 	/**
 	 * Setup.
+	 *
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -41,12 +45,14 @@ public class FullDownloadWorkerTest {
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testConstruct(){
+	public void testConstruct() {
 		FullDownloadWorker actual;
 		try {
-			actual = new FullDownloadWorker(StringUtils.loadServerList()[0], mock(LinkedBlockingQueue.class));
+			actual = new FullDownloadWorker(StringUtils.loadServerList()[0],
+			        mock(LinkedBlockingQueue.class));
 			assertNotNull(actual);
-		} catch (UNISoNException e) {
+		}
+		catch (UNISoNException e) {
 			fail("ERROR: " + e.getMessage());
 		}
 	}
@@ -75,7 +81,8 @@ public class FullDownloadWorkerTest {
 		FullDownloadWorker worker = null;
 		try {
 			worker = new FullDownloadWorker(UNISoNController.getInstance().getNntpHost(), queue);
-		} catch (UNISoNException e1) {
+		}
+		catch (UNISoNException e1) {
 			e1.printStackTrace();
 		}
 		DownloadRequest request = new DownloadRequest("<Baf4g.374$Lj1.115@fe10.lga>",
@@ -84,9 +91,11 @@ public class FullDownloadWorkerTest {
 		try {
 			NewsArticle article = worker.downloadFullMessage(request);
 			System.out.println("Downloaded: " + article);
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
-		} catch (UNISoNException e) {
+		}
+		catch (UNISoNException e) {
 			e.printStackTrace();
 		}
 	}
@@ -96,11 +105,13 @@ public class FullDownloadWorkerTest {
 	 */
 	@Ignore
 	@Test
-	public void testAddDownloadRequest(){
+	public void testAddDownloadRequest() {
 		try {
-			FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>", DownloadMode.ALL, mock(UNISoNLogger.class));
+			FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
+			        DownloadMode.ALL, mock(UNISoNLogger.class));
 			assertTrue(FullDownloadWorker.queueSize() >= 1);
-		} catch (UNISoNException e) {
+		}
+		catch (UNISoNException e) {
 			fail("ERROR: " + e.getMessage());
 		}
 	}
@@ -110,15 +121,16 @@ public class FullDownloadWorkerTest {
 	 */
 	@Test
 	public void testDownloadArticle() {
-		DownloadRequest request = new DownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>", DownloadMode.ALL);
+		DownloadRequest request = new DownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
+		        DownloadMode.ALL);
 		try {
 			NewsArticle actual = this.worker.downloadArticle(request);
 			assertNotNull(actual);
-		} catch (UNISoNException e) {
+		}
+		catch (UNISoNException e) {
 			fail("ERROR: " + e.getMessage());
 		}
-		
-		
+
 	}
 
 	/**
@@ -139,6 +151,9 @@ public class FullDownloadWorkerTest {
 		fail("Not yet implemented");
 	}
 
+	/**
+	 * Test start downloaders.
+	 */
 	@Ignore
 	@Test
 	public void testStartDownloaders() {
@@ -153,5 +168,5 @@ public class FullDownloadWorkerTest {
 	public void testQueueSize() {
 		fail("Not yet implemented");
 	}
-	
+
 }

@@ -23,10 +23,14 @@ import uk.co.sleonard.unison.output.ExportToCSV;
  */
 public class ExportToCSVTest {
 
+	/** The export. */
 	private ExportToCSV export;
 
 	/**
 	 * Setup.
+	 *
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -46,8 +50,7 @@ public class ExportToCSVTest {
 		fieldNames.addElement("test");
 		try {
 			String currentLine;
-			this.export.exportTable(archiveName, generateJTableToTest(),
-					fieldNames);
+			this.export.exportTable(archiveName, generateJTableToTest(), fieldNames);
 			File file = new File(archiveName);
 			FileReader fileReader = new FileReader(file.getCanonicalPath());
 			BufferedReader reader = new BufferedReader(fileReader);
@@ -56,7 +59,8 @@ public class ExportToCSVTest {
 			}
 			reader.close();
 			file.delete();
-		} catch (UNISoNException | IOException f) {
+		}
+		catch (UNISoNException | IOException f) {
 			fail("ERROR: " + f.getMessage());
 		}
 	}

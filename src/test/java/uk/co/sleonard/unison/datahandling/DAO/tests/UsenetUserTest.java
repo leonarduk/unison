@@ -19,8 +19,7 @@ public class UsenetUserTest {
 	@Test
 	public void testToString() {
 		String expected = "elton(elton_12_nunes@hotmail.com)";
-		UsenetUser actual = new UsenetUser("elton",
-				"elton_12_nunes@hotmail.com", null);
+		UsenetUser actual = new UsenetUser("elton", "elton_12_nunes@hotmail.com", null);
 		assertEquals(expected, actual.toString());
 	}
 
@@ -77,8 +76,7 @@ public class UsenetUserTest {
 		UsenetUser actual = new UsenetUser();
 		assertNull(actual.getLocation());
 		actual.setLocation(expected);
-		assertEquals(expected.getCountryCode(), actual.getLocation()
-				.getCountryCode());
+		assertEquals(expected.getCountryCode(), actual.getLocation().getCountryCode());
 	}
 
 	/**

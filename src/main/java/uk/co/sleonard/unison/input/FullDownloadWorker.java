@@ -46,7 +46,11 @@ public class FullDownloadWorker extends SwingWorker {
 		super("FullDownload");
 		startIndex++;
 		this.client = new NewsClient();
-		this.client.connect(server);
+		try {
+			this.client.connect(server);
+		} catch (IOException e) {
+			throw new UNISoNException(e);
+		}
 
 		this.start();
 	}

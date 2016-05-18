@@ -63,11 +63,15 @@ public class NewsClient extends NNTPClient {
 	 * @throws UNISoNException
 	 */
 	@Override
-	public void connect(final String server) throws UNISoNException {
+	public void connect(final String server) throws IOException {
 		final int port = 119;
 		final String username = null;
 		final String password = null;
-		this.connect(server, port, username, password);
+		try {
+			this.connect(server, port, username, password);
+		} catch (UNISoNException e) {
+			throw new IOException(e);
+		}
 	}
 
 	/**
@@ -119,7 +123,11 @@ public class NewsClient extends NNTPClient {
 	public void reconnect() throws UNISoNException {
 		// If it should be connected but has timed out
 		if (!this.isConnected()) {
-			this.connect(this.host);
+			try {
+				this.connect(this.host);
+			} catch (IOException e) {
+				throw new UNISoNException(e);
+			}
 		}
 	}
 

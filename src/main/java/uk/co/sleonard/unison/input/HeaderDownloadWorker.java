@@ -21,59 +21,61 @@ import uk.co.sleonard.unison.utils.HttpDateObject;
 
 /**
  * Class to create a separate Thread for downloading messages.
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since
  *
- * @author steve
  */
 public class HeaderDownloadWorker extends SwingWorker {
 
 	/** The logger. */
-	private static Logger logger = Logger.getLogger(HeaderDownloadWorker.class);
+	private static Logger	logger		= Logger.getLogger(HeaderDownloadWorker.class);
 
 	// private static final int MAX_DEPTH = 0;
 
 	/** The end index. */
-	private int endIndex;
+	private int				endIndex;
 
 	// private int messageCount;
 
 	/** The news reader. */
-	private NewsGroupReader newsReader = null;
+	private NewsGroupReader	newsReader	= null;
 
 	/** The start index. */
-	private int startIndex;
+	private int				startIndex;
 
 	/** The newsgroup. */
-	private String newsgroup;
+	private String			newsgroup;
 
 	/** The from date. */
-	private Date fromDate;
+	private Date			fromDate;
 
 	/** The to date. */
-	private Date toDate;
+	private Date			toDate;
 
 	/** The log. */
-	private UNISoNLogger log;
+	private UNISoNLogger	log;
 
 	/** The downloading. */
-	private boolean downloading = false;
+	private boolean			downloading	= false;
 
 	/** The running. */
-	private boolean running = true;
+	private boolean			running		= true;
 
 	/** The log tally. */
-	private int logTally = 0;
+	private int				logTally	= 0;
 
 	/** The index. */
-	private int index = 0;
+	private int				index		= 0;
 
 	/** The skipped. */
-	private int skipped = 0;
+	private int				skipped		= 0;
 
 	/** The kept. */
-	private int kept = 0;
+	private int				kept		= 0;
 
 	/** The mode. */
-	private DownloadMode mode;
+	private DownloadMode	mode;
 
 	/**
 	 * Instantiates a new header download worker.
@@ -378,6 +380,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
+	@SuppressWarnings("deprecation")
 	public boolean storeArticleInfo() throws UNISoNException {
 		Reader reader = null;
 		try {

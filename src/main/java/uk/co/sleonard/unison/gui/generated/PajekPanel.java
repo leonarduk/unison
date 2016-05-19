@@ -38,14 +38,74 @@ import uk.co.sleonard.unison.utils.StringUtils;
  * The Class PajekPanel.
  *
  * @author Steve
+ * @since
+ * 
  */
 public class PajekPanel extends javax.swing.JPanel implements Observer {
 
 	/** The Constant PAJEK_NETWORK_FILE_SUFFIX. */
-	private static final String PAJEK_NETWORK_FILE_SUFFIX = ".net";
+	private static final String			PAJEK_NETWORK_FILE_SUFFIX	= ".net";
 
 	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = 84102596787648747L;
+	private static final long			serialVersionUID			= 84102596787648747L;
+
+	/** The pajek file. */
+	private PajekNetworkFile			pajekFile;
+
+	/** The frame. */
+	private JFrame						frame;
+
+	/** The csv exporter. */
+	private final ExportToCSV			csvExporter					= new ExportToCSV();
+
+	/** The session. */
+	private Session						session;
+
+	/** The all radio. */
+	// Variables declaration - do not modify//GEN-BEGIN:variables
+	private javax.swing.JRadioButton	allRadio;
+
+	/** The creator radio. */
+	private javax.swing.JRadioButton	creatorRadio;
+
+	/** The csv button. */
+	private javax.swing.JButton			csvButton;
+
+	/** The file preview area. */
+	private javax.swing.JTextArea		filePreviewArea;
+
+	/** The file preview scroll pane. */
+	private javax.swing.JScrollPane		filePreviewScrollPane;
+
+	/** The graph scroll pane. */
+	private javax.swing.JScrollPane		graphScrollPane;
+
+	/** The inc missing check. */
+	private javax.swing.JCheckBox		incMissingCheck;
+
+	/** The matrix scroll pane. */
+	private javax.swing.JScrollPane		matrixScrollPane;
+
+	/** The matrix type group. */
+	private javax.swing.ButtonGroup		matrixTypeGroup;
+
+	/** The pajek tab pane. */
+	private javax.swing.JTabbedPane		pajekTabPane;
+
+	/** The preview button. */
+	private javax.swing.JButton			previewButton;
+
+	/** The previous radio. */
+	private javax.swing.JRadioButton	previousRadio;
+
+	/** The results matrix table. */
+	private javax.swing.JTable			resultsMatrixTable;
+
+	/** The save button. */
+	private javax.swing.JButton			saveButton;
+
+	/** The pajek header. */
+	private final Vector<String>		pajekHeader;
 
 	/**
 	 * The main method.
@@ -66,64 +126,6 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 		frame.setSize(frame.getPreferredSize());
 
 	}
-
-	/** The pajek file. */
-	private PajekNetworkFile pajekFile;
-
-	/** The frame. */
-	private JFrame frame;
-
-	/** The csv exporter. */
-	private final ExportToCSV csvExporter = new ExportToCSV();
-
-	/** The session. */
-	private Session session;
-
-	/** The all radio. */
-	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JRadioButton allRadio;
-
-	/** The creator radio. */
-	private javax.swing.JRadioButton creatorRadio;
-
-	/** The csv button. */
-	private javax.swing.JButton csvButton;
-
-	/** The file preview area. */
-	private javax.swing.JTextArea filePreviewArea;
-
-	/** The file preview scroll pane. */
-	private javax.swing.JScrollPane filePreviewScrollPane;
-
-	/** The graph scroll pane. */
-	private javax.swing.JScrollPane graphScrollPane;
-
-	/** The inc missing check. */
-	private javax.swing.JCheckBox incMissingCheck;
-
-	/** The matrix scroll pane. */
-	private javax.swing.JScrollPane matrixScrollPane;
-
-	/** The matrix type group. */
-	private javax.swing.ButtonGroup matrixTypeGroup;
-
-	/** The pajek tab pane. */
-	private javax.swing.JTabbedPane pajekTabPane;
-
-	/** The preview button. */
-	private javax.swing.JButton previewButton;
-
-	/** The previous radio. */
-	private javax.swing.JRadioButton previousRadio;
-
-	/** The results matrix table. */
-	private javax.swing.JTable resultsMatrixTable;
-
-	/** The save button. */
-	private javax.swing.JButton saveButton;
-
-	/** The pajek header. */
-	private final Vector<String> pajekHeader;
 
 	/**
 	 * Creates new form PajekPanel.
@@ -213,7 +215,6 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 	 *
 	 * @return the latest pajek matrix vector
 	 */
-	@SuppressWarnings("unchecked")
 	private Vector<Vector<String>> getLatestPajekMatrixVector() {
 		Vector<Vector<String>> tableData;
 		final List<Message> messages = UNISoNController.getInstance().getMessagesFilter();
@@ -535,7 +536,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 	 * @param evt
 	 *            the evt
 	 */
-	@SuppressWarnings({ "unchecked", "deprecation" })
+	@SuppressWarnings({ "deprecation" })
 	private void saveButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_saveButtonActionPerformed
 		final FileDialog file = new FileDialog(this.frame, "Save Pajek Network File",
 		        FileDialog.SAVE);
@@ -549,7 +550,8 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 		});
 		file.show(); // Blocks
 		String curFile = null;
-		if ((curFile = file.getFile()) != null && !curFile.equals(initialValue)) {
+		curFile = file.getFile();
+		if (curFile != null && !curFile.equals(initialValue)) {
 
 			if (!curFile.endsWith(PajekPanel.PAJEK_NETWORK_FILE_SUFFIX)) {
 				curFile += PajekPanel.PAJEK_NETWORK_FILE_SUFFIX;

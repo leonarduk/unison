@@ -6,6 +6,10 @@ import uk.co.sleonard.unison.datahandling.DAO.EmailAddress;
 
 /**
  * The Class UsenetUserHelper.
+ * 
+ * @author
+ * @since
+ *
  */
 public class UsenetUserHelper {
 

@@ -2,6 +2,10 @@ package uk.co.sleonard.unison.gui;
 
 /**
  * The Class UNISoNException.
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since
+ *
  */
 public class UNISoNException extends Exception {
 

@@ -2,6 +2,10 @@ package uk.co.sleonard.unison.gui;
 
 /**
  * The Interface UNISoNLogger.
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since
+ *
  */
 public interface UNISoNLogger {
 

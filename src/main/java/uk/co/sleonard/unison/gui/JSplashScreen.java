@@ -30,13 +30,22 @@ import javax.swing.border.BevelBorder;
 
 /**
  * The Class JSplashScreen.
+ * 
+ * @author
+ * @since
+ *
  */
+@SuppressWarnings("serial")
 public class JSplashScreen extends JDialog {
 
 	/**
 	 * The Class CloseJNSplash.
 	 */
 	class CloseJNSplash implements Runnable {
+
+		/** The Constant serialVersionUID. */
+		@SuppressWarnings("unused")
+		private static final long serialVersionUID = -6087186647558684188L;
 
 		/*
 		 * (non-Javadoc)
@@ -49,9 +58,6 @@ public class JSplashScreen extends JDialog {
 			JSplashScreen.this.dispose();
 		}
 	}
-
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = -6087186647558684188L;
 
 	/** The status bar. */
 	JProgressBar statusBar;

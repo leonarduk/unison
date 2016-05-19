@@ -25,9 +25,12 @@ public class UNISoNCLI implements UNISoNLogger {
 	enum Command {
 
 		/** The download. */
-		DOWNLOAD, /** The find. */
-		FIND, /** The finddownload. */
-		FINDDOWNLOAD, /** The quickdownload. */
+		DOWNLOAD,
+		/** The find. */
+		FIND,
+		/** The finddownload. */
+		FINDDOWNLOAD,
+		/** The quickdownload. */
 		QUICKDOWNLOAD
 	}
 
@@ -146,12 +149,12 @@ public class UNISoNCLI implements UNISoNLogger {
 					this.downloadAll(arg, host);
 				}
 				catch (final UNISoNException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
 			case QUICKDOWNLOAD:
 				this.quickDownload(arg, fromDate, toDate, host);
+				break;
 		}
 	}
 

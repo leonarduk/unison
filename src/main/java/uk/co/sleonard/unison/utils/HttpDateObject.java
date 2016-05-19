@@ -49,23 +49,26 @@ import uk.co.sleonard.unison.gui.UNISoNException;
  * HTTP date formatter and parser. Formats dates according to RFC 822 (updated by RFC 1123). Parses
  * dates according to the above, <i>or</i> RFC 1036, <i>or</i> the ANSI C <code>asctime()</code>
  * format.
+ * 
+ * @author Chris Burdess <dog@gnu.org>
+ * @since
  *
- * @author <a href="mailto:dog@gnu.org">Chris Burdess</a>
  */
 public class HttpDateObject extends DateFormat {
 
 	/** The Constant DAYS_OF_WEEK. */
-	static final String[] DAYS_OF_WEEK = { null, "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+	static final String[]			DAYS_OF_WEEK		= { null, "Sun", "Mon", "Tue", "Wed", "Thu",
+	        "Fri", "Sat" };
 
 	/** The instance. */
-	private static HttpDateObject instance;
+	private static HttpDateObject	instance;
 
 	/** The Constant MONTHS. */
-	static final String[] MONTHS = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
-	        "Oct", "Nov", "Dec" };
+	static final String[]			MONTHS				= { "Jan", "Feb", "Mar", "Apr", "May",
+	        "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
 	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = -4375514658403735218L;
+	private static final long		serialVersionUID	= -4375514658403735218L;
 
 	/**
 	 * Gets the parser.
@@ -215,7 +218,8 @@ public class HttpDateObject extends DateFormat {
 		int date, month, year, hour, minute, second;
 
 		String monthText;
-		int start = 0, end = -1;
+		int start = 0;
+		int end = -1;
 		final int len = text.length();
 		this.calendar.clear();
 		pos.setIndex(start);

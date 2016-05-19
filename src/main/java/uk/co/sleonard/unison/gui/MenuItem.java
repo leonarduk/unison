@@ -4,6 +4,10 @@ import javax.swing.JMenu;
 
 /**
  * The Interface MenuItem.
+ * 
+ * @author
+ * @since
+ *
  */
 public interface MenuItem {
 

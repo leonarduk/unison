@@ -14,47 +14,48 @@ import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
  * The Class NewsArticle.
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since
  *
- * @author steve
  */
 public class NewsArticle implements Comparable<Object> {
 
 	/** The logger. */
-	private static Logger logger = Logger.getLogger("NewsArtiole");
+	private static Logger	logger	= Logger.getLogger("NewsArtiole");
 
 	/** The article id. */
-	private String articleID;
+	private String			articleID;
 
 	/** The article number. */
-	private int articleNumber;
+	private int				articleNumber;
 
 	/** The content. */
 	// yyyyMMdd HHmmss 'GMT'
-	private String content;
+	private String			content;
 
 	/** The date. */
-	private Date date;
+	private Date			date;
 
 	/** The from. */
-	private String from;
+	private String			from;
 
 	/** The newsgroups. */
-	private String newsgroups;
+	private String			newsgroups;
 
 	/** The posting host. */
-	private String postingHost;
+	private String			postingHost;
 
 	/** The references. */
-	private String references;
+	private String			references;
 
 	/** The subject. */
-	private String subject;
+	private String			subject;
 
 	/**
 	 * Instantiates a new news article.
 	 */
 	public NewsArticle() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -65,6 +66,7 @@ public class NewsArticle implements Comparable<Object> {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
+	@SuppressWarnings("deprecation")
 	public NewsArticle(final Article article) throws UNISoNException {
 		this.setArticleId(article.getArticleId());
 		this.setArticleNumber(article.getArticleNumber());

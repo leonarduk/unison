@@ -15,8 +15,10 @@ import uk.co.sleonard.unison.gui.UNISoNException;
 
 /**
  * The Class ExportToCSV.
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since
  *
- * @author Stephen
  */
 public class ExportToCSV {
 

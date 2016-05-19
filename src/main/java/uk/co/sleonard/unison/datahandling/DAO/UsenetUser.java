@@ -1,34 +1,36 @@
 package uk.co.sleonard.unison.datahandling.DAO;
 
-// Generated 11-Nov-2007 17:31:30 by Hibernate Tools 3.2.0.b9
-
 /**
  * Represents a poster to a news group.
+ * 
+ * @author Generated 11-Nov-2007 17:31:30 by Hibernate Tools 3.2.0.b9
+ * @since
+ *
  */
 public class UsenetUser implements java.io.Serializable {
 
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = 6240031352036083751L;
+	private static final long	serialVersionUID	= 6240031352036083751L;
 
 	/** The email. */
-	private String email;
+	private String				email;
 
 	/** The gender. */
-	private String gender;
+	private String				gender;
 
 	/** The id. */
-	private int id;
+	private int					id;
 
 	/** The ipaddress. */
-	private String ipaddress;
+	private String				ipaddress;
 
 	/** The location. */
-	private Location location;
+	private Location			location;
 
 	/** The name. */
-	private String name;
+	private String				name;
 
 	/**
 	 * Instantiates a new usenet user.

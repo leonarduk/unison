@@ -1,28 +1,30 @@
 package uk.co.sleonard.unison.datahandling.DAO;
 
-// Generated 11-Nov-2007 17:31:30 by Hibernate Tools 3.2.0.b9
-
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Represents a message thread.
+ * 
+ * @author Generated 11-Nov-2007 17:31:30 by Hibernate Tools 3.2.0.b9
+ * @since
+ *
  */
 public class Topic implements java.io.Serializable {
 
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = -4646650675535168051L;
+	private static final long	serialVersionUID	= -4646650675535168051L;
 
 	/** The id. */
-	private int id;
+	private int					id;
 
 	/** The newsgroups. */
-	private Set<NewsGroup> newsgroups = new HashSet<>(0);
+	private Set<NewsGroup>		newsgroups			= new HashSet<>(0);
 
 	/** The subject. */
-	private String subject;
+	private String				subject;
 
 	/**
 	 * Instantiates a new topic.

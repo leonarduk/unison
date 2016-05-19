@@ -27,6 +27,10 @@ import uk.co.sleonard.unison.gui.UNISoNException;
 
 /**
  * The Class NewsClient.
+ * 
+ * @author
+ * @since
+ *
  */
 public class NewsClient extends NNTPClient {
 
@@ -65,10 +69,10 @@ public class NewsClient extends NNTPClient {
 	}
 
 	/** The host. */
-	private String host;
+	private String	host;
 
 	/** The message count. */
-	private int messageCount;
+	private int		messageCount;
 
 	/**
 	 * Instantiates a new news client.
@@ -276,6 +280,7 @@ public class NewsClient extends NNTPClient {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
+	@SuppressWarnings("deprecation")
 	public Set<NNTPNewsGroup> listNNTPNewsgroups(final String wildcard, final String nntpserver)
 	        throws UNISoNException {
 

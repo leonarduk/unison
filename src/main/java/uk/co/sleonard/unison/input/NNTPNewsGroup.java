@@ -4,37 +4,41 @@ import org.apache.commons.net.nntp.NewsgroupInfo;
 
 /**
  * The Class NNTPNewsGroup.
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since
+ *
  */
 public final class NNTPNewsGroup implements Comparable<NNTPNewsGroup> {
 	/** * A constant indicating that a newsgroup is moderated. ** */
-	public static final int MODERATED_POSTING_PERMISSION = 1;
+	public static final int	MODERATED_POSTING_PERMISSION	= 1;
 
 	/** * A constant indicating that a newsgroup is public and unmoderated. ** */
-	public static final int PERMITTED_POSTING_PERMISSION = 2;
+	public static final int	PERMITTED_POSTING_PERMISSION	= 2;
 
 	/***************************************************************************
 	 * A constant indicating that a newsgroup is closed for general posting.
 	 **************************************************************************/
-	public static final int PROHIBITED_POSTING_PERMISSION = 3;
+	public static final int	PROHIBITED_POSTING_PERMISSION	= 3;
 
 	/***************************************************************************
 	 * A constant indicating that the posting permission of a newsgroup is unknown. For example, the
 	 * NNTP GROUP command does not return posting information, so NewsgroupInfo instances obtained
 	 * from that command willhave an UNKNOWN_POSTING_PERMISSION.
 	 **************************************************************************/
-	public static final int UNKNOWN_POSTING_PERMISSION = 0;
+	public static final int	UNKNOWN_POSTING_PERMISSION		= 0;
 
 	/** The __estimated article count. */
-	private int __estimatedArticleCount;
+	private int				__estimatedArticleCount;
 
 	/** The __last article. */
-	private int __firstArticle, __lastArticle;
+	private int				__firstArticle, __lastArticle;
 
 	/** The __newsgroup. */
-	private String __newsgroup;
+	private String			__newsgroup;
 
 	/** The __posting permission. */
-	private int __postingPermission;
+	private int				__postingPermission;
 
 	/**
 	 * Instantiates a new NNTP news group.
@@ -42,6 +46,7 @@ public final class NNTPNewsGroup implements Comparable<NNTPNewsGroup> {
 	 * @param original
 	 *            the original
 	 */
+	@SuppressWarnings("deprecation")
 	public NNTPNewsGroup(final NewsgroupInfo original) {
 		this.__estimatedArticleCount = original.getArticleCount();
 		this.__firstArticle = original.getFirstArticle();

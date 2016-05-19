@@ -15,6 +15,10 @@ import javax.swing.SwingUtilities;
  *
  * Note that the API changed slightly in the 3rd version: You must now invoke start() on the
  * SwingWorker after creating it.
+ * 
+ * @author
+ * @since
+ * 
  */
 public abstract class SwingWorker extends Observable implements Runnable {
 	/**
@@ -53,10 +57,10 @@ public abstract class SwingWorker extends Observable implements Runnable {
 	}
 
 	/** The thread var. */
-	protected final ThreadVar threadVar;
+	protected final ThreadVar	threadVar;
 
 	/** The value. */
-	private Object value; // see getValue(), setValue()
+	private Object				value;		 // see getValue(), setValue()
 
 	/**
 	 * Start a thread that will call the <code>construct</code> method and then exit.

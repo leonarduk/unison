@@ -15,6 +15,8 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
  *
  * @param <T>
  *            the generic type
+ * @author
+ * @since
  */
 public class GUIItem<T> {
 
@@ -63,10 +65,10 @@ public class GUIItem<T> {
 	}
 
 	/** The name. */
-	private final String name;
+	private final String	name;
 
 	/** The object. */
-	private final T object;
+	private final T			object;
 
 	/**
 	 * Instantiates a new GUI item.

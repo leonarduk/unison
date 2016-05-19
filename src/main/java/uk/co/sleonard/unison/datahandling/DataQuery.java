@@ -23,8 +23,21 @@ import uk.co.sleonard.unison.gui.UNISoNController;
 
 /**
  * The Class DataQuery.
+ * 
+ * @author
+ * @since
+ *
  */
 public class DataQuery {
+
+	/** The logger. */
+	private static Logger			logger				= Logger.getLogger("DataQuery");
+
+	/** The helper. */
+	private final HibernateHelper	helper;
+
+	/** The yyyy mmdd formatter. */
+	SimpleDateFormat				yyyyMMDDFormatter	= new SimpleDateFormat("yyyy-MM-dd");
 
 	/**
 	 * The Class DataQueryHelper.
@@ -44,9 +57,6 @@ public class DataQuery {
 		}
 	}
 
-	/** The logger. */
-	private static Logger logger = Logger.getLogger("DataQuery");
-
 	/**
 	 * Gets the single instance of DataQuery.
 	 *
@@ -55,12 +65,6 @@ public class DataQuery {
 	public static DataQuery getInstance() {
 		return DataQueryHelper.getInstance();
 	}
-
-	/** The helper. */
-	private final HibernateHelper helper;
-
-	/** The yyyy mmdd formatter. */
-	SimpleDateFormat yyyyMMDDFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
 	/**
 	 * Instantiates a new data query.

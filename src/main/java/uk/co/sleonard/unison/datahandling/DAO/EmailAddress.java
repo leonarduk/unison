@@ -2,17 +2,21 @@ package uk.co.sleonard.unison.datahandling.DAO;
 
 /**
  * The Class EmailAddress.
+ * 
+ * @author
+ * @since
+ *
  */
 public class EmailAddress {
 
 	/** The name. */
-	private final String name;
+	private final String	name;
 
 	/** The email. */
-	private final String email;
+	private final String	email;
 
 	/** The ip address. */
-	private final String ipAddress;
+	private final String	ipAddress;
 
 	/**
 	 * Instantiates a new email address.

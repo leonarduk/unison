@@ -1,25 +1,27 @@
 package uk.co.sleonard.unison.datahandling.DAO;
 
-// Generated 11-Nov-2007 17:31:30 by Hibernate Tools 3.2.0.b9
-
 /**
  * The IP address.
+ * 
+ * @author Generated 11-Nov-2007 17:31:30 by Hibernate Tools 3.2.0.b9
+ * @since
+ *
  */
 public class IpAddress implements java.io.Serializable {
 
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = -7969874241047620708L;
+	private static final long	serialVersionUID	= -7969874241047620708L;
 
 	/** The id. */
-	private int id;
+	private int					id;
 
 	/** The Ip address. */
-	private String IpAddress;
+	private String				IpAddress;
 
 	/** The location. */
-	private Location location;
+	private Location			location;
 
 	/**
 	 * Instantiates a new ip address.

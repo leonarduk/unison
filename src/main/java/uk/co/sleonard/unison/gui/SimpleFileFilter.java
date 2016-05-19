@@ -10,14 +10,18 @@ import javax.swing.filechooser.FileFilter;
 
 /**
  * The Class SimpleFileFilter.
+ * 
+ * @author
+ * @since
+ *
  */
 public class SimpleFileFilter extends FileFilter {
 
 	/** The description. */
-	String description;
+	String		description;
 
 	/** The extensions. */
-	String[] extensions;
+	String[]	extensions;
 
 	/**
 	 * Instantiates a new simple file filter.

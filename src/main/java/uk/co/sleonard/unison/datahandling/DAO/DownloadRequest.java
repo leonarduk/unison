@@ -2,6 +2,10 @@ package uk.co.sleonard.unison.datahandling.DAO;
 
 /**
  * The Class DownloadRequest.
+ * 
+ * @author
+ * @since
+ *
  */
 public class DownloadRequest {
 
@@ -11,16 +15,18 @@ public class DownloadRequest {
 	public enum DownloadMode {
 
 		/** The basic. */
-		BASIC, /** The headers. */
-		HEADERS, /** The all. */
+		BASIC,
+		/** The headers. */
+		HEADERS,
+		/** The all. */
 		ALL
 	}
 
 	/** The usenet id. */
-	private final String usenetID;
+	private final String		usenetID;
 
 	/** The mode. */
-	private final DownloadMode mode;
+	private final DownloadMode	mode;
 
 	/**
 	 * Instantiates a new download request.

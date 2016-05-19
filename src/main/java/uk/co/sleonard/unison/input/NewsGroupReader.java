@@ -29,6 +29,10 @@ import uk.co.sleonard.unison.gui.UNISoNLogger;
 
 /**
  * The Class NewsGroupReader.
+ * 
+ * @author
+ * @since
+ *
  */
 public class NewsGroupReader implements UNISoNLogger {
 	// public Message[] getMessages() throws MessagingException {
@@ -74,20 +78,20 @@ public class NewsGroupReader implements UNISoNLogger {
 	}
 
 	/** The client. */
-	public NewsClient client;
+	public NewsClient	client;
 
 	/** The message count. */
-	private int messageCount;
+	private int			messageCount;
 
 	/** The msgs. */
 	@Deprecated
-	ArrayList<Message> msgs;
+	ArrayList<Message>	msgs;
 
 	/** The msgs skipped. */
-	int msgsSkipped = 0;
+	int					msgsSkipped	= 0;
 
 	/** The msgs stored. */
-	int msgsStored = 0;
+	int					msgsStored	= 0;
 
 	/**
 	 * Instantiates a new news group reader.

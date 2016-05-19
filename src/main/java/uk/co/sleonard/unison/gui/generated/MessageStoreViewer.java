@@ -52,117 +52,119 @@ import uk.co.sleonard.unison.utils.StringUtils;
  * The Class MessageStoreViewer.
  *
  * @author Steve
+ * @since
+ * 
  */
 public class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNLogger {
 
 	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = -4431795072981463365L;
+	private static final long			serialVersionUID	= -4431795072981463365L;
 
 	/** The body pane. */
 	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JTextArea bodyPane;
+	private javax.swing.JTextArea		bodyPane;
 
 	/** The body scroll pane. */
-	private javax.swing.JScrollPane bodyScrollPane;
+	private javax.swing.JScrollPane		bodyScrollPane;
 
 	/** The crosspost combo box. */
-	private javax.swing.JComboBox crosspostComboBox;
+	private javax.swing.JComboBox		crosspostComboBox;
 
 	/** The filter toggle. */
-	private javax.swing.JToggleButton filterToggle;
+	private javax.swing.JToggleButton	filterToggle;
 
 	/** The from date field. */
-	private javax.swing.JTextField fromDateField;
+	private javax.swing.JTextField		fromDateField;
 
 	/** The from date label. */
-	private javax.swing.JLabel fromDateLabel;
+	private javax.swing.JLabel			fromDateLabel;
 
 	/** The get body button. */
-	private javax.swing.JButton getBodyButton;
+	private javax.swing.JButton			getBodyButton;
 
 	/** The groups hierarchy. */
-	private javax.swing.JTree groupsHierarchy;
+	private javax.swing.JTree			groupsHierarchy;
 
 	/** The groups scroll pane. */
-	private javax.swing.JScrollPane groupsScrollPane;
+	private javax.swing.JScrollPane		groupsScrollPane;
 
 	/** The headers button. */
-	private javax.swing.JButton headersButton;
+	private javax.swing.JButton			headersButton;
 
 	/** The location field. */
-	private javax.swing.JTextField locationField;
+	private javax.swing.JTextField		locationField;
 
 	/** The location label. */
-	private javax.swing.JLabel locationLabel;
+	private javax.swing.JLabel			locationLabel;
 
 	/** The missing messages check. */
-	private javax.swing.JCheckBox missingMessagesCheck;
+	private javax.swing.JCheckBox		missingMessagesCheck;
 
 	/** The refresh button. */
-	private javax.swing.JButton refreshButton;
+	private javax.swing.JButton			refreshButton;
 
 	/** The sender field. */
-	private javax.swing.JTextField senderField;
+	private javax.swing.JTextField		senderField;
 
 	/** The sender label. */
-	private javax.swing.JLabel senderLabel;
+	private javax.swing.JLabel			senderLabel;
 
 	/** The sent date field. */
-	private javax.swing.JTextField sentDateField;
+	private javax.swing.JTextField		sentDateField;
 
 	/** The sent date label. */
-	private javax.swing.JLabel sentDateLabel;
+	private javax.swing.JLabel			sentDateLabel;
 
 	/** The stats tab pane. */
-	private javax.swing.JTabbedPane statsTabPane;
+	private javax.swing.JTabbedPane		statsTabPane;
 
 	/** The subject field. */
-	private javax.swing.JTextField subjectField;
+	private javax.swing.JTextField		subjectField;
 
 	/** The subject label. */
-	private javax.swing.JLabel subjectLabel;
+	private javax.swing.JLabel			subjectLabel;
 
 	/** The to date field. */
-	private javax.swing.JTextField toDateField;
+	private javax.swing.JTextField		toDateField;
 
 	/** The todate label. */
-	private javax.swing.JLabel todateLabel;
+	private javax.swing.JLabel			todateLabel;
 
 	/** The top countries list. */
-	private javax.swing.JList topCountriesList;
+	private javax.swing.JList			topCountriesList;
 
 	/** The top countries scroll pane. */
-	private javax.swing.JScrollPane topCountriesScrollPane;
+	private javax.swing.JScrollPane		topCountriesScrollPane;
 
 	/** The top groups list. */
-	private javax.swing.JList topGroupsList;
+	private javax.swing.JList			topGroupsList;
 
 	/** The top groups scroll pane. */
-	private javax.swing.JScrollPane topGroupsScrollPane;
+	private javax.swing.JScrollPane		topGroupsScrollPane;
 
 	/** The top posters list. */
-	private javax.swing.JList topPostersList;
+	private javax.swing.JList			topPostersList;
 
 	/** The top posters scroll pane. */
-	private javax.swing.JScrollPane topPostersScrollPane;
+	private javax.swing.JScrollPane		topPostersScrollPane;
 
 	/** The topics hierarchy. */
-	private javax.swing.JTree topicsHierarchy;
+	private javax.swing.JTree			topicsHierarchy;
 
 	/** The topics scroll pane. */
-	private javax.swing.JScrollPane topicsScrollPane;
+	private javax.swing.JScrollPane		topicsScrollPane;
 
 	/** The session. */
-	private Session session;
+	private Session						session;
 
 	/** The newsgroup tree root. */
-	private TreeNode newsgroupTreeRoot;
+	private TreeNode					newsgroupTreeRoot;
 
 	/** The topic root. */
-	private TreeNode topicRoot;
+	private TreeNode					topicRoot;
 
 	/** The parser. */
-	private final HttpDateObject parser = new HttpDateObject();
+	private final HttpDateObject		parser				= new HttpDateObject();
 
 	// End of variables declaration//GEN-END:variables
 	/**

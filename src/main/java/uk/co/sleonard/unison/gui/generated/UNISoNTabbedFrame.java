@@ -22,7 +22,7 @@ import uk.co.sleonard.unison.gui.UNISoNController;
 /**
  * The Class UNISoNTabbedFrame.
  *
- * @author Steve
+ * @author Stephen <github@leonarduk.com>
  * @since
  * 
  */
@@ -176,6 +176,7 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
 				break;
 			default:
 				this.showAlert("DB refresh cancelled");
+				break;
 		}
 	}// GEN-LAST:event_deleteDBMenuItemActionPerformed
 

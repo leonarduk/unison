@@ -105,8 +105,7 @@ public class StringUtils {
 		entry.getName();
 		final byte[] buffer = new byte[1024];
 		int offset = -1;
-		offset = zin.read(buffer);
-		while (offset != -1) {
+		while ((offset = zin.read(buffer)) != -1) {
 			out.write(buffer, 0, offset);
 		}
 		final String decompressed = out.toString();

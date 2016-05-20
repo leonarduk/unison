@@ -37,7 +37,7 @@ import uk.co.sleonard.unison.utils.StringUtils;
 /**
  * The Class PajekPanel.
  *
- * @author Steve
+ * @author Stephen <github@leonarduk.com>
  * @since
  * 
  */

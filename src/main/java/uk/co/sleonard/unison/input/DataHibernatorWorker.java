@@ -41,6 +41,12 @@ public class DataHibernatorWorker extends SwingWorker {
 	/** The workers. */
 	private static ArrayList<DataHibernatorWorker>	workers				= new ArrayList<>();
 
+	/** The reader. */
+	private final NewsGroupReader					reader;
+
+	/** The save to database. */
+	private boolean									saveToDatabase		= true;
+
 	/**
 	 * Sets the logger.
 	 *
@@ -70,12 +76,6 @@ public class DataHibernatorWorker extends SwingWorker {
 			iter.next().interrupt();
 		}
 	}
-
-	/** The reader. */
-	private final NewsGroupReader	reader;
-
-	/** The save to database. */
-	private boolean					saveToDatabase	= true;
 
 	/**
 	 * Creates a new instance of DataHibernatorWorker.

@@ -39,7 +39,23 @@ public class NewsGroupReader implements UNISoNLogger {
 	// return folder.getMessages();
 	/** The logger. */
 	// }
-	private static Logger logger = Logger.getLogger("NewsGroupReader");
+	private static Logger	logger		= Logger.getLogger("NewsGroupReader");
+
+	/** The client. */
+	public NewsClient		client;
+
+	/** The message count. */
+	private int				messageCount;
+
+	/** The msgs. */
+	@Deprecated
+	ArrayList<Message>		msgs;
+
+	/** The msgs skipped. */
+	int						msgsSkipped	= 0;
+
+	/** The msgs stored. */
+	int						msgsStored	= 0;
 
 	/**
 	 * The main method.
@@ -76,22 +92,6 @@ public class NewsGroupReader implements UNISoNLogger {
 		System.out.println("done");
 
 	}
-
-	/** The client. */
-	public NewsClient	client;
-
-	/** The message count. */
-	private int			messageCount;
-
-	/** The msgs. */
-	@Deprecated
-	ArrayList<Message>	msgs;
-
-	/** The msgs skipped. */
-	int					msgsSkipped	= 0;
-
-	/** The msgs stored. */
-	int					msgsStored	= 0;
 
 	/**
 	 * Instantiates a new news group reader.

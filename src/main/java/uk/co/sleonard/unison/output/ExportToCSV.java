@@ -115,7 +115,8 @@ public class ExportToCSV {
 		});
 		file.show(); // Blocks
 		String curFile = null;
-		if ((curFile = file.getFile()) != null && !curFile.equals(initialValue)) {
+		curFile = file.getFile();
+		if (curFile != null && !curFile.equals(initialValue)) {
 
 			if (!curFile.endsWith(CSV_FILE_SUFFIX)) {
 				curFile += CSV_FILE_SUFFIX;

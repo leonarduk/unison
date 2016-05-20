@@ -265,10 +265,7 @@ public class NewsArticle implements Comparable<Object> {
 	 * @return true, if is full header
 	 */
 	public boolean isFullHeader() {
-		if (null == this.postingHost) {
-			return false;
-		}
-		return true;
+		return null == this.postingHost ? false : true;
 	}
 
 	/**

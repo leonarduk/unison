@@ -22,7 +22,13 @@ public class GUIItem<T> {
 
 	/** The Constant logger. */
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger("GUIItem");
+	private static final Logger	logger	= Logger.getLogger("GUIItem");
+
+	/** The name. */
+	private final String		name;
+
+	/** The object. */
+	private final T				object;
 
 	/**
 	 * Gets the GUI list.
@@ -63,12 +69,6 @@ public class GUIItem<T> {
 	        final HibernateHelper helper) {
 		return GUIItem.getGUIList(Arrays.asList(array), helper);
 	}
-
-	/** The name. */
-	private final String	name;
-
-	/** The object. */
-	private final T			object;
 
 	/**
 	 * Instantiates a new GUI item.

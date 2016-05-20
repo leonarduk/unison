@@ -21,6 +21,12 @@ import javax.swing.SwingUtilities;
  * 
  */
 public abstract class SwingWorker extends Observable implements Runnable {
+	/** The thread var. */
+	protected final ThreadVar	threadVar;
+
+	/** The value. */
+	private Object				value;				 // see getValue(), setValue()
+
 	/**
 	 * Class to maintain reference to current worker thread under separate synchronization control.
 	 */
@@ -55,12 +61,6 @@ public abstract class SwingWorker extends Observable implements Runnable {
 			return this.thread;
 		}
 	}
-
-	/** The thread var. */
-	protected final ThreadVar	threadVar;
-
-	/** The value. */
-	private Object				value;		 // see getValue(), setValue()
 
 	/**
 	 * Start a thread that will call the <code>construct</code> method and then exit.

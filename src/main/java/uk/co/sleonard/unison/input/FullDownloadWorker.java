@@ -38,6 +38,12 @@ public class FullDownloadWorker extends SwingWorker {
 	/** The Constant downloaders. */
 	private final static ArrayList<FullDownloadWorker>	downloaders		= new ArrayList<>();
 
+	/** The client. */
+	private final NewsClient							client;
+
+	/** The download. */
+	private boolean										download		= true;
+
 	/**
 	 * Adds the download request.
 	 *
@@ -87,12 +93,6 @@ public class FullDownloadWorker extends SwingWorker {
 			        .add(new FullDownloadWorker(host, UNISoNController.getInstance().getQueue()));
 		}
 	}
-
-	/** The client. */
-	private final NewsClient	client;
-
-	/** The download. */
-	private boolean				download	= true;
 
 	/**
 	 * Instantiates a new full download worker.

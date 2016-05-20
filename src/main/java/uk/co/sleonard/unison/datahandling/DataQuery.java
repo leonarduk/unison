@@ -128,7 +128,7 @@ public class DataQuery {
 	public Vector<Location> getLocations(final Vector<String> countries, final Session session,
 	        final boolean filtered) {
 		DataQuery.logger.debug("getLocations : " + countries);
-		if (filtered && (null != countries) && (countries.size() > 0)) {
+		if (filtered && null != countries && countries.size() > 0) {
 			final StringBuffer sqlBuffer = this.getLocationsSQL(countries);
 
 			return this.helper.runQuery(sqlBuffer.toString(), session, Location.class);
@@ -169,7 +169,7 @@ public class DataQuery {
 		DataQuery.logger.debug("getMessageIdsString");
 
 		final StringBuffer buf = new StringBuffer();
-		if ((users != null) && (users.size() > 0)) {
+		if (users != null && users.size() > 0) {
 			buf.append("'" + users.get(0).getId() + "'");
 			if (users.size() > 1) {
 				for (int i = 1; i < users.size(); i++) {
@@ -201,6 +201,7 @@ public class DataQuery {
 	 *            the countries
 	 * @return the messages
 	 */
+	@SuppressWarnings("unchecked")
 	public Vector<Message> getMessages(final Vector<Message> messages,
 	        final Vector<UsenetUser> users, final Session session, final Date fromDate,
 	        final Date toDate, final boolean filtered, final List<NewsGroup> newsgroups,
@@ -211,24 +212,24 @@ public class DataQuery {
 		sqlBuffer.append(" as message ");
 
 		if (filtered) {
-			final Vector<String> whereClauses = new Vector<>();
-			if ((null != users) && (users.size() > 0)) {
+			final Vector<String> whereClauses = new Vector<String>();
+			if (null != users && users.size() > 0) {
 				sqlBuffer.append(" left join fetch message.poster as usenetuser ");
 				whereClauses
 				        .add(" usenetuser.id in ( " + this.getUsenetUserIdsString(users) + ") ");
 			}
 
-			if ((null != countries) && (countries.size() > 0)) {
+			if (null != countries && countries.size() > 0) {
 				sqlBuffer.append(" left join fetch message.poster.location as location ");
 				whereClauses.add(" location.Country in ('" + this.join(countries, "','") + "') ");
 			}
-			if ((null != newsgroups) && (newsgroups.size() > 0)) {
+			if (null != newsgroups && newsgroups.size() > 0) {
 				sqlBuffer.append(" left join fetch message.newsgroups as newsgroup ");
 				whereClauses
 				        .add(" newsgroup.id in ( " + this.getNewsGroupIdsString(newsgroups) + ") ");
 			}
 
-			if ((null != messages) && (messages.size() > 0)) {
+			if (null != messages && messages.size() > 0) {
 				whereClauses.add(" message.id in ( " + this.getMessageIdsString(messages) + ") ");
 			}
 
@@ -262,7 +263,7 @@ public class DataQuery {
 	 */
 	private String getNewsGroupIdsString(final List<NewsGroup> newsgroups) {
 		final StringBuffer buf = new StringBuffer();
-		if ((newsgroups != null) && (newsgroups.size() > 0)) {
+		if (newsgroups != null && newsgroups.size() > 0) {
 			buf.append("'" + newsgroups.get(0).getId() + "'");
 			if (newsgroups.size() > 1) {
 				for (int i = 1; i < newsgroups.size(); i++) {
@@ -284,7 +285,7 @@ public class DataQuery {
 		DataQuery.logger.debug("getUsenetUserIdsString");
 
 		final StringBuffer buf = new StringBuffer();
-		if ((users != null) && (users.size() > 0)) {
+		if (users != null && users.size() > 0) {
 			buf.append("'" + users.get(0).getId() + "'");
 			if (users.size() > 1) {
 				for (int i = 1; i < users.size(); i++) {
@@ -305,7 +306,7 @@ public class DataQuery {
 	 *            the delimiter
 	 * @return the string
 	 */
-	public String join(final Collection<String> s, final String delimiter) {
+	public String join(final Collection s, final String delimiter) {
 		final StringBuffer buffer = new StringBuffer();
 		final Iterator<String> iter = s.iterator();
 		while (iter.hasNext()) {
@@ -332,7 +333,7 @@ public class DataQuery {
 		DataQuery.logger.warn(dataQuery.getLocations(null, session, true));
 
 		DataQuery.logger.warn("UNITED STATES");
-		final Vector<String> countries = new Vector<>();
+		final Vector<String> countries = new Vector<String>();
 		countries.add("UNITED STATES");
 		final Vector<Location> locations = dataQuery.getLocations(countries, session, true);
 		DataQuery.logger.warn(locations);

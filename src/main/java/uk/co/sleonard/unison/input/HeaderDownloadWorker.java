@@ -87,7 +87,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see uk.co.sleonard.unison.input.SwingWorker#construct()
 	 */
 	@Override
@@ -114,7 +114,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see uk.co.sleonard.unison.input.SwingWorker#finished()
 	 */
 	@Override
@@ -144,33 +144,33 @@ public class HeaderDownloadWorker extends SwingWorker {
 	/**
 	 * In date range.
 	 *
-	 * @param fromDate1
+	 * @param fromDate
 	 *            the from date
-	 * @param toDate1
+	 * @param toDate
 	 *            the to date
 	 * @param date
 	 *            the date
 	 * @return true, if successful
 	 */
-	private boolean inDateRange(final Date fromDate1, final Date toDate1, final Date date) {
+	private boolean inDateRange(final Date fromDate, final Date toDate, final Date date) {
 		if (null == date) {
 			return false;
 		}
 		final Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 
-		if (null != fromDate1) {
+		if (null != fromDate) {
 			final Calendar from = Calendar.getInstance();
-			from.setTime(fromDate1);
+			from.setTime(fromDate);
 			// zeroHours(from);
 
 			if (cal.before(from)) {
 				return false;
 			}
 		}
-		if (null != toDate1) {
+		if (null != toDate) {
 			final Calendar to = Calendar.getInstance();
-			to.setTime(toDate1);
+			to.setTime(toDate);
 
 			// add a day to allow for time past midnight
 			to.add(Calendar.DAY_OF_MONTH, 1);
@@ -188,17 +188,17 @@ public class HeaderDownloadWorker extends SwingWorker {
 	 *
 	 * @param reader
 	 *            the reader
-	 * @param startIndex1
+	 * @param startIndex
 	 *            the start index
-	 * @param endIndex1
+	 * @param endIndex
 	 *            the end index
 	 * @param server
 	 *            the server
-	 * @param newsgroup1
+	 * @param newsgroup
 	 *            the newsgroup
-	 * @param log1
+	 * @param log
 	 *            the log
-	 * @param mode1
+	 * @param mode
 	 *            the mode
 	 * @param from
 	 *            the from
@@ -207,22 +207,22 @@ public class HeaderDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	public void initialise(final NewsGroupReader reader, final int startIndex1, final int endIndex1,
-	        final String server, final String newsgroup1, final UNISoNLogger log1,
-	        final DownloadMode mode1, final Date from, final Date to) throws UNISoNException {
-		this.log = log1;
-		this.mode = mode1;
-		this.startIndex = startIndex1;
-		this.endIndex = endIndex1;
+	public void initialise(final NewsGroupReader reader, final int startIndex, final int endIndex,
+	        final String server, final String newsgroup, final UNISoNLogger log,
+	        final DownloadMode mode, final Date from, final Date to) throws UNISoNException {
+		this.log = log;
+		this.mode = mode;
+		this.startIndex = startIndex;
+		this.endIndex = endIndex;
 		this.newsReader = reader;
-		this.newsgroup = newsgroup1;
+		this.newsgroup = newsgroup;
 		this.fromDate = from;
 		this.toDate = to;
 
-		HeaderDownloadWorker.logger.info(" Server: " + server + " Newsgroup: " + newsgroup1);
+		HeaderDownloadWorker.logger.info(" Server: " + server + " Newsgroup: " + newsgroup);
 		try {
 			this.newsReader.client.connect(server);
-			this.newsReader.client.selectNewsgroup(newsgroup1);
+			this.newsReader.client.selectNewsgroup(newsgroup);
 		}
 		catch (final Exception e) {
 			HeaderDownloadWorker.logger.warn(e.getMessage(), e);
@@ -245,7 +245,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.util.Observable#notifyObservers()
 	 */
 	@Override
@@ -294,7 +294,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 					throw new UNISoNException("Download aborted");
 				}
 				// If told to pause or queue is getting a bit full wait
-				while (!this.downloading || (queue.size() > 1000)) {
+				while (!this.downloading || queue.size() > 1000) {
 					try {
 						Thread.sleep(1000);
 					}

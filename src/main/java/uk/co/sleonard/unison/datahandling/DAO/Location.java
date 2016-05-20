@@ -32,10 +32,10 @@ public class Location implements java.io.Serializable {
 	private int id;
 
 	/** The Ip addresses. */
-	private List<IpAddress> IpAddresses = new ArrayList<>(0);
+	private List<IpAddress> IpAddresses = new ArrayList<IpAddress>(0);
 
 	/** The posters. */
-	private List<UsenetUser> posters = new ArrayList<>(0);
+	private List<UsenetUser> posters = new ArrayList<UsenetUser>(0);
 
 	/**
 	 * Instantiates a new location.
@@ -84,7 +84,7 @@ public class Location implements java.io.Serializable {
 			return false;
 		}
 		final Location that = (Location) object;
-		if ((this.getId() != that.getId()) || !this.getCity().equals(that.getCity())
+		if (this.getId() != that.getId() || !this.getCity().equals(that.getCity())
 		        || !this.getCountry().equals(that.getCountry())
 		        || !this.getCountryCode().equals(this.getCountryCode())) {
 			return false;
@@ -171,7 +171,7 @@ public class Location implements java.io.Serializable {
 	@Override
 	public int hashCode() {
 		int hashCode = 0;
-		hashCode = (29 * hashCode) + this.id;
+		hashCode = 29 * hashCode + this.id;
 
 		return hashCode;
 	}

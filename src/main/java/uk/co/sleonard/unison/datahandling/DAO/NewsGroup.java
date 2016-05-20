@@ -39,7 +39,7 @@ public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
 	private boolean lastNode;
 
 	/** Messages in this NewsGroup. */
-	private Set<Message> messages = new HashSet<>(0);
+	private Set<Message> messages = new HashSet<Message>(0);
 
 	/** The name. */
 	private String name;
@@ -48,7 +48,7 @@ public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
 	private NewsGroup parentNewsGroup;
 
 	/** Message Threads in this NewsGroup. */
-	private Set<Topic> topics = new HashSet<>(0);
+	private Set<Topic> topics = new HashSet<Topic>(0);
 
 	/**
 	 * Instantiates a new news group.
@@ -233,7 +233,7 @@ public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
 	@Override
 	public int hashCode() {
 		int hashCode = 0;
-		hashCode = (29 * hashCode) + this.id;
+		hashCode = 29 * hashCode + this.id;
 
 		return hashCode;
 	}

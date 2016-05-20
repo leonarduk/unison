@@ -147,33 +147,34 @@ public class HibernateHelper {
 	 *            the ip address
 	 * @return the location
 	 */
+	@SuppressWarnings("unchecked")
 	public Location createLocation(final String ipAddress) {
 
 		Location location = null;
 		final String locationLookupUrl = "http://api.hostip.info/rough.php?ip=" + ipAddress;
 
-		final HashMap<String, String> fieldMap = new HashMap<>();
+		final HashMap<String, String> fieldMap = new HashMap<String, String>();
 
 		try {
 			// Create a URL for the desired page
 			final URL url = new URL(locationLookupUrl);
 
 			// Read all the text returned by the server
-			try (final BufferedReader in = new BufferedReader(
-			        new InputStreamReader(url.openStream()));) {
-				String str;
-				// Example output:
-				// Country: UNITED STATES
-				// Country Code: US
-				// City: Beltsville, MD <-- this becomes location field
-				// Guessed: true
-				while ((str = in.readLine()) != null) {
-					// str is one line of text; readLine() strips the newline
-					// character(s)
-					final String[] fields = str.split(": ");
-					fieldMap.put(fields[0], fields[1]);
-				}
+			final BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+			String str;
+			// Example output:
+			// Country: UNITED STATES
+			// Country Code: US
+			// City: Beltsville, MD <-- this becomes location field
+			// Guessed: true
+			while ((str = in.readLine()) != null) {
+				// str is one line of text; readLine() strips the newline
+				// character(s)
+				final String[] fields = str.split(": ");
+				fieldMap.put(fields[0], fields[1]);
 			}
+			in.close();
+
 			final String city = fieldMap.get("City");
 			final String country = fieldMap.get("Country");
 			final String countryCode = fieldMap.get("Country Code");
@@ -240,14 +241,13 @@ public class HibernateHelper {
 	 * @return the usenet user
 	 */
 	private synchronized UsenetUser createUsenetUser(final NewsArticle article,
-	        final Session session, final Location locationInput, final String gender) {
-		Location location = locationInput;
+	        final Session session, Location location, final String gender) {
 		// Add location details if got all details
 		if (article.isFullHeader()) {
 			location = this.createLocation(article, session);
 		}
 		final UsenetUser poster = this.findOrCreateUsenetUser(article, session, gender);
-		if ((null == poster.getLocation()) || !poster.getLocation().equals(location)) {
+		if (null == poster.getLocation() || !poster.getLocation().equals(location)) {
 			poster.setLocation(location);
 			poster.setLocation(location);
 			session.saveOrUpdate(poster);
@@ -284,6 +284,7 @@ public class HibernateHelper {
 	 * @throws GenericJDBCException
 	 *             the generic jdbc exception
 	 */
+	@SuppressWarnings("unchecked")
 	public List<NewsGroup> fetchBaseNewsGroups(final Session session) throws GenericJDBCException {
 		final String query = "from " + NewsGroup.class.getName() + " where lastnode is true";
 		final List<NewsGroup> returnVal = this.runQuery(query, session, NewsGroup.class);
@@ -303,9 +304,8 @@ public class HibernateHelper {
 	 * @throws HibernateException
 	 *             the hibernate exception
 	 */
-	public Serializable fetchOrInsert(final Session session, final Serializable storableInput,
+	public Serializable fetchOrInsert(final Session session, Serializable storable,
 	        final List<?> dbList) throws HibernateException {
-		Serializable storable = storableInput;
 		if (dbList.size() > 0) {
 			storable = (Serializable) dbList.get(0);
 		}
@@ -419,7 +419,7 @@ public class HibernateHelper {
 			location = dbLocation;
 			List<IpAddress> ipAddresses = location.getIpAddresses();
 			if (null == ipAddresses) {
-				ipAddresses = new ArrayList<>();
+				ipAddresses = new ArrayList<IpAddress>();
 			}
 			ipAddresses.add(ipAddress);
 		}
@@ -515,9 +515,8 @@ public class HibernateHelper {
 	 *            the subject
 	 * @return the topic
 	 */
-	private synchronized Topic findOrCreateTopic(final Session session, final String subjectInput) {
+	private synchronized Topic findOrCreateTopic(final Session session, String subject) {
 		Topic topic = null;
-		String subject = subjectInput;
 		subject = subject.replaceAll("Re: ", "").trim();
 		topic = (Topic) this.findByKey(subject, session, Topic.class);
 		if (null == topic) {
@@ -648,10 +647,7 @@ public class HibernateHelper {
 							break;
 						case 1:
 							System.exit(0);
-							break;
 						case JOptionPane.CLOSED_OPTION: // quit
-							break;
-						default:
 							break;
 					}
 				}
@@ -721,7 +717,7 @@ public class HibernateHelper {
 	public <T> Vector<ResultRow> getListResults(final String query, final Class<T> type,
 	        final Session session) {
 		final List<T> resultsRows = this.runSQLQuery(query, session, type);
-		final Vector<ResultRow> resultsVector = new Vector<>();
+		final Vector<ResultRow> resultsVector = new Vector<ResultRow>();
 		for (final Object next : resultsRows) {
 			final Object[] results = (Object[]) next;
 			final String key = (String) results[0];
@@ -879,7 +875,7 @@ public class HibernateHelper {
 			HibernateHelper.logger.error("Error fetching " + NewsGroup.class.getName(), e);
 		}
 		if (null == returnVal) {
-			returnVal = new Vector<>();
+			returnVal = new Vector<Object>();
 		}
 		return (Vector<T>) returnVal;
 	}
@@ -934,9 +930,8 @@ public class HibernateHelper {
 	 * @throws HibernateException
 	 *             the hibernate exception
 	 */
-	public synchronized void storeNewsgroups(final List<String> newsgroupsList,
-	        final Message messageInput, final Session session) throws HibernateException {
-		Message message = messageInput;
+	public synchronized void storeNewsgroups(final List<String> newsgroupsList, Message message,
+	        final Session session) throws HibernateException {
 		message = this.findOrCreateMessage(message, session);
 
 		final ListIterator<String> iter = newsgroupsList.listIterator();
@@ -948,7 +943,7 @@ public class HibernateHelper {
 				if (null != message) {
 					Set<NewsGroup> newsgroups = message.getNewsgroups();
 					if (null == newsgroups) {
-						newsgroups = new HashSet<>();
+						newsgroups = new HashSet<NewsGroup>();
 						message.setNewsgroups(newsgroups);
 					}
 					newsgroups.add(group);
@@ -958,14 +953,14 @@ public class HibernateHelper {
 
 					Set<Message> groupMessages = group.getMessages();
 					if (null == groupMessages) {
-						groupMessages = new HashSet<>();
+						groupMessages = new HashSet<Message>();
 						group.setMessages(groupMessages);
 					}
 					groupMessages.add(message);
 
 					Set<Topic> groupTopics = group.getTopics();
 					if (null == groupTopics) {
-						groupTopics = new HashSet<>();
+						groupTopics = new HashSet<Topic>();
 						group.setTopics(groupTopics);
 					}
 					groupTopics.add(topic);
@@ -973,7 +968,7 @@ public class HibernateHelper {
 
 					Set<NewsGroup> topicsGroups = topic.getNewsgroups();
 					if (null == topicsGroups) {
-						topicsGroups = new HashSet<>();
+						topicsGroups = new HashSet<NewsGroup>();
 						topic.setNewsgroups(topicsGroups);
 					}
 					topicsGroups.add(group);
@@ -1003,7 +998,7 @@ public class HibernateHelper {
 	public List<NewsGroup> storeNewsgroups(final Set<NNTPNewsGroup> newsgroupsList,
 	        final Session session) throws HibernateException {
 		final Iterator<NNTPNewsGroup> iter = newsgroupsList.iterator();
-		final List<NewsGroup> groups = new Vector<>();
+		final List<NewsGroup> groups = new Vector<NewsGroup>();
 
 		while (iter.hasNext()) {
 			final NNTPNewsGroup sourceGroup = iter.next();

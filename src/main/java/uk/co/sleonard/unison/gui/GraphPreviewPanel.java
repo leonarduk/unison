@@ -60,7 +60,7 @@ public class GraphPreviewPanel extends JPanel {
 	class UnicodeVertexStringer implements VertexStringer {
 
 		/** The map. */
-		Map<Vertex, String> map = new HashMap<>();
+		Map<Vertex, String> map = new HashMap<Vertex, String>();
 
 		/**
 		 * Instantiates a new unicode vertex stringer.
@@ -87,7 +87,9 @@ public class GraphPreviewPanel extends JPanel {
 			if (GraphPreviewPanel.this.showLabels) {
 				return this.map.get(v);
 			}
-			return "";
+			else {
+				return "";
+			}
 		}
 	}
 
@@ -134,7 +136,7 @@ public class GraphPreviewPanel extends JPanel {
 	public static void main(final String[] args) throws UNISoNException {
 		final JFrame frame = new JFrame();
 		frame.setVisible(true);
-		final LinkedList<String> posters = new LinkedList<>();
+		final LinkedList<String> posters = new LinkedList<String>();
 		final String LUCY = "Lucy";
 		posters.add(LUCY);
 		final String JESS = "Jess";
@@ -150,7 +152,7 @@ public class GraphPreviewPanel extends JPanel {
 
 		Relationship link = new Relationship(posters.indexOf(STEVE), posters.indexOf(LUCY));
 
-		final List<Relationship> links = new Vector<>();
+		final List<Relationship> links = new Vector<Relationship>();
 		links.add(link);
 		link = new Relationship(posters.indexOf(STEVE), posters.indexOf(MIC));
 		links.add(link);
@@ -239,7 +241,7 @@ public class GraphPreviewPanel extends JPanel {
 			}
 			catch (final ArrayIndexOutOfBoundsException e) {
 				throw new UNISoNException("Array out of bounds: size " + v.length + " vs "
-				        + link.getOwner() + " or " + link.getTarget(), e);
+				        + link.getOwner() + " or " + link.getTarget());
 
 			}
 		}

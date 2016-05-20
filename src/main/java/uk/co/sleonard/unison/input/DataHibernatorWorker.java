@@ -36,7 +36,7 @@ public class DataHibernatorWorker extends SwingWorker {
 	static UNISoNLogger log;
 
 	/** The workers. */
-	private static ArrayList<DataHibernatorWorker> workers = new ArrayList<DataHibernatorWorker>();
+	private static ArrayList<DataHibernatorWorker> workers = new ArrayList<>();
 
 	/**
 	 * Sets the logger.
@@ -138,7 +138,7 @@ public class DataHibernatorWorker extends SwingWorker {
 				DataHibernatorWorker.log.alert("Download complete");
 			}
 		}
-		catch (final InterruptedException e) {
+		catch (@SuppressWarnings("unused") final InterruptedException e) {
 			return "Interrupted";
 		}
 		catch (final UNISoNException e) {

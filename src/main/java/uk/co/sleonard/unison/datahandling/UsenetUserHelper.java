@@ -25,19 +25,21 @@ public class UsenetUserHelper {
 	 *            the ip address
 	 * @return the email address
 	 */
-	private static EmailAddress augmentDataAndCreateUser(String name, String email,
-	        final String gender, String ipAddress) {
+	private static EmailAddress augmentDataAndCreateUser(final String nameInput,
+	        final String emailInput, final String gender, final String ipAddressInput) {
 		EmailAddress emailAddress = null;
-
-		if (null == ipAddress || ipAddress.equals("")) {
+		String name = nameInput;
+		String email = emailInput;
+		String ipAddress = ipAddressInput;
+		if ((null == ipAddress) || ipAddress.equals("")) {
 			ipAddress = "UNKNOWN";
 		}
 
 		// TODO throw exception here instead?
 		// can only create if have either name or email
-		if (null != email || null != name) {
+		if ((null != email) || (null != name)) {
 			// create name from email if missing
-			if (null == name || name.equals("")) {
+			if ((null == name) || name.equals("")) {
 				// if just email address
 				final int atIndex = email.indexOf("@");
 				if (atIndex > -1) {
@@ -49,7 +51,7 @@ public class UsenetUserHelper {
 				}
 			}
 			// create email from name and ipAddress if missing
-			if (null == email || email.equals("")) {
+			if ((null == email) || email.equals("")) {
 				email = name + "@" + ipAddress;
 			}
 
@@ -119,7 +121,7 @@ public class UsenetUserHelper {
 		}
 		catch (final Exception e) {
 			UsenetUserHelper.logger
-			        .warn("Couldn't parse " + emailString + " so using it for name and email");
+			        .warn("Couldn't parse " + emailString + " so using it for name and email", e);
 			emailAddress = new EmailAddress(emailString, emailString, ipAddress);
 
 		}
@@ -135,8 +137,9 @@ public class UsenetUserHelper {
 	 *            the ip address
 	 * @return the email address
 	 */
-	public static EmailAddress parseFromField(String emailString, final String ipAddress) {
-
+	public static EmailAddress parseFromField(final String emailStringInput,
+	        final String ipAddress) {
+		String emailString = emailStringInput;
 		UsenetUserHelper.logger.debug("createUser: " + emailString + " " + ipAddress);
 
 		emailString = emailString.replaceAll("\"", "");

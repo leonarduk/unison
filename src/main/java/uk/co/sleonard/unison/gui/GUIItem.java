@@ -32,7 +32,7 @@ public class GUIItem<T> {
 	 * @return the GUI list
 	 */
 	public static Vector<GUIItem<?>> getGUIList(final List<?> list, final HibernateHelper helper) {
-		final Vector<GUIItem<?>> returnList = new Vector<GUIItem<?>>();
+		final Vector<GUIItem<?>> returnList = new Vector<>();
 
 		for (final ListIterator<?> iter = list.listIterator(); iter.hasNext();) {
 			final Object next = iter.next();
@@ -43,7 +43,7 @@ public class GUIItem<T> {
 			else {
 				text = helper.getText(next);
 			}
-			returnList.add(new GUIItem<Object>(text, next));
+			returnList.add(new GUIItem<>(text, next));
 		}
 		return returnList;
 	}

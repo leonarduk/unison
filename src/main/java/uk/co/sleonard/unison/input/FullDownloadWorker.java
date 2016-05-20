@@ -27,17 +27,14 @@ import uk.co.sleonard.unison.utils.HttpDateObject;
  */
 public class FullDownloadWorker extends SwingWorker {
 
-	/** The start index. */
-	private static int startIndex = 0;
-
 	/** The download queue. */
-	private static LinkedBlockingQueue<DownloadRequest> downloadQueue = new LinkedBlockingQueue<DownloadRequest>();
+	private static LinkedBlockingQueue<DownloadRequest> downloadQueue = new LinkedBlockingQueue<>();
 
 	/** The log. */
 	private static UNISoNLogger log;
 
 	/** The Constant downloaders. */
-	private final static ArrayList<FullDownloadWorker> downloaders = new ArrayList<FullDownloadWorker>();
+	private final static ArrayList<FullDownloadWorker> downloaders = new ArrayList<>();
 
 	/**
 	 * Adds the download request.
@@ -46,16 +43,16 @@ public class FullDownloadWorker extends SwingWorker {
 	 *            the usenet id
 	 * @param mode
 	 *            the mode
-	 * @param log
+	 * @param log1
 	 *            the log
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
 	public synchronized static void addDownloadRequest(final String usenetID,
-	        final DownloadMode mode, final UNISoNLogger log) throws UNISoNException {
+	        final DownloadMode mode, final UNISoNLogger log1) throws UNISoNException {
 		final DownloadRequest request = new DownloadRequest(usenetID, mode);
 
-		FullDownloadWorker.log = log;
+		FullDownloadWorker.log = log1;
 		FullDownloadWorker.downloadQueue.add(request);
 		if (FullDownloadWorker.downloaders.size() < 1) {
 			FullDownloadWorker.startDownloaders(1);
@@ -108,7 +105,6 @@ public class FullDownloadWorker extends SwingWorker {
 	public FullDownloadWorker(final String server, final LinkedBlockingQueue<NewsArticle> outQueue)
 	        throws UNISoNException {
 		super("FullDownload");
-		FullDownloadWorker.startIndex++;
 		this.client = new NewsClient();
 		try {
 			this.client.connect(server);
@@ -137,13 +133,13 @@ public class FullDownloadWorker extends SwingWorker {
 				}
 				// Wait a bit. If no messages then close downloader
 				Thread.sleep(5000);
-				if (FullDownloadWorker.downloadQueue.size() == 0
-				        && FullDownloadWorker.downloaders.size() > 1) {
+				if ((FullDownloadWorker.downloadQueue.size() == 0)
+				        && (FullDownloadWorker.downloaders.size() > 1)) {
 					this.download = false;
 				}
 			}
 		}
-		catch (final InterruptedException e) {
+		catch (@SuppressWarnings("unused") final InterruptedException e) {
 			return "Interrupted";
 		}
 		catch (final UNISoNException e) {
@@ -164,7 +160,7 @@ public class FullDownloadWorker extends SwingWorker {
 	 *             the UNI so n exception
 	 */
 	private NewsArticle convertHeaderStringToArticle(final String theInfo) throws UNISoNException {
-		final HashMap<String, String> headerFields = new HashMap<String, String>();
+		final HashMap<String, String> headerFields = new HashMap<>();
 
 		final StringTokenizer st = new StringTokenizer(theInfo, "\n");
 		String key = null;
@@ -172,7 +168,7 @@ public class FullDownloadWorker extends SwingWorker {
 
 		// Skip these as they can contain illegal characters and we don't need
 		// them anyway
-		final List<String> ignoreList = new ArrayList<String>();
+		final List<String> ignoreList = new ArrayList<>();
 		ignoreList.add("X-FACE");
 		ignoreList.add("FACE");
 		ignoreList.add("CANCEL-LOCK");
@@ -187,7 +183,7 @@ public class FullDownloadWorker extends SwingWorker {
 				value += "," + row;
 			}
 			else {
-				if (null != key && !ignoreList.contains(key)) {
+				if ((null != key) && !ignoreList.contains(key)) {
 					headerFields.put(key, value);
 				}
 				final int indexOf = row.indexOf(":");
@@ -207,7 +203,7 @@ public class FullDownloadWorker extends SwingWorker {
 				else if (body) {
 					bodyBuffer.append(row + "\n");
 				}
-				if (null != key && !ignoreList.contains(key)) {
+				if ((null != key) && !ignoreList.contains(key)) {
 					value = row.replaceFirst(key + ":", "").trim();
 				}
 			}
@@ -253,9 +249,7 @@ public class FullDownloadWorker extends SwingWorker {
 			return this.convertHeaderStringToArticle(theInfo);
 
 		}
-		else {
-			return null;
-		}
+		return null;
 	}
 
 	/**
@@ -276,6 +270,10 @@ public class FullDownloadWorker extends SwingWorker {
 					break;
 				case ALL:
 					article = this.downloadFullMessage(request);
+					break;
+				case BASIC:
+					break;
+				default:
 					break;
 			}
 		}
@@ -305,16 +303,16 @@ public class FullDownloadWorker extends SwingWorker {
 	 */
 	public NewsArticle downloadFullMessage(final DownloadRequest request)
 	        throws IOException, UNISoNException {
-		Reader reader;
-		reader = this.client.retrieveArticle(request.getUsenetID());
-		NewsArticle article = null;
-		if (null != reader) {
-			article = this.convertReaderToArticle(reader);
+		try (Reader reader = this.client.retrieveArticle(request.getUsenetID());) {
+			NewsArticle article = null;
+			if (null != reader) {
+				article = this.convertReaderToArticle(reader);
+			}
+			else {
+				System.err.println("No message returned");
+			}
+			return article;
 		}
-		else {
-			System.err.println("No message returned");
-		}
-		return article;
 	}
 
 	/**
@@ -330,16 +328,16 @@ public class FullDownloadWorker extends SwingWorker {
 	 */
 	private NewsArticle downloadHeader(final DownloadRequest request)
 	        throws IOException, UNISoNException {
-		Reader reader;
-		reader = this.client.retrieveArticleHeader(request.getUsenetID());
-		NewsArticle article = null;
-		if (null != reader) {
-			article = this.convertReaderToArticle(reader);
+		try (Reader reader = this.client.retrieveArticleHeader(request.getUsenetID());) {
+			NewsArticle article = null;
+			if (null != reader) {
+				article = this.convertReaderToArticle(reader);
+			}
+			else {
+				System.err.println("No message returned");
+			}
+			return article;
 		}
-		else {
-			System.err.println("No message returned");
-		}
-		return article;
 	}
 
 	/*

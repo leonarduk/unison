@@ -26,7 +26,7 @@ public class Message implements java.io.Serializable {
 	private byte[] MessageBody;
 
 	/** The newsgroups. */
-	private Set<NewsGroup> newsgroups = new HashSet<NewsGroup>(0);
+	private Set<NewsGroup> newsgroups = new HashSet<>(0);
 
 	/** The poster. */
 	private UsenetUser poster;
@@ -122,9 +122,9 @@ public class Message implements java.io.Serializable {
 			return false;
 		}
 		final Message that = (Message) object;
-		if (this.getId() != that.getId()
-		        || null != this.getMessageBody()
-		                && !this.getMessageBody().equals(that.getMessageBody())
+		if ((this.getId() != that.getId())
+		        || ((null != this.getMessageBody())
+		                && !this.getMessageBody().equals(that.getMessageBody()))
 		        || !this.getTopic().equals(that.getTopic())
 		        || !this.getUsenetMessageID().equals(that.getUsenetMessageID())
 		        || !this.getDateCreated().equals(that.getDateCreated())
@@ -231,7 +231,7 @@ public class Message implements java.io.Serializable {
 	@Override
 	public int hashCode() {
 		int hashCode = 0;
-		hashCode = 29 * hashCode + this.id;
+		hashCode = (29 * hashCode) + this.id;
 
 		return hashCode;
 	}

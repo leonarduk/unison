@@ -4,14 +4,18 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  * The Class TreeNode.
+ * 
+ * @author
+ * @since
+ *
  */
 public class TreeNode extends DefaultMutableTreeNode {
 
 	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = -8471464838090837440L;
+	private static final long	serialVersionUID	= -8471464838090837440L;
 
 	/** The node name. */
-	private String nodeName;
+	private String				nodeName;
 
 	/**
 	 * Instantiates a new tree node.

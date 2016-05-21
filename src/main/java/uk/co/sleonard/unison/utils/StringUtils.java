@@ -13,11 +13,14 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
- * The Class StringUtils.
- */
-/*
- * //TODO Add this reference for the compression FRom
+ * The Class StringUtils. </br>
+ * </br>
+ * TODO Add this reference for the compression FRom
  * http://forum.java.sun.com/thread.jspa?threadID=250124&messageID=926638
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since
+ *
  */
 public class StringUtils {
 

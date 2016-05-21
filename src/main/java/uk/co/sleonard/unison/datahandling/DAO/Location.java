@@ -1,41 +1,43 @@
 package uk.co.sleonard.unison.datahandling.DAO;
 
-// Generated 11-Nov-2007 17:31:30 by Hibernate Tools 3.2.0.b9
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * The real world location of an IP address.
+ * 
+ * @author Generated 11-Nov-2007 17:31:30 by Hibernate Tools 3.2.0.b9
+ * @since
+ *
  */
 public class Location implements java.io.Serializable {
 
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = -4937544540164453405L;
+	private static final long	serialVersionUID	= -4937544540164453405L;
 
 	/** The City. */
 
-	private String City;
+	private String				City;
 
 	/** The Country. */
-	private String Country;
+	private String				Country;
 
 	/** The Country code. */
-	private String CountryCode;
+	private String				CountryCode;
 
 	/** The Guessed. */
-	private boolean Guessed;
+	private boolean				Guessed;
 
 	/** The id. */
-	private int id;
+	private int					id;
 
 	/** The Ip addresses. */
-	private List<IpAddress> IpAddresses = new ArrayList<>(0);
+	private List<IpAddress>		IpAddresses			= new ArrayList<>(0);
 
 	/** The posters. */
-	private List<UsenetUser> posters = new ArrayList<>(0);
+	private List<UsenetUser>	posters				= new ArrayList<>(0);
 
 	/**
 	 * Instantiates a new location.

@@ -2,20 +2,24 @@ package uk.co.sleonard.unison.output;
 
 /**
  * The Class Relationship.
+ * 
+ * @author
+ * @since
+ *
  */
 public class Relationship {
 
 	/** The directed. */
-	private boolean directed = true;
+	private boolean		directed	= true;
 
 	/** The owner. */
-	private final int owner;
+	private final int	owner;
 
 	/** The target. */
-	private final int target;
+	private final int	target;
 
 	/** The value. */
-	public int value = 1;
+	public int			value		= 1;
 
 	/**
 	 * Instantiates a new relationship.

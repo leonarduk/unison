@@ -30,8 +30,18 @@ import javax.swing.border.BevelBorder;
 
 /**
  * The Class JSplashScreen.
+ * 
+ * @author
+ * @since
+ *
  */
 public class JSplashScreen extends JDialog {
+
+	/** The Constant serialVersionUID. */
+	private static final long	serialVersionUID	= -6087186647558684188L;
+
+	/** The status bar. */
+	JProgressBar				statusBar;
 
 	/**
 	 * The Class CloseJNSplash.
@@ -49,12 +59,6 @@ public class JSplashScreen extends JDialog {
 			JSplashScreen.this.dispose();
 		}
 	}
-
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = -6087186647558684188L;
-
-	/** The status bar. */
-	JProgressBar statusBar;
 
 	/**
 	 * Instantiates a new j splash screen.

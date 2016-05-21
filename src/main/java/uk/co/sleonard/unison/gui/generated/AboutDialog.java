@@ -8,13 +8,46 @@ package uk.co.sleonard.unison.gui.generated;
 
 /**
  * The Class AboutDialog.
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since
  *
- * @author Steve
  */
 public class AboutDialog extends javax.swing.JDialog {
 
 	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = -3036341591077972567L;
+	private static final long	serialVersionUID	= -3036341591077972567L;
+
+	/** The j label1. */
+	// Variables declaration - do not modify//GEN-BEGIN:variables
+	private javax.swing.JLabel	jLabel1;
+
+	/** The j label2. */
+	private javax.swing.JLabel	jLabel2;
+
+	/** The j label3. */
+	private javax.swing.JLabel	jLabel3;
+
+	/** The j label4. */
+	private javax.swing.JLabel	jLabel4;
+
+	/** The j label5. */
+	private javax.swing.JLabel	jLabel5;
+
+	/** The j label6. */
+	private javax.swing.JLabel	jLabel6;
+
+	/** The j label7. */
+	private javax.swing.JLabel	jLabel7;
+
+	/** The j label8. */
+	private javax.swing.JLabel	jLabel8;
+
+	/** The j label9. */
+	private javax.swing.JLabel	jLabel9;
+
+	/** The ok button. */
+	private javax.swing.JButton	okButton;
 
 	/**
 	 * The main method.
@@ -26,38 +59,6 @@ public class AboutDialog extends javax.swing.JDialog {
 		java.awt.EventQueue.invokeLater(
 		        () -> new AboutDialog(new javax.swing.JFrame(), true).setVisible(true));
 	}
-
-	/** The j label1. */
-	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JLabel jLabel1;
-
-	/** The j label2. */
-	private javax.swing.JLabel jLabel2;
-
-	/** The j label3. */
-	private javax.swing.JLabel jLabel3;
-
-	/** The j label4. */
-	private javax.swing.JLabel jLabel4;
-
-	/** The j label5. */
-	private javax.swing.JLabel jLabel5;
-
-	/** The j label6. */
-	private javax.swing.JLabel jLabel6;
-
-	/** The j label7. */
-	private javax.swing.JLabel jLabel7;
-
-	/** The j label8. */
-	private javax.swing.JLabel jLabel8;
-
-	/** The j label9. */
-	private javax.swing.JLabel jLabel9;
-
-	/** The ok button. */
-	private javax.swing.JButton okButton;
-	// End of variables declaration//GEN-END:variables
 
 	/**
 	 * Creates new form AboutDialog.

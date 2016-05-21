@@ -13,23 +13,27 @@ import uk.co.sleonard.unison.gui.UNISoNException;
 
 /**
  * The Class PajekNetworkFile.
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since
+ *
  */
 public class PajekNetworkFile {
 
 	/** The vertices. */
-	private final LinkedList<String> vertices;
+	private final LinkedList<String>	vertices;
 
 	/** The directed links. */
-	protected List<Relationship> directedLinks;
+	protected List<Relationship>		directedLinks;
 
 	/** The filename. */
-	private String filename;
+	private String						filename;
 
 	/** The suffix. */
-	protected String SUFFIX;
+	protected String					SUFFIX;
 
 	/** The undirected links. */
-	protected List<Relationship> undirectedLinks;
+	protected List<Relationship>		undirectedLinks;
 
 	// Statically assign the suffix
 	{

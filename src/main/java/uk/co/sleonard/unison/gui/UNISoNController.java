@@ -42,8 +42,102 @@ import uk.co.sleonard.unison.input.NewsGroupReader;
 
 /**
  * The Class UNISoNController.
+ * 
+ * @author
+ * @since
+ *
  */
 public class UNISoNController extends Observable {
+
+	/** The countries filter. */
+	private Set<String>								countriesFilter		= null;
+
+	/** The message queue. */
+	private final LinkedBlockingQueue<NewsArticle>	messageQueue;
+
+	/** The nntp reader. */
+	private final NewsGroupReader					nntpReader;
+
+	/** The topics filter. */
+	private Set<Topic>								topicsFilter		= null;
+
+	/** The filtered. */
+	private boolean									filtered			= false;
+
+	/** The frame. */
+	private JFrame									frame;
+
+	/** The from date. */
+	private Date									fromDate;
+
+	/** The header downloader. */
+	private final HeaderDownloadWorker				headerDownloader	= new HeaderDownloadWorker();
+
+	/** The helper. */
+	private final HibernateHelper					helper;
+
+	// private Vector<NewsGroup> selectedNewsgroups = null;
+
+	/** The matrix type. */
+	private MatrixType								matrixType;
+
+	/** The message. */
+	private Message									message;
+
+	/** The messages filter. */
+	private Vector<Message>							messagesFilter		= null;
+
+	/** The newsgroup filter. */
+	private Set<NewsGroup>							newsgroupFilter		= null;
+
+	/** The nntp host. */
+	private String									nntpHost;
+
+	/** The selected countries. */
+	Set<String>										selectedCountries	= null;
+
+	/** The selected messages. */
+	private final Vector<Message>					selectedMessages	= null;
+
+	/** The selected newsgroup. */
+	private NewsGroup								selectedNewsgroup;
+
+	/** The selected newsgroups. */
+	private Vector<NewsGroup>						selectedNewsgroups;
+
+	/** The selected posters. */
+	private Vector<UsenetUser>						selectedPosters;
+
+	/** The session. */
+	private Session									session;
+
+	/** The to date. */
+	private Date									toDate;
+
+	/** The tops newsgroups. */
+	private Set<NewsGroup>							topsNewsgroups;
+
+	/** The usenet users filter. */
+	private Vector<UsenetUser>						usenetUsersFilter	= null;
+
+	/** The download panel. */
+	private UNISoNLogger							downloadPanel;
+
+	/** The instance. */
+	private static UNISoNController					instance;
+
+	/** The logger. */
+	private static Logger							logger				= Logger
+	        .getLogger("UNISonController");
+
+	// private static UNISoNController instance;
+
+	/** The Constant LOCATION. */
+	public static final String						LOCATION			= "Location";
+
+	/** The Constant USENETUSER. */
+	public static final String						USENETUSER			= UsenetUser.class
+	        .getName();
 
 	/**
 	 * The Enum MatrixType.
@@ -51,8 +145,10 @@ public class UNISoNController extends Observable {
 	public enum MatrixType {
 
 		/** The reply to all. */
-		REPLY_TO_ALL, /** The reply to first. */
-		REPLY_TO_FIRST, /** The reply to last. */
+		REPLY_TO_ALL,
+		/** The reply to first. */
+		REPLY_TO_FIRST,
+		/** The reply to last. */
 		REPLY_TO_LAST
 	}
 
@@ -90,19 +186,7 @@ public class UNISoNController extends Observable {
 
 	}
 
-	/** The instance. */
-	private static UNISoNController instance;
-
 	// private static UNISoNController instance;
-
-	/** The Constant LOCATION. */
-	public static final String LOCATION = "Location";
-
-	/** The logger. */
-	private static Logger logger = Logger.getLogger("UNISonController");
-
-	/** The Constant USENETUSER. */
-	public static final String USENETUSER = UsenetUser.class.getName();
 
 	/**
 	 * Creates the.
@@ -152,79 +236,7 @@ public class UNISoNController extends Observable {
 
 	}
 
-	/** The filtered. */
-	private boolean filtered = false;
-
-	/** The frame. */
-	private JFrame frame;
-
-	/** The from date. */
-	private Date fromDate;
-
-	/** The header downloader. */
-	private final HeaderDownloadWorker headerDownloader = new HeaderDownloadWorker();
-
-	/** The helper. */
-	private final HibernateHelper helper;
-
 	// private Vector<NewsGroup> selectedNewsgroups = null;
-
-	/** The countries filter. */
-	private Set<String> countriesFilter = null;
-
-	/** The matrix type. */
-	private MatrixType matrixType;
-
-	/** The message. */
-	private Message message;
-
-	/** The message queue. */
-	private final LinkedBlockingQueue<NewsArticle> messageQueue;
-
-	/** The messages filter. */
-	private Vector<Message> messagesFilter = null;
-
-	/** The newsgroup filter. */
-	private Set<NewsGroup> newsgroupFilter = null;
-
-	/** The nntp host. */
-	private String nntpHost;
-
-	/** The nntp reader. */
-	private final NewsGroupReader nntpReader;
-
-	/** The selected countries. */
-	Set<String> selectedCountries = null;
-
-	/** The selected messages. */
-	private final Vector<Message> selectedMessages = null;
-
-	/** The selected newsgroup. */
-	private NewsGroup selectedNewsgroup;
-
-	/** The selected newsgroups. */
-	private Vector<NewsGroup> selectedNewsgroups;
-
-	/** The selected posters. */
-	private Vector<UsenetUser> selectedPosters;
-
-	/** The session. */
-	private Session session;
-
-	/** The to date. */
-	private Date toDate;
-
-	/** The topics filter. */
-	private Set<Topic> topicsFilter = null;
-
-	/** The tops newsgroups. */
-	private Set<NewsGroup> topsNewsgroups;
-
-	/** The usenet users filter. */
-	private Vector<UsenetUser> usenetUsersFilter = null;
-
-	/** The download panel. */
-	private UNISoNLogger downloadPanel;
 
 	/**
 	 * Instantiates a new UNI so n controller.
@@ -311,7 +323,7 @@ public class UNISoNController extends Observable {
 
 			this.showStatus("MESSAGES:" + this.nntpReader.getNumberOfMessages());
 		}
-		catch (@SuppressWarnings("unused") final java.net.UnknownHostException e) {
+		catch (final java.net.UnknownHostException e) {
 			this.showErrorMessage(newsgroup + " not found on " + host);
 		}
 		catch (final Exception e) {

@@ -2,17 +2,21 @@ package uk.co.sleonard.unison.datahandling.DAO;
 
 /**
  * The Class ResultRow.
+ * 
+ * @author
+ * @since
+ *
  */
 public class ResultRow implements Comparable<ResultRow> {
 
 	/** The key. */
-	private final Object key;
+	private final Object	key;
 
 	/** The type. */
-	private final Class<?> type;
+	private final Class<?>	type;
 
 	/** The count. */
-	private final int count;
+	private final int		count;
 
 	/**
 	 * Instantiates a new result row.

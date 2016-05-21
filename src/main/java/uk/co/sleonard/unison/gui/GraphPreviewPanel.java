@@ -50,9 +50,22 @@ import uk.co.sleonard.unison.output.Relationship;
  * </p>
  *
  * @author Tom Nelson - RABA Technologies
+ * @since
  *
  */
 public class GraphPreviewPanel extends JPanel {
+
+	/** The Constant serialVersionUID. */
+	private static final long	serialVersionUID	= 7584897717727915747L;
+
+	/** the graph. */
+	Graph						graph;
+
+	/** the visual component and renderer for the graph. */
+	VisualizationViewer			vv;
+
+	/** The show labels. */
+	boolean						showLabels;
 
 	/**
 	 * The Class UnicodeVertexStringer.
@@ -120,9 +133,6 @@ public class GraphPreviewPanel extends JPanel {
 		}
 	}
 
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = 7584897717727915747L;
-
 	/**
 	 * a driver for this demo.
 	 *
@@ -161,15 +171,6 @@ public class GraphPreviewPanel extends JPanel {
 		frame.setSize(frame.getPreferredSize());
 
 	}
-
-	/** the graph. */
-	Graph graph;
-
-	/** the visual component and renderer for the graph. */
-	VisualizationViewer vv;
-
-	/** The show labels. */
-	boolean showLabels;
 
 	/**
 	 * create an instance of a simple graph with controls to demo the zoom features.

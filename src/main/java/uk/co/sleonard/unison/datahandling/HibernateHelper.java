@@ -54,36 +54,43 @@ import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
  * This is one of the the most important classes as it helps persist the data to the HSQL database.
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since
  *
- * @author steve
  */
 public class HibernateHelper {
 
 	/** The Constant DB_URL. */
 	// private final static String DB_URL = "jdbc:hsqldb:file:DB/projectDB";
-	private final static String DB_URL = "jdbc:hsqldb:file:src/main/resources/DB/projectDB";
+	private final static String		DB_URL						= "jdbc:hsqldb:file:src/main/resources/DB/projectDB";
 
 	/** The Constant dbDriver. */
-	private final static String dbDriver = "org.hsqldb.jdbcDriver";
+	private final static String		dbDriver					= "org.hsqldb.jdbcDriver";
 
 	/** The Constant dbUser. */
-	private final static String dbUser = "sa";
+	private final static String		dbUser						= "sa";
 
 	/** The first connect. */
-	private static boolean firstConnect = true;
+	private static boolean			firstConnect				= true;
 
 	/** The Constant GUI_ARGS. */
-	public static final String GUI_ARGS[] = { "-driver", HibernateHelper.dbDriver, "-url",
-	        HibernateHelper.DB_URL, "-user", HibernateHelper.dbUser };
+	public static final String		GUI_ARGS[]					= { "-driver",
+	        HibernateHelper.dbDriver, "-url", HibernateHelper.DB_URL, "-user",
+	        HibernateHelper.dbUser };
 
 	/** The Constant HIBERNATE_CONNECTION_URL. */
-	private static final String HIBERNATE_CONNECTION_URL = "hibernate.connection.url";
+	private static final String		HIBERNATE_CONNECTION_URL	= "hibernate.connection.url";
 
 	/** The logger. */
-	private static Logger logger = Logger.getLogger("HibernateHelper");
+	private static Logger			logger						= Logger
+	        .getLogger("HibernateHelper");
 
 	/** The session factory. */
-	private static SessionFactory sessionFactory = null;
+	private static SessionFactory	sessionFactory				= null;
+
+	/** The controller. */
+	private final UNISoNController	controller;
 
 	/**
 	 * The main method.
@@ -96,9 +103,6 @@ public class HibernateHelper {
 		helper.generateSchema();
 		DatabaseManagerSwing.main(HibernateHelper.GUI_ARGS);
 	}
-
-	/** The controller. */
-	private final UNISoNController controller;
 
 	/**
 	 * Instantiates a new hibernate helper.

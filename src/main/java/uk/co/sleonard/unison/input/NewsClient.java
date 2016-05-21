@@ -27,19 +27,29 @@ import uk.co.sleonard.unison.gui.UNISoNException;
 
 /**
  * The Class NewsClient.
+ * 
+ * @author
+ * @since
+ *
  */
 public class NewsClient extends NNTPClient {
 
+	/** The logger. */
+	private static Logger					logger			= Logger.getLogger("NewsClient");
+
 	/** There is a maximum number of connections allowed per host. */
-	private static HashMap<String, Integer> maxconnections = new HashMap<String, Integer>();
+	private static HashMap<String, Integer>	maxconnections	= new HashMap<String, Integer>();
+
+	/** The host. */
+	private String							host;
+
+	/** The message count. */
+	private int								messageCount;
 
 	static {
 		NewsClient.maxconnections.put("freetext.usenetserver.com", 3);
 		NewsClient.maxconnections.put("news.readfreenews.net", 2);
 	}
-
-	/** The logger. */
-	private static Logger logger = Logger.getLogger("NewsClient");
 
 	/**
 	 * Convert date to string.
@@ -63,12 +73,6 @@ public class NewsClient extends NNTPClient {
 		cal.setTime(date);
 		return df.format(date);
 	}
-
-	/** The host. */
-	private String host;
-
-	/** The message count. */
-	private int messageCount;
 
 	/**
 	 * Instantiates a new news client.
@@ -276,6 +280,7 @@ public class NewsClient extends NNTPClient {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
+	@SuppressWarnings("deprecation")
 	public Set<NNTPNewsGroup> listNNTPNewsgroups(final String wildcard, final String nntpserver)
 	        throws UNISoNException {
 

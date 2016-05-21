@@ -28,13 +28,85 @@ import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
  * The Class DownloadNewsPanel.
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since
  *
- * @author Steve
  */
+@SuppressWarnings("rawtypes")
 public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogger, Observer {
 
 	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = 6581138636992116397L;
+	private static final long					serialVersionUID	= 6581138636992116397L;
+
+	/** The available newsgroups. */
+	// Variables declaration - do not modify//GEN-BEGIN:variables
+	private javax.swing.JList<NNTPNewsGroup>	availableNewsgroups;
+
+	/** The cancel button. */
+	private javax.swing.JButton					cancelButton;
+
+	/** The download button. */
+	private javax.swing.JButton					downloadButton;
+
+	/** The download progress bar. */
+	private javax.swing.JProgressBar			downloadProgressBar;
+
+	/** The download progress label. */
+	private javax.swing.JLabel					downloadProgressLabel;
+
+	/** The find button. */
+	private javax.swing.JButton					findButton;
+
+	/** The from date field. */
+	private javax.swing.JTextField				fromDateField;
+
+	/** The from date label. */
+	private javax.swing.JLabel					fromDateLabel;
+
+	/** The get location check. */
+	private javax.swing.JCheckBox				getLocationCheck;
+
+	/** The get text check. */
+	private javax.swing.JCheckBox				getTextCheck;
+
+	/** The host combo. */
+	private javax.swing.JComboBox				hostCombo;
+
+	/** The host label. */
+	private javax.swing.JLabel					hostLabel;
+
+	/** The j scroll pane1. */
+	private javax.swing.JScrollPane				jScrollPane1;
+
+	/** The j scroll pane3. */
+	private javax.swing.JScrollPane				jScrollPane3;
+
+	/** The newsgroup field. */
+	private javax.swing.JTextField				newsgroupField;
+
+	/** The newsgroup label. */
+	private javax.swing.JLabel					newsgroupLabel;
+
+	/** The notes area. */
+	private javax.swing.JTextArea				notesArea;
+
+	/** The pause button. */
+	private javax.swing.JButton					pauseButton;
+
+	/** The to date field. */
+	private javax.swing.JTextField				toDateField;
+	/** The to date label. */
+	private javax.swing.JLabel					toDateLabel;
+
+	/** The available groups. */
+	private Set<NNTPNewsGroup>					availableGroups;
+
+	/** The parser. */
+	HttpDateObject								parser				= HttpDateObject.getParser();
+
+	/** The controller. */
+	private final UNISoNController				controller;
 
 	/**
 	 * The main method.
@@ -51,75 +123,6 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 			panel.setVisible(true);
 		});
 	}
-
-	/** The available newsgroups. */
-	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JList<NNTPNewsGroup> availableNewsgroups;
-
-	/** The cancel button. */
-	private javax.swing.JButton cancelButton;
-
-	/** The download button. */
-	private javax.swing.JButton downloadButton;
-
-	/** The download progress bar. */
-	private javax.swing.JProgressBar downloadProgressBar;
-
-	/** The download progress label. */
-	private javax.swing.JLabel downloadProgressLabel;
-
-	/** The find button. */
-	private javax.swing.JButton findButton;
-
-	/** The from date field. */
-	private javax.swing.JTextField fromDateField;
-
-	/** The from date label. */
-	private javax.swing.JLabel fromDateLabel;
-
-	/** The get location check. */
-	private javax.swing.JCheckBox getLocationCheck;
-
-	/** The get text check. */
-	private javax.swing.JCheckBox getTextCheck;
-
-	/** The host combo. */
-	private javax.swing.JComboBox hostCombo;
-
-	/** The host label. */
-	private javax.swing.JLabel hostLabel;
-
-	/** The j scroll pane1. */
-	private javax.swing.JScrollPane jScrollPane1;
-
-	/** The j scroll pane3. */
-	private javax.swing.JScrollPane jScrollPane3;
-
-	/** The newsgroup field. */
-	private javax.swing.JTextField newsgroupField;
-
-	/** The newsgroup label. */
-	private javax.swing.JLabel newsgroupLabel;
-
-	/** The notes area. */
-	private javax.swing.JTextArea notesArea;
-
-	/** The pause button. */
-	private javax.swing.JButton pauseButton;
-
-	/** The to date field. */
-	private javax.swing.JTextField	toDateField;
-	/** The to date label. */
-	private javax.swing.JLabel		toDateLabel;
-
-	/** The available groups. */
-	private Set<NNTPNewsGroup> availableGroups;
-
-	/** The parser. */
-	HttpDateObject parser = HttpDateObject.getParser();
-
-	/** The controller. */
-	private final UNISoNController controller;
 
 	// End of variables declaration//GEN-END:variables
 	/**
@@ -188,6 +191,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 	 * @param evt
 	 *            the evt
 	 */
+	@SuppressWarnings("deprecation")
 	private void downloadButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_downloadButtonActionPerformed
 		this.downloadEnabled(false);
 
@@ -313,6 +317,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 	// <editor-fold defaultstate="collapsed" desc=" Generated Code
 	// <editor-fold defaultstate="collapsed" desc=" Generated Code
 	// <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
+	@SuppressWarnings("unchecked")
 	private void initComponents() {
 		this.newsgroupLabel = new javax.swing.JLabel();
 		this.newsgroupField = new javax.swing.JTextField();

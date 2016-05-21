@@ -21,22 +21,31 @@ import uk.co.sleonard.unison.gui.UNISoNLogger;
 
 /**
  * The Class DataHibernatorWorker.
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since
  *
- * @author steve
  */
 public class DataHibernatorWorker extends SwingWorker {
 
 	/** The logger. */
-	private static Logger logger = Logger.getLogger("DataHibernatorWorker");
+	private static Logger							logger				= Logger
+	        .getLogger("DataHibernatorWorker");
 
 	/** The numberof hibernators. */
-	private static int numberofHibernators = 10;
+	private static int								numberofHibernators	= 10;
 
 	/** The log. */
-	static UNISoNLogger log;
+	static UNISoNLogger								log;
 
 	/** The workers. */
-	private static ArrayList<DataHibernatorWorker> workers = new ArrayList<>();
+	private static ArrayList<DataHibernatorWorker>	workers				= new ArrayList<>();
+
+	/** The reader. */
+	private final NewsGroupReader					reader;
+
+	/** The save to database. */
+	private boolean									saveToDatabase		= true;
 
 	/**
 	 * Sets the logger.
@@ -67,12 +76,6 @@ public class DataHibernatorWorker extends SwingWorker {
 			iter.next().interrupt();
 		}
 	}
-
-	/** The reader. */
-	private final NewsGroupReader reader;
-
-	/** The save to database. */
-	private boolean saveToDatabase = true;
 
 	/**
 	 * Creates a new instance of DataHibernatorWorker.
@@ -138,7 +141,7 @@ public class DataHibernatorWorker extends SwingWorker {
 				DataHibernatorWorker.log.alert("Download complete");
 			}
 		}
-		catch (@SuppressWarnings("unused") final InterruptedException e) {
+		catch (final InterruptedException e) {
 			return "Interrupted";
 		}
 		catch (final UNISoNException e) {

@@ -25,6 +25,7 @@
 		<httpunit.version>1.6.2</httpunit.version>
 		<oro.version>2.0.8</oro.version>
 		<javax-activation.version>1.1.1</javax-activation.version>
+		<googlecode-json.version>1.1</googlecode-json.version>
 	</properties>
 
 	<build>
@@ -104,6 +105,39 @@
 					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
 					<autoReleaseAfterClose>true</autoReleaseAfterClose>
 				</configuration>
+			</plugin>
+			<plugin>
+				<!-- run the integration tests -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.18.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.9.1</version>
+				<executions>
+					<execution>
+						<id>add-integration-test-source-as-test-sources</id>
+						<phase>generate-test-sources</phase>
+						<goals>
+							<goal>add-test-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/it/java</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -346,6 +380,11 @@
 			<version>${jacoco.version}</version>
 			<type>maven-plugin</type>
 		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.6.2</version>
+		</dependency>
 	</dependencies>
 	<reporting>
 		<plugins>
@@ -363,7 +402,7 @@
 			</plugin>
 		</plugins>
 	</reporting>
-	<!--  to get to sona type and onto maven central -->
+	<!-- to get to sona type and onto maven central -->
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>

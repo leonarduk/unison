@@ -41,13 +41,13 @@ public class StringUtils {
 	 */
 	public static final byte[] compress(final String str) throws IOException {
 		final ByteArrayOutputStream out = new ByteArrayOutputStream();
-		final ZipOutputStream zout = new ZipOutputStream(out);
-		zout.putNextEntry(new ZipEntry("0"));
-		zout.write(str.getBytes());
-		zout.closeEntry();
-		final byte[] compressed = out.toByteArray();
-		zout.close();
-		return compressed;
+		try (final ZipOutputStream zout = new ZipOutputStream(out);) {
+			zout.putNextEntry(new ZipEntry("0"));
+			zout.write(str.getBytes());
+			zout.closeEntry();
+			final byte[] compressed = out.toByteArray();
+			return compressed;
+		}
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class StringUtils {
 	 * @return the list
 	 */
 	public static List<String> convertCommasToList(final String commaSeparatedString) {
-		final Vector<String> words = new Vector<String>();
+		final Vector<String> words = new Vector<>();
 
 		final StringTokenizer tok = new StringTokenizer(commaSeparatedString, ",");
 		while (tok.hasMoreTokens()) {
@@ -77,7 +77,7 @@ public class StringUtils {
 	 * @return the vector
 	 */
 	public static Vector<String> convertStringToList(final String field, final String delimiters) {
-		final Vector<String> list = new Vector<String>();
+		final Vector<String> list = new Vector<>();
 		if (null == field) {
 			return list;
 		}
@@ -104,20 +104,21 @@ public class StringUtils {
 		if (null == compressed) {
 			return null;
 		}
-		final ByteArrayOutputStream out = new ByteArrayOutputStream();
-		final ByteArrayInputStream in = new ByteArrayInputStream(compressed);
-		final ZipInputStream zin = new ZipInputStream(in);
-		final ZipEntry entry = zin.getNextEntry();
-		entry.getName();
-		final byte[] buffer = new byte[1024];
-		int offset = -1;
-		while ((offset = zin.read(buffer)) != -1) {
-			out.write(buffer, 0, offset);
+		try (final ByteArrayOutputStream out = new ByteArrayOutputStream();
+		        final ByteArrayInputStream in = new ByteArrayInputStream(compressed);
+		        final ZipInputStream zin = new ZipInputStream(in);) {
+			final ZipEntry entry = zin.getNextEntry();
+			entry.getName();
+			final byte[] buffer = new byte[1024];
+			int offset = -1;
+			while ((offset = zin.read(buffer)) != -1) {
+				out.write(buffer, 0, offset);
+			}
+			final String decompressed = out.toString();
+			out.close();
+			zin.close();
+			return decompressed;
 		}
-		final String decompressed = out.toString();
-		out.close();
-		zin.close();
-		return decompressed;
 	}
 
 	/**

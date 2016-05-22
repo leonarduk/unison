@@ -1,3 +1,9 @@
+/**
+ * PajekNetworkFile
+ *
+ * @author Stephen <github@leonarduk.com>
+ * @since 22-May-2016
+ */
 package uk.co.sleonard.unison.output;
 
 import java.io.FileNotFoundException;
@@ -13,7 +19,7 @@ import uk.co.sleonard.unison.gui.UNISoNException;
 
 /**
  * The Class PajekNetworkFile.
- * 
+ *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  *
@@ -21,19 +27,19 @@ import uk.co.sleonard.unison.gui.UNISoNException;
 public class PajekNetworkFile {
 
 	/** The vertices. */
-	private final LinkedList<String>	vertices;
+	private final LinkedList<String> vertices;
 
 	/** The directed links. */
-	protected List<Relationship>		directedLinks;
+	protected List<Relationship> directedLinks;
 
 	/** The filename. */
-	private String						filename;
+	private String filename;
 
 	/** The suffix. */
-	protected String					SUFFIX;
+	protected String SUFFIX;
 
 	/** The undirected links. */
-	protected List<Relationship>		undirectedLinks;
+	protected List<Relationship> undirectedLinks;
 
 	// Statically assign the suffix
 	{
@@ -44,10 +50,10 @@ public class PajekNetworkFile {
 	 * Instantiates a new pajek network file.
 	 */
 	public PajekNetworkFile() {
-		this.vertices = new LinkedList<String>();
-		this.directedLinks = new Vector<Relationship>();
+		this.vertices = new LinkedList<>();
+		this.directedLinks = new Vector<>();
 
-		this.undirectedLinks = new Vector<Relationship>();
+		this.undirectedLinks = new Vector<>();
 	}
 
 	/**
@@ -135,7 +141,7 @@ public class PajekNetworkFile {
 
 			// System.out.println(key + " " + value);
 
-			if (null != value && !value.equals("")) {
+			if ((null != value) && !value.equals("")) {
 				this.addRelationship(key, value, links);
 			}
 			else {
@@ -207,17 +213,17 @@ public class PajekNetworkFile {
 	 * @param filename
 	 *            the filename
 	 */
-	public void saveToFile(String filename) {
-		if (!filename.endsWith(this.SUFFIX)) {
-			filename += this.SUFFIX;
+	public void saveToFile(final String filenameInput) {
+		this.filename = filenameInput;
+		if (!filenameInput.endsWith(this.SUFFIX)) {
+			this.filename += this.SUFFIX;
 		}
-		this.filename = filename;
 		FileOutputStream out; // declare a file output object
 		PrintStream p; // declare a print stream object
 
 		// Create a new file output stream
 		try {
-			out = new FileOutputStream(filename);
+			out = new FileOutputStream(this.filename);
 
 			// Connect print stream to the output stream
 			p = new PrintStream(out);
@@ -228,7 +234,7 @@ public class PajekNetworkFile {
 		catch (final FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Saved to " + filename);
+		System.out.println("Saved to " + this.filename);
 	}
 
 	/**

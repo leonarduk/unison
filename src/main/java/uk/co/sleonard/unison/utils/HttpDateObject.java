@@ -49,7 +49,7 @@ import uk.co.sleonard.unison.gui.UNISoNException;
  * HTTP date formatter and parser. Formats dates according to RFC 822 (updated by RFC 1123). Parses
  * dates according to the above, <i>or</i> RFC 1036, <i>or</i> the ANSI C <code>asctime()</code>
  * format.
- * 
+ *
  * @author Chris Burdess <dog@gnu.org>
  * @since v1.0.0
  *
@@ -57,18 +57,17 @@ import uk.co.sleonard.unison.gui.UNISoNException;
 public class HttpDateObject extends DateFormat {
 
 	/** The Constant DAYS_OF_WEEK. */
-	static final String[]			DAYS_OF_WEEK		= { null, "Sun", "Mon", "Tue", "Wed", "Thu",
-	        "Fri", "Sat" };
+	static final String[] DAYS_OF_WEEK = { null, "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
 
 	/** The instance. */
-	private static HttpDateObject	instance;
+	private static HttpDateObject instance;
 
 	/** The Constant MONTHS. */
-	static final String[]			MONTHS				= { "Jan", "Feb", "Mar", "Apr", "May",
-	        "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+	static final String[] MONTHS = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+	        "Oct", "Nov", "Dec" };
 
 	/** The Constant serialVersionUID. */
-	private static final long		serialVersionUID	= -4375514658403735218L;
+	private static final long serialVersionUID = -4375514658403735218L;
 
 	/**
 	 * Gets the parser.
@@ -315,7 +314,7 @@ public class HttpDateObject extends DateFormat {
 					start = end + 1;
 					pos.setIndex(start);
 					end = start + 1;
-					while (end < len && !Character.isWhitespace(text.charAt(end))) {
+					while ((end < len) && !Character.isWhitespace(text.charAt(end))) {
 						end++;
 					}
 					second = Integer.parseInt(text.substring(start, end));
@@ -361,7 +360,7 @@ public class HttpDateObject extends DateFormat {
 					start = end + 1;
 					pos.setIndex(start);
 					end = start + 1;
-					while (end < len && !Character.isWhitespace(text.charAt(end))) {
+					while ((end < len) && !Character.isWhitespace(text.charAt(end))) {
 						end++;
 					}
 					second = Integer.parseInt(text.substring(start, end));
@@ -373,7 +372,7 @@ public class HttpDateObject extends DateFormat {
 				// Timezone
 				start = this.skipWhitespace(text, end + 1);
 				end = start + 1;
-				while (end < len && !Character.isWhitespace(text.charAt(end))) {
+				while ((end < len) && !Character.isWhitespace(text.charAt(end))) {
 					end++;
 				}
 				final char pm = text.charAt(start);
@@ -398,10 +397,10 @@ public class HttpDateObject extends DateFormat {
 
 			return this.calendar.getTime();
 		}
-		catch (final NumberFormatException e) {
+		catch (@SuppressWarnings("unused") final NumberFormatException e) {
 			pos.setErrorIndex(Math.max(start, end));
 		}
-		catch (final StringIndexOutOfBoundsException e) {
+		catch (@SuppressWarnings("unused") final StringIndexOutOfBoundsException e) {
 			pos.setErrorIndex(Math.max(start, end));
 		}
 		return null;
@@ -419,7 +418,7 @@ public class HttpDateObject extends DateFormat {
 	 *             the UNI so n exception
 	 */
 	public Date parseDate(final String text) throws ParseException, UNISoNException {
-		if (null == text || text.equals("")) {
+		if ((null == text) || text.equals("")) {
 			return null;
 		}
 		if (text.length() == 8) {
@@ -431,7 +430,7 @@ public class HttpDateObject extends DateFormat {
 				throw new UNISoNException("Failed to parse date:" + text, e);
 			}
 		}
-		else if (text.length() == 10 && text.contains("/")) {
+		else if ((text.length() == 10) && text.contains("/")) {
 			final DateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
 			try {
 				return fmt.parse(text);
@@ -502,11 +501,12 @@ public class HttpDateObject extends DateFormat {
 	 *            the pos
 	 * @return the int
 	 */
-	private int skipNonWhitespace(final String text, int pos) {
-		while (!Character.isWhitespace(text.charAt(pos))) {
-			pos++;
+	private int skipNonWhitespace(final String text, final int pos) {
+		int pos2 = pos;
+		while (!Character.isWhitespace(text.charAt(pos2))) {
+			pos2++;
 		}
-		return pos;
+		return pos2;
 	}
 
 	/**
@@ -520,11 +520,12 @@ public class HttpDateObject extends DateFormat {
 	 *            the c
 	 * @return the int
 	 */
-	private int skipTo(final String text, int pos, final char c) {
-		while (text.charAt(pos) != c) {
-			pos++;
+	private int skipTo(final String text, final int pos, final char c) {
+		int pos2 = pos;
+		while (text.charAt(pos2) != c) {
+			pos2++;
 		}
-		return pos;
+		return pos2;
 	}
 
 	/**
@@ -536,11 +537,12 @@ public class HttpDateObject extends DateFormat {
 	 *            the pos
 	 * @return the int
 	 */
-	private int skipWhitespace(final String text, int pos) {
-		while (Character.isWhitespace(text.charAt(pos))) {
-			pos++;
+	private int skipWhitespace(final String text, final int pos) {
+		int pos2 = pos;
+		while (Character.isWhitespace(text.charAt(pos2))) {
+			pos2++;
 		}
-		return pos;
+		return pos2;
 	}
 
 }

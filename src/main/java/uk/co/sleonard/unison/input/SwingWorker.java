@@ -1,3 +1,9 @@
+/**
+ * SwingWorker
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since 22-May-2016
+ */
 package uk.co.sleonard.unison.input;
 
 import java.util.Observable;
@@ -15,17 +21,11 @@ import javax.swing.SwingUtilities;
  *
  * Note that the API changed slightly in the 3rd version: You must now invoke start() on the
  * SwingWorker after creating it.
- * 
+ *
  * @since v1.0.0
- * 
+ *
  */
 public abstract class SwingWorker extends Observable implements Runnable {
-	/** The thread var. */
-	protected final ThreadVar	threadVar;
-
-	/** The value. */
-	private Object				value;				 // see getValue(), setValue()
-
 	/**
 	 * Class to maintain reference to current worker thread under separate synchronization control.
 	 */
@@ -61,6 +61,12 @@ public abstract class SwingWorker extends Observable implements Runnable {
 		}
 	}
 
+	/** The thread var. */
+	protected final ThreadVar threadVar;
+
+	/** The value. */
+	private Object value;				 // see getValue(), setValue()
+
 	/**
 	 * Start a thread that will call the <code>construct</code> method and then exit.
 	 *
@@ -84,6 +90,7 @@ public abstract class SwingWorker extends Observable implements Runnable {
 	 * <code>construct</code> method has returned.
 	 */
 	public void finished() {
+		//
 	}
 
 	/**
@@ -101,7 +108,7 @@ public abstract class SwingWorker extends Observable implements Runnable {
 			try {
 				t.join();
 			}
-			catch (final InterruptedException e) {
+			catch (@SuppressWarnings("unused") final InterruptedException e) {
 				Thread.currentThread().interrupt(); // propagate
 				return null;
 			}

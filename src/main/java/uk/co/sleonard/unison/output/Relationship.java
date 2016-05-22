@@ -1,8 +1,14 @@
+/**
+ * Relationship
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since 22-May-2016
+ */
 package uk.co.sleonard.unison.output;
 
 /**
  * The Class Relationship.
- * 
+ *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  *
@@ -10,16 +16,16 @@ package uk.co.sleonard.unison.output;
 public class Relationship {
 
 	/** The directed. */
-	private boolean		directed	= true;
+	private boolean directed = true;
 
 	/** The owner. */
-	private final int	owner;
+	private final int owner;
 
 	/** The target. */
-	private final int	target;
+	private final int target;
 
 	/** The value. */
-	public int			value		= 1;
+	public int value = 1;
 
 	/**
 	 * Instantiates a new relationship.
@@ -50,8 +56,8 @@ public class Relationship {
 
 		// Not interested in value - if we have this link
 		// already we will just add to this one
-		if (other.getOwner() == this.getOwner() && other.getTarget() == this.getTarget()
-		        && other.isDirected() == this.isDirected()) {
+		if ((other.getOwner() == this.getOwner()) && (other.getTarget() == this.getTarget())
+		        && (other.isDirected() == this.isDirected())) {
 			return true;
 		}
 

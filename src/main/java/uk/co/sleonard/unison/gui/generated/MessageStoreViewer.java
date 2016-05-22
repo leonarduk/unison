@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Observable;
@@ -53,118 +52,118 @@ import uk.co.sleonard.unison.utils.StringUtils;
  *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
- * 
+ *
  */
 public class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNLogger {
 
 	/** The Constant serialVersionUID. */
-	private static final long			serialVersionUID	= -4431795072981463365L;
+	private static final long serialVersionUID = -4431795072981463365L;
 
 	/** The body pane. */
 	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JTextArea		bodyPane;
+	private javax.swing.JTextArea bodyPane;
 
 	/** The body scroll pane. */
-	private javax.swing.JScrollPane		bodyScrollPane;
+	private javax.swing.JScrollPane bodyScrollPane;
 
 	/** The crosspost combo box. */
-	private javax.swing.JComboBox		crosspostComboBox;
+	private javax.swing.JComboBox<NewsGroup> crosspostComboBox;
 
 	/** The filter toggle. */
-	private javax.swing.JToggleButton	filterToggle;
+	private javax.swing.JToggleButton filterToggle;
 
 	/** The from date field. */
-	private javax.swing.JTextField		fromDateField;
+	private javax.swing.JTextField fromDateField;
 
 	/** The from date label. */
-	private javax.swing.JLabel			fromDateLabel;
+	private javax.swing.JLabel fromDateLabel;
 
 	/** The get body button. */
-	private javax.swing.JButton			getBodyButton;
+	private javax.swing.JButton getBodyButton;
 
 	/** The groups hierarchy. */
-	private javax.swing.JTree			groupsHierarchy;
+	private javax.swing.JTree groupsHierarchy;
 
 	/** The groups scroll pane. */
-	private javax.swing.JScrollPane		groupsScrollPane;
+	private javax.swing.JScrollPane groupsScrollPane;
 
 	/** The headers button. */
-	private javax.swing.JButton			headersButton;
+	private javax.swing.JButton headersButton;
 
 	/** The location field. */
-	private javax.swing.JTextField		locationField;
+	private javax.swing.JTextField locationField;
 
 	/** The location label. */
-	private javax.swing.JLabel			locationLabel;
+	private javax.swing.JLabel locationLabel;
 
 	/** The missing messages check. */
-	private javax.swing.JCheckBox		missingMessagesCheck;
+	private javax.swing.JCheckBox missingMessagesCheck;
 
 	/** The refresh button. */
-	private javax.swing.JButton			refreshButton;
+	private javax.swing.JButton refreshButton;
 
 	/** The sender field. */
-	private javax.swing.JTextField		senderField;
+	private javax.swing.JTextField senderField;
 
 	/** The sender label. */
-	private javax.swing.JLabel			senderLabel;
+	private javax.swing.JLabel senderLabel;
 
 	/** The sent date field. */
-	private javax.swing.JTextField		sentDateField;
+	private javax.swing.JTextField sentDateField;
 
 	/** The sent date label. */
-	private javax.swing.JLabel			sentDateLabel;
+	private javax.swing.JLabel sentDateLabel;
 
 	/** The stats tab pane. */
-	private javax.swing.JTabbedPane		statsTabPane;
+	private javax.swing.JTabbedPane statsTabPane;
 
 	/** The subject field. */
-	private javax.swing.JTextField		subjectField;
+	private javax.swing.JTextField subjectField;
 
 	/** The subject label. */
-	private javax.swing.JLabel			subjectLabel;
+	private javax.swing.JLabel subjectLabel;
 
 	/** The to date field. */
-	private javax.swing.JTextField		toDateField;
+	private javax.swing.JTextField toDateField;
 
 	/** The todate label. */
-	private javax.swing.JLabel			todateLabel;
+	private javax.swing.JLabel todateLabel;
 
 	/** The top countries list. */
-	private javax.swing.JList			topCountriesList;
+	private javax.swing.JList<GUIItem<Object>> topCountriesList;
 
 	/** The top countries scroll pane. */
-	private javax.swing.JScrollPane		topCountriesScrollPane;
+	private javax.swing.JScrollPane topCountriesScrollPane;
 
 	/** The top groups list. */
-	private javax.swing.JList			topGroupsList;
+	private javax.swing.JList<GUIItem<Object>> topGroupsList;
 
 	/** The top groups scroll pane. */
-	private javax.swing.JScrollPane		topGroupsScrollPane;
+	private javax.swing.JScrollPane topGroupsScrollPane;
 
 	/** The top posters list. */
-	private javax.swing.JList			topPostersList;
+	private javax.swing.JList<GUIItem<Object>> topPostersList;
 
 	/** The top posters scroll pane. */
-	private javax.swing.JScrollPane		topPostersScrollPane;
+	private javax.swing.JScrollPane topPostersScrollPane;
 
 	/** The topics hierarchy. */
-	private javax.swing.JTree			topicsHierarchy;
+	private javax.swing.JTree topicsHierarchy;
 
 	/** The topics scroll pane. */
-	private javax.swing.JScrollPane		topicsScrollPane;
+	private javax.swing.JScrollPane topicsScrollPane;
 
 	/** The session. */
-	private Session						session;
+	private Session session;
 
 	/** The newsgroup tree root. */
-	private TreeNode					newsgroupTreeRoot;
+	private TreeNode newsgroupTreeRoot;
 
 	/** The topic root. */
-	private TreeNode					topicRoot;
+	private TreeNode topicRoot;
 
 	/** The parser. */
-	private final HttpDateObject		parser				= new HttpDateObject();
+	private final HttpDateObject parser = new HttpDateObject();
 
 	// End of variables declaration//GEN-END:variables
 	/**
@@ -221,7 +220,9 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 *            the name
 	 * @return the tree node
 	 */
-	protected TreeNode addChildNode(final TreeNode root, final Object childObject, String name) {
+	protected TreeNode addChildNode(final TreeNode root, final Object childObject,
+	        final String nameInput) {
+		String name = nameInput;
 		if (childObject instanceof Set<?>) {
 			if (((Set<?>) childObject).size() == 0) {
 				// if no entries then don't add it
@@ -239,21 +240,6 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 		root.add(child);
 
 		return child;
-	}
-
-	/**
-	 * Adds the children.
-	 *
-	 * @param set
-	 *            the set
-	 * @param msgRoot
-	 *            the msg root
-	 */
-	@SuppressWarnings("unchecked")
-	private void addChildren(final Set set, final TreeNode msgRoot) {
-		if (null != set) {
-			this.iterateCollection(set.iterator(), msgRoot);
-		}
 	}
 
 	/*
@@ -282,8 +268,8 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 */
 	private Set<Message> createMessageHierarchy(final Set<Message> set, final TreeNode root,
 	        final Object matchId, final boolean fillInMissing) {
-		final Set<TreeNode> matches = new HashSet<TreeNode>();
-		final Set<Message> copy = new HashSet<Message>(set);
+		final Set<TreeNode> matches = new HashSet<>();
+		final Set<Message> copy = new HashSet<>(set);
 
 		for (final Message next : set) {
 			// compare to the last refered message, ie. the one they replied to
@@ -313,7 +299,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 				copy.remove(next);
 			}
 		}
-		Set<Message> remainder = new HashSet<Message>(copy);
+		Set<Message> remainder = new HashSet<>(copy);
 		for (final TreeNode next : matches) {
 			remainder = this.createMessageHierarchy(remainder, next,
 			        ((Message) next.getUserObject()).getUsenetMessageID(), fillInMissing);
@@ -387,8 +373,8 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 *            the results
 	 * @return the list model
 	 */
-	private ListModel getListModel(final List<ResultRow> results) {
-		final DefaultListModel model = new DefaultListModel();
+	private ListModel<GUIItem<Object>> getListModel(final List<ResultRow> results) {
+		final DefaultListModel<GUIItem<Object>> model = new DefaultListModel<>();
 		for (final ListIterator<ResultRow> iter = results.listIterator(); iter.hasNext();) {
 			final Object next = iter.next();
 			String name = next.toString();
@@ -399,7 +385,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 				name = ((Location) next).getCountry();
 			}
 
-			model.addElement(new GUIItem<Object>(name, next));
+			model.addElement(new GUIItem<>(name, next));
 		}
 		return model;
 	}
@@ -451,18 +437,6 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 * This method is called from within the constructor to initialize the form. WARNING: Do NOT
 	 * modify this code. The content of this method is always regenerated by the Form Editor.
 	 */
-	// <editor-fold defaultstate="collapsed" desc=" Generated Code
-	// <editor-fold defaultstate="collapsed" desc=" Generated Code
-	// <editor-fold defaultstate="collapsed" desc=" Generated Code
-	// <editor-fold defaultstate="collapsed" desc=" Generated Code
-	// <editor-fold defaultstate="collapsed" desc=" Generated Code
-	// <editor-fold defaultstate="collapsed" desc=" Generated Code
-	// <editor-fold defaultstate="collapsed" desc=" Generated Code
-	// <editor-fold defaultstate="collapsed" desc=" Generated Code
-	// <editor-fold defaultstate="collapsed" desc=" Generated Code
-	// <editor-fold defaultstate="collapsed" desc=" Generated Code
-	// <editor-fold defaultstate="collapsed" desc=" Generated Code
-	// <editor-fold defaultstate="collapsed" desc=" Generated Code
 	// ">//GEN-BEGIN:initComponents
 	private void initComponents() {
 		this.groupsScrollPane = new javax.swing.JScrollPane();
@@ -481,14 +455,14 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 		this.subjectField = new javax.swing.JTextField();
 		this.locationLabel = new javax.swing.JLabel();
 		this.locationField = new javax.swing.JTextField();
-		this.crosspostComboBox = new javax.swing.JComboBox();
+		this.crosspostComboBox = new javax.swing.JComboBox<>();
 		this.statsTabPane = new javax.swing.JTabbedPane();
 		this.topPostersScrollPane = new javax.swing.JScrollPane();
-		this.topPostersList = new javax.swing.JList();
+		this.topPostersList = new javax.swing.JList<>();
 		this.topGroupsScrollPane = new javax.swing.JScrollPane();
-		this.topGroupsList = new javax.swing.JList();
+		this.topGroupsList = new javax.swing.JList<>();
 		this.topCountriesScrollPane = new javax.swing.JScrollPane();
-		this.topCountriesList = new javax.swing.JList();
+		this.topCountriesList = new javax.swing.JList<>();
 		this.fromDateLabel = new javax.swing.JLabel();
 		this.todateLabel = new javax.swing.JLabel();
 		this.fromDateField = new javax.swing.JTextField();
@@ -833,21 +807,6 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 		                                Short.MAX_VALUE))));
 	}// </editor-fold>//GEN-END:initComponents
 
-	/**
-	 * Iterate collection.
-	 *
-	 * @param iter2
-	 *            the iter2
-	 * @param msgRoot
-	 *            the msg root
-	 */
-	private void iterateCollection(final Iterator<?> iter2, final TreeNode msgRoot) {
-		while (iter2.hasNext()) {
-			final Object object = iter2.next();
-			this.addChildNode(msgRoot, object);
-		}
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -947,8 +906,9 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 
 			this.sentDateField.setText(
 			        new SimpleDateFormat("dd MMM yyyy hh:mm").format(message.getDateCreated()));
-			this.crosspostComboBox
-			        .setModel(new DefaultComboBoxModel(message.getNewsgroups().toArray()));
+			final DefaultComboBoxModel<NewsGroup> aModel = new DefaultComboBoxModel<>(
+			        new Vector<>(message.getNewsgroups()));
+			this.crosspostComboBox.setModel(aModel);
 			try {
 				this.bodyPane.setText(StringUtils.decompress(message.getMessageBody()));
 			}
@@ -966,9 +926,9 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 		this.newsgroupTreeRoot.removeAllChildren();
 		// FIXME split out from name - ignore db stuff
 		final UNISoNController controller = UNISoNController.getInstance();
-		final HashMap<String, TreeNode> nodeMap = new HashMap<String, TreeNode>();
+		final HashMap<String, TreeNode> nodeMap = new HashMap<>();
 
-		final List<NewsGroup> newsgroupFilter = new ArrayList<NewsGroup>();
+		final List<NewsGroup> newsgroupFilter = new ArrayList<>();
 		newsgroupFilter.addAll(controller.getNewsgroupFilter());
 		Collections.sort(newsgroupFilter);
 
@@ -1074,7 +1034,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 			final Set<Topic> topics = selectedNewsgroup.getTopics();
 			final Set<Topic> topicsFilter = controller.getTopicsFilter();
 			for (final Topic topic : topics) {
-				if (null == topicsFilter || topicsFilter.contains(topic)) {
+				if ((null == topicsFilter) || topicsFilter.contains(topic)) {
 					final int lastIndex = topic.getSubject().length();
 					this.addChildNode(this.topicRoot, topic,
 					        topic.getSubject().substring(0, lastIndex));
@@ -1117,8 +1077,9 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 				final Date toDate = this.parser.parseDate(this.toDateField.getText());
 				controller.setDates(fromDate, toDate);
 
-				final Object[] selectedCountries = this.topCountriesList.getSelectedValues();
-				final Set<String> countries = new HashSet<String>();
+				final List<GUIItem<Object>> selectedCountries = this.topCountriesList
+				        .getSelectedValuesList();
+				final Set<String> countries = new HashSet<>();
 				for (final Object country : selectedCountries) {
 					final GUIItem<ResultRow> row = (GUIItem<ResultRow>) country;
 					final String selectedcountry = (String) row.getItem().getKey();
@@ -1126,8 +1087,9 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 				}
 				controller.setSelectedCountries(countries);
 
-				final Object[] selectedNewsgroups = this.topGroupsList.getSelectedValues();
-				final Vector<NewsGroup> groups = new Vector<NewsGroup>();
+				final List<GUIItem<Object>> selectedNewsgroups = this.topGroupsList
+				        .getSelectedValuesList();
+				final Vector<NewsGroup> groups = new Vector<>();
 				for (final Object group : selectedNewsgroups) {
 					final GUIItem<ResultRow> row = (GUIItem<ResultRow>) group;
 					final NewsGroup selectedgroup = (NewsGroup) row.getItem().getKey();
@@ -1135,8 +1097,9 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 				}
 				controller.setSelectedNewsgroups(groups);
 
-				final Object[] selectedPosters = this.topPostersList.getSelectedValues();
-				final Vector<UsenetUser> posters = new Vector<UsenetUser>();
+				final List<GUIItem<Object>> selectedPosters = this.topPostersList
+				        .getSelectedValuesList();
+				final Vector<UsenetUser> posters = new Vector<>();
 				for (final Object poster : selectedPosters) {
 					final GUIItem<ResultRow> row = (GUIItem<ResultRow>) poster;
 					final UsenetUser selectedUser = (UsenetUser) row.getItem().getKey();

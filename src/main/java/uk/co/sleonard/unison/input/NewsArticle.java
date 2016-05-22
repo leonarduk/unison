@@ -1,3 +1,9 @@
+/**
+ * NewsArticle
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since 22-May-2016
+ */
 package uk.co.sleonard.unison.input;
 
 // Import Commons/NET clases

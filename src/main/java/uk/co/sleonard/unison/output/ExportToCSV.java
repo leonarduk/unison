@@ -1,3 +1,9 @@
+/**
+ * ExportToCSV
+ *
+ * @author Stephen <github@leonarduk.com>
+ * @since 22-May-2016
+ */
 package uk.co.sleonard.unison.output;
 
 import java.awt.FileDialog;
@@ -15,7 +21,7 @@ import uk.co.sleonard.unison.gui.UNISoNException;
 
 /**
  * The Class ExportToCSV.
- * 
+ *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  *
@@ -56,10 +62,9 @@ public class ExportToCSV {
 				if (file.exists()) {
 					file.delete();
 				}
-				try {
-					final BufferedWriter bufferedWriter = new BufferedWriter(
-					        new FileWriter(file, true));
-					final PrintWriter fileWriter = new PrintWriter(bufferedWriter);
+				try (final BufferedWriter bufferedWriter = new BufferedWriter(
+				        new FileWriter(file, true));
+				        final PrintWriter fileWriter = new PrintWriter(bufferedWriter);) {
 					String data;
 					for (int j = 0; j < table.getColumnCount(); ++j) {
 
@@ -87,7 +92,8 @@ public class ExportToCSV {
 		catch (final Exception e) {
 			throw new UNISoNException("Failed to export to CSV", e);
 		}
-	}// export Table
+	}// export
+	 // Table
 
 	/**
 	 * Export table to csv.
@@ -116,7 +122,7 @@ public class ExportToCSV {
 		file.show(); // Blocks
 		String curFile = null;
 		curFile = file.getFile();
-		if (curFile != null && !curFile.equals(initialValue)) {
+		if ((curFile != null) && !curFile.equals(initialValue)) {
 
 			if (!curFile.endsWith(CSV_FILE_SUFFIX)) {
 				curFile += CSV_FILE_SUFFIX;
@@ -135,15 +141,11 @@ public class ExportToCSV {
 	 *            the data
 	 * @return the string
 	 */
-	private String extractCommas(String data) {
-		if (data.startsWith("M'I-5'Persecut ion")) {
-			int i = 0;
-			i++;
+	private String extractCommas(final String dataInput) {
+		if (dataInput.indexOf(',') > -1) {
+			return dataInput.replaceAll(",", ";");
 		}
-		if (data.indexOf(',') > -1) {
-			data = data.replaceAll(",", ";");
-		}
-		return data;
+		return dataInput;
 	}
 
 }

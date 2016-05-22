@@ -54,9 +54,6 @@ public class HeaderDownloadWorkerTest {
 
 	/**
 	 * Test NotifyObservers.
-	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Test
 	public void testNotifyObservers() {
@@ -73,9 +70,6 @@ public class HeaderDownloadWorkerTest {
 
 	/**
 	 * Test if download then finished.
-	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Test
 	public void testFinished() {
@@ -87,9 +81,6 @@ public class HeaderDownloadWorkerTest {
 
 	/**
 	 * Test if in download
-	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Test
 	public void testIsDownloading() {
@@ -101,7 +92,6 @@ public class HeaderDownloadWorkerTest {
 	/**
 	 * Test sToreArticleInfo
 	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
 	 * @throws UNISoNException
 	 *             Signals that an exception has occurred.
 	 */
@@ -113,9 +103,6 @@ public class HeaderDownloadWorkerTest {
 
 	/**
 	 * Test fullStop
-	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Test
 	@Ignore
@@ -135,7 +122,6 @@ public class HeaderDownloadWorkerTest {
 	/**
 	 * Test Initialize
 	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
 	 * @throws UNISoNException
 	 *             Signals that an exception has occurred.
 	 */
@@ -161,9 +147,6 @@ public class HeaderDownloadWorkerTest {
 
 	/**
 	 * Test Resume
-	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Test
 	public void testResume() {
@@ -174,9 +157,6 @@ public class HeaderDownloadWorkerTest {
 
 	/**
 	 * Test Pause
-	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Test
 	public void testPause() {

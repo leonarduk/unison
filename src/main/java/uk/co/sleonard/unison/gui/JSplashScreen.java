@@ -30,6 +30,10 @@ import javax.swing.border.BevelBorder;
 
 /**
  * The Class JSplashScreen.
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since v1.0.0
+ * 
  */
 public class JSplashScreen extends JDialog {
 

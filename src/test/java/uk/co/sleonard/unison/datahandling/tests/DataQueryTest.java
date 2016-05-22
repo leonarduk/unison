@@ -29,7 +29,7 @@ import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
  * The Class DataQueryTest.
  * 
  * @author Elton <elton_12_nunes@hotmail.com>
- * @since v1.0.0
+ * @since v1.2.0
  *
  */
 public class DataQueryTest {

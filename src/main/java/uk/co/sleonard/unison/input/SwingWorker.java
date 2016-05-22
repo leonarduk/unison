@@ -16,6 +16,7 @@ import javax.swing.SwingUtilities;
  * Note that the API changed slightly in the 3rd version: You must now invoke start() on the
  * SwingWorker after creating it.
  * 
+ * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  * 
  */
@@ -24,7 +25,7 @@ public abstract class SwingWorker extends Observable implements Runnable {
 	protected final ThreadVar	threadVar;
 
 	/** The value. */
-	private Object				value;				 // see getValue(), setValue()
+	private Object			value;	// see getValue(), setValue()
 
 	/**
 	 * Class to maintain reference to current worker thread under separate synchronization control.

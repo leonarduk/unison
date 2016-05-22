@@ -30,8 +30,6 @@ public class NewsArticleTest {
 	 * 
 	 * @throws UNISoNException
 	 *             Signals that an exception in application has occurred..
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Test
 	public void testConstructorArticle() throws UNISoNException {
@@ -60,9 +58,6 @@ public class NewsArticleTest {
 
 	/**
 	 * Test isFullHeader.
-	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Test
 	public void testIsFullHeader() {
@@ -74,9 +69,6 @@ public class NewsArticleTest {
 
 	/**
 	 * Test compareTo.
-	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Test
 	public void testCompareTo() {
@@ -93,9 +85,6 @@ public class NewsArticleTest {
 
 	/**
 	 * Test getArticleId.
-	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Test
 	public void testGetArticleId() {
@@ -108,9 +97,6 @@ public class NewsArticleTest {
 
 	/**
 	 * Test getArticleId expected NullPointerException.
-	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Test(expected = NullPointerException.class)
 	public void testGetArticleIdThrowException() {
@@ -120,9 +106,6 @@ public class NewsArticleTest {
 
 	/**
 	 * Test getContent.
-	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Test
 	public void testGetContent() {
@@ -140,8 +123,6 @@ public class NewsArticleTest {
 	 *             Signals that an parse exception in application has occurred..
 	 * @throws UNISoNException
 	 *             Signals that an exception in application has occurred..
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Test
 	public void testGetDate() throws ParseException, UNISoNException {
@@ -156,9 +137,6 @@ public class NewsArticleTest {
 
 	/**
 	 * Test getFrom.
-	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Test
 	public void testGetFrom() {
@@ -171,9 +149,6 @@ public class NewsArticleTest {
 
 	/**
 	 * Test getFrom expected NullPointerException.
-	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Test(expected = NullPointerException.class)
 	public void testGetFromThrowException() {
@@ -198,9 +173,6 @@ public class NewsArticleTest {
 
 	/**
 	 * Test getPostingHost.
-	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Test
 	public void testGetPostingHost() {
@@ -213,9 +185,6 @@ public class NewsArticleTest {
 
 	/**
 	 * Test getReferences.
-	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Test
 	public void testGetReferences() {
@@ -228,9 +197,6 @@ public class NewsArticleTest {
 
 	/**
 	 * Test getSubject.
-	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Test
 	public void testGetSubject() {
@@ -243,9 +209,6 @@ public class NewsArticleTest {
 
 	/**
 	 * Test toString.
-	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Test
 	public void testToString() {

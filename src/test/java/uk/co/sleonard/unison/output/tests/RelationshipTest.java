@@ -13,7 +13,7 @@ import uk.co.sleonard.unison.output.Relationship;
  * The Class RelationshipTest.
  * 
  * @author Elton <elton_12_nunes@hotmail.com>
- * @since v1.0.0
+ * @since v1.2.0
  *
  */
 public class RelationshipTest {

@@ -106,9 +106,6 @@ public class FullDownloadWorkerTest {
 
 	/**
 	 * Test AddDownloadRequest.
-	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Ignore
 	@Test
@@ -125,9 +122,6 @@ public class FullDownloadWorkerTest {
 
 	/**
 	 * Test DownloadArticle.
-	 * 
-	 * @author Elton <elton_12_nunes@hotmail.com>
-	 * 
 	 */
 	@Test
 	public void testDownloadArticle() {

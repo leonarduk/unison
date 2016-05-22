@@ -16,6 +16,10 @@ import uk.co.sleonard.unison.input.NNTPNewsGroup;
 
 /**
  * The Class UNISoNCLI.
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since v1.0.0
+ *
  */
 public class UNISoNCLI implements UNISoNLogger {
 

@@ -43,8 +43,8 @@ import uk.co.sleonard.unison.input.NewsGroupReader;
 /**
  * The Class UNISoNController.
  * 
- * @author
- * @since
+ * @author Stephen <github@leonarduk.com>
+ * @since v1.0.0
  *
  */
 public class UNISoNController extends Observable {

@@ -52,7 +52,7 @@ import uk.co.sleonard.unison.utils.StringUtils;
  * The Class MessageStoreViewer.
  *
  * @author Stephen <github@leonarduk.com>
- * @since
+ * @since v1.0.0
  * 
  */
 public class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNLogger {

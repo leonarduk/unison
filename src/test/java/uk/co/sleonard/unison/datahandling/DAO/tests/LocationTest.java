@@ -16,17 +16,21 @@ import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 
 /**
  * The Class LocationTest.
+ * 
+ * @author Elton <elton_12_nunes@hotmail.com>
+ * @since v1.0.0
+ *
  */
 public class LocationTest {
 
 	/** The city. */
-	private String city = "Boston";
+	private String	city		= "Boston";
 
 	/** The country. */
-	private String country = "United States";
+	private String	country		= "United States";
 
 	/** The country code. */
-	private String countryCode = "USA";
+	private String	countryCode	= "USA";
 
 	/**
 	 * Test toString.

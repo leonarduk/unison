@@ -6,7 +6,7 @@ import org.apache.commons.net.nntp.NewsgroupInfo;
  * The Class NNTPNewsGroup.
  * 
  * @author Stephen <github@leonarduk.com>
- * @since
+ * @since v1.0.0
  *
  */
 public final class NNTPNewsGroup implements Comparable<NNTPNewsGroup> {
@@ -61,7 +61,7 @@ public final class NNTPNewsGroup implements Comparable<NNTPNewsGroup> {
 	 * @param count
 	 *            the count
 	 */
-	void _setArticleCount(final int count) {
+	void setArticleCount(final int count) {
 		this.__estimatedArticleCount = count;
 	}
 
@@ -71,7 +71,7 @@ public final class NNTPNewsGroup implements Comparable<NNTPNewsGroup> {
 	 * @param first
 	 *            the first
 	 */
-	void _setFirstArticle(final int first) {
+	void setFirstArticle(final int first) {
 		this.__firstArticle = first;
 	}
 
@@ -81,7 +81,7 @@ public final class NNTPNewsGroup implements Comparable<NNTPNewsGroup> {
 	 * @param last
 	 *            the last
 	 */
-	void _setLastArticle(final int last) {
+	void setLastArticle(final int last) {
 		this.__lastArticle = last;
 	}
 
@@ -91,7 +91,7 @@ public final class NNTPNewsGroup implements Comparable<NNTPNewsGroup> {
 	 * @param newsgroup
 	 *            the newsgroup
 	 */
-	void _setNewsgroup(final String newsgroup) {
+	void setNewsgroup(final String newsgroup) {
 		this.__newsgroup = newsgroup;
 	}
 
@@ -101,7 +101,7 @@ public final class NNTPNewsGroup implements Comparable<NNTPNewsGroup> {
 	 * @param permission
 	 *            the permission
 	 */
-	void _setPostingPermission(final int permission) {
+	void setPostingPermission(final int permission) {
 		this.__postingPermission = permission;
 	}
 

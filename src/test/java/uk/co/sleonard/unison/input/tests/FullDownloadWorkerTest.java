@@ -23,6 +23,10 @@ import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
  * The Class FullDownloadWorkerTest.
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since v1.0.0
+ *
  */
 public class FullDownloadWorkerTest {
 
@@ -87,7 +91,7 @@ public class FullDownloadWorkerTest {
 		}
 		DownloadRequest request = new DownloadRequest("<Baf4g.374$Lj1.115@fe10.lga>",
 
-		DownloadMode.ALL);
+		        DownloadMode.ALL);
 		try {
 			NewsArticle article = worker.downloadFullMessage(request);
 			System.out.println("Downloaded: " + article);
@@ -102,6 +106,9 @@ public class FullDownloadWorkerTest {
 
 	/**
 	 * Test AddDownloadRequest.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Ignore
 	@Test
@@ -118,6 +125,9 @@ public class FullDownloadWorkerTest {
 
 	/**
 	 * Test DownloadArticle.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Test
 	public void testDownloadArticle() {

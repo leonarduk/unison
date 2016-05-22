@@ -53,7 +53,7 @@ import uk.co.sleonard.unison.utils.StringUtils;
  * This is one of the the most important classes as it helps persist the data to the HSQL database.
  *
  * @author Stephen <github@leonarduk.com>
- * @since
+ * @since v1.0.0
  *
  */
 public class HibernateHelper {

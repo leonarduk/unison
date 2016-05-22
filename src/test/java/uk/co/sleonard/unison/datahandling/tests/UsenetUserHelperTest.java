@@ -12,6 +12,10 @@ import uk.co.sleonard.unison.datahandling.DAO.EmailAddress;
 
 /**
  * The Class UsenetUserHelperTest
+ * 
+ * @author Elton <elton_12_nunes@hotmail.com>
+ * @since v1.0.0
+ *
  */
 public class UsenetUserHelperTest {
 

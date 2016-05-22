@@ -13,6 +13,10 @@ import uk.co.sleonard.unison.datahandling.DAO.Topic;
 
 /**
  * The Class TopicTest.
+ * 
+ * @author Elton <elton_12_nunes@hotmail.com>
+ * @since v1.0.0
+ *
  */
 public class TopicTest {
 

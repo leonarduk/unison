@@ -13,6 +13,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.powermock.api.mockito.PowerMockito;
 
+import com.ibm.icu.util.Calendar;
+
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.gui.UNISoNException;
 import uk.co.sleonard.unison.gui.UNISoNLogger;
@@ -21,15 +23,17 @@ import uk.co.sleonard.unison.input.NewsClient;
 import uk.co.sleonard.unison.input.NewsGroupReader;
 import uk.co.sleonard.unison.utils.StringUtils;
 
-import com.ibm.icu.util.Calendar;
-
 /**
  * The Class HeaderDownloadWorker.
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since v1.0.0
+ *
  */
 public class HeaderDownloadWorkerTest {
 
-	private HeaderDownloadWorker worker;
-	private static Logger logger = Logger.getLogger(HeaderDownloadWorkerTest.class);
+	private HeaderDownloadWorker	worker;
+	private static Logger			logger	= Logger.getLogger(HeaderDownloadWorkerTest.class);
 
 	/**
 	 * Setup.
@@ -50,6 +54,9 @@ public class HeaderDownloadWorkerTest {
 
 	/**
 	 * Test NotifyObservers.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Test
 	public void testNotifyObservers() {
@@ -66,6 +73,9 @@ public class HeaderDownloadWorkerTest {
 
 	/**
 	 * Test if download then finished.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Test
 	public void testFinished() {
@@ -77,6 +87,9 @@ public class HeaderDownloadWorkerTest {
 
 	/**
 	 * Test if in download
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Test
 	public void testIsDownloading() {
@@ -87,7 +100,10 @@ public class HeaderDownloadWorkerTest {
 
 	/**
 	 * Test sToreArticleInfo
-	 * @throws UNISoNException Signals that an exception has occurred.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * @throws UNISoNException
+	 *             Signals that an exception has occurred.
 	 */
 	@Test
 	public void testStoreArticleInfo() throws UNISoNException {
@@ -97,6 +113,9 @@ public class HeaderDownloadWorkerTest {
 
 	/**
 	 * Test fullStop
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Test
 	@Ignore
@@ -105,7 +124,8 @@ public class HeaderDownloadWorkerTest {
 		System.out.println("Wait 2 secs and stop");
 		try {
 			Thread.sleep(2000);
-		} catch (InterruptedException e) {
+		}
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		System.out.println("Stop");
@@ -114,7 +134,10 @@ public class HeaderDownloadWorkerTest {
 
 	/**
 	 * Test Initialize
-	 * @throws UNISoNException Signals that an exception has occurred.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * @throws UNISoNException
+	 *             Signals that an exception has occurred.
 	 */
 	@Test
 	@Ignore
@@ -126,17 +149,21 @@ public class HeaderDownloadWorkerTest {
 		UNISoNLogger uniLog = mock(UNISoNLogger.class);
 		Date fromAndTo = Calendar.getInstance().getTime();
 		assertFalse(this.worker.isDownloading());
-		
+
 		String server = StringUtils.loadServerList()[0];
-		
-		this.worker.initialise(ngr, 0, 1, server,
-				"newsgroup", uniLog, DownloadMode.ALL, fromAndTo, fromAndTo);;
-				
+
+		this.worker.initialise(ngr, 0, 1, server, "newsgroup", uniLog, DownloadMode.ALL, fromAndTo,
+		        fromAndTo);
+		;
+
 		assertTrue(this.worker.isDownloading());
 	}
 
 	/**
 	 * Test Resume
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Test
 	public void testResume() {
@@ -147,6 +174,9 @@ public class HeaderDownloadWorkerTest {
 
 	/**
 	 * Test Pause
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Test
 	public void testPause() {

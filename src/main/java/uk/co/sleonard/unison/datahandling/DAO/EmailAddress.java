@@ -3,8 +3,8 @@ package uk.co.sleonard.unison.datahandling.DAO;
 /**
  * The Class EmailAddress.
  * 
- * @author
- * @since
+ * @author Stephen <github@leonarduk.com>
+ * @since v1.0.0
  *
  */
 public class EmailAddress {

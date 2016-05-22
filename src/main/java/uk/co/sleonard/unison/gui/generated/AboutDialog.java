@@ -10,7 +10,7 @@ package uk.co.sleonard.unison.gui.generated;
  * The Class AboutDialog.
  * 
  * @author Stephen <github@leonarduk.com>
- * @since
+ * @since v1.0.0
  *
  */
 public class AboutDialog extends javax.swing.JDialog {

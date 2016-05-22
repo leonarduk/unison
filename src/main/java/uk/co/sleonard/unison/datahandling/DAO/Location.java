@@ -6,8 +6,8 @@ import java.util.List;
 /**
  * The real world location of an IP address.
  * 
- * @author Generated 11-Nov-2007 17:31:30 by Hibernate Tools 3.2.0.b9
- * @since
+ * @author Hibernate Tools 3.2.0.b9
+ * @since Generated 11-Nov-2007 17:31:30
  *
  */
 public class Location implements java.io.Serializable {

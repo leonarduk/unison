@@ -42,6 +42,10 @@ import uk.co.sleonard.unison.input.NNTPNewsGroup;
 
 /**
  * The Class HibernateHelperTest.
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since v1.0.0
+ *
  */
 public class HibernateHelperTest {
 
@@ -70,6 +74,9 @@ public class HibernateHelperTest {
 
 	/**
 	 * Test fetch all.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Test
 	public void testFetchAll() {
@@ -92,6 +99,9 @@ public class HibernateHelperTest {
 
 	/**
 	 * Test fetch news groups.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Test
 	public void testFetchBaseNewsGroups() {
@@ -112,6 +122,9 @@ public class HibernateHelperTest {
 
 	/**
 	 * Test to fetch or insert.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Test
 	public void testFetchOrInsert() {
@@ -132,6 +145,9 @@ public class HibernateHelperTest {
 
 	/**
 	 * Test to find by key.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
@@ -164,6 +180,9 @@ public class HibernateHelperTest {
 
 	/**
 	 * Test to find by key.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
@@ -196,6 +215,9 @@ public class HibernateHelperTest {
 
 	/**
 	 * Test to find or create newsgroup.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Test
 	public void testFindOrCreateNewsGroup() {
@@ -226,6 +248,9 @@ public class HibernateHelperTest {
 
 	/**
 	 * Test create the google map URL.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Test
 	public void testGetGoogleMapURL() {
@@ -240,6 +265,9 @@ public class HibernateHelperTest {
 
 	/**
 	 * Test get hibernate session.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Test
 	public void testGetHibernateSession() {
@@ -254,6 +282,9 @@ public class HibernateHelperTest {
 
 	/**
 	 * Test get list results.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Test
 	public void testGetListResults() {
@@ -273,6 +304,9 @@ public class HibernateHelperTest {
 
 	/**
 	 * Test get newsgroup by fullname.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Test
 	public void testGetNewsgroupByFullName() {
@@ -294,6 +328,9 @@ public class HibernateHelperTest {
 
 	/**
 	 * Test get text.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Test
 	public void testGetText() {
@@ -376,6 +413,9 @@ public class HibernateHelperTest {
 
 	/**
 	 * Test store newsgroups.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Ignore
 	@Test

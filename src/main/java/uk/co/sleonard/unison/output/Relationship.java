@@ -3,8 +3,8 @@ package uk.co.sleonard.unison.output;
 /**
  * The Class Relationship.
  * 
- * @author
- * @since
+ * @author Stephen <github@leonarduk.com>
+ * @since v1.0.0
  *
  */
 public class Relationship {

@@ -30,7 +30,7 @@ import uk.co.sleonard.unison.utils.StringUtils;
  * The Class DownloadNewsPanel.
  * 
  * @author Stephen <github@leonarduk.com>
- * @since
+ * @since v1.0.0
  *
  */
 @SuppressWarnings("rawtypes")

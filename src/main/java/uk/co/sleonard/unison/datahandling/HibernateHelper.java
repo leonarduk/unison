@@ -1,16 +1,11 @@
 package uk.co.sleonard.unison.datahandling;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.sql.BatchUpdateException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -48,13 +43,15 @@ import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.gui.UNISoNController;
 import uk.co.sleonard.unison.gui.UNISoNException;
+import uk.co.sleonard.unison.input.LegacyLocationFinderImpl;
+import uk.co.sleonard.unison.input.LocationFinder;
 import uk.co.sleonard.unison.input.NNTPNewsGroup;
 import uk.co.sleonard.unison.input.NewsArticle;
 import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
  * This is one of the the most important classes as it helps persist the data to the HSQL database.
- * 
+ *
  * @author Stephen <github@leonarduk.com>
  * @since
  *
@@ -63,34 +60,29 @@ public class HibernateHelper {
 
 	/** The Constant DB_URL. */
 	// private final static String DB_URL = "jdbc:hsqldb:file:DB/projectDB";
-	private final static String		DB_URL						= "jdbc:hsqldb:file:src/main/resources/DB/projectDB";
+	private final static String DB_URL = "jdbc:hsqldb:file:src/main/resources/DB/projectDB";
 
 	/** The Constant dbDriver. */
-	private final static String		dbDriver					= "org.hsqldb.jdbcDriver";
+	private final static String dbDriver = "org.hsqldb.jdbcDriver";
 
 	/** The Constant dbUser. */
-	private final static String		dbUser						= "sa";
+	private final static String dbUser = "sa";
 
 	/** The first connect. */
-	private static boolean			firstConnect				= true;
+	private static boolean firstConnect = true;
 
 	/** The Constant GUI_ARGS. */
-	public static final String		GUI_ARGS[]					= { "-driver",
-	        HibernateHelper.dbDriver, "-url", HibernateHelper.DB_URL, "-user",
-	        HibernateHelper.dbUser };
+	public static final String GUI_ARGS[] = { "-driver", HibernateHelper.dbDriver, "-url",
+	        HibernateHelper.DB_URL, "-user", HibernateHelper.dbUser };
 
 	/** The Constant HIBERNATE_CONNECTION_URL. */
-	private static final String		HIBERNATE_CONNECTION_URL	= "hibernate.connection.url";
+	private static final String HIBERNATE_CONNECTION_URL = "hibernate.connection.url";
 
 	/** The logger. */
-	private static Logger			logger						= Logger
-	        .getLogger("HibernateHelper");
+	private static Logger logger = Logger.getLogger("HibernateHelper");
 
 	/** The session factory. */
-	private static SessionFactory	sessionFactory				= null;
-
-	/** The controller. */
-	private final UNISoNController	controller;
+	private static SessionFactory sessionFactory = null;
 
 	/**
 	 * The main method.
@@ -104,6 +96,11 @@ public class HibernateHelper {
 		DatabaseManagerSwing.main(HibernateHelper.GUI_ARGS);
 	}
 
+	/** The controller. */
+	private final UNISoNController controller;
+
+	private final LocationFinder locationFinder;
+
 	/**
 	 * Instantiates a new hibernate helper.
 	 *
@@ -112,6 +109,7 @@ public class HibernateHelper {
 	 */
 	public HibernateHelper(final UNISoNController controller) {
 		this.controller = controller;
+		this.locationFinder = new LegacyLocationFinderImpl();
 	}
 
 	/**
@@ -140,60 +138,6 @@ public class HibernateHelper {
 		if (null == location) {
 			// create location to find city (does web lookup)
 			location = this.findOrCreateLocation(session, ip);
-		}
-		return location;
-	}
-
-	/**
-	 * Creates the location.
-	 *
-	 * @param ipAddress
-	 *            the ip address
-	 * @return the location
-	 */
-	public Location createLocation(final String ipAddress) {
-
-		Location location = null;
-		final String locationLookupUrl = "http://api.hostip.info/rough.php?ip=" + ipAddress;
-
-		final HashMap<String, String> fieldMap = new HashMap<>();
-
-		try {
-			// Create a URL for the desired page
-			final URL url = new URL(locationLookupUrl);
-
-			// Read all the text returned by the server
-			try (final BufferedReader in = new BufferedReader(
-			        new InputStreamReader(url.openStream()));) {
-				String str;
-				// Example output:
-				// Country: UNITED STATES
-				// Country Code: US
-				// City: Beltsville, MD <-- this becomes location field
-				// Guessed: true
-				while ((str = in.readLine()) != null) {
-					// str is one line of text; readLine() strips the newline
-					// character(s)
-					final String[] fields = str.split(": ");
-					fieldMap.put(fields[0], fields[1]);
-				}
-			}
-			final String city = fieldMap.get("City");
-			final String country = fieldMap.get("Country");
-			final String countryCode = fieldMap.get("Country Code");
-			final boolean guessed = Boolean.getBoolean(fieldMap.get("Guessed"));
-
-			final Vector<UsenetUser> posters = null;// new Vector<UsenetUser>();
-			final Vector<IpAddress> ips = null;// new Vector<IpAddress>();
-
-			location = new Location(city, country, countryCode, guessed, posters, ips);
-
-		}
-		catch (final MalformedURLException e) {
-			e.printStackTrace();
-		}
-		catch (final IOException e) {
-			e.printStackTrace();
 		}
 		return location;
 	}
@@ -413,7 +357,7 @@ public class HibernateHelper {
 	private synchronized Location findOrCreateLocation(final Session session,
 	        final IpAddress ipAddress) {
 		Location location;
-		location = this.createLocation(ipAddress.getIpAddress());
+		location = this.locationFinder.createLocation(ipAddress.getIpAddress());
 
 		// find if location was already created for another
 		// IP

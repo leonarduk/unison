@@ -1,3 +1,9 @@
+/**
+ * FullDownloadWorker
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since 22-May-2016
+ */
 package uk.co.sleonard.unison.input;
 
 import java.io.BufferedReader;
@@ -22,7 +28,7 @@ import uk.co.sleonard.unison.utils.HttpDateObject;
 
 /**
  * Class to create a separate Thread for downloading messages.
- * 
+ *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  *
@@ -30,19 +36,19 @@ import uk.co.sleonard.unison.utils.HttpDateObject;
 public class FullDownloadWorker extends SwingWorker {
 
 	/** The download queue. */
-	private static LinkedBlockingQueue<DownloadRequest>	downloadQueue	= new LinkedBlockingQueue<>();
+	private static LinkedBlockingQueue<DownloadRequest> downloadQueue = new LinkedBlockingQueue<>();
 
 	/** The log. */
-	private static UNISoNLogger							log;
+	private static UNISoNLogger log;
 
 	/** The Constant downloaders. */
-	private final static ArrayList<FullDownloadWorker>	downloaders		= new ArrayList<>();
+	private final static ArrayList<FullDownloadWorker> downloaders = new ArrayList<>();
 
 	/** The client. */
-	private final NewsClient							client;
+	private final NewsClient client;
 
 	/** The download. */
-	private boolean										download		= true;
+	private boolean download = true;
 
 	/**
 	 * Adds the download request.

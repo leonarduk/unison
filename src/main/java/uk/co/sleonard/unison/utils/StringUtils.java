@@ -1,3 +1,9 @@
+/**
+ * StringUtils
+ *
+ * @author Stephen <github@leonarduk.com>
+ * @since 22-May-2016
+ */
 package uk.co.sleonard.unison.utils;
 
 import java.io.ByteArrayInputStream;
@@ -17,7 +23,7 @@ import java.util.zip.ZipOutputStream;
  * </br>
  * TODO Add this reference for the compression FRom
  * http://forum.java.sun.com/thread.jspa?threadID=250124&messageID=926638
- * 
+ *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  *
@@ -126,7 +132,7 @@ public class StringUtils {
 	public static String join(final String[] strings, final String delimiter) {
 		final StringBuffer buf = new StringBuffer();
 
-		for (int i = 0; i < strings.length - 1; i++) {
+		for (int i = 0; i < (strings.length - 1); i++) {
 			buf.append(strings[i] + delimiter);
 		}
 		buf.append(strings[strings.length - 1]);
@@ -143,19 +149,16 @@ public class StringUtils {
 	public static String[] loadServerList() {
 
 		final Properties prop = new Properties();
+		final String file = "servers.properties";
 
-		try {
-			final String file = "servers.properties";
-			final InputStream resources = ClassLoader.getSystemResourceAsStream(file);
+		try (final InputStream resources = ClassLoader.getSystemResourceAsStream(file);) {
 			if (null == resources) {
 				throw new IOException("can't find " + file);
 			}
 			prop.load(resources);
 			final List<String> list = StringUtils.convertCommasToList(prop.getProperty("servers"));
 
-			final String[] listServers = list.toArray(new String[list.size()]);
-
-			return listServers;
+			return list.toArray(new String[list.size()]);
 		}
 		catch (final IOException io) {
 			io.printStackTrace();

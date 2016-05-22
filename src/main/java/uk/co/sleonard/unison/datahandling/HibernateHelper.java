@@ -1,3 +1,9 @@
+/**
+ * HibernateHelper
+ *
+ * @author Stephen <github@leonarduk.com>
+ * @since 22-May-2016
+ */
 package uk.co.sleonard.unison.datahandling;
 
 import java.io.File;
@@ -43,8 +49,8 @@ import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.gui.UNISoNController;
 import uk.co.sleonard.unison.gui.UNISoNException;
-import uk.co.sleonard.unison.input.LegacyLocationFinderImpl;
 import uk.co.sleonard.unison.input.LocationFinder;
+import uk.co.sleonard.unison.input.LocationFinderImpl;
 import uk.co.sleonard.unison.input.NNTPNewsGroup;
 import uk.co.sleonard.unison.input.NewsArticle;
 import uk.co.sleonard.unison.utils.StringUtils;
@@ -84,6 +90,11 @@ public class HibernateHelper {
 	/** The session factory. */
 	private static SessionFactory sessionFactory = null;
 
+	/** The controller. */
+	private final UNISoNController controller;
+
+	private final LocationFinder locationFinder;
+
 	/**
 	 * The main method.
 	 *
@@ -96,11 +107,6 @@ public class HibernateHelper {
 		DatabaseManagerSwing.main(HibernateHelper.GUI_ARGS);
 	}
 
-	/** The controller. */
-	private final UNISoNController controller;
-
-	private final LocationFinder locationFinder;
-
 	/**
 	 * Instantiates a new hibernate helper.
 	 *
@@ -109,7 +115,7 @@ public class HibernateHelper {
 	 */
 	public HibernateHelper(final UNISoNController controller) {
 		this.controller = controller;
-		this.locationFinder = new LegacyLocationFinderImpl();
+		this.locationFinder = new LocationFinderImpl();
 	}
 
 	/**

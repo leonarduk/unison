@@ -7,8 +7,8 @@ import uk.co.sleonard.unison.datahandling.DAO.EmailAddress;
 /**
  * The Class UsenetUserHelper.
  * 
- * @author
- * @since
+ * @author Stephen <github@leonarduk.com>
+ * @since v1.0.0
  *
  */
 public class UsenetUserHelper {

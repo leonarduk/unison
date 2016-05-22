@@ -24,7 +24,7 @@ import uk.co.sleonard.unison.utils.HttpDateObject;
  * Class to create a separate Thread for downloading messages.
  * 
  * @author Stephen <github@leonarduk.com>
- * @since
+ * @since v1.0.0
  *
  */
 public class FullDownloadWorker extends SwingWorker {

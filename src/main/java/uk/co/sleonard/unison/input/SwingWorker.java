@@ -16,8 +16,7 @@ import javax.swing.SwingUtilities;
  * Note that the API changed slightly in the 3rd version: You must now invoke start() on the
  * SwingWorker after creating it.
  * 
- * @author
- * @since
+ * @since v1.0.0
  * 
  */
 public abstract class SwingWorker extends Observable implements Runnable {

@@ -51,7 +51,7 @@ import uk.co.sleonard.unison.gui.UNISoNException;
  * format.
  * 
  * @author Chris Burdess <dog@gnu.org>
- * @since
+ * @since v1.0.0
  *
  */
 public class HttpDateObject extends DateFormat {

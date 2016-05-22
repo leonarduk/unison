@@ -23,7 +23,7 @@ import uk.co.sleonard.unison.gui.UNISoNController;
  * The Class UNISoNTabbedFrame.
  *
  * @author Stephen <github@leonarduk.com>
- * @since
+ * @since v1.0.0
  * 
  */
 public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {

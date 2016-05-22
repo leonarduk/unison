@@ -19,7 +19,7 @@ import java.util.zip.ZipOutputStream;
  * http://forum.java.sun.com/thread.jspa?threadID=250124&messageID=926638
  * 
  * @author Stephen <github@leonarduk.com>
- * @since
+ * @since v1.0.0
  *
  */
 public class StringUtils {

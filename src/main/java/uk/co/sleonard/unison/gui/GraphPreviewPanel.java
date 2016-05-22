@@ -50,7 +50,7 @@ import uk.co.sleonard.unison.output.Relationship;
  * </p>
  *
  * @author Tom Nelson - RABA Technologies
- * @since
+ * @since v1.0.0
  *
  */
 public class GraphPreviewPanel extends JPanel {

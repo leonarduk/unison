@@ -16,7 +16,7 @@ import uk.co.sleonard.unison.utils.StringUtils;
  * The Class NewsArticle.
  * 
  * @author Stephen <github@leonarduk.com>
- * @since
+ * @since v1.0.0
  *
  */
 public class NewsArticle implements Comparable<Object> {

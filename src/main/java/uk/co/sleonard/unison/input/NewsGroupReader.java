@@ -30,8 +30,8 @@ import uk.co.sleonard.unison.gui.UNISoNLogger;
 /**
  * The Class NewsGroupReader.
  * 
- * @author
- * @since
+ * @author Stephen <github@leonarduk.com>
+ * @since v1.0.0
  *
  */
 public class NewsGroupReader implements UNISoNLogger {

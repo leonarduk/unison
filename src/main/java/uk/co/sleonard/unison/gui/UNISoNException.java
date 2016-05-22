@@ -4,7 +4,7 @@ package uk.co.sleonard.unison.gui;
  * The Class UNISoNException.
  * 
  * @author Stephen <github@leonarduk.com>
- * @since
+ * @since v1.0.0
  *
  */
 public class UNISoNException extends Exception {

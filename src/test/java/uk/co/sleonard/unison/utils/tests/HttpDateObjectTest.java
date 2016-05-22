@@ -15,7 +15,11 @@ import uk.co.sleonard.unison.gui.UNISoNException;
 import uk.co.sleonard.unison.utils.HttpDateObject;
 
 /**
- * The Class HttpDateObject.
+ * The Class HttpDateObjectTest.
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since v1.0.0
+ *
  */
 public class HttpDateObjectTest {
 

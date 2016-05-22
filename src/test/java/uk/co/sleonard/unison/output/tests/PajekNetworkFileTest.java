@@ -22,6 +22,10 @@ import uk.co.sleonard.unison.output.Relationship;
 
 /**
  * The Class PajekNetworkFile.
+ * 
+ * @author Stephen <github@leonarduk.com>
+ * @since v1.0.0
+ *
  */
 public class PajekNetworkFileTest {
 
@@ -87,6 +91,9 @@ public class PajekNetworkFileTest {
 
 	/**
 	 * test createUndirectedLinks.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Test
 	public void testCreateUndirectedLinks() {
@@ -97,6 +104,9 @@ public class PajekNetworkFileTest {
 
 	/**
 	 * Test getFilename.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Test
 	public void testGetFilename() {
@@ -107,6 +117,9 @@ public class PajekNetworkFileTest {
 
 	/**
 	 * Test getFileSuffix.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Test
 	public void testGetFileSuffix() {
@@ -131,6 +144,9 @@ public class PajekNetworkFileTest {
 
 	/**
 	 * test writeData.
+	 * 
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * 
 	 */
 	@Test
 	public void testWriteData() {

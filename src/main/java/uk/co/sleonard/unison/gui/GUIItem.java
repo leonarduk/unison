@@ -15,8 +15,8 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
  *
  * @param <T>
  *            the generic type
- * @author
- * @since
+ * @author Stephen <github@leonarduk.com>
+ * @since v1.0.0
  */
 public class GUIItem<T> {
 

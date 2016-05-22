@@ -6,8 +6,8 @@ import java.util.Set;
 /**
  * Represents a message thread.
  * 
- * @author Generated 11-Nov-2007 17:31:30 by Hibernate Tools 3.2.0.b9
- * @since
+ * @author Hibernate Tools 3.2.0.b9
+ * @since Generated 11-Nov-2007 17:31:30
  *
  */
 public class Topic implements java.io.Serializable {

@@ -6,8 +6,8 @@ import java.util.Set;
 /**
  * Represents a news group e.g. soc.senior.issues
  * 
- * @author Generated 11-Nov-2007 17:31:30 by Hibernate Tools 3.2.0.b9
- * @since
+ * @author Hibernate Tools 3.2.0.b9
+ * @since Generated 11-Nov-2007 17:31:30
  *
  */
 public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {

@@ -15,7 +15,7 @@ import uk.co.sleonard.unison.gui.UNISoNException;
  * The Class PajekNetworkFile.
  * 
  * @author Stephen <github@leonarduk.com>
- * @since
+ * @since v1.0.0
  *
  */
 public class PajekNetworkFile {

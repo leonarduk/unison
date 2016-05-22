@@ -38,7 +38,7 @@ import uk.co.sleonard.unison.utils.StringUtils;
  * The Class PajekPanel.
  *
  * @author Stephen <github@leonarduk.com>
- * @since
+ * @since v1.0.0
  * 
  */
 public class PajekPanel extends javax.swing.JPanel implements Observer {

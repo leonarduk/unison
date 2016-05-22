@@ -15,28 +15,32 @@ import uk.co.sleonard.unison.input.NNTPNewsGroup;
 
 /**
  * The Class NNTPNewsGroupTest.
+ * 
+ * @author Elton <elton_12_nunes@hotmail.com>
+ * @since v1.0.0
+ *
  */
 @RunWith(value = PowerMockRunner.class)
 @PrepareForTest(value = { NewsgroupInfo.class })
 public class NNTPNewsGroupTest {
 
 	/** The nntp ng. */
-	private NNTPNewsGroup nntpNG;
+	private NNTPNewsGroup	nntpNG;
 
 	/** The expected article count. */
-	private int expectedArticleCount = 10;
+	private int				expectedArticleCount	= 10;
 
 	/** The expected first article. */
-	private int expectedFirstArticle = 2;
+	private int				expectedFirstArticle	= 2;
 
 	/** The expected last article. */
-	private int expectedLastArticle = 79;
+	private int				expectedLastArticle		= 79;
 
 	/** The expected newsgroup. */
-	private String expectedNewsgroup = "newsgroup";
+	private String			expectedNewsgroup		= "newsgroup";
 
 	/** The expected posting perm. */
-	private int expectedPostingPerm = 1;
+	private int				expectedPostingPerm		= 1;
 
 	/**
 	 * Setup.

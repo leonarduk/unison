@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -16,8 +17,6 @@ import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
-
-import com.ibm.icu.util.Calendar;
 
 import uk.co.sleonard.unison.datahandling.DataQuery;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;

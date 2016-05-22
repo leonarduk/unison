@@ -363,6 +363,7 @@
 			</plugin>
 		</plugins>
 	</reporting>
+	<!--  to get to sona type and onto maven central -->
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>

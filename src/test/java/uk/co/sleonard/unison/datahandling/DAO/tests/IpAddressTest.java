@@ -10,6 +10,10 @@ import uk.co.sleonard.unison.datahandling.DAO.Location;
 
 /**
  * The Class IpAddressTest.
+ * 
+ * @author Elton <elton_12_nunes@hotmail.com>
+ * @since v1.0.0
+ *
  */
 public class IpAddressTest {
 
@@ -48,7 +52,7 @@ public class IpAddressTest {
 		assertEquals(expected.getCity(), actual.getLocation().getCity());
 		actual = new IpAddress(expected);
 		assertEquals(expected.getCity(), actual.getLocation().getCity()); // Constructor
-																			// Test
+		                                                                  // Test
 	}
 
 }

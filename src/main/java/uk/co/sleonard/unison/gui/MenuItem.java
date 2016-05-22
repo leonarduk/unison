@@ -5,8 +5,8 @@ import javax.swing.JMenu;
 /**
  * The Interface MenuItem.
  * 
- * @author
- * @since
+ * @author Stephen <github@leonarduk.com>
+ * @since v1.0.0
  *
  */
 public interface MenuItem {

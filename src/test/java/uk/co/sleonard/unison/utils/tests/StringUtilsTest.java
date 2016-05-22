@@ -13,6 +13,10 @@ import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
  * The Class StringUtilsTest.
+ * 
+ * @author Elton <elton_12_nunes@hotmail.com>
+ * @since v1.0.0
+ *
  */
 public class StringUtilsTest {
 

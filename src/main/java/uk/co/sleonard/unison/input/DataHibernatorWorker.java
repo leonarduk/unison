@@ -23,7 +23,7 @@ import uk.co.sleonard.unison.gui.UNISoNLogger;
  * The Class DataHibernatorWorker.
  * 
  * @author Stephen <github@leonarduk.com>
- * @since
+ * @since v1.0.0
  *
  */
 public class DataHibernatorWorker extends SwingWorker {

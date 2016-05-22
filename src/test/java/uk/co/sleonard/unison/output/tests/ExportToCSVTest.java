@@ -20,6 +20,10 @@ import uk.co.sleonard.unison.output.ExportToCSV;
 
 /**
  * The Class ExportToCSV.
+ * 
+ * @author Elton <elton_12_nunes@hotmail.com>
+ * @since v1.0.0
+ *
  */
 public class ExportToCSVTest {
 

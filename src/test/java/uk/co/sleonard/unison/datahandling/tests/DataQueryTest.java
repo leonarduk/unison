@@ -17,6 +17,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
 
+import com.ibm.icu.util.Calendar;
+
 import uk.co.sleonard.unison.datahandling.DataQuery;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.DAO.Location;
@@ -24,16 +26,17 @@ import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 
-import com.ibm.icu.util.Calendar;
-
 /**
  * The Class DataQueryTest.
+ * 
+ * @author Elton <elton_12_nunes@hotmail.com>
+ * @since v1.0.0
+ *
  */
+public class DataQueryTest {
 
-public class DataQueryTest { 
-
-	private DataQuery dataQuery;
-	private HibernateHelper helper;
+	private DataQuery		dataQuery;
+	private HibernateHelper	helper;
 
 	/**
 	 * Setup.
@@ -56,8 +59,8 @@ public class DataQueryTest {
 		boolean filtered = true;
 		Vector locations = new Vector<Location>();
 		locations.addElement(new Location());
-		when(this.helper.runQuery(Matchers.anyString(), Matchers.any(Session.class), 
-				Matchers.<Class<Location>>any())).thenReturn(locations);
+		when(this.helper.runQuery(Matchers.anyString(), Matchers.any(Session.class),
+		        Matchers.<Class<Location>> any())).thenReturn(locations);
 		Vector<Location> actual = this.dataQuery.getLocations(countries, session, filtered);
 		Vector expected = locations;
 		assertEquals(expected, actual);
@@ -87,13 +90,13 @@ public class DataQueryTest {
 		when(Integer.valueOf(message.getId())).thenReturn(Integer.valueOf(1));
 		messages.add(message);
 		assertEquals("'1'", this.dataQuery.getMessageIdsString(messages).toString()); // 1
-																					// object
+		                                                                              // object
 		messages.add(message);
 		String test = this.dataQuery.getMessageIdsString(messages).toString();
 		assertEquals(Boolean.valueOf(true), Boolean.valueOf(test.contains(","))); // 2 objects
 		assertNotNull(this.dataQuery.getMessageIdsString(null)); // If null
 		assertNotNull(this.dataQuery.getMessageIdsString(messagesEmpty)); // If size
-																		// <= 0
+		                                                                  // <= 0
 
 	}
 
@@ -115,24 +118,27 @@ public class DataQueryTest {
 		countries.add("Brazil");
 		Session session = mock(Session.class);
 		boolean filtered = true;
-		when(this.helper.runQuery(Matchers.anyString(), Matchers.any(Session.class), Matchers.<Class<Message>>any())).thenReturn(messages);
-		Vector<Message> actual = this.dataQuery.getMessages(messages, users, session, date, date, filtered, news, countries); // If
-																															// filtered
-																															// is
-																															// true
+		when(this.helper.runQuery(Matchers.anyString(), Matchers.any(Session.class),
+		        Matchers.<Class<Message>> any())).thenReturn(messages);
+		Vector<Message> actual = this.dataQuery.getMessages(messages, users, session, date, date,
+		        filtered, news, countries); // If
+		                                    // filtered
+		                                    // is
+		                                    // true
 		Vector expected = messages;
 		assertEquals(expected, actual);
 		filtered = false;
-		actual = this.dataQuery.getMessages(messages, users, session, date, date, filtered, news, countries); // If
-																											// filtered
-																											// is
-																											// false
+		actual = this.dataQuery.getMessages(messages, users, session, date, date, filtered, news,
+		        countries); // If
+		                    // filtered
+		                    // is
+		                    // false
 		assertEquals(expected, actual);
 		actual = this.dataQuery.getMessages(null, null, session, null, null, filtered, null, null); // If
-																								// all
-																								// parameters
-																								// is
-																								// null
+		// all
+		// parameters
+		// is
+		// null
 		assertEquals(expected, actual);
 	}
 
@@ -159,13 +165,13 @@ public class DataQueryTest {
 		when(Integer.valueOf(user.getId())).thenReturn(Integer.valueOf(1));
 		users.add(user);
 		assertEquals("'1'", this.dataQuery.getUsenetUserIdsString(users).toString()); // 1
-																					// object
+		                                                                              // object
 		users.add(user);
 		String test = this.dataQuery.getUsenetUserIdsString(users).toString();
 		assertEquals(Boolean.valueOf(true), Boolean.valueOf(test.contains(","))); // 2 objects
 		assertNotNull(this.dataQuery.getUsenetUserIdsString(null)); // If null
 		assertNotNull(this.dataQuery.getUsenetUserIdsString(usersEmpty)); // If size
-																		// <= 0
+		                                                                  // <= 0
 	}
 
 }

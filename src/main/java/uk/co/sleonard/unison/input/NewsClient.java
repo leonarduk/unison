@@ -28,8 +28,8 @@ import uk.co.sleonard.unison.gui.UNISoNException;
 /**
  * The Class NewsClient.
  * 
- * @author
- * @since
+ * @author Stephen <github@leonarduk.com>
+ * @since v1.0.0
  *
  */
 public class NewsClient extends NNTPClient {

@@ -24,8 +24,8 @@ import uk.co.sleonard.unison.gui.UNISoNController;
 /**
  * The Class DataQuery.
  * 
- * @author
- * @since
+ * @author Stephen <github@leonarduk.com>
+ * @since v1.0.0
  *
  */
 public class DataQuery {

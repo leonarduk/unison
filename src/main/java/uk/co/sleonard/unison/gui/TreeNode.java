@@ -5,8 +5,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 /**
  * The Class TreeNode.
  * 
- * @author
- * @since
+ * @author Stephen <github@leonarduk.com>
+ * @since v1.0.0
  *
  */
 public class TreeNode extends DefaultMutableTreeNode {

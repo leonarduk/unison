@@ -140,7 +140,7 @@ public class DataHibernatorWorker extends SwingWorker {
 				DataHibernatorWorker.log.alert("Download complete");
 			}
 		}
-		catch (final InterruptedException e) {
+		catch (@SuppressWarnings("unused") final InterruptedException e) {
 			return "Interrupted";
 		}
 		catch (final UNISoNException e) {

@@ -39,73 +39,73 @@ import uk.co.sleonard.unison.utils.StringUtils;
  *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
- * 
+ *
  */
 public class PajekPanel extends javax.swing.JPanel implements Observer {
 
 	/** The Constant PAJEK_NETWORK_FILE_SUFFIX. */
-	private static final String			PAJEK_NETWORK_FILE_SUFFIX	= ".net";
+	private static final String PAJEK_NETWORK_FILE_SUFFIX = ".net";
 
 	/** The Constant serialVersionUID. */
-	private static final long			serialVersionUID			= 84102596787648747L;
+	private static final long serialVersionUID = 84102596787648747L;
 
 	/** The pajek file. */
-	private PajekNetworkFile			pajekFile;
+	private PajekNetworkFile pajekFile;
 
 	/** The frame. */
-	private JFrame						frame;
+	private JFrame frame;
 
 	/** The csv exporter. */
-	private final ExportToCSV			csvExporter					= new ExportToCSV();
+	private final ExportToCSV csvExporter = new ExportToCSV();
 
 	/** The session. */
-	private Session						session;
+	private Session session;
 
 	/** The all radio. */
 	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JRadioButton	allRadio;
+	private javax.swing.JRadioButton allRadio;
 
 	/** The creator radio. */
-	private javax.swing.JRadioButton	creatorRadio;
+	private javax.swing.JRadioButton creatorRadio;
 
 	/** The csv button. */
-	private javax.swing.JButton			csvButton;
+	private javax.swing.JButton csvButton;
 
 	/** The file preview area. */
-	private javax.swing.JTextArea		filePreviewArea;
+	private javax.swing.JTextArea filePreviewArea;
 
 	/** The file preview scroll pane. */
-	private javax.swing.JScrollPane		filePreviewScrollPane;
+	private javax.swing.JScrollPane filePreviewScrollPane;
 
 	/** The graph scroll pane. */
-	private javax.swing.JScrollPane		graphScrollPane;
+	private javax.swing.JScrollPane graphScrollPane;
 
 	/** The inc missing check. */
-	private javax.swing.JCheckBox		incMissingCheck;
+	private javax.swing.JCheckBox incMissingCheck;
 
 	/** The matrix scroll pane. */
-	private javax.swing.JScrollPane		matrixScrollPane;
+	private javax.swing.JScrollPane matrixScrollPane;
 
 	/** The matrix type group. */
-	private javax.swing.ButtonGroup		matrixTypeGroup;
+	private javax.swing.ButtonGroup matrixTypeGroup;
 
 	/** The pajek tab pane. */
-	private javax.swing.JTabbedPane		pajekTabPane;
+	private javax.swing.JTabbedPane pajekTabPane;
 
 	/** The preview button. */
-	private javax.swing.JButton			previewButton;
+	private javax.swing.JButton previewButton;
 
 	/** The previous radio. */
-	private javax.swing.JRadioButton	previousRadio;
+	private javax.swing.JRadioButton previousRadio;
 
 	/** The results matrix table. */
-	private javax.swing.JTable			resultsMatrixTable;
+	private javax.swing.JTable resultsMatrixTable;
 
 	/** The save button. */
-	private javax.swing.JButton			saveButton;
+	private javax.swing.JButton saveButton;
 
 	/** The pajek header. */
-	private final Vector<String>		pajekHeader;
+	private final Vector<String> pajekHeader;
 
 	/**
 	 * The main method.
@@ -134,7 +134,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 	 *            the frame
 	 */
 	public PajekPanel(final JFrame frame) {
-		this.pajekHeader = new Vector<String>(
+		this.pajekHeader = new Vector<>(
 		        Arrays.asList(new String[] { "Subject", "Date", "FROM", "TO" }));
 		try {
 
@@ -149,7 +149,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 			// TODO create file to put the location as cluster (use country)
 
 			this.resultsMatrixTable.setEnabled(false);
-			this.filePreviewArea.setEditable(false);
+			this.getFilePreviewArea().setEditable(false);
 			this.previousRadio.setSelected(true);
 			this.refreshPajekMatrixTable();
 		}
@@ -178,7 +178,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 			toText = originalMsg.getPoster().getName() + " [" + originalMsg.getPoster().getEmail()
 			        + "]";
 		}
-		final Vector<String> row = new Vector<String>();
+		final Vector<String> row = new Vector<>();
 		row.add(currentMsg.getSubject());
 		row.add("" + currentMsg.getDateCreated());
 
@@ -210,6 +210,10 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 		}
 	}// GEN-LAST:event_csvButtonActionPerformed
 
+	public javax.swing.JTextArea getFilePreviewArea() {
+		return this.filePreviewArea;
+	}
+
 	/**
 	 * Gets the latest pajek matrix vector.
 	 *
@@ -218,7 +222,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 	private Vector<Vector<String>> getLatestPajekMatrixVector() {
 		Vector<Vector<String>> tableData;
 		final List<Message> messages = UNISoNController.getInstance().getMessagesFilter();
-		final HashMap<String, Message> msgMap = new HashMap<String, Message>();
+		final HashMap<String, Message> msgMap = new HashMap<>();
 
 		// Load ALL messages into map so can get complete referemce
 		final Vector<Message> allMessages = DataQuery.getInstance().getMessages(null, null,
@@ -228,7 +232,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 			msgMap.put(msg.getUsenetMessageID(), msg);
 		}
 
-		tableData = new Vector<Vector<String>>();
+		tableData = new Vector<>();
 		int rowIndex = 1;
 		for (final ListIterator<Message> msgIter = messages.listIterator(); msgIter.hasNext();) {
 			final Message next = msgIter.next();
@@ -244,7 +248,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 				e.printStackTrace();
 				size = 0;
 			}
-			if (null != refMsgs && size > 0) {
+			if ((null != refMsgs) && (size > 0)) {
 				final List<String> msgList = StringUtils
 				        .convertStringToList(next.getReferencedMessages(), " ");
 
@@ -291,7 +295,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 		Message message = msgMap.get(key);
 
 		// create dummy message for missing ones
-		if (null != key && key.contains("@") && null == message) {
+		if ((null != key) && key.contains("@") && (null == message)) {
 			// This message and poster is not saved to the database
 			final UsenetUser poster = new UsenetUser("MISSING", key, "UNKNOWN", null, null);
 			message = new Message(null, key, currentMessage.getSubject(), poster,
@@ -307,7 +311,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 	 * @param evt
 	 *            the evt
 	 */
-	private void incMissingCheckAncestorAdded(final javax.swing.event.AncestorEvent evt) {// GEN-FIRST:event_incMissingCheckAncestorAdded
+	void incMissingCheckAncestorAdded(final javax.swing.event.AncestorEvent evt) {// GEN-FIRST:event_incMissingCheckAncestorAdded
 		// TODO add your handling code here:
 	}// GEN-LAST:event_incMissingCheckAncestorAdded
 
@@ -317,7 +321,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 	 * @param evt
 	 *            the evt
 	 */
-	private void incMissingCheckAncestorMoved(final javax.swing.event.AncestorEvent evt) {// GEN-FIRST:event_incMissingCheckAncestorMoved
+	void incMissingCheckAncestorMoved(final javax.swing.event.AncestorEvent evt) {// GEN-FIRST:event_incMissingCheckAncestorMoved
 		// TODO add your handling code here:
 	}// GEN-LAST:event_incMissingCheckAncestorMoved
 
@@ -345,7 +349,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 		this.matrixScrollPane = new javax.swing.JScrollPane();
 		this.resultsMatrixTable = new javax.swing.JTable();
 		this.filePreviewScrollPane = new javax.swing.JScrollPane();
-		this.filePreviewArea = new javax.swing.JTextArea();
+		this.setFilePreviewArea(new javax.swing.JTextArea());
 		this.csvButton = new javax.swing.JButton();
 
 		this.incMissingCheck.setText("Include Missing Messages");
@@ -367,6 +371,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 
 			@Override
 			public void ancestorRemoved(final javax.swing.event.AncestorEvent evt) {
+				//
 			}
 		});
 
@@ -411,9 +416,9 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 
 		this.pajekTabPane.addTab("Matrix", this.matrixScrollPane);
 
-		this.filePreviewArea.setColumns(20);
-		this.filePreviewArea.setRows(5);
-		this.filePreviewScrollPane.setViewportView(this.filePreviewArea);
+		this.getFilePreviewArea().setColumns(20);
+		this.getFilePreviewArea().setRows(5);
+		this.filePreviewScrollPane.setViewportView(this.getFilePreviewArea());
 
 		this.pajekTabPane.addTab("Pajek File Preview", this.filePreviewScrollPane);
 
@@ -498,7 +503,6 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	@SuppressWarnings("unchecked")
 	private void refreshPajekMatrixTable() throws UNISoNException {
 		final DefaultTableModel model = (DefaultTableModel) this.resultsMatrixTable.getModel();
 		model.setDataVector(this.getLatestPajekMatrixVector(), this.pajekHeader);
@@ -515,13 +519,13 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 		this.graphScrollPane.setSize(this.graphScrollPane.getMaximumSize());
 
 		// clear down for next set of data
-		this.filePreviewArea.setText("");
+		this.getFilePreviewArea().setText("");
 		final OutputStream output = new OutputStream() {
 
 			@Override
 			public void write(final int b) throws IOException {
 				final char letter = (char) b;
-				PajekPanel.this.filePreviewArea.append("" + letter);
+				PajekPanel.this.getFilePreviewArea().append("" + letter);
 			}
 
 		};
@@ -551,7 +555,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 		file.show(); // Blocks
 		String curFile = null;
 		curFile = file.getFile();
-		if (curFile != null && !curFile.equals(initialValue)) {
+		if ((curFile != null) && !curFile.equals(initialValue)) {
 
 			if (!curFile.endsWith(PajekPanel.PAJEK_NETWORK_FILE_SUFFIX)) {
 				curFile += PajekPanel.PAJEK_NETWORK_FILE_SUFFIX;
@@ -569,6 +573,12 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 
 	}// GEN-LAST:event_saveButtonActionPerformed
 
+	// End of variables declaration//GEN-END:variables
+
+	public void setFilePreviewArea(final javax.swing.JTextArea filePreviewArea) {
+		this.filePreviewArea = filePreviewArea;
+	}
+
 	/**
 	 * Show status.
 	 *
@@ -578,8 +588,6 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 	private void showStatus(final String string) {
 		UNISoNController.getInstance().showStatus(string);
 	}
-
-	// End of variables declaration//GEN-END:variables
 
 	/*
 	 * (non-Javadoc)

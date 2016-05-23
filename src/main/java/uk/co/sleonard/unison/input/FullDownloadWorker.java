@@ -1,6 +1,6 @@
 /**
  * FullDownloadWorker
- * 
+ *
  * @author Stephen <github@leonarduk.com>
  * @since 22-May-2016
  */
@@ -147,7 +147,7 @@ public class FullDownloadWorker extends SwingWorker {
 				}
 			}
 		}
-		catch (final InterruptedException e) {
+		catch (@SuppressWarnings("unused") final InterruptedException e) {
 			return "Interrupted";
 		}
 		catch (final UNISoNException e) {

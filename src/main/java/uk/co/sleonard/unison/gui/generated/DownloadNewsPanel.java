@@ -28,7 +28,7 @@ import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
  * The Class DownloadNewsPanel.
- * 
+ *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  *
@@ -37,76 +37,76 @@ import uk.co.sleonard.unison.utils.StringUtils;
 public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogger, Observer {
 
 	/** The Constant serialVersionUID. */
-	private static final long					serialVersionUID	= 6581138636992116397L;
+	private static final long serialVersionUID = 6581138636992116397L;
 
 	/** The available newsgroups. */
 	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JList<NNTPNewsGroup>	availableNewsgroups;
+	private javax.swing.JList<NNTPNewsGroup> availableNewsgroups;
 
 	/** The cancel button. */
-	private javax.swing.JButton					cancelButton;
+	private javax.swing.JButton cancelButton;
 
 	/** The download button. */
-	private javax.swing.JButton					downloadButton;
+	private javax.swing.JButton downloadButton;
 
 	/** The download progress bar. */
-	private javax.swing.JProgressBar			downloadProgressBar;
+	private javax.swing.JProgressBar downloadProgressBar;
 
 	/** The download progress label. */
-	private javax.swing.JLabel					downloadProgressLabel;
+	private javax.swing.JLabel downloadProgressLabel;
 
 	/** The find button. */
-	private javax.swing.JButton					findButton;
+	private javax.swing.JButton findButton;
 
 	/** The from date field. */
-	private javax.swing.JTextField				fromDateField;
+	private javax.swing.JTextField fromDateField;
 
 	/** The from date label. */
-	private javax.swing.JLabel					fromDateLabel;
+	private javax.swing.JLabel fromDateLabel;
 
 	/** The get location check. */
-	private javax.swing.JCheckBox				getLocationCheck;
+	private javax.swing.JCheckBox getLocationCheck;
 
 	/** The get text check. */
-	private javax.swing.JCheckBox				getTextCheck;
+	private javax.swing.JCheckBox getTextCheck;
 
 	/** The host combo. */
-	private javax.swing.JComboBox				hostCombo;
+	private javax.swing.JComboBox hostCombo;
 
 	/** The host label. */
-	private javax.swing.JLabel					hostLabel;
+	private javax.swing.JLabel hostLabel;
 
 	/** The j scroll pane1. */
-	private javax.swing.JScrollPane				jScrollPane1;
+	private javax.swing.JScrollPane jScrollPane1;
 
 	/** The j scroll pane3. */
-	private javax.swing.JScrollPane				jScrollPane3;
+	private javax.swing.JScrollPane jScrollPane3;
 
 	/** The newsgroup field. */
-	private javax.swing.JTextField				newsgroupField;
+	private javax.swing.JTextField newsgroupField;
 
 	/** The newsgroup label. */
-	private javax.swing.JLabel					newsgroupLabel;
+	private javax.swing.JLabel newsgroupLabel;
 
 	/** The notes area. */
-	private javax.swing.JTextArea				notesArea;
+	private javax.swing.JTextArea notesArea;
 
 	/** The pause button. */
-	private javax.swing.JButton					pauseButton;
+	private javax.swing.JButton pauseButton;
 
 	/** The to date field. */
-	private javax.swing.JTextField				toDateField;
+	private javax.swing.JTextField	toDateField;
 	/** The to date label. */
-	private javax.swing.JLabel					toDateLabel;
+	private javax.swing.JLabel		toDateLabel;
 
 	/** The available groups. */
-	private Set<NNTPNewsGroup>					availableGroups;
+	private Set<NNTPNewsGroup> availableGroups;
 
 	/** The parser. */
-	HttpDateObject								parser				= HttpDateObject.getParser();
+	HttpDateObject parser = HttpDateObject.getParser();
 
 	/** The controller. */
-	private final UNISoNController				controller;
+	private final UNISoNController controller;
 
 	/**
 	 * The main method.
@@ -156,7 +156,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see uk.co.sleonard.unison.gui.UNISoNLogger#alert(java.lang.String)
 	 */
 	@Override
@@ -196,7 +196,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 		this.downloadEnabled(false);
 
 		final Object[] items = this.availableNewsgroups.getSelectedValues();
-		final Set<NNTPNewsGroup> groups = new HashSet<NNTPNewsGroup>();
+		final Set<NNTPNewsGroup> groups = new HashSet<>();
 		for (final Object item : items) {
 			groups.add((NNTPNewsGroup) item);
 		}
@@ -220,7 +220,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 
 				this.log("Done.");
 			}
-			catch (final UNISoNException e) {
+			catch (@SuppressWarnings("unused") final UNISoNException e) {
 				this.alert("Failed to download. Check your internet connection");
 				this.downloadEnabled(true);
 			}
@@ -270,7 +270,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 			catch (final UNISoNException e) {
 				this.alert("Problem downloading: " + e.getMessage());
 			}
-			if (null == this.availableGroups || this.availableGroups.size() == 0) {
+			if ((null == this.availableGroups) || (this.availableGroups.size() == 0)) {
 				this.alert("No groups found for string : " + group + " on "
 				        + this.controller.getNntpHost() + ".\nPerhaps another host?");
 
@@ -289,7 +289,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 	 * @param evt
 	 *            the evt
 	 */
-	private void formMousePressed(final java.awt.event.MouseEvent evt) {// GEN-FIRST:event_formMousePressed
+	void formMousePressed(final java.awt.event.MouseEvent evt) {// GEN-FIRST:event_formMousePressed
 		// TODO add your handling code here:
 	}// GEN-LAST:event_formMousePressed
 
@@ -299,10 +299,10 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 	 * @return the available groups model
 	 */
 	private ListModel<NNTPNewsGroup> getAvailableGroupsModel() {
-		final DefaultListModel<NNTPNewsGroup> model = new DefaultListModel<NNTPNewsGroup>();
+		final DefaultListModel<NNTPNewsGroup> model = new DefaultListModel<>();
 
 		if (null != this.availableGroups) {
-			for (NNTPNewsGroup next : this.availableGroups) {
+			for (final NNTPNewsGroup next : this.availableGroups) {
 				model.addElement(next);
 			}
 		}
@@ -338,7 +338,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 		this.getLocationCheck = new javax.swing.JCheckBox();
 		this.hostCombo = new javax.swing.JComboBox();
 		this.jScrollPane1 = new javax.swing.JScrollPane();
-		this.availableNewsgroups = new javax.swing.JList<NNTPNewsGroup>();
+		this.availableNewsgroups = new javax.swing.JList<>();
 
 		this.addMouseListener(new java.awt.event.MouseAdapter() {
 			@Override
@@ -568,7 +568,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see uk.co.sleonard.unison.gui.UNISoNLogger#log(java.lang.String)
 	 */
 	@Override
@@ -596,7 +596,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
 	 */
 	@Override

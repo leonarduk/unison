@@ -1,3 +1,9 @@
+/**
+ * HeaderDownloadWorker
+ *
+ * @author Stephen <github@leonarduk.com>
+ * @since 22-May-2016
+ */
 package uk.co.sleonard.unison.input;
 
 import java.io.BufferedReader;
@@ -21,7 +27,7 @@ import uk.co.sleonard.unison.utils.HttpDateObject;
 
 /**
  * Class to create a separate Thread for downloading messages.
- * 
+ *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  *
@@ -29,53 +35,49 @@ import uk.co.sleonard.unison.utils.HttpDateObject;
 public class HeaderDownloadWorker extends SwingWorker {
 
 	/** The logger. */
-	private static Logger	logger		= Logger.getLogger(HeaderDownloadWorker.class);
-
-	// private static final int MAX_DEPTH = 0;
+	private static Logger logger = Logger.getLogger(HeaderDownloadWorker.class);
 
 	/** The end index. */
-	private int				endIndex;
-
-	// private int messageCount;
+	private int endIndex;
 
 	/** The news reader. */
-	private NewsGroupReader	newsReader	= null;
+	private NewsGroupReader newsReader = null;
 
 	/** The start index. */
-	private int				startIndex;
+	private int startIndex;
 
 	/** The newsgroup. */
-	private String			newsgroup;
+	private String newsgroup;
 
 	/** The from date. */
-	private Date			fromDate;
+	private Date fromDate;
 
 	/** The to date. */
-	private Date			toDate;
+	private Date toDate;
 
 	/** The log. */
-	private UNISoNLogger	log;
+	private UNISoNLogger log;
 
 	/** The downloading. */
-	private boolean			downloading	= false;
+	private boolean downloading = false;
 
 	/** The running. */
-	private boolean			running		= true;
+	private boolean running = true;
 
 	/** The log tally. */
-	private int				logTally	= 0;
+	private int logTally = 0;
 
 	/** The index. */
-	private int				index		= 0;
+	private int index = 0;
 
 	/** The skipped. */
-	private int				skipped		= 0;
+	private int skipped = 0;
 
 	/** The kept. */
-	private int				kept		= 0;
+	private int kept = 0;
 
 	/** The mode. */
-	private DownloadMode	mode;
+	private DownloadMode mode;
 
 	/**
 	 * Instantiates a new header download worker.
@@ -137,7 +139,6 @@ public class HeaderDownloadWorker extends SwingWorker {
 			}
 		}
 		catch (final IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		this.notifyObservers();
@@ -301,7 +302,6 @@ public class HeaderDownloadWorker extends SwingWorker {
 						Thread.sleep(1000);
 					}
 					catch (final InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -380,9 +380,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	@SuppressWarnings("deprecation")
 	public boolean storeArticleInfo() throws UNISoNException {
-		Reader reader = null;
 		try {
 			this.logTally = 0;
 			this.index = 0;
@@ -391,10 +389,11 @@ public class HeaderDownloadWorker extends SwingWorker {
 
 			// fetch back 500 messages at a time
 			for (int i = this.startIndex; i < this.endIndex; i += 500) {
-				reader = this.newsReader.client.retrieveArticleInfo(i, i + 500);
-				this.queueMessages(reader);
+				try (final Reader reader = this.newsReader.client.retrieveArticleInfo(
+				        Long.valueOf(i).longValue(), Long.valueOf(i + 500).longValue());) {
+					this.queueMessages(reader);
+				}
 			}
-
 		}
 		catch (final IOException e1) {
 			this.log.alert("ERROR: " + e1);

@@ -1,26 +1,10 @@
-package uk.co.sleonard.unison.input;
-
 /**
- * NewsGroupReader - NNTP client
+ * NewsGroupReader
  *
- * @author Steve Leonard Copyright (C) 2007 This program is free software; you can redistribute it
- *         and/or modify it under the terms of the GNU General Public License as published by the
- *         Free Software Foundation; either version 2 of the License, or (at your option) any later
- *         version.
- *
- *         This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- *         without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *         See the GNU General Public License for more details.
- *
- *         You should have received a copy of the GNU General Public License along with this
- *         program; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
- *         Boston, MA 02111-1307 USA
- *
+ * @author Stephen <github@leonarduk.com>
+ * @since 22-May-2016
  */
-
-import java.util.ArrayList;
-
-import javax.mail.Message;
+package uk.co.sleonard.unison.input;
 
 import org.apache.log4j.Logger;
 
@@ -29,33 +13,26 @@ import uk.co.sleonard.unison.gui.UNISoNLogger;
 
 /**
  * The Class NewsGroupReader.
- * 
+ *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  *
  */
 public class NewsGroupReader implements UNISoNLogger {
-	// public Message[] getMessages() throws MessagingException {
-	// return folder.getMessages();
 	/** The logger. */
-	// }
-	private static Logger	logger		= Logger.getLogger("NewsGroupReader");
+	private static Logger logger = Logger.getLogger("NewsGroupReader");
 
 	/** The client. */
-	public NewsClient		client;
+	public NewsClient client;
 
 	/** The message count. */
-	private int				messageCount;
-
-	/** The msgs. */
-	@Deprecated
-	ArrayList<Message>		msgs;
+	private int messageCount;
 
 	/** The msgs skipped. */
-	int						msgsSkipped	= 0;
+	int msgsSkipped = 0;
 
 	/** The msgs stored. */
-	int						msgsStored	= 0;
+	int msgsStored = 0;
 
 	/**
 	 * The main method.
@@ -217,7 +194,7 @@ public class NewsGroupReader implements UNISoNLogger {
 		final int i = this.getMessagesSkipped() + this.getMessagesStored();
 
 		if (this.getMessageCount() > 0) {
-			final int progress = i * 100 / this.getMessageCount();
+			final int progress = (i * 100) / this.getMessageCount();
 			UNISoNController.getInstance().setDownloadingState(progress);
 		}
 

@@ -344,7 +344,8 @@ public class HeaderDownloadWorker extends SwingWorker {
 					this.skipped++;
 				}
 				this.index++;
-				if (++this.logTally == 100) {
+				this.logTally++;
+				if (this.logTally == 100) {
 					int size = queue.size();
 					if (!this.mode.equals(DownloadMode.BASIC)) {
 						size += FullDownloadWorker.queueSize();

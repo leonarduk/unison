@@ -159,6 +159,8 @@ public class UNISoNCLI implements UNISoNLogger {
 			case QUICKDOWNLOAD:
 				this.quickDownload(arg, fromDate, toDate, host);
 				break;
+			default:
+				break;
 		}
 	}
 

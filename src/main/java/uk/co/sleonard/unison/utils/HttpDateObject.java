@@ -97,7 +97,6 @@ public class HttpDateObject extends DateFormat {
 			date = parser.parse(dateString);
 		}
 		catch (final ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println("Was : " + dateString + " now " + date);
@@ -397,10 +396,10 @@ public class HttpDateObject extends DateFormat {
 
 			return this.calendar.getTime();
 		}
-		catch (@SuppressWarnings("unused") final NumberFormatException e) {
+		catch (final NumberFormatException e) {
 			pos.setErrorIndex(Math.max(start, end));
 		}
-		catch (@SuppressWarnings("unused") final StringIndexOutOfBoundsException e) {
+		catch (final StringIndexOutOfBoundsException e) {
 			pos.setErrorIndex(Math.max(start, end));
 		}
 		return null;
@@ -436,7 +435,6 @@ public class HttpDateObject extends DateFormat {
 				return fmt.parse(text);
 			}
 			catch (final ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
 			}

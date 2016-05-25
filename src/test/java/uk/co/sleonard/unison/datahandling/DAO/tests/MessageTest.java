@@ -27,6 +27,41 @@ import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 public class MessageTest {
 
 	/**
+	 * Test Constructors
+	 */
+	@Test
+	public void testConstructors() {
+		Message actual = null;
+		Date expected1 = Calendar.getInstance().getTime();
+		String expected2 = "usenetMessage";
+		String expected3 = "subject";
+		UsenetUser expected4 = new UsenetUser();
+		Topic expected5 = new Topic();
+		Set<NewsGroup> expected6 = new HashSet<>();
+		String expected7 = "refMess";
+		byte[] expected8 = { 10, 10, 10 };
+		actual = new Message(expected1, expected2, expected3, expected4, expected5, expected6,
+		        expected7, expected8);
+
+		assertEquals(expected1, actual.getDateCreated());
+		assertEquals(expected2, actual.getUsenetMessageID());
+		assertEquals(expected3, actual.getSubject());
+		assertEquals(expected4, actual.getPoster());
+		assertEquals(expected5, actual.getTopic());
+		assertEquals(expected6, actual.getNewsgroups());
+		assertEquals(expected7, actual.getReferencedMessages());
+		assertArrayEquals(expected8, actual.getMessageBody());
+
+		actual = new Message(expected1, expected2, expected3, expected4, expected5, expected8);
+		assertEquals(expected1, actual.getDateCreated());
+		assertEquals(expected2, actual.getUsenetMessageID());
+		assertEquals(expected3, actual.getSubject());
+		assertEquals(expected4, actual.getPoster());
+		assertEquals(expected5, actual.getTopic());
+		assertArrayEquals(expected8, actual.getMessageBody());
+	}
+
+	/**
 	 * Test toString.
 	 */
 	@Test
@@ -141,6 +176,14 @@ public class MessageTest {
 		assertNull(actual.getUsenetMessageID());
 		actual.setUsenetMessageID(expected);
 		assertEquals(expected, actual.getUsenetMessageID());
+	}
+
+	/**
+	 * Test hashCode
+	 */
+	@Test
+	public void testHashCode() {
+		assertEquals(0, new Message().hashCode());
 	}
 
 }

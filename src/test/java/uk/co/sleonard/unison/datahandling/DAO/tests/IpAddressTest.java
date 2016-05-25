@@ -55,4 +55,12 @@ public class IpAddressTest {
 		                                                                  // Test
 	}
 
+	/**
+	 * Test hashCode
+	 */
+	@Test
+	public void testHashCode() {
+		assertEquals(0, new IpAddress().hashCode());
+	}
+
 }

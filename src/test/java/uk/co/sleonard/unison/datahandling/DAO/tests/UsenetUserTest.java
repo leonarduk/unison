@@ -18,6 +18,33 @@ import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 public class UsenetUserTest {
 
 	/**
+	 * Test Constructor
+	 */
+	@Test
+	public void testConstructor() {
+		UsenetUser actual = null;
+		String expected = "John";
+		String expected2 = "john@java.com";
+		String expected3 = "127.0.0.1";
+		String expected4 = "Programming";
+		Location expected5 = new Location();
+		actual = new UsenetUser(expected, expected2, expected3, expected4, expected5);
+		assertEquals(expected, actual.getName());
+		assertEquals(expected2, actual.getEmail());
+		assertEquals(expected3, actual.getIpaddress());
+		assertEquals(expected4, actual.getGender());
+		assertEquals(expected5, actual.getLocation());
+	}
+
+	/**
+	 * Test hashCode
+	 */
+	@Test
+	public void testHashCode() {
+		assertEquals(0, new UsenetUser().hashCode());
+	}
+
+	/**
 	 * Test toString.
 	 */
 	@Test

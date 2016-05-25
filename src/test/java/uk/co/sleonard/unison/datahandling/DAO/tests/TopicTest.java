@@ -21,6 +21,28 @@ import uk.co.sleonard.unison.datahandling.DAO.Topic;
 public class TopicTest {
 
 	/**
+	 * Test Constructor
+	 */
+	@Test
+	public void testConstructor() {
+		Topic actual = null;
+		String expected = "subject";
+		Set<NewsGroup> expected2 = new HashSet<>();
+
+		actual = new Topic(expected, expected2);
+		assertEquals(expected, actual.getSubject());
+		assertEquals(expected2, actual.getNewsgroups());
+	}
+
+	/**
+	 * Test hashCode
+	 */
+	@Test
+	public void testHashCode() {
+		assertEquals(0, new Topic().hashCode());
+	}
+
+	/**
 	 * Test toString.
 	 */
 	@Test

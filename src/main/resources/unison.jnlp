@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="http://unison.sleonard.co.uk/downloads/jnlp" href="">
+    <information>
+        <title>Unison - Usenet incorporates social networks
+        </title>
+        <vendor>Steve Leonard
+        </vendor>
+    </information>
+    <resources>
+        <!-- Application Resources -->
+            <jar href="unison.jar" main="true" />
+    </resources>
+    <application-desc main-class="uk.co.sleonard.unison.gui.generated.DownloadNewsPanel">
+        <!-- Application Arguments -->
+    </application-desc>
+    <security><all-permissions/></security>
+</jnlp>

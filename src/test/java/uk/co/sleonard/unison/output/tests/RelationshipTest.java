@@ -94,4 +94,24 @@ public class RelationshipTest {
 		assertEquals(expected, actual.toString());
 	}
 
+	/**
+	 * test HashCode
+	 */
+	@Test
+	public void testHashCode() {
+		Relationship test = new Relationship(10, 20);
+		assertEquals(31, test.hashCode());
+		test.makeUndirected();
+		assertEquals(30, test.hashCode());
+	}
+
+	/**
+	 * test Equals
+	 */
+	@Test
+	public void testEquals() {
+		assertEquals(new Relationship(10, 10), new Relationship(10, 10));
+		assertFalse(new Relationship(10, 10).equals(new Object()));
+	}
+
 }

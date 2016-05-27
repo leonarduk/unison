@@ -24,13 +24,13 @@ import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 public class LocationTest {
 
 	/** The city. */
-	private String	city		= "Boston";
+	private String city = "Boston";
 
 	/** The country. */
-	private String	country		= "United States";
+	private String country = "United States";
 
 	/** The country code. */
-	private String	countryCode	= "USA";
+	private String countryCode = "USA";
 
 	/**
 	 * Test toString.
@@ -133,4 +133,29 @@ public class LocationTest {
 		assertTrue(actual.isGuessed());
 	}
 
+	/**
+	 * Test hashCode
+	 */
+	@Test
+	public void testHashCode() {
+		TestLocation actual1 = new TestLocation();
+		TestLocation actual2 = new TestLocation();
+		actual1.setIdSuper(5);
+		actual2.setIdSuper(59);
+		assertTrue(actual1.hashCode() != actual2.hashCode());
+	}
+
+}
+
+/**
+ * Extends Location to change setId(protected)
+ * 
+ * @author Elton <elton_12_nunes@hotmail.com>
+ *
+ */
+@SuppressWarnings("serial")
+class TestLocation extends Location {
+	void setIdSuper(int id) {
+		super.setId(id);
+	}
 }

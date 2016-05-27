@@ -1,7 +1,9 @@
 package uk.co.sleonard.unison.utils.tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.List;
@@ -82,5 +84,15 @@ public class StringUtilsTest {
 		String[] stringArray = { "string", "array", "test", "join" };
 		String stringJoined = StringUtils.join(stringArray, ".");
 		assertEquals("string.array.test.join", stringJoined);
+	}
+
+	/**
+	 * Test loadServerList
+	 */
+	@Test
+	public void testLoadServerList() {
+		String[] actual = StringUtils.loadServerList();
+		assertNotNull(actual);
+		assertTrue(actual.length > 0);
 	}
 }

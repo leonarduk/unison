@@ -3,6 +3,7 @@ package uk.co.sleonard.unison.datahandling.DAO.tests;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -183,7 +184,24 @@ public class MessageTest {
 	 */
 	@Test
 	public void testHashCode() {
-		assertEquals(0, new Message().hashCode());
+		TestMessage actual1 = new TestMessage();
+		TestMessage actual2 = new TestMessage();
+		actual1.setIdSuper(1);
+		actual2.setIdSuper(2);
+		assertTrue(actual1.hashCode() != actual2.hashCode());
 	}
 
+}
+
+/**
+ * Extends Message to change setId(protected)
+ * 
+ * @author Elton <elton_12_nunes@hotmail.com>
+ *
+ */
+@SuppressWarnings("serial")
+class TestMessage extends Message {
+	void setIdSuper(int id) {
+		super.setId(id);
+	}
 }

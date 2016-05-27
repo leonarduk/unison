@@ -39,14 +39,6 @@ public class HttpDateObjectTest {
 	}
 
 	/**
-	 * Test main
-	 */
-	@Test
-	public void testMain() {
-		HttpDateObject.main(null);
-	}
-
-	/**
 	 * Test format
 	 */
 	@Test

@@ -2,6 +2,7 @@ package uk.co.sleonard.unison.datahandling.DAO.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -41,7 +42,11 @@ public class UsenetUserTest {
 	 */
 	@Test
 	public void testHashCode() {
-		assertEquals(0, new UsenetUser().hashCode());
+		TestUsenetUser actual1 = new TestUsenetUser();
+		TestUsenetUser actual2 = new TestUsenetUser();
+		actual1.setIdSuper(68);
+		actual2.setIdSuper(182);
+		assertTrue(actual1.hashCode() != actual2.hashCode());
 	}
 
 	/**
@@ -122,4 +127,17 @@ public class UsenetUserTest {
 		assertEquals(expected, actual.getName());
 	}
 
+}
+
+/**
+ * Extends UsenetUser to change setId(protected)
+ * 
+ * @author Elton <elton_12_nunes@hotmail.com>
+ *
+ */
+@SuppressWarnings("serial")
+class TestUsenetUser extends UsenetUser {
+	void setIdSuper(int id) {
+		super.setId(id);
+	}
 }

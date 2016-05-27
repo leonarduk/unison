@@ -2,6 +2,7 @@ package uk.co.sleonard.unison.datahandling.DAO.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -55,4 +56,29 @@ public class IpAddressTest {
 		                                                                  // Test
 	}
 
+	/**
+	 * Test hashCode
+	 */
+	@Test
+	public void testHashCode() {
+		TestIpAddress actual1 = new TestIpAddress();
+		TestIpAddress actual2 = new TestIpAddress();
+		actual1.setIdSuper(10);
+		actual2.setIdSuper(20);
+		assertTrue(actual1.hashCode() != actual2.hashCode());
+	}
+
+}
+
+/**
+ * Extends IpAddress class to change setId(protected)
+ * 
+ * @author Elton <elton_12_nunes@hotmail.com>
+ *
+ */
+@SuppressWarnings("serial")
+class TestIpAddress extends IpAddress {
+	void setIdSuper(int id) {
+		super.setId(id);
+	}
 }

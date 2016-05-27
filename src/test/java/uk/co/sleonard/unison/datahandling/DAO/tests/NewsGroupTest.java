@@ -3,6 +3,7 @@ package uk.co.sleonard.unison.datahandling.DAO.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -175,4 +176,28 @@ public class NewsGroupTest {
 		assertEquals(0, actual.compareTo(expected));
 	}
 
+	/**
+	 * Test hashCode
+	 */
+	public void testHashCode() {
+		TestNewsGroup actual1 = new TestNewsGroup();
+		TestNewsGroup actual2 = new TestNewsGroup();
+		actual1.setIdSuper(5);
+		actual2.setIdSuper(93);
+		assertTrue(actual1.hashCode() != actual2.hashCode());
+	}
+
+}
+
+/**
+ * Extends NewsGroup to change setId(protected)
+ * 
+ * @author Elton <elton_12_nunes@hotmail.com>
+ *
+ */
+@SuppressWarnings("serial")
+class TestNewsGroup extends NewsGroup {
+	void setIdSuper(int id) {
+		super.setId(id);
+	}
 }

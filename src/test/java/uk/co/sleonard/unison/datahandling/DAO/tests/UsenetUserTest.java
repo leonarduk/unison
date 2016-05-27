@@ -2,6 +2,7 @@ package uk.co.sleonard.unison.datahandling.DAO.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -16,6 +17,37 @@ import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
  *
  */
 public class UsenetUserTest {
+
+	/**
+	 * Test Constructor
+	 */
+	@Test
+	public void testConstructor() {
+		UsenetUser actual = null;
+		String expected = "John";
+		String expected2 = "john@java.com";
+		String expected3 = "127.0.0.1";
+		String expected4 = "Programming";
+		Location expected5 = new Location();
+		actual = new UsenetUser(expected, expected2, expected3, expected4, expected5);
+		assertEquals(expected, actual.getName());
+		assertEquals(expected2, actual.getEmail());
+		assertEquals(expected3, actual.getIpaddress());
+		assertEquals(expected4, actual.getGender());
+		assertEquals(expected5, actual.getLocation());
+	}
+
+	/**
+	 * Test hashCode
+	 */
+	@Test
+	public void testHashCode() {
+		TestUsenetUser actual1 = new TestUsenetUser();
+		TestUsenetUser actual2 = new TestUsenetUser();
+		actual1.setIdSuper(68);
+		actual2.setIdSuper(182);
+		assertTrue(actual1.hashCode() != actual2.hashCode());
+	}
 
 	/**
 	 * Test toString.
@@ -95,4 +127,17 @@ public class UsenetUserTest {
 		assertEquals(expected, actual.getName());
 	}
 
+}
+
+/**
+ * Extends UsenetUser to change setId(protected)
+ * 
+ * @author Elton <elton_12_nunes@hotmail.com>
+ *
+ */
+@SuppressWarnings("serial")
+class TestUsenetUser extends UsenetUser {
+	void setIdSuper(int id) {
+		super.setId(id);
+	}
 }

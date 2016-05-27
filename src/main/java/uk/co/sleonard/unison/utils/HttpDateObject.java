@@ -83,26 +83,6 @@ public class HttpDateObject extends DateFormat {
 	}
 
 	/**
-	 * The main method.
-	 *
-	 * @param args
-	 *            the arguments
-	 */
-	public static void main(final String[] args) {
-		final HttpDateObject parser = HttpDateObject.getParser();
-
-		final String dateString = "Wed, 31 Oct 2007 22:49:00 GMT";
-		Date date = null;
-		try {
-			date = parser.parse(dateString);
-		}
-		catch (final ParseException e) {
-			e.printStackTrace();
-		}
-		System.out.println("Was : " + dateString + " now " + date);
-	}
-
-	/**
 	 * Instantiates a new http date object.
 	 */
 	public HttpDateObject() {

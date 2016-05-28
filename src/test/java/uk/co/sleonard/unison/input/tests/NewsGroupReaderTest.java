@@ -85,6 +85,7 @@ public class NewsGroupReaderTest {
 		this.newsGroup.incrementMessagesSkipped();
 		this.newsGroup.incrementMessagesSkipped();
 		assertEquals(2, this.newsGroup.getMessagesSkipped());
+		this.newsGroup.alert("Number messages skipped: " + this.newsGroup.getMessagesSkipped());
 	}
 
 	/**
@@ -95,6 +96,7 @@ public class NewsGroupReaderTest {
 		this.newsGroup.incrementMessagesStored();
 		this.newsGroup.incrementMessagesStored();
 		assertEquals(2, this.newsGroup.getMessagesStored());
+		this.newsGroup.log("Number messages stored: " + this.newsGroup.getMessagesStored());
 	}
 
 	/**
@@ -102,8 +104,7 @@ public class NewsGroupReaderTest {
 	 */
 	@Test
 	public void testIsConnected() {
-		boolean actual = false;
-		actual = this.newsGroup.isConnected();
+		boolean actual = this.newsGroup.isConnected();
 		assertFalse(actual);
 	}
 
@@ -117,5 +118,4 @@ public class NewsGroupReaderTest {
 		this.newsGroup.setMessageCount(expected);
 		assertEquals(expected, this.newsGroup.getMessageCount());
 	}
-
 }

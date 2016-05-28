@@ -31,13 +31,13 @@ import uk.co.sleonard.unison.gui.UNISoNController;
 public class DataQuery {
 
 	/** The logger. */
-	private static Logger			logger				= Logger.getLogger("DataQuery");
+	private static Logger logger = Logger.getLogger("DataQuery");
 
 	/** The helper. */
-	private final HibernateHelper	helper;
+	private final HibernateHelper helper;
 
 	/** The yyyy mmdd formatter. */
-	SimpleDateFormat				yyyyMMDDFormatter	= new SimpleDateFormat("yyyy-MM-dd");
+	SimpleDateFormat yyyyMMDDFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
 	/**
 	 * The Class DataQueryHelper.
@@ -319,29 +319,6 @@ public class DataQuery {
 			}
 		}
 		return buffer.toString();
-	}
-
-	/**
-	 * Test locations.
-	 *
-	 * @param session
-	 *            the session
-	 * @return the vector
-	 */
-	public Vector<Location> testLocations(final Session session) {
-		DataQuery.logger.debug("testLocations");
-
-		DataQuery.logger.warn("ALL COUNTRIES");
-		final DataQuery dataQuery = DataQuery.getInstance();
-		DataQuery.logger.warn(dataQuery.getLocations(null, session, true));
-
-		DataQuery.logger.warn("UNITED STATES");
-		final Vector<String> countries = new Vector<>();
-		countries.add("UNITED STATES");
-		final Vector<Location> locations = dataQuery.getLocations(countries, session, true);
-		DataQuery.logger.warn(locations);
-		return locations;
-
 	}
 
 }

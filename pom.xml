@@ -14,6 +14,7 @@
 		<java.version>1.8</java.version>
 		<powermock.version>1.6.5</powermock.version>
 		<mockito.version>1.10.19</mockito.version>
+		<googlecode-json.version>1.1</googlecode-json.version>
 		<javax.mail.version>1.4</javax.mail.version>
 		<maven-assembly-plugin.version>2.2-beta-4
 		</maven-assembly-plugin.version>
@@ -25,8 +26,31 @@
 		<httpunit.version>1.6.2</httpunit.version>
 		<oro.version>2.0.8</oro.version>
 		<javax-activation.version>1.1.1</javax-activation.version>
-		<googlecode-json.version>1.1</googlecode-json.version>
+		<antlr.version>2.7.6</antlr.version>
+		<asm.version>1.5.3</asm.version>
+		<asm-attrs.version>1.5.3</asm-attrs.version>
+		<cglib.version>2.1_3</cglib.version>
+		<colt.version>1.2.0</colt.version>
+		<commons-collections.version>3.2</commons-collections>
+		<commons-lang.version>2.1</commons-lang.version>
+		<commons-logging.version>1.0.4</commons-logging.version>
+		<db-ojb.version>1.0.4-patch9</db-ojb.version>
+		<dom4f.version>1.5.2</dom4f.version>
+		<ehcache.version>1.2</ehcache.version>
+		<hibernate-core.version>3.3.2.GA</hibernate-core.version>
+		<hibernate-tools.version>3.2.3.GA</hibernate-tools.version>
+		<hsqldb.version>1.8.0.1</hsqldb.version>
+		<jdom.version>b10</jdom.version>
+		<jta.version>1.1</jta.version>
+		<jtidy.version>r8-20060801</jtidy.version>
+		<jung.version>1.7.6</jung.version>
+		<junit.version>4.12</junit.version>
+		<oscache.version>2.4.1</oscache.version>
+		<swing-layout.version>1.0.3</swing-layout.version>
+		<mail.version>1.4.7</mail.version>	
+
 	</properties>
+
 
 	<build>
 		<plugins>
@@ -339,124 +363,118 @@
 		<dependency>
 			<groupId>antlr</groupId>
 			<artifactId>antlr</artifactId>
-			<version>2.7.6</version>
+			<artifact>${antlr.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>asm</groupId>
 			<artifactId>asm</artifactId>
-			<version>1.5.3</version>
+			<version>${asm.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>asm</groupId>
 			<artifactId>asm-attrs</artifactId>
-			<version>1.5.3</version>
+			<version>${asm-attrs.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
-			<version>2.1_3</version>
+			<version>${cglib.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>colt</groupId>
 			<artifactId>colt</artifactId>
-			<version>1.2.0</version>
+			<version>${colt.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
-			<version>2.1.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-collections</groupId>
-			<artifactId>commons-collections</artifactId>
-			<version>3.2</version>
+			<version>${commons-collections.verison}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
-			<version>2.1</version>
+			<version>${commons-lang.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
-			<version>1.0.4</version>
+			<version>${commons-logging.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.kuali.db.ojb</groupId>
 			<artifactId>db-ojb</artifactId>
-			<version>1.0.4-patch9</version>
+			<version>${db-ojb.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>
-			<version>1.5.2</version>
+			<version>${dom4j.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
-			<version>1.2</version>
+			<version>${ehcache.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>3.3.2.GA</version>
+			<version>${hibernate-core.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-tools</artifactId>
-			<version>3.2.3.GA</version>
+			<version>${hibernate-tools.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
-			<version>1.8.0.1</version>
+			<version>${hsqldb.version}</version>
 		</dependency>
 
-		<!-- <dependency> <groupId>gnu.classpath.ext</groupId> <artifactId>inetlib</artifactId> 
+		<!-- <dependency> <groupId>gnu.classpath.ext</groupId> <artifactId>inetlib</artifactId>
 			<version>1.1.1</version> </dependency> -->
 
 		<dependency>
 			<groupId>jdom</groupId>
 			<artifactId>jdom</artifactId>
-			<version>b10</version>
+			<version>${jdom.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>javax.transaction</groupId>
 			<artifactId>jta</artifactId>
-			<version>1.1</version>
+			<version>${jta.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>jtidy</artifactId>
-			<version>r8-20060801</version>
+			<version>${jtidy.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>jung</groupId>
 			<artifactId>jung</artifactId>
-			<version>1.7.6</version>
+			<version>${jung.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<version>${junit.version}</version>
 		</dependency>
 
 		<dependency>
@@ -482,21 +500,21 @@
 		<dependency>
 			<groupId>opensymphony</groupId>
 			<artifactId>oscache</artifactId>
-			<version>2.4.1</version>
+			<version>${oscache.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.swinglabs</groupId>
 			<artifactId>swing-layout</artifactId>
-			<version>1.0.3</version>
+			<version>${swing-layout.version}</version>
 		</dependency>
 
-		<!-- gnumail lib not found. Then we checked that the package used is (javax.mail). 
+		<!-- gnumail lib not found. Then we checked that the package used is (javax.mail).
 			So, we have added its dependency -->
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
-			<version>1.4.7</version>
+			<version>${mail.version}</version>
 		</dependency>
 
 		<dependency>

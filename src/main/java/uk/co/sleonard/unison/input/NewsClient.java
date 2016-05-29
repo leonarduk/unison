@@ -7,6 +7,7 @@
 package uk.co.sleonard.unison.input;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.UnknownHostException;
@@ -74,6 +75,11 @@ public class NewsClient extends NNTPClient {
 	 * Instantiates a new news client.
 	 */
 	public NewsClient() {
+	}
+
+	public NewsClient(final BufferedWriter writer, final BufferedReader reader) {
+		this._writer_ = writer;
+		this._reader_ = reader;
 	}
 
 	/**
@@ -294,9 +300,10 @@ public class NewsClient extends NNTPClient {
 			try (final BufferedReader reader = new BufferedReader(
 			        new DotTerminatedMessageReader(this._reader_));) {
 
-				String line;
-				while ((line = reader.readLine()) != null) {
+				String line = reader.readLine();
+				while (line != null) {
 					list.addElement(line);
+					line = reader.readLine();
 				}
 			}
 		}

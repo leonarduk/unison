@@ -193,6 +193,7 @@
 
 		<dependency>
 			<groupId>antlr</groupId>
+			<artifactId>antlr</artifactId>
 			<artifact>${antlr.version}</version>
 		</dependency>
 

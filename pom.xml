@@ -97,6 +97,7 @@
 				<configuration>
 					<excludes>
 						<exclude>uk/co/sleonard/unison/gui/*.class</exclude>
+						<exclude>uk/co/sleonard/unison/gui/generated/*.class</exclude>
 					</excludes>
 				</configuration>
 			</plugin>

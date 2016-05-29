@@ -33,6 +33,7 @@ import org.hibernate.Session;
 import uk.co.sleonard.unison.datahandling.DataQuery;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
+import uk.co.sleonard.unison.datahandling.DAO.GUIItem;
 import uk.co.sleonard.unison.datahandling.DAO.Location;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;

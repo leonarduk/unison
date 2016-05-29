@@ -32,20 +32,20 @@ import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
+import uk.co.sleonard.unison.datahandling.DAO.GUIItem;
 import uk.co.sleonard.unison.datahandling.DAO.Location;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.ResultRow;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
-import uk.co.sleonard.unison.gui.GUIItem;
-import uk.co.sleonard.unison.gui.TreeNode;
 import uk.co.sleonard.unison.gui.UNISoNController;
 import uk.co.sleonard.unison.gui.UNISoNException;
 import uk.co.sleonard.unison.gui.UNISoNLogger;
 import uk.co.sleonard.unison.input.FullDownloadWorker;
 import uk.co.sleonard.unison.utils.HttpDateObject;
 import uk.co.sleonard.unison.utils.StringUtils;
+import uk.co.sleonard.unison.utils.TreeNode;
 
 /**
  * The Class MessageStoreViewer.

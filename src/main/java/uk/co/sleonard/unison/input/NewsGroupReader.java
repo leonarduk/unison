@@ -35,42 +35,6 @@ public class NewsGroupReader implements UNISoNLogger {
 	int msgsStored = 0;
 
 	/**
-	 * The main method.
-	 *
-	 * @param args
-	 *            the arguments
-	 * @throws Exception
-	 *             the exception
-	 */
-	public static void main(final String args[]) throws Exception {
-		/*
-		 * Chosen from http://freeusenetnews.com/newspage.html
-		 *
-		 * or http://www.elfqrin.com/hacklab/pages/nntpserv.php
-		 */
-		final String host = "freetext.usenetserver.com";
-
-		String newsgroup = "soc.senior.issues";
-		if (args.length > 0) {
-			newsgroup = args[0];
-		}
-		System.out.println("Look for " + newsgroup + " on " + host);
-
-		try {
-			final NewsGroupReader reader = new NewsGroupReader(null);
-			reader.client.connectToNewsGroup(host, newsgroup);
-			// Date toDate = null;
-			// Date fromDate = null;
-			// reader.startDownload(newsgroup, fromDate, toDate);
-		}
-		catch (final Exception e) {
-			e.printStackTrace();
-		}
-		System.out.println("done");
-
-	}
-
-	/**
 	 * Instantiates a new news group reader.
 	 *
 	 * @param controller

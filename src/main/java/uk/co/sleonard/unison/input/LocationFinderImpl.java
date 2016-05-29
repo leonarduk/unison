@@ -1,11 +1,17 @@
+/**
+ * LocationFinderImpl
+ *
+ * @author ${author}
+ * @since 29-May-2016
+ */
 package uk.co.sleonard.unison.input;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Vector;
 
 import com.google.gson.JsonElement;
@@ -18,6 +24,16 @@ import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 
 public class LocationFinderImpl implements LocationFinder {
 
+	private final String webUrl;
+
+	public LocationFinderImpl() {
+		this("http://freegeoip.net/json/");
+	}
+
+	public LocationFinderImpl(final String url) {
+		this.webUrl = url;
+	}
+
 	@Override
 	public Location createLocation(final String ipAddress) {
 		try {
@@ -28,11 +44,11 @@ public class LocationFinderImpl implements LocationFinder {
 			 * "time_zone":"Europe/London","latitude":51.5144,"longitude":-0.0941,"metro_code":0}
 			 */
 
-			final String sURL = "http://freegeoip.net/json/" + ipAddress; // just a string
+			final String sURL = this.webUrl + ipAddress; // just a string
 
 			// Connect to the URL using java's native library
 			final URL url = new URL(sURL);
-			final HttpURLConnection request = (HttpURLConnection) url.openConnection();
+			final URLConnection request = url.openConnection();
 			request.connect();
 
 			// Convert to a JSON object to print data

@@ -225,7 +225,8 @@
 						if necessary -->
 					<sign>
 						<keystore>${basedir}/keystore</keystore>
-						<keypass>password</keypass>  <!-- we need to override passwords easily from the command line. ${keypass} -->
+						<keypass>upwork2016</keypass>  <!-- we need to override passwords easily from the command line. ${keypass} -->
+						<storepass>password</storepass> <!-- ${storepass} -->
 						<!-- retype>fillme</storetype -->
 						<alias>unison</alias>
 

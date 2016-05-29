@@ -25,7 +25,7 @@ import uk.co.sleonard.unison.utils.StringUtils;
  * @version $Date:: $: Date of last commit
  *
  */
-public class NewsClientTest {
+public class NewsClientIT {
 
 	/**
 	 * @throws IOException

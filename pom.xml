@@ -94,6 +94,11 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<excludes>
+						<exclude>uk/co/sleonard/unison/gui/*.class</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
@@ -223,7 +228,6 @@
 						<keypass>password</keypass>  <!-- we need to override passwords easily from the command line. ${keypass} -->
 						<!-- retype>fillme</storetype -->
 						<alias>unison</alias>
-                    <tsaLocation>${codesigning.tsa}</tsaLocation>
 
 						<!--validity>fillme</validity -->
 

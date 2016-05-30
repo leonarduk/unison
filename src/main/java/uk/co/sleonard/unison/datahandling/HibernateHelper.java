@@ -39,7 +39,6 @@ import org.hibernate.exception.GenericJDBCException;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hsqldb.util.DatabaseManagerSwing;
 
-import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.EmailAddress;
 import uk.co.sleonard.unison.datahandling.DAO.IpAddress;
@@ -49,6 +48,7 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.ResultRow;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
+import uk.co.sleonard.unison.gui.UNISoNGUI;
 import uk.co.sleonard.unison.input.LocationFinder;
 import uk.co.sleonard.unison.input.LocationFinderImpl;
 import uk.co.sleonard.unison.input.NNTPNewsGroup;
@@ -90,10 +90,9 @@ public class HibernateHelper {
 	/** The session factory. */
 	private static SessionFactory sessionFactory = null;
 
-	/** The controller. */
-	private final UNISoNController controller;
-
 	private final LocationFinder locationFinder;
+
+	private final UNISoNGUI gui;
 
 	/**
 	 * The main method.
@@ -113,8 +112,8 @@ public class HibernateHelper {
 	 * @param controller
 	 *            the controller
 	 */
-	public HibernateHelper(final UNISoNController controller) {
-		this.controller = controller;
+	public HibernateHelper(final UNISoNGUI gui) {
+		this.gui = gui;
 		this.locationFinder = new LocationFinderImpl();
 	}
 
@@ -161,7 +160,7 @@ public class HibernateHelper {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	private Message createMessage(final NewsArticle article, final Topic topic,
+	public Message createMessage(final NewsArticle article, final Topic topic,
 	        final UsenetUser poster) throws UNISoNException {
 		Message message;
 		byte[] body = null;
@@ -329,6 +328,12 @@ public class HibernateHelper {
 		return uniqueResult;
 	}
 
+	public Message findMessage(final Message aMessage, final Session session) {
+		Message message;
+		message = (Message) this.findByKey(aMessage.getUsenetMessageID(), session, Message.class);
+		return message;
+	}
+
 	/**
 	 * Find or create ip address.
 	 *
@@ -393,13 +398,9 @@ public class HibernateHelper {
 	 */
 	private synchronized Message findOrCreateMessage(final Message aMessage,
 	        final Session session) {
-		final String key = aMessage.getUsenetMessageID();
-		// if (messages.containsKey(key)) {
-		// return messages.get(key);
-		// }
 		Message message = null;
 		try {
-			message = (Message) this.findByKey(key, session, Message.class);
+			message = this.findMessage(aMessage, session);
 			if (null == message) {
 				session.saveOrUpdate(aMessage.getPoster());
 				message = aMessage;
@@ -497,10 +498,8 @@ public class HibernateHelper {
 	        final Session session, final String gender) {
 		// Need to create a user to get the correctly formatted email
 		// for the key
-		final EmailAddress emailAddress = UsenetUserHelper.parseFromField(article.getFrom(),
-		        article.getPostingHost());
-		UsenetUser poster = null;
-		poster = (UsenetUser) this.findByKey(emailAddress.getEmail(), session, UsenetUser.class);
+		final EmailAddress emailAddress = UsenetUserHelper.parseFromField(article);
+		UsenetUser poster = this.findUsenetUser(article, session);
 
 		if (null == poster) {
 			poster = new UsenetUser(emailAddress.getName(), emailAddress.getEmail(),
@@ -508,6 +507,12 @@ public class HibernateHelper {
 			session.saveOrUpdate(poster);
 		}
 		return poster;
+	}
+
+	public synchronized UsenetUser findUsenetUser(final NewsArticle article,
+	        final Session session) {
+		final EmailAddress emailAddress = UsenetUserHelper.parseFromField(article);
+		return (UsenetUser) this.findByKey(emailAddress.getEmail(), session, UsenetUser.class);
 	}
 
 	/**
@@ -593,9 +598,9 @@ public class HibernateHelper {
 
 				final String[] options = { defaultOption, "Quit" };
 				final String title = "Database locked";
-				if (null != this.controller) {
-					final int response = UNISoNController.getGui().askQuestion(question, options,
-					        title, defaultOption);
+				if (null != this.gui) {
+					final int response = this.gui.askQuestion(question, options, title,
+					        defaultOption);
 					switch (response) {
 						case 0: // delete
 							dbLock.delete();

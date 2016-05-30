@@ -83,10 +83,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 	 * Instantiates a new header download worker.
 	 */
 	public HeaderDownloadWorker() {
-		super("HeaderDownloader");
-		this.running = true;
-		this.downloading = false;
-		this.start();
+		super(HeaderDownloadWorker.class.getCanonicalName());
 	}
 
 	/*
@@ -99,9 +96,8 @@ public class HeaderDownloadWorker extends SwingWorker {
 
 		while (this.running) {
 			if (this.downloading) {
-
 				try {
-					this.storeArticleInfo();
+					this.storeArticleInfo(UNISoNController.getInstance().getQueue());
 				}
 				catch (final UNISoNException e) {
 					this.log.alert("ERROR:" + e);
@@ -114,6 +110,18 @@ public class HeaderDownloadWorker extends SwingWorker {
 
 		}
 		return "Completed";
+	}
+
+	public NewsArticle convertMessageToNewsArticle(final int articleNumber, final String subject,
+	        final String from, final Date date, final String articleId, final String references)
+	                throws UNISoNException {
+		final String postingHost = null;
+		final String content = null;
+
+		final NewsArticle article = new NewsArticle(articleId, articleNumber, date, from, subject,
+		        references, content, this.newsgroup, postingHost);
+
+		return article;
 	}
 
 	/*
@@ -134,8 +142,9 @@ public class HeaderDownloadWorker extends SwingWorker {
 		this.running = false;
 		this.downloading = false;
 		try {
-			if (null != this.newsReader.client) {
-				this.newsReader.client.quit();
+			final NewsGroupReader newsReader2 = this.newsReader;
+			if ((null != newsReader2) && (null != newsReader2.client)) {
+				newsReader2.client.quit();
 			}
 		}
 		catch (final IOException e) {
@@ -186,6 +195,12 @@ public class HeaderDownloadWorker extends SwingWorker {
 		return true;
 	}
 
+	public void initialise() {
+		this.running = true;
+		this.downloading = false;
+		this.start();
+	}
+
 	/**
 	 * Initialise.
 	 *
@@ -224,8 +239,8 @@ public class HeaderDownloadWorker extends SwingWorker {
 
 		HeaderDownloadWorker.logger.info(" Server: " + server + " Newsgroup: " + newsgroup1);
 		try {
-			this.newsReader.client.connect(server);
-			this.newsReader.client.selectNewsgroup(newsgroup1);
+			reader.client.connect(server);
+			reader.client.selectNewsgroup(newsgroup1);
 		}
 		catch (final Exception e) {
 			HeaderDownloadWorker.logger.warn(e.getMessage(), e);
@@ -233,8 +248,8 @@ public class HeaderDownloadWorker extends SwingWorker {
 		}
 
 		this.downloading = true;
-		HeaderDownloadWorker.logger
-		        .info("Creating " + this.getClass() + " " + reader.getNumberOfMessages());
+		HeaderDownloadWorker.logger.info("Creating " + this.getClass() + " " + newsgroup1 + "["
+		        + reader.getMessageCount() + "]");
 	}
 
 	/**
@@ -257,19 +272,47 @@ public class HeaderDownloadWorker extends SwingWorker {
 		super.notifyObservers();
 	}
 
-	// private void zeroHours(Calendar cal) {
-	// // want to zero these to improve comparison
-	// cal.set(Calendar.HOUR_OF_DAY, 0);
-	// cal.set(Calendar.MINUTE, 0);
-	// cal.set(Calendar.SECOND, 0);
-	//
-	// }
-
 	/**
 	 * Pause.
 	 */
 	public void pause() {
 		this.downloading = false;
+	}
+
+	public void processMessage(final LinkedBlockingQueue<NewsArticle> queue, final String line)
+	        throws UNISoNException {
+		// Extract the article information
+		// Mandatory format (from NNTP RFC 2980) is :
+		// Subject\tAuthor\tDate\tID\tReference(s)\tByte Count\tLine
+		// Count
+		final StringTokenizer stt = new StringTokenizer(line, "\t");
+		final int articleNumber = Integer.parseInt(stt.nextToken());
+		final String subject = stt.nextToken();
+		final String from = stt.nextToken();
+		Date date;
+		try {
+			date = HttpDateObject.getParser().parseDate(stt.nextToken());
+		}
+		catch (final ParseException e) {
+			throw new UNISoNException(e);
+		}
+		final String articleId = stt.nextToken();
+		String references = stt.nextToken();
+		if (!references.contains("@")) {
+			references = "";
+		}
+
+		if (this.inDateRange(this.fromDate, this.toDate, date)) {
+			queue.add(this.convertMessageToNewsArticle(articleNumber, subject, from, date,
+			        articleId, references));
+			this.kept++;
+			if (!this.mode.equals(DownloadMode.BASIC)) {
+				FullDownloadWorker.addDownloadRequest(articleId, this.mode, this.log);
+			}
+		}
+		else {
+			this.skipped++;
+		}
 	}
 
 	/**
@@ -283,12 +326,11 @@ public class HeaderDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	private boolean queueMessages(final Reader reader) throws IOException, UNISoNException {
+	public boolean queueMessages(final LinkedBlockingQueue<NewsArticle> queue, final Reader reader)
+	        throws IOException, UNISoNException {
 		if (reader != null) {
 
 			final BufferedReader bufReader = new BufferedReader(reader);
-			final LinkedBlockingQueue<NewsArticle> queue = UNISoNController.getInstance()
-			        .getQueue();
 
 			for (String line = bufReader.readLine(); line != null; line = bufReader.readLine()) {
 				if (!this.running) {
@@ -306,43 +348,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 					}
 				}
 
-				// Extract the article information
-				// Mandatory format (from NNTP RFC 2980) is :
-				// Subject\tAuthor\tDate\tID\tReference(s)\tByte Count\tLine
-				// Count
-				final StringTokenizer stt = new StringTokenizer(line, "\t");
-				final int articleNumber = Integer.parseInt(stt.nextToken());
-				final String subject = stt.nextToken();
-				final String from = stt.nextToken();
-				Date date;
-				try {
-					date = HttpDateObject.getParser().parseDate(stt.nextToken());
-				}
-				catch (final ParseException e) {
-					throw new UNISoNException(e);
-				}
-				final String articleId = stt.nextToken();
-				String references = stt.nextToken();
-				if (!references.contains("@")) {
-					references = "";
-				}
-
-				if (this.inDateRange(this.fromDate, this.toDate, date)) {
-					final String postingHost = null;
-					final String content = null;
-
-					final NewsArticle article = new NewsArticle(articleId, articleNumber, date,
-					        from, subject, references, content, this.newsgroup, postingHost);
-
-					queue.add(article);
-					if (!this.mode.equals(DownloadMode.BASIC)) {
-						FullDownloadWorker.addDownloadRequest(articleId, this.mode, this.log);
-					}
-					this.kept++;
-				}
-				else {
-					this.skipped++;
-				}
+				this.processMessage(queue, line);
 				this.index++;
 				this.logTally++;
 				if (this.logTally == 100) {
@@ -373,6 +379,10 @@ public class HeaderDownloadWorker extends SwingWorker {
 		this.downloading = true;
 	}
 
+	public void setMode(final DownloadMode headers) {
+		this.mode = headers;
+	}
+
 	/**
 	 * Given an {@link NNTPClient} instance, and an integer range of messages, return an array of
 	 * {@link Article} instances.
@@ -381,7 +391,9 @@ public class HeaderDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	public boolean storeArticleInfo() throws UNISoNException {
+	public boolean storeArticleInfo(final LinkedBlockingQueue<NewsArticle> queue)
+	        throws UNISoNException {
+
 		try {
 			this.logTally = 0;
 			this.index = 0;
@@ -392,7 +404,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 			for (int i = this.startIndex; i < this.endIndex; i += 500) {
 				try (final Reader reader = this.newsReader.client.retrieveArticleInfo(
 				        Long.valueOf(i).longValue(), Long.valueOf(i + 500).longValue());) {
-					this.queueMessages(reader);
+					this.queueMessages(queue, reader);
 				}
 			}
 		}

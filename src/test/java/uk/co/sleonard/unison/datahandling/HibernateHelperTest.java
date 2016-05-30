@@ -56,8 +56,7 @@ public class HibernateHelperTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		UNISoNController uniController = mock(UNISoNController.class);
-		this.helper = new HibernateHelper(uniController);
+		this.helper = new HibernateHelper(null);
 		this.session = mock(Session.class);
 	}
 

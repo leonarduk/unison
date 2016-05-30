@@ -1,12 +1,19 @@
+/**
+ * UsenetUserHelper
+ * 
+ * @author ${author}
+ * @since 30-May-2016
+ */
 package uk.co.sleonard.unison.datahandling;
 
 import org.apache.log4j.Logger;
 
 import uk.co.sleonard.unison.datahandling.DAO.EmailAddress;
+import uk.co.sleonard.unison.input.NewsArticle;
 
 /**
  * The Class UsenetUserHelper.
- * 
+ *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  *
@@ -130,6 +137,10 @@ public class UsenetUserHelper {
 
 		}
 		return emailAddress;
+	}
+
+	public static EmailAddress parseFromField(final NewsArticle article) {
+		return UsenetUserHelper.parseFromField(article.getFrom(), article.getPostingHost());
 	}
 
 	/**

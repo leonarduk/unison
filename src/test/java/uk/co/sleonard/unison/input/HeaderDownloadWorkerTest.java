@@ -1,16 +1,20 @@
+/**
+ * HeaderDownloadWorkerTest
+ * 
+ * @author ${author}
+ * @since 30-May-2016
+ */
 package uk.co.sleonard.unison.input;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-
 import java.util.Date;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.log4j.Logger;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 
 import com.ibm.icu.util.Calendar;
@@ -18,46 +22,26 @@ import com.ibm.icu.util.Calendar;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
-import uk.co.sleonard.unison.input.HeaderDownloadWorker;
-import uk.co.sleonard.unison.input.NewsClient;
-import uk.co.sleonard.unison.input.NewsGroupReader;
 import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
  * The Class HeaderDownloadWorker.
- * 
+ *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  *
  */
 public class HeaderDownloadWorkerTest {
 
-	private HeaderDownloadWorker	worker;
 	private static Logger			logger	= Logger.getLogger(HeaderDownloadWorkerTest.class);
+	private HeaderDownloadWorker	worker;
 
 	/**
 	 * Setup.
 	 */
 	@Before
 	public void setUp() throws Exception {
-		worker = new HeaderDownloadWorker();
-	}
-
-	/**
-	 * Test Class Constructor.
-	 */
-	@Test
-	public void testConstructor() {
-		HeaderDownloadWorker worker = new HeaderDownloadWorker();
-		assertNotNull(worker);
-	}
-
-	/**
-	 * Test NotifyObservers.
-	 */
-	@Test
-	public void testNotifyObservers() {
-		this.worker.notifyObservers();
+		this.worker = new HeaderDownloadWorker();
 	}
 
 	/**
@@ -69,36 +53,23 @@ public class HeaderDownloadWorkerTest {
 	}
 
 	/**
+	 * Test Class Constructor.
+	 */
+	@Test
+	public void testConstructor() {
+		final HeaderDownloadWorker worker = new HeaderDownloadWorker();
+		Assert.assertNotNull(worker);
+	}
+
+	/**
 	 * Test if download then finished.
 	 */
 	@Test
 	public void testFinished() {
 		this.worker.resume();
-		assertTrue(this.worker.isDownloading());
+		Assert.assertTrue(this.worker.isDownloading());
 		this.worker.finished();
-		assertFalse(this.worker.isDownloading());
-	}
-
-	/**
-	 * Test if in download
-	 */
-	@Test
-	public void testIsDownloading() {
-		assertFalse(this.worker.isDownloading());
-		this.worker.resume();
-		assertTrue(this.worker.isDownloading());
-	}
-
-	/**
-	 * Test sToreArticleInfo
-	 * 
-	 * @throws UNISoNException
-	 *             Signals that an exception has occurred.
-	 */
-	@Test
-	public void testStoreArticleInfo() throws UNISoNException {
-		boolean actual = this.worker.storeArticleInfo();
-		assertTrue(actual);
+		Assert.assertFalse(this.worker.isDownloading());
 	}
 
 	/**
@@ -107,12 +78,12 @@ public class HeaderDownloadWorkerTest {
 	@Test
 	@Ignore
 	public void testFullstop() {
-		HeaderDownloadWorker worker = new HeaderDownloadWorker();
+		final HeaderDownloadWorker worker = new HeaderDownloadWorker();
 		System.out.println("Wait 2 secs and stop");
 		try {
 			Thread.sleep(2000);
 		}
-		catch (InterruptedException e) {
+		catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
 		System.out.println("Stop");
@@ -121,7 +92,7 @@ public class HeaderDownloadWorkerTest {
 
 	/**
 	 * Test Initialize
-	 * 
+	 *
 	 * @throws UNISoNException
 	 *             Signals that an exception has occurred.
 	 */
@@ -129,30 +100,38 @@ public class HeaderDownloadWorkerTest {
 	@Ignore
 	public void testInitialise() throws UNISoNException {
 
-		NewsGroupReader ngr = mock(NewsGroupReader.class);
-		NewsClient nc = PowerMockito.mock(NewsClient.class);
+		final NewsGroupReader ngr = Mockito.mock(NewsGroupReader.class);
+		final NewsClient nc = PowerMockito.mock(NewsClient.class);
 		ngr.client = nc;
-		UNISoNLogger uniLog = mock(UNISoNLogger.class);
-		Date fromAndTo = Calendar.getInstance().getTime();
-		assertFalse(this.worker.isDownloading());
+		final UNISoNLogger uniLog = Mockito.mock(UNISoNLogger.class);
+		final Date fromAndTo = Calendar.getInstance().getTime();
+		Assert.assertFalse(this.worker.isDownloading());
 
-		String server = StringUtils.loadServerList()[0];
+		final String server = StringUtils.loadServerList()[0];
 
 		this.worker.initialise(ngr, 0, 1, server, "newsgroup", uniLog, DownloadMode.ALL, fromAndTo,
 		        fromAndTo);
 		;
 
-		assertTrue(this.worker.isDownloading());
+		Assert.assertTrue(this.worker.isDownloading());
 	}
 
 	/**
-	 * Test Resume
+	 * Test if in download
 	 */
 	@Test
-	public void testResume() {
-		assertFalse(this.worker.isDownloading());
+	public void testIsDownloading() {
+		Assert.assertFalse(this.worker.isDownloading());
 		this.worker.resume();
-		assertTrue(this.worker.isDownloading());
+		Assert.assertTrue(this.worker.isDownloading());
+	}
+
+	/**
+	 * Test NotifyObservers.
+	 */
+	@Test
+	public void testNotifyObservers() {
+		this.worker.notifyObservers();
 	}
 
 	/**
@@ -161,8 +140,31 @@ public class HeaderDownloadWorkerTest {
 	@Test
 	public void testPause() {
 		this.worker.resume();
-		assertTrue(this.worker.isDownloading());
+		Assert.assertTrue(this.worker.isDownloading());
 		this.worker.pause();
-		assertFalse(this.worker.isDownloading());
+		Assert.assertFalse(this.worker.isDownloading());
+	}
+
+	/**
+	 * Test Resume
+	 */
+	@Test
+	public void testResume() {
+		Assert.assertFalse(this.worker.isDownloading());
+		this.worker.resume();
+		Assert.assertTrue(this.worker.isDownloading());
+	}
+
+	/**
+	 * Test sToreArticleInfo
+	 *
+	 * @throws UNISoNException
+	 *             Signals that an exception has occurred.
+	 */
+	@Test
+	public void testStoreArticleInfo() throws UNISoNException {
+		final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
+		final boolean actual = this.worker.storeArticleInfo(queue);
+		Assert.assertTrue(actual);
 	}
 }

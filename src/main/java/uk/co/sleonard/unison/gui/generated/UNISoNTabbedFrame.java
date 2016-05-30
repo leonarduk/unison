@@ -17,6 +17,8 @@ import javax.swing.KeyStroke;
 import org.hsqldb.util.DatabaseManagerSwing;
 
 import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNException;
+import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
 import uk.co.sleonard.unison.gui.JSplashScreen;
 
 /**
@@ -94,21 +96,13 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
 	/** The about dialog. */
 	private final AboutDialog aboutDialog;
 
-	/**
-	 * The main method.
-	 *
-	 * @param args
-	 *            the command line arguments
-	 */
-	public static void main(final String args[]) {
-		java.awt.EventQueue.invokeLater(() -> new UNISoNTabbedFrame().setVisible(true));
-	}
-
 	// End of variables declaration//GEN-END:variables
 	/**
 	 * Creates new form UNISoNTabbedFrame.
+	 *
+	 * @throws UNISoNException
 	 */
-	public UNISoNTabbedFrame() {
+	public UNISoNTabbedFrame() throws UNISoNException {
 		this.setTitle("UNISoN");
 		final JSplashScreen splash = new JSplashScreen("Loading ...", this);
 		splash.setProgress(10);
@@ -119,10 +113,11 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
 		this.initComponents();
 		splash.setProgress(80);
 
-		this.controller.addObserver(this.downloadNewsPanel1);
-		this.controller.addObserver(this.messageStoreViewer1);
-		this.controller.addObserver(this.pajekPanel1);
-		this.controller.addObserver(this);
+		final UNISoNDatabase database = this.controller.getDatabase();
+		database.addObserver(this.downloadNewsPanel1);
+		database.addObserver(this.messageStoreViewer1);
+		database.addObserver(this.pajekPanel1);
+		database.addObserver(this);
 
 		this.aboutDialog = new AboutDialog(this, false);
 
@@ -141,7 +136,7 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
 		this.aboutMenuItem
 		        .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_HOME, InputEvent.CTRL_MASK));
 
-		this.controller.refreshDataFromDatabase();
+		database.refreshDataFromDatabase();
 		splash.setProgress(100);
 
 		splash.close();
@@ -169,9 +164,9 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
 		        JOptionPane.YES_NO_OPTION);
 		switch (response) {
 			case JOptionPane.YES_OPTION:
-				UNISoNController.getInstance().helper().generateSchema();
+				this.controller.helper().generateSchema();
 				this.showAlert("DB refresh complete");
-				UNISoNController.getInstance().refreshDataFromDatabase();
+				this.controller.getDatabase().refreshDataFromDatabase();
 				break;
 			default:
 				this.showAlert("DB refresh cancelled");
@@ -292,7 +287,7 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
 	 *            the evt
 	 */
 	private void refreshDBMenuItemActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_refreshDBMenuItemActionPerformed
-		UNISoNController.getInstance().refreshDataFromDatabase();
+		this.controller.getDatabase().refreshDataFromDatabase();
 	}// GEN-LAST:event_refreshDBMenuItemActionPerformed
 
 	/**
@@ -322,7 +317,7 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
 	 */
 	@Override
 	public void update(final Observable observable, final Object arg1) {
-		if (observable instanceof UNISoNController) {
+		if (observable instanceof UNISoNDatabase) {
 			this.showAlert("GUI has been refreshed from the database");
 		}
 	}

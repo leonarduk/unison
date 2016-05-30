@@ -19,7 +19,9 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
+import org.hibernate.Session;
 
+import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.DAO.GUIItem;
 import uk.co.sleonard.unison.datahandling.DAO.Location;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
@@ -30,10 +32,15 @@ import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 public class UNISoNAnalysis {
 	/** The logger. */
 	private static Logger			logger	= Logger.getLogger(UNISoNAnalysis.class);
-	private final UNISoNController	controller;
+	private final NewsGroupFilter	filter;
+	private final Session			session;
+	private final HibernateHelper	helper;
 
-	public UNISoNAnalysis(final UNISoNController controller) {
-		this.controller = controller;
+	public UNISoNAnalysis(final NewsGroupFilter filter, final Session session,
+	        final HibernateHelper helper) {
+		this.filter = filter;
+		this.session = session;
+		this.helper = helper;
 	}
 
 	/**
@@ -45,8 +52,8 @@ public class UNISoNAnalysis {
 		List<ResultRow> results = null;
 		final HashMap<String, Integer> summaryMap = new HashMap<>();
 
-		for (final ListIterator<Message> iter = this.controller.getMessagesFilter()
-		        .listIterator(); iter.hasNext();) {
+		for (final ListIterator<Message> iter = this.filter.getMessagesFilter().listIterator(); iter
+		        .hasNext();) {
 			final Message nextMessage = iter.next();
 
 			String nextCountry;
@@ -81,12 +88,12 @@ public class UNISoNAnalysis {
 		List<ResultRow> results = null;
 		final HashMap<NewsGroup, Integer> summaryMap = new HashMap<>();
 
-		for (final ListIterator<Message> iter = this.controller.getMessagesFilter()
-		        .listIterator(); iter.hasNext();) {
+		for (final ListIterator<Message> iter = this.filter.getMessagesFilter().listIterator(); iter
+		        .hasNext();) {
 			for (final NewsGroup nextGroup : iter.next().getNewsgroups()) {
-				if ((null == this.controller.getSelectedNewsgroups())
-				        || (this.controller.getSelectedNewsgroups().size() == 0)
-				        || this.controller.getSelectedNewsgroups().contains(nextGroup)) {
+				if ((null == this.filter.getSelectedNewsgroups())
+				        || (this.filter.getSelectedNewsgroups().size() == 0)
+				        || this.filter.getSelectedNewsgroups().contains(nextGroup)) {
 					Integer count = summaryMap.get(nextGroup);
 					if (null == count) {
 						count = Integer.valueOf(0);
@@ -117,7 +124,7 @@ public class UNISoNAnalysis {
 		final String sql = "SELECT count(*) as posts, newsgroup_id FROM newsgroup_message "
 		        + " group by newsgroup_id " + " order by posts desc";
 
-		final SQLQuery query = this.controller.getSession().createSQLQuery(sql);
+		final SQLQuery query = this.session.createSQLQuery(sql);
 
 		final List<?> returnVal = query.list();
 
@@ -128,9 +135,9 @@ public class UNISoNAnalysis {
 			final Object[] array = (Object[]) iter.next();
 			final int userID = ((Integer) array[1]).intValue();
 
-			final List<NewsGroup> posters = this.controller.getHelper().runQuery(
-			        "from " + NewsGroup.class.getName() + " where id = " + userID,
-			        this.controller.getSession(), NewsGroup.class);
+			final List<NewsGroup> posters = this.helper.runQuery(
+			        "from " + NewsGroup.class.getName() + " where id = " + userID, this.session,
+			        NewsGroup.class);
 			if (posters.size() > 0) {
 				final NewsGroup usenetUser = posters.get(0);
 				row.add(new GUIItem<>(usenetUser.getFullName(), usenetUser));
@@ -153,26 +160,26 @@ public class UNISoNAnalysis {
 		Vector<ResultRow> results = null;
 		final HashMap<UsenetUser, Integer> summaryMap = new HashMap<>();
 
-		for (final ListIterator<Message> iter = this.controller.getMessagesFilter()
-		        .listIterator(); iter.hasNext();) {
+		for (final ListIterator<Message> iter = this.filter.getMessagesFilter().listIterator(); iter
+		        .hasNext();) {
 			final Message next = iter.next();
 
 			// Want to check if any of the groups are selected
 			boolean keep = true;
-			if ((null != this.controller.getSelectedNewsgroups())
-			        && (this.controller.getSelectedNewsgroups().size() > 0)) {
+			if ((null != this.filter.getSelectedNewsgroups())
+			        && (this.filter.getSelectedNewsgroups().size() > 0)) {
 				final Set<NewsGroup> newsgroupsCopy = new HashSet<>();
 				newsgroupsCopy.addAll(next.getNewsgroups());
-				newsgroupsCopy.removeAll(this.controller.getSelectedNewsgroups());
+				newsgroupsCopy.removeAll(this.filter.getSelectedNewsgroups());
 				if (newsgroupsCopy.size() == next.getNewsgroups().size()) {
 					keep = false;
 				}
 			}
 
 			final UsenetUser poster = next.getPoster();
-			if (keep && ((null == this.controller.getSelectedPosters())
-			        || (this.controller.getSelectedPosters().size() == 0)
-			        || this.controller.getSelectedPosters().contains(poster))) {
+			if (keep && ((null == this.filter.getSelectedPosters())
+			        || (this.filter.getSelectedPosters().size() == 0)
+			        || this.filter.getSelectedPosters().contains(poster))) {
 				Integer count = summaryMap.get(poster);
 				if (null == count) {
 					count = Integer.valueOf(0);

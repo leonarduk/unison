@@ -18,6 +18,7 @@ import org.hibernate.Session;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
+import uk.co.sleonard.unison.datahandling.HibernateHelper;
 
 /**
  * The Class DataHibernatorWorker.
@@ -32,7 +33,7 @@ public class DataHibernatorWorker extends SwingWorker {
 	private static Logger logger = Logger.getLogger("DataHibernatorWorker");
 
 	/** The number of hibernators. */
-	private static int numberofHibernators = 10;
+	private static int numberofHibernators = 20;
 
 	/** The log. */
 	static UNISoNLogger log;
@@ -45,6 +46,8 @@ public class DataHibernatorWorker extends SwingWorker {
 
 	/** The save to database. */
 	private boolean saveToDatabase = true;
+
+	private final HibernateHelper helper;
 
 	/**
 	 * Sets the logger.
@@ -76,6 +79,12 @@ public class DataHibernatorWorker extends SwingWorker {
 		}
 	}
 
+	public DataHibernatorWorker(final HibernateHelper helper) {
+		super("DataHibernator");
+		this.reader = null;
+		this.helper = helper;
+	}
+
 	/**
 	 * Creates a new instance of DataHibernatorWorker.
 	 *
@@ -83,7 +92,9 @@ public class DataHibernatorWorker extends SwingWorker {
 	 *            the reader
 	 */
 	public DataHibernatorWorker(final NewsGroupReader reader) {
-		super("DataHibernator");
+		super("DataHibernatorWorker");
+		this.helper = UNISoNController.getInstance().helper();
+
 		this.reader = reader;
 		DataHibernatorWorker.logger
 		        .debug("Creating " + this.getClass() + " " + reader.getNumberOfMessages());
@@ -105,31 +116,9 @@ public class DataHibernatorWorker extends SwingWorker {
 			// HAve one session per worker rather than per message
 			final Session session = UNISoNController.getInstance().helper().getHibernateSession();
 			while (this.saveToDatabase) {
-
-				while (!queue.isEmpty()) {
-					if (Thread.interrupted()) {
-						this.stopHibernatingData();
-						throw new InterruptedException();
-					}
-
-					final NewsArticle article = this.pollForMessage(queue);
-					if (null != article) {
-						DataHibernatorWorker.logger.debug(
-						        "Hibernating " + article.getArticleId() + " " + queue.size());
-
-						if (UNISoNController.getInstance().helper().hibernateData(article,
-						        session)) {
-							this.reader.incrementMessagesStored();
-						}
-						else {
-							this.reader.incrementMessagesSkipped();
-						}
-						this.reader.showDownloadStatus();
-					}
-				}
+				this.pollQueue(queue, session);
 				// wait a second
 				Thread.sleep(5000);
-
 				// completed save so close down
 				if (queue.isEmpty()) {
 					this.saveToDatabase = false;
@@ -159,6 +148,30 @@ public class DataHibernatorWorker extends SwingWorker {
 	private synchronized NewsArticle pollForMessage(final LinkedBlockingQueue<NewsArticle> queue) {
 		final NewsArticle article = queue.poll();
 		return article;
+	}
+
+	public void pollQueue(final LinkedBlockingQueue<NewsArticle> queue, final Session session)
+	        throws InterruptedException {
+		while (!queue.isEmpty()) {
+			if (Thread.interrupted()) {
+				this.stopHibernatingData();
+				throw new InterruptedException();
+			}
+
+			final NewsArticle article = this.pollForMessage(queue);
+			if (null != article) {
+				DataHibernatorWorker.logger
+				        .debug("Hibernating " + article.getArticleId() + " " + queue.size());
+
+				if (this.helper.hibernateData(article, session)) {
+					this.reader.incrementMessagesStored();
+				}
+				else {
+					this.reader.incrementMessagesSkipped();
+				}
+				this.reader.showDownloadStatus();
+			}
+		}
 	}
 
 	/**

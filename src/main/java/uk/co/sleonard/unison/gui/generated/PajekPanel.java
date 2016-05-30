@@ -27,6 +27,7 @@ import org.hibernate.Session;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DataQuery;
+import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.gui.GraphPreviewPanel;
@@ -222,7 +223,8 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 	 */
 	private Vector<Vector<String>> getLatestPajekMatrixVector() {
 		Vector<Vector<String>> tableData;
-		final List<Message> messages = UNISoNController.getInstance().getMessagesFilter();
+		final List<Message> messages = UNISoNController.getInstance().getFilter()
+		        .getMessagesFilter();
 		final HashMap<String, Message> msgMap = new HashMap<>();
 
 		// Load ALL messages into map so can get complete referemce
@@ -495,7 +497,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 	 *            the evt
 	 */
 	private void previewButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_previewButtonActionPerformed
-		UNISoNController.getInstance().notifyObservers();
+		UNISoNController.getInstance().getDatabase().notifyObservers();
 	}// GEN-LAST:event_previewButtonActionPerformed
 
 	/**
@@ -598,7 +600,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 	 */
 	@Override
 	public void update(final Observable observable, final Object arg1) {
-		if (observable instanceof UNISoNController) {
+		if (observable instanceof UNISoNDatabase) {
 			// UNISoNController controller = (UNISoNController) observable;
 			try {
 				this.refreshPajekMatrixTable();

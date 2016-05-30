@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 
+import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
@@ -31,6 +32,25 @@ import uk.co.sleonard.unison.utils.StringUtils;
  */
 public class NewsClientIT {
 	private static Logger logger = Logger.getLogger("NewsClient");
+
+	public static BufferedReader downloadFirstMessage() throws IOException, UNISoNException {
+		return NewsClientIT.downloadFirstMessage(StringUtils.loadServerList()[0]);
+	}
+
+	public static BufferedReader downloadFirstMessage(final String server)
+	        throws IOException, UNISoNException {
+		final NewsClient client = new NewsClientImpl();
+		client.connect(server);
+		final Set<NNTPNewsGroup> groups = client.listNNTPNewsgroups("", server);
+		final NNTPNewsGroup group = groups.iterator().next();
+		client.selectNewsgroup(group.getNewsgroup());
+		NewsClientIT.logger.info("Connect to " + server + ":" + group.getNewsgroup());
+		final long lowArticleNumber = group.getFirstArticle();
+		final long highArticleNumber = group.getFirstArticle();
+		final BufferedReader reader = client.retrieveArticleInfo(lowArticleNumber,
+		        highArticleNumber);
+		return reader;
+	}
 
 	/**
 	 * @throws IOException
@@ -60,24 +80,14 @@ public class NewsClientIT {
 
 	@Test
 	public void testRetrieveArticleInfo() throws Exception {
-		final NewsClient client = new NewsClientImpl();
 		final String server = StringUtils.loadServerList()[0];
-		client.connect(server);
-		final Set<NNTPNewsGroup> groups = client.listNNTPNewsgroups("", server);
-		final NNTPNewsGroup group = groups.iterator().next();
-		client.selectNewsgroup(group.getNewsgroup());
-		NewsClientIT.logger.info("Connect to " + server + ":" + group.getNewsgroup());
-		final long lowArticleNumber = group.getFirstArticle();
-		final long highArticleNumber = group.getFirstArticle();
-		final BufferedReader reader = client.retrieveArticleInfo(lowArticleNumber,
-		        highArticleNumber);
-		final BufferedReader bufReader = new BufferedReader(reader);
-
-		final String line = bufReader.readLine();
-		NewsClientIT.logger.info("Message: " + line);
-		Assert.assertNotNull(line);
-		Assert.assertTrue(line.length() > 0);
-		Assert.assertTrue(line.contains(server));
+		final BufferedReader reader = NewsClientIT.downloadFirstMessage(server);
+		try (final BufferedReader bufReader = new BufferedReader(reader);) {
+			final String line = bufReader.readLine();
+			NewsClientIT.logger.info("Message: " + line);
+			Assert.assertNotNull(line);
+			Assert.assertTrue(line.length() > 0);
+			Assert.assertTrue(line.contains(server));
+		}
 	}
-
 }

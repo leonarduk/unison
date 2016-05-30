@@ -108,6 +108,8 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 	/** The controller. */
 	private final UNISoNController controller;
 
+	StringBuffer logText;
+
 	/**
 	 * The main method.
 	 *
@@ -116,11 +118,18 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 	 */
 	public static void main(final String args[]) {
 		java.awt.EventQueue.invokeLater(() -> {
-			final UNISoNTabbedFrame frame = new UNISoNTabbedFrame();
-			frame.setVisible(true);
-			final DownloadNewsPanel panel = new DownloadNewsPanel();
-			frame.add(panel);
-			panel.setVisible(true);
+			UNISoNTabbedFrame frame;
+			try {
+				frame = new UNISoNTabbedFrame();
+				frame.setVisible(true);
+				final DownloadNewsPanel panel = new DownloadNewsPanel();
+				frame.add(panel);
+				panel.setVisible(true);
+			}
+			catch (final Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		});
 	}
 
@@ -334,6 +343,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 		this.cancelButton = new javax.swing.JButton();
 		this.jScrollPane3 = new javax.swing.JScrollPane();
 		this.notesArea = new javax.swing.JTextArea();
+		this.logText = new StringBuffer();
 		this.hostLabel = new javax.swing.JLabel();
 		this.getTextCheck = new javax.swing.JCheckBox();
 		this.getLocationCheck = new javax.swing.JCheckBox();
@@ -574,7 +584,8 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 	 */
 	@Override
 	public void log(final String message) {
-		this.notesArea.append(message + "\n");
+		this.logText.append(message + "\n");
+		this.notesArea.setText(this.logText.toString());
 	}
 
 	/**

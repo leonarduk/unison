@@ -31,10 +31,10 @@ import javax.swing.tree.TreePath;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 
-import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
+import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.DAO.GUIItem;
 import uk.co.sleonard.unison.datahandling.DAO.Location;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
@@ -318,7 +318,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	private void crosspostComboBoxActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_crosspostComboBoxActionPerformed
 		final UNISoNController controller = UNISoNController.getInstance();
 		final NewsGroup selectedGroup = (NewsGroup) this.crosspostComboBox.getSelectedItem();
-		controller.setSelectedNewsgroup(selectedGroup);
+		controller.getFilter().setSelectedNewsgroup(selectedGroup);
 		this.refreshTopicHierarchy();
 		// controller.showAlert("You chose " + selectedGroup);
 	}// GEN-LAST:event_crosspostComboBoxActionPerformed
@@ -337,8 +337,8 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 		if (userObject instanceof Topic) {
 			final Topic topic = (Topic) userObject;
 			this.createMessageHierarchy(
-			        UNISoNController.getInstance().getMessages(topic, this.session), root, "ROOT",
-			        fillInMissing);
+			        UNISoNController.getInstance().getDatabase().getMessages(topic, this.session),
+			        root, "ROOT", fillInMissing);
 		}
 	}
 
@@ -405,10 +405,12 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 
 		// as root is not a newsgroup
 		if (root.getUserObject() instanceof NewsGroup) {
-			UNISoNController.getInstance().setSelectedNewsgroup((NewsGroup) root.getUserObject());
+			UNISoNController.getInstance().getFilter()
+			        .setSelectedNewsgroup((NewsGroup) root.getUserObject());
 		}
 		else {
-			UNISoNController.getInstance().setSelectedNewsgroup((String) root.getUserObject());
+			UNISoNController.getInstance().getFilter()
+			        .setSelectedNewsgroup((String) root.getUserObject());
 		}
 
 		this.notifySelectedNewsGroupObservers();
@@ -422,7 +424,8 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 */
 	private void headersButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_headersButtonActionPerformed
 		try {
-			for (final Message message : UNISoNController.getInstance().getMessagesFilter()) {
+			for (final Message message : UNISoNController.getInstance().getFilter()
+			        .getMessagesFilter()) {
 				// only download for messages that need it
 				if (null == message.getPoster().getLocation()) {
 					FullDownloadWorker.addDownloadRequest(message.getUsenetMessageID(),
@@ -851,7 +854,8 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 *            the evt
 	 */
 	private void refreshButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_refreshButtonActionPerformed
-		UNISoNController.getInstance().refreshDataFromDatabase();
+		final UNISoNController controller = UNISoNController.getInstance();
+		controller.getDatabase().refreshDataFromDatabase();
 	}// GEN-LAST:event_refreshButtonActionPerformed
 
 	/**
@@ -873,7 +877,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 * Refresh message pane.
 	 */
 	public void refreshMessagePane() {
-		final Message message = UNISoNController.getInstance().getSelectedMessage();
+		final Message message = UNISoNController.getInstance().getFilter().getSelectedMessage();
 
 		if (null != message) {
 			// final DefaultListModel model = this.getCrossPostsModel(message);
@@ -932,7 +936,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 		final HashMap<String, TreeNode> nodeMap = new HashMap<>();
 
 		final List<NewsGroup> newsgroupFilter = new ArrayList<>();
-		newsgroupFilter.addAll(controller.getNewsgroupFilter());
+		newsgroupFilter.addAll(controller.getFilter().getNewsgroupFilter());
 		Collections.sort(newsgroupFilter);
 
 		for (final NewsGroup group : newsgroupFilter) {
@@ -1033,11 +1037,11 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 		this.topicRoot.removeAllChildren();
 
 		final UNISoNController controller = UNISoNController.getInstance();
-		final NewsGroup selectedNewsgroup = controller.getSelectedNewsgroup();
+		final NewsGroup selectedNewsgroup = controller.getFilter().getSelectedNewsgroup();
 		if (null != selectedNewsgroup) {
 			this.topicRoot.setName(selectedNewsgroup.getFullName());
 			final Set<Topic> topics = selectedNewsgroup.getTopics();
-			final Set<Topic> topicsFilter = controller.getTopicsFilter();
+			final Set<Topic> topicsFilter = controller.getFilter().getTopicsFilter();
 			for (final Topic topic : topics) {
 				if ((null == topicsFilter) || topicsFilter.contains(topic)) {
 					final int lastIndex = topic.getSubject().length();
@@ -1081,7 +1085,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 			if (on) {
 				final Date fromDate = this.parser.parseDate(this.fromDateField.getText());
 				final Date toDate = this.parser.parseDate(this.toDateField.getText());
-				controller.setDates(fromDate, toDate);
+				controller.getFilter().setDates(fromDate, toDate);
 
 				final List<GUIItem<Object>> selectedCountries = this.topCountriesList
 				        .getSelectedValuesList();
@@ -1091,7 +1095,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 					final String selectedcountry = (String) row.getItem().getKey();
 					countries.add(selectedcountry);
 				}
-				controller.setSelectedCountries(countries);
+				controller.getFilter().setSelectedCountries(countries);
 
 				final List<GUIItem<Object>> selectedNewsgroups = this.topGroupsList
 				        .getSelectedValuesList();
@@ -1101,7 +1105,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 					final NewsGroup selectedgroup = (NewsGroup) row.getItem().getKey();
 					groups.add(selectedgroup);
 				}
-				controller.setSelectedNewsgroups(groups);
+				controller.getFilter().setSelectedNewsgroups(groups);
 
 				final List<GUIItem<Object>> selectedPosters = this.topPostersList
 				        .getSelectedValuesList();
@@ -1111,7 +1115,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 					final UsenetUser selectedUser = (UsenetUser) row.getItem().getKey();
 					posters.add(selectedUser);
 				}
-				controller.setSelectedPosters(posters);
+				controller.getFilter().setSelectedPosters(posters);
 				this.filterToggle.setText("Filtered");
 				this.filterToggle.setToolTipText("Click again to remove filter");
 				this.refreshButton.setEnabled(false);
@@ -1165,7 +1169,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 		final Object datanode = root.getUserObject();
 		if (datanode instanceof Message) {
 			final Message msg = (Message) datanode;
-			UNISoNController.getInstance().setSelectedMessage(msg);
+			UNISoNController.getInstance().getFilter().setSelectedMessage(msg);
 			this.notifySelectedMessageObservers();
 		}
 		else {

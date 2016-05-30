@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import com.ibm.icu.util.Calendar;
 
-import uk.co.sleonard.unison.gui.UNISoNException;
+import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.input.NewsArticle;
 
 /**

@@ -15,9 +15,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
-import uk.co.sleonard.unison.gui.UNISoNController;
-import uk.co.sleonard.unison.gui.UNISoNException;
-import uk.co.sleonard.unison.gui.UNISoNLogger;
+import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNException;
+import uk.co.sleonard.unison.UNISoNLogger;
 
 /**
  * The Class DataHibernatorWorker.

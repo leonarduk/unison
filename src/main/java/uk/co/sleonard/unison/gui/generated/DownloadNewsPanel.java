@@ -16,10 +16,10 @@ import java.util.Set;
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
 
+import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNException;
+import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
-import uk.co.sleonard.unison.gui.UNISoNController;
-import uk.co.sleonard.unison.gui.UNISoNException;
-import uk.co.sleonard.unison.gui.UNISoNLogger;
 import uk.co.sleonard.unison.input.DataHibernatorWorker;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
 import uk.co.sleonard.unison.input.NNTPNewsGroup;
@@ -162,7 +162,8 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 	@Override
 	public void alert(final String message) {
 		this.log(message);
-		UNISoNController.getInstance().showAlert(message);
+		UNISoNController.getInstance();
+		UNISoNController.getGui().showAlert(message);
 	}
 
 	/**

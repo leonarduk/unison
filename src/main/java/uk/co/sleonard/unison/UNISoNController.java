@@ -4,42 +4,30 @@
  * @author Stephen <github@leonarduk.com>
  * @since 22-May-2016
  */
-package uk.co.sleonard.unison.gui;
+package uk.co.sleonard.unison;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
 import uk.co.sleonard.unison.datahandling.DataQuery;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
-import uk.co.sleonard.unison.datahandling.DAO.GUIItem;
-import uk.co.sleonard.unison.datahandling.DAO.Location;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
-import uk.co.sleonard.unison.datahandling.DAO.ResultRow;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
+import uk.co.sleonard.unison.gui.UNISoNGUI;
 import uk.co.sleonard.unison.gui.generated.UNISoNTabbedFrame;
 import uk.co.sleonard.unison.input.DataHibernatorWorker;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
@@ -60,16 +48,15 @@ public class UNISoNController extends Observable {
 	private static UNISoNController instance;
 
 	/** The logger. */
-	private static Logger logger = Logger.getLogger("UNISonController");
+	private static Logger logger = Logger.getLogger(UNISoNController.class);
+
+	private static UNISoNGUI gui;
 
 	/** The Constant LOCATION. */
 	public static final String LOCATION = "Location";
 
 	/** The Constant USENETUSER. */
 	public static final String USENETUSER = UsenetUser.class.getName();
-
-	/** The selected messages. */
-	private static final Vector<Message> selectedMessages = null;
 
 	/** The countries filter. */
 	private Set<String> countriesFilter = null;
@@ -83,13 +70,8 @@ public class UNISoNController extends Observable {
 	/** The topics filter. */
 	private Set<Topic> topicsFilter = null;
 
-	// private Vector<NewsGroup> selectedNewsgroups = null;
-
 	/** The filtered. */
 	private boolean filtered = false;
-
-	/** The frame. */
-	private JFrame frame;
 
 	/** The from date. */
 	private Date fromDate;
@@ -118,6 +100,9 @@ public class UNISoNController extends Observable {
 	/** The selected countries. */
 	Set<String> selectedCountries = null;
 
+	/** The selected messages. */
+	private final Vector<Message> selectedMessages = null;
+
 	/** The selected newsgroup. */
 	private NewsGroup selectedNewsgroup;
 
@@ -136,13 +121,13 @@ public class UNISoNController extends Observable {
 	/** The tops newsgroups. */
 	private Set<NewsGroup> topsNewsgroups;
 
-	// private static UNISoNController instance;
-
 	/** The usenet users filter. */
 	private Vector<UsenetUser> usenetUsersFilter = null;
 
 	/** The download panel. */
 	private UNISoNLogger downloadPanel;
+
+	private final UNISoNAnalysis analysis;
 
 	/**
 	 * Creates the.
@@ -160,9 +145,15 @@ public class UNISoNController extends Observable {
 	 */
 	public static UNISoNController create(final JFrame frame) {
 		UNISoNController.instance = new UNISoNController();
-		UNISoNController.instance.frame = frame;
+		UNISoNController.setGui(new UNISoNGUI(frame));
 		return UNISoNController.instance;
 	}
+
+	public static UNISoNGUI getGui() {
+		return UNISoNController.gui;
+	}
+
+	// private static UNISoNController instance;
 
 	/**
 	 * Gets the single instance of UNISoNController.
@@ -172,8 +163,6 @@ public class UNISoNController extends Observable {
 	public static UNISoNController getInstance() {
 		return UNISoNController.instance;
 	}
-
-	// private static UNISoNController instance;
 
 	/**
 	 * Sets the frame.
@@ -186,49 +175,25 @@ public class UNISoNController extends Observable {
 
 	}
 
+	public static void setGui(final UNISoNGUI gui) {
+		UNISoNController.gui = gui;
+	}
+
 	/**
 	 * Instantiates a new UNI so n controller.
 	 */
 	private UNISoNController() {
+		this.analysis = new UNISoNAnalysis(this);
 		this.helper = new HibernateHelper(this);
 		this.nntpReader = new NewsGroupReader(this);
 		try {
-			this.session = this.helper.getHibernateSession();
+			this.setSession(this.getHelper().getHibernateSession());
 		}
 		catch (final UNISoNException e) {
-			this.showAlert("Error:" + e.getMessage());
+			UNISoNController.getGui().showAlert("Error:" + e.getMessage());
 		}
 		this.messageQueue = new LinkedBlockingQueue<>();
 
-	}
-
-	// public static UNISoNController createInstance(final JFrame frame) {
-	// return UNISoNController.instance = new UNISoNController(frame);
-	// }
-	//
-	// public static UNISoNController getInstance() {
-	// return UNISoNController.instance;
-	// }
-
-	/**
-	 * Ask question.
-	 *
-	 * @param question
-	 *            the question
-	 * @param options
-	 *            the options
-	 * @param title
-	 *            the title
-	 * @param defaultOption
-	 *            the default option
-	 * @return the int
-	 */
-	public int askQuestion(final String question, final String[] options, final String title,
-	        final String defaultOption) {
-		final int response = JOptionPane.showOptionDialog(this.frame, question, title,
-		        JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options,
-		        defaultOption);
-		return response;
 	}
 
 	/**
@@ -238,8 +203,6 @@ public class UNISoNController extends Observable {
 		this.stopDownload();
 	}
 
-	// private Vector<NewsGroup> selectedNewsgroups = null;
-
 	/**
 	 * Connect to news group.
 	 *
@@ -248,9 +211,9 @@ public class UNISoNController extends Observable {
 	 * @deprecated
 	 */
 	@Deprecated
-	public void connectToNewsGroup(final String newsgroup) {
+	private void connectToNewsGroup(final String newsgroup) {
 		this.setConnectingState();
-		this.showStatus("Connect to " + newsgroup);
+		UNISoNController.getGui().showStatus("Connect to " + newsgroup);
 
 		// TODO need to filter by data and allow more than one newsgroup
 		this.setSelectedNewsgroup(newsgroup);
@@ -259,7 +222,8 @@ public class UNISoNController extends Observable {
 			this.nntpReader.client.connectToNewsGroup(host, newsgroup);
 			this.setConnectedState();
 
-			this.showStatus("MESSAGES:" + this.nntpReader.getNumberOfMessages());
+			UNISoNController.getGui()
+			        .showStatus("MESSAGES:" + this.nntpReader.getNumberOfMessages());
 		}
 		catch (@SuppressWarnings("unused") final java.net.UnknownHostException e) {
 			this.showErrorMessage(newsgroup + " not found on " + host);
@@ -269,29 +233,8 @@ public class UNISoNController extends Observable {
 		}
 	}
 
-	/**
-	 * Gets the countries filter.
-	 *
-	 * @return the countries filter
-	 */
-	// public void downloadMessages(String newsgroup, Date toDate, Date
-	// fromDate)
-	// throws UNISoNException {
-	// this.setDownloadingState(0);
-	// logger.info("Start download");
-	// if ((null != this.nntpReader) && this.nntpReader.isConnected()) {
-	// this.nntpReader.startDownload(newsgroup, fromDate, toDate);
-	// } else {
-	// System.out.println("Not connected!");
-	// }
-	// }
-	/**
-	 *
-	 * @return
-	 */
-	public DefaultListModel<?> getCountriesFilter() {
-		// TODO Auto-generated method stub
-		return null;
+	public UNISoNAnalysis getAnalysis() {
+		return this.analysis;
 	}
 
 	/**
@@ -310,6 +253,10 @@ public class UNISoNController extends Observable {
 	 */
 	public HeaderDownloadWorker getHeaderDownloader() {
 		return this.headerDownloader;
+	}
+
+	public HibernateHelper getHelper() {
+		return this.helper;
 	}
 
 	/**
@@ -342,11 +289,10 @@ public class UNISoNController extends Observable {
 	public Set<Message> getMessages(final Topic topic, final Session session1) {
 		final String query = "from  Message  where topic_id = " + topic.getId();
 		final HashSet<Message> returnVal = new HashSet<>();
-		for (final Message message1 : (List<Message>) this.helper.runQuery(query, session1,
+		for (final Message message1 : (List<Message>) this.getHelper().runQuery(query, session1,
 		        Message.class)) {
-			if (((null == UNISoNController.selectedMessages)
-			        || (UNISoNController.selectedMessages.size() == 0)
-			        || UNISoNController.selectedMessages.contains(message1))
+			if (((null == this.selectedMessages) || (this.selectedMessages.size() == 0)
+			        || this.selectedMessages.contains(message1))
 			        && ((null == this.selectedPosters) || (this.selectedPosters.size() == 0)
 			                || this.selectedPosters.contains(message1.getPoster()))) {
 				returnVal.add(message1);
@@ -440,7 +386,7 @@ public class UNISoNController extends Observable {
 	 *
 	 * @return the selected newsgroups
 	 */
-	private Vector<NewsGroup> getSelectedNewsgroups() {
+	public Vector<NewsGroup> getSelectedNewsgroups() {
 		if (!this.filtered) {
 			return null;
 		}
@@ -452,119 +398,15 @@ public class UNISoNController extends Observable {
 	 *
 	 * @return the selected posters
 	 */
-	private Vector<UsenetUser> getSelectedPosters() {
+	public Vector<UsenetUser> getSelectedPosters() {
 		if (!this.filtered) {
 			return null;
 		}
 		return this.selectedPosters;
 	}
 
-	/**
-	 * Gets the top countries list.
-	 *
-	 * @return the top countries list
-	 */
-	public List<ResultRow> getTopCountriesList() {
-		List<ResultRow> results = null;
-		final HashMap<String, Integer> summaryMap = new HashMap<>();
-
-		for (final ListIterator<Message> iter = this.messagesFilter.listIterator(); iter
-		        .hasNext();) {
-			final Message nextMessage = iter.next();
-
-			String nextCountry;
-			if ((null != nextMessage.getPoster()) && (null != nextMessage.getPoster().getLocation())
-			        && (null != nextMessage.getPoster().getLocation().getCountry())) {
-				nextCountry = nextMessage.getPoster().getLocation().getCountry();
-			}
-			else {
-				nextCountry = "UNKNOWN";
-			}
-
-			Integer count = summaryMap.get(nextCountry);
-			if (null == count) {
-				count = Integer.valueOf(0);
-			}
-			summaryMap.put(nextCountry, Integer.valueOf(count.intValue() + 1));
-		}
-		results = new Vector<>();
-		for (final Entry<String, Integer> entry : summaryMap.entrySet()) {
-			results.add(new ResultRow(entry.getKey(), entry.getValue().intValue(), Location.class));
-		}
-		Collections.sort(results);
-		return results;
-	}
-
-	/**
-	 * Gets the top groups list.
-	 *
-	 * @return the top groups list
-	 */
-	public List<ResultRow> getTopGroupsList() {
-		List<ResultRow> results = null;
-		final HashMap<NewsGroup, Integer> summaryMap = new HashMap<>();
-
-		for (final ListIterator<Message> iter = this.messagesFilter.listIterator(); iter
-		        .hasNext();) {
-			for (final NewsGroup nextGroup : iter.next().getNewsgroups()) {
-				if ((null == this.getSelectedNewsgroups())
-				        || (this.getSelectedNewsgroups().size() == 0)
-				        || this.getSelectedNewsgroups().contains(nextGroup)) {
-					Integer count = summaryMap.get(nextGroup);
-					if (null == count) {
-						count = Integer.valueOf(0);
-					}
-					summaryMap.put(nextGroup, Integer.valueOf(count.intValue() + 1));
-
-				}
-			}
-		}
-		results = new Vector<>();
-		for (final Entry<NewsGroup, Integer> entry : summaryMap.entrySet()) {
-			results.add(
-			        new ResultRow(entry.getKey(), entry.getValue().intValue(), NewsGroup.class));
-		}
-		Collections.sort(results);
-		return results;
-	}
-
-	/**
-	 * Gets the top groups vector.
-	 *
-	 * @return the top groups vector
-	 * @throws HibernateException
-	 *             the hibernate exception
-	 */
-	public Vector<Vector<Object>> getTopGroupsVector() throws HibernateException {
-
-		final String sql = "SELECT count(*) as posts, newsgroup_id FROM newsgroup_message "
-		        + " group by newsgroup_id " + " order by posts desc";
-
-		final SQLQuery query = this.session.createSQLQuery(sql);
-
-		final List<?> returnVal = query.list();
-
-		final Vector<Vector<Object>> tableData = new Vector<>();
-		final Iterator<?> iter = returnVal.iterator();
-		while (iter.hasNext()) {
-			final Vector<Object> row = new Vector<>();
-			final Object[] array = (Object[]) iter.next();
-			final int userID = ((Integer) array[1]).intValue();
-
-			final List<NewsGroup> posters = this.helper.runQuery(
-			        "from " + NewsGroup.class.getName() + " where id = " + userID, this.session,
-			        NewsGroup.class);
-			if (posters.size() > 0) {
-				final NewsGroup usenetUser = posters.get(0);
-				row.add(new GUIItem<>(usenetUser.getFullName(), usenetUser));
-				row.add(array[0].toString());
-			}
-			else {
-				UNISoNController.logger.warn("Poster " + userID + " not found");
-			}
-			tableData.add(row);
-		}
-		return tableData;
+	public Session getSession() {
+		return this.session;
 	}
 
 	/**
@@ -586,51 +428,6 @@ public class UNISoNController extends Observable {
 	}
 
 	/**
-	 * Gets the top posters.
-	 *
-	 * @return the top posters
-	 */
-	public Vector<ResultRow> getTopPosters() {
-		Vector<ResultRow> results = null;
-		final HashMap<UsenetUser, Integer> summaryMap = new HashMap<>();
-
-		for (final ListIterator<Message> iter = this.messagesFilter.listIterator(); iter
-		        .hasNext();) {
-			final Message next = iter.next();
-
-			// Want to check if any of the groups are selected
-			boolean keep = true;
-			if ((null != this.getSelectedNewsgroups())
-			        && (this.getSelectedNewsgroups().size() > 0)) {
-				final Set<NewsGroup> newsgroupsCopy = new HashSet<>();
-				newsgroupsCopy.addAll(next.getNewsgroups());
-				newsgroupsCopy.removeAll(this.getSelectedNewsgroups());
-				if (newsgroupsCopy.size() == next.getNewsgroups().size()) {
-					keep = false;
-				}
-			}
-
-			final UsenetUser poster = next.getPoster();
-			if (keep && ((null == this.getSelectedPosters())
-			        || (this.getSelectedPosters().size() == 0)
-			        || this.getSelectedPosters().contains(poster))) {
-				Integer count = summaryMap.get(poster);
-				if (null == count) {
-					count = Integer.valueOf(0);
-				}
-				summaryMap.put(poster, Integer.valueOf(count.intValue() + 1));
-			}
-		}
-		results = new Vector<>();
-		for (final Entry<UsenetUser, Integer> entry : summaryMap.entrySet()) {
-			results.add(
-			        new ResultRow(entry.getKey(), entry.getValue().intValue(), UsenetUser.class));
-		}
-		Collections.sort(results);
-		return results;
-	}
-
-	/**
 	 * Gets the usenet users filter.
 	 *
 	 * @return the usenet users filter
@@ -645,29 +442,7 @@ public class UNISoNController extends Observable {
 	 * @return the hibernate helper
 	 */
 	public HibernateHelper helper() {
-		return this.helper;
-	}
-
-	/**
-	 * This is the main initialisation for the whole application.
-	 */
-	public void initialiseGUI() {
-		this.frame = new JFrame();
-
-		final JSplashScreen splash = new JSplashScreen("loading", this.frame);
-
-		splash.setProgress(10);
-
-		this.frame.setVisible(true);
-		splash.setProgress(50);
-
-		this.refreshDataFromDatabase();
-
-		this.setIdleState();
-
-		splash.setProgress(100);
-
-		splash.close();
+		return this.getHelper();
 	}
 
 	/**
@@ -752,9 +527,9 @@ public class UNISoNController extends Observable {
 
 		UNISoNController.logger.debug("refreshDataFromDatabase");
 
-		this.messagesFilter = DataQuery.getInstance().getMessages(UNISoNController.selectedMessages,
-		        this.getSelectedPosters(), this.session, this.fromDate, this.toDate, this.filtered,
-		        this.getSelectedNewsgroups(), this.getSelectedCountries());
+		this.messagesFilter = DataQuery.getInstance().getMessages(this.selectedMessages,
+		        this.getSelectedPosters(), this.getSession(), this.fromDate, this.toDate,
+		        this.filtered, this.getSelectedNewsgroups(), this.getSelectedCountries());
 
 		this.usenetUsersFilter = new Vector<>();
 		this.newsgroupFilter = new HashSet<>();
@@ -764,8 +539,8 @@ public class UNISoNController extends Observable {
 		for (final Message message1 : this.messagesFilter) {
 			UsenetUser poster = null;
 			try {
-				if (this.session.contains(message1)) {
-					this.session.refresh(message1);
+				if (this.getSession().contains(message1)) {
+					this.getSession().refresh(message1);
 				}
 			}
 			catch (final org.hibernate.UnresolvableObjectException e) {
@@ -773,8 +548,8 @@ public class UNISoNController extends Observable {
 			}
 			try {
 				poster = message1.getPoster();
-				if (this.session.contains(poster)) {
-					this.session.refresh(poster);
+				if (this.getSession().contains(poster)) {
+					this.getSession().refresh(poster);
 				}
 			}
 			catch (final org.hibernate.UnresolvableObjectException e) {
@@ -802,8 +577,8 @@ public class UNISoNController extends Observable {
 
 			for (NewsGroup group : message1.getNewsgroups()) {
 				try {
-					if (this.session.contains(group)) {
-						this.session.refresh(group);
+					if (this.getSession().contains(group)) {
+						this.getSession().refresh(group);
 					}
 				}
 				catch (final org.hibernate.UnresolvableObjectException e) {
@@ -966,7 +741,7 @@ public class UNISoNController extends Observable {
 	public void setSelectedNewsgroup(final String groupName) {
 		NewsGroup group = null;
 		if (!groupName.equals("")) {
-			group = this.helper.getNewsgroupByFullName(groupName, this.session);
+			group = this.getHelper().getNewsgroupByFullName(groupName, this.getSession());
 		}
 		this.setSelectedNewsgroup(group);
 	}
@@ -991,14 +766,8 @@ public class UNISoNController extends Observable {
 		this.selectedPosters = posters;
 	}
 
-	/**
-	 * Show alert.
-	 *
-	 * @param message
-	 *            the message
-	 */
-	public void showAlert(final String messageText) {
-		JOptionPane.showMessageDialog(this.frame, messageText);
+	public void setSession(final Session session) {
+		this.session = session;
 	}
 
 	/**
@@ -1010,19 +779,6 @@ public class UNISoNController extends Observable {
 	private void showErrorMessage(final String messageText) {
 		// this.frame.showErrorMessage(message);
 		UNISoNController.logger.warn(messageText);
-	}
-
-	/**
-	 * Show status.
-	 *
-	 * @param message1
-	 *            the message
-	 */
-	public void showStatus(final String message1) {
-		// CLI version does not do this
-		if (null != this.frame) {
-			this.showAlert(message1);
-		}
 	}
 
 	/**
@@ -1040,7 +796,7 @@ public class UNISoNController extends Observable {
 	 *            the newsgroups
 	 */
 	public void storeNewsgroups(final Set<NNTPNewsGroup> newsgroups) {
-		this.helper.storeNewsgroups(newsgroups, this.session);
+		this.getHelper().storeNewsgroups(newsgroups, this.getSession());
 	}
 
 	/**
@@ -1052,50 +808,5 @@ public class UNISoNController extends Observable {
 	public void switchFiltered(final boolean on) {
 		this.filtered = on;
 		this.refreshDataFromDatabase();
-	}
-
-	/**
-	 * The Enum MatrixType.
-	 */
-	public enum MatrixType {
-
-		/** The reply to all. */
-		REPLY_TO_ALL, /** The reply to first. */
-		REPLY_TO_FIRST, /** The reply to last. */
-		REPLY_TO_LAST
-	}
-
-	/**
-	 * The Class NewsGroupComparator.
-	 */
-	class NewsGroupComparator implements Comparator<NewsGroup> {
-
-		/*
-		 * (non-Javadoc)
-		 *
-		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-		 */
-		@Override
-		public int compare(final NewsGroup first, final NewsGroup second) {
-			return first.getName().compareTo(second.getName());
-		}
-
-	}
-
-	/**
-	 * The Class TopicComparator.
-	 */
-	public class TopicComparator implements Comparator<Topic> {
-
-		/*
-		 * (non-Javadoc)
-		 *
-		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-		 */
-		@Override
-		public int compare(final Topic first, final Topic second) {
-			return first.getSubject().compareTo(second.getSubject());
-		}
-
 	}
 }

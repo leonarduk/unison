@@ -1,3 +1,9 @@
+/**
+ * UNISoNCLI
+ * 
+ * @author ${author}
+ * @since 30-May-2016
+ */
 package uk.co.sleonard.unison.input;
 
 import java.util.Arrays;
@@ -7,59 +13,23 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.hsqldb.util.DatabaseManagerSwing;
 
+import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNException;
+import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
-import uk.co.sleonard.unison.gui.UNISoNController;
-import uk.co.sleonard.unison.gui.UNISoNException;
-import uk.co.sleonard.unison.gui.UNISoNLogger;
-import uk.co.sleonard.unison.input.NNTPNewsGroup;
 
 /**
  * The Class UNISoNCLI.
- * 
+ *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  *
  */
 public class UNISoNCLI implements UNISoNLogger {
 
-	/**
-	 * The Enum Command.
-	 */
-	enum Command {
-
-		/** The download. */
-		DOWNLOAD,
-		/** The find. */
-		FIND,
-		/** The finddownload. */
-		FINDDOWNLOAD,
-		/** The quickdownload. */
-		QUICKDOWNLOAD
-	}
-
 	/** The logger. */
-	private static Logger logger = Logger.getLogger("UNISoNCLI");;
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see uk.co.sleonard.unison.gui.UNISoNLogger#alert(java.lang.String)
-	 */
-	@Override
-	public void alert(String message) {
-		logger.warn(message);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see uk.co.sleonard.unison.gui.UNISoNLogger#log(java.lang.String)
-	 */
-	@Override
-	public void log(String message) {
-		logger.info(message);
-	}
+	private static Logger logger = Logger.getLogger("UNISoNCLI");
 
 	/**
 	 * The main method.
@@ -78,10 +48,10 @@ public class UNISoNCLI implements UNISoNLogger {
 			if (null != command) {
 				UNISoNCLI.logger.info("Run " + command + " with " + arg);
 				try {
-					String host = "";
+					final String host = "";
 					main.handleCommand(command, arg, host);
 				}
-				catch (UNISoNException e) {
+				catch (final UNISoNException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -100,12 +70,22 @@ public class UNISoNCLI implements UNISoNLogger {
 			UNISoNCLI.logger.fatal("No valid command found in args: " + Arrays.asList(args));
 			System.exit(1);
 		}
-	}
+	};
 
 	/**
 	 * Instantiates a new UNI so ncli.
 	 */
 	public UNISoNCLI() {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see uk.co.sleonard.unison.gui.UNISoNLogger#alert(java.lang.String)
+	 */
+	@Override
+	public void alert(final String message) {
+		UNISoNCLI.logger.warn(message);
 	}
 
 	/**
@@ -118,7 +98,7 @@ public class UNISoNCLI implements UNISoNLogger {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	private void downloadAll(final String searchString, String host) throws UNISoNException {
+	private void downloadAll(final String searchString, final String host) throws UNISoNException {
 		final Set<NNTPNewsGroup> listNewsgroups = UNISoNController.getInstance()
 		        .listNewsgroups(searchString, host);
 		UNISoNController.getInstance().quickDownload(listNewsgroups, null, null, this,
@@ -137,10 +117,10 @@ public class UNISoNCLI implements UNISoNLogger {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	private void handleCommand(final Command command, final String arg, String host)
+	private void handleCommand(final Command command, final String arg, final String host)
 	        throws UNISoNException {
-		Date toDate = null;
-		Date fromDate = null;
+		final Date toDate = null;
+		final Date fromDate = null;
 		switch (command) {
 			case DOWNLOAD:
 				this.startDownload(arg, fromDate, toDate);
@@ -165,6 +145,35 @@ public class UNISoNCLI implements UNISoNLogger {
 	}
 
 	/**
+	 * This method finds the newsgroups that match a search expression (* for wild character) and
+	 * saves them to the database.
+	 *
+	 * @param searchString
+	 *            the search string
+	 * @param host
+	 *            the host
+	 * @throws UNISoNException
+	 *             the UNI so n exception
+	 */
+	private void listNewsgroups(final String searchString, final String host)
+	        throws UNISoNException {
+		final Set<NNTPNewsGroup> listNewsgroups = UNISoNController.getInstance()
+		        .listNewsgroups(searchString, host);
+		UNISoNController.getInstance().storeNewsgroups(listNewsgroups);
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see uk.co.sleonard.unison.gui.UNISoNLogger#log(java.lang.String)
+	 */
+	@Override
+	public void log(final String message) {
+		UNISoNCLI.logger.info(message);
+	}
+
+	/**
 	 * Quick download.
 	 *
 	 * @param arg
@@ -178,8 +187,8 @@ public class UNISoNCLI implements UNISoNLogger {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	private void quickDownload(String arg, Date toDate, Date fromDate, String host)
-	        throws UNISoNException {
+	private void quickDownload(final String arg, final Date toDate, final Date fromDate,
+	        final String host) throws UNISoNException {
 		UNISoNController.create();
 		final Set<NNTPNewsGroup> listNewsgroups = UNISoNController.getInstance().listNewsgroups(arg,
 		        host);
@@ -190,28 +199,10 @@ public class UNISoNCLI implements UNISoNLogger {
 			UNISoNController.getInstance().quickDownload(listNewsgroups, fromDate, toDate, this,
 			        DownloadMode.BASIC);
 		}
-		catch (UNISoNException e) {
-			logger.fatal("Error downloading messages", e);
+		catch (final UNISoNException e) {
+			UNISoNCLI.logger.fatal("Error downloading messages", e);
 		}
 		DatabaseManagerSwing.main(HibernateHelper.GUI_ARGS);
-
-	}
-
-	/**
-	 * This method finds the newsgroups that match a search expression (* for wild character) and
-	 * saves them to the database.
-	 *
-	 * @param searchString
-	 *            the search string
-	 * @param host
-	 *            the host
-	 * @throws UNISoNException
-	 *             the UNI so n exception
-	 */
-	private void listNewsgroups(final String searchString, String host) throws UNISoNException {
-		final Set<NNTPNewsGroup> listNewsgroups = UNISoNController.getInstance()
-		        .listNewsgroups(searchString, host);
-		UNISoNController.getInstance().storeNewsgroups(listNewsgroups);
 
 	}
 
@@ -225,7 +216,7 @@ public class UNISoNCLI implements UNISoNLogger {
 	 * @param fromDate
 	 *            the from date
 	 */
-	public void startDownload(final String newsgroup, Date toDate, Date fromDate) {
+	public void startDownload(final String newsgroup, final Date toDate, final Date fromDate) {
 		// try {
 		// UNISoNController.getInstance().downloadMessages(newsgroup,
 		// fromDate, toDate);
@@ -233,5 +224,17 @@ public class UNISoNCLI implements UNISoNLogger {
 		// } catch (UNISoNException e) {
 		// logger.fatal("Error downloading messages", e);
 		// }
+	}
+
+	/**
+	 * The Enum Command.
+	 */
+	enum Command {
+
+		/** The download. */
+		DOWNLOAD, /** The find. */
+		FIND, /** The finddownload. */
+		FINDDOWNLOAD, /** The quickdownload. */
+		QUICKDOWNLOAD
 	}
 }

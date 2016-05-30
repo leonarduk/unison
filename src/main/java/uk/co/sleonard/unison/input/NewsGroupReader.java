@@ -8,8 +8,8 @@ package uk.co.sleonard.unison.input;
 
 import org.apache.log4j.Logger;
 
-import uk.co.sleonard.unison.gui.UNISoNController;
-import uk.co.sleonard.unison.gui.UNISoNLogger;
+import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNLogger;
 
 /**
  * The Class NewsGroupReader.

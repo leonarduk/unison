@@ -38,6 +38,7 @@ import edu.uci.ics.jung.visualization.ShapePickSupport;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
+import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.output.Relationship;
 
 /**

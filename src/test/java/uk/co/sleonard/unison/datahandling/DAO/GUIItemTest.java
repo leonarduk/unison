@@ -1,6 +1,6 @@
 /**
  * GUIItemTest
- * 
+ *
  * @author ${author}
  * @since 29-May-2016
  */
@@ -11,9 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
-import uk.co.sleonard.unison.datahandling.DAO.GUIItem;
-import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
-import uk.co.sleonard.unison.datahandling.DAO.Topic;
 
 /**
  * The Class GUIItem.

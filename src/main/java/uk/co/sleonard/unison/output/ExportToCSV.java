@@ -17,7 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
-import uk.co.sleonard.unison.gui.UNISoNException;
+import uk.co.sleonard.unison.UNISoNException;
 
 /**
  * The Class ExportToCSV.

@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import uk.co.sleonard.unison.gui.UNISoNException;
+import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.output.PajekNetworkFile;
 import uk.co.sleonard.unison.output.Relationship;
 

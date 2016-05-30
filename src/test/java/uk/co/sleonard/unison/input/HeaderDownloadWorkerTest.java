@@ -15,9 +15,9 @@ import org.powermock.api.mockito.PowerMockito;
 
 import com.ibm.icu.util.Calendar;
 
+import uk.co.sleonard.unison.UNISoNException;
+import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
-import uk.co.sleonard.unison.gui.UNISoNException;
-import uk.co.sleonard.unison.gui.UNISoNLogger;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
 import uk.co.sleonard.unison.input.NewsClient;
 import uk.co.sleonard.unison.input.NewsGroupReader;

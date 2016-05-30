@@ -19,7 +19,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.co.sleonard.unison.gui.UNISoNException;
+import uk.co.sleonard.unison.UNISoNException;
 
 /**
  * The Class ExportToCSV.

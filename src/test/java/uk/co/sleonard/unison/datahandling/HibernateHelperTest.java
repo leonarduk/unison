@@ -28,7 +28,8 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.powermock.api.mockito.PowerMockito;
 
-import uk.co.sleonard.unison.datahandling.HibernateHelper;
+import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.IpAddress;
 import uk.co.sleonard.unison.datahandling.DAO.Location;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
@@ -36,8 +37,6 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.ResultRow;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
-import uk.co.sleonard.unison.gui.UNISoNController;
-import uk.co.sleonard.unison.gui.UNISoNException;
 import uk.co.sleonard.unison.input.NNTPNewsGroup;
 
 /**

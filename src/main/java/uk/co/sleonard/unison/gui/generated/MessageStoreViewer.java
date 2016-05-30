@@ -32,6 +32,9 @@ import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
+import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNException;
+import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.GUIItem;
 import uk.co.sleonard.unison.datahandling.DAO.Location;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
@@ -39,9 +42,6 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.ResultRow;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
-import uk.co.sleonard.unison.gui.UNISoNController;
-import uk.co.sleonard.unison.gui.UNISoNException;
-import uk.co.sleonard.unison.gui.UNISoNLogger;
 import uk.co.sleonard.unison.input.FullDownloadWorker;
 import uk.co.sleonard.unison.utils.HttpDateObject;
 import uk.co.sleonard.unison.utils.StringUtils;
@@ -192,7 +192,8 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 			this.switchFilter(this.filterToggle.isSelected());
 		}
 		catch (final UNISoNException e) {
-			UNISoNController.getInstance().showAlert("Error :" + e.getMessage());
+			UNISoNController.getInstance();
+			UNISoNController.getGui().showAlert("Error :" + e.getMessage());
 		}
 	}
 
@@ -250,7 +251,8 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	@Override
 	public void alert(final String message) {
 		this.log(message);
-		UNISoNController.getInstance().showAlert(message);
+		UNISoNController.getInstance();
+		UNISoNController.getGui().showAlert(message);
 	}
 
 	/**
@@ -351,7 +353,8 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 			this.switchFilter(this.filterToggle.isSelected());
 		}
 		catch (final UNISoNException e) {
-			UNISoNController.getInstance().showAlert("Error :" + e.getMessage());
+			UNISoNController.getInstance();
+			UNISoNController.getGui().showAlert("Error :" + e.getMessage());
 		}
 	}// GEN-LAST:event_filterToggleActionPerformed
 
@@ -1005,7 +1008,8 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 * Refresh top countries.
 	 */
 	private void refreshTopCountries() {
-		final List<ResultRow> results = UNISoNController.getInstance().getTopCountriesList();
+		final List<ResultRow> results = UNISoNController.getInstance().getAnalysis()
+		        .getTopCountriesList();
 
 		this.topCountriesList.setModel(this.getListModel(results));
 	}
@@ -1014,7 +1018,8 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 * Refresh top groups.
 	 */
 	private void refreshTopGroups() {
-		final List<ResultRow> results = UNISoNController.getInstance().getTopGroupsList();
+		final List<ResultRow> results = UNISoNController.getInstance().getAnalysis()
+		        .getTopGroupsList();
 
 		this.topGroupsList.setModel(this.getListModel(results));
 	}
@@ -1054,7 +1059,8 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 	 * Refresh top posters.
 	 */
 	private void refreshTopPosters() {
-		final Vector<ResultRow> results = UNISoNController.getInstance().getTopPosters();
+		final Vector<ResultRow> results = UNISoNController.getInstance().getAnalysis()
+		        .getTopPosters();
 
 		this.topPostersList.setModel(this.getListModel(results));
 	}

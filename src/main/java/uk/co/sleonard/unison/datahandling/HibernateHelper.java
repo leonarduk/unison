@@ -39,6 +39,8 @@ import org.hibernate.exception.GenericJDBCException;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hsqldb.util.DatabaseManagerSwing;
 
+import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.EmailAddress;
 import uk.co.sleonard.unison.datahandling.DAO.IpAddress;
 import uk.co.sleonard.unison.datahandling.DAO.Location;
@@ -47,8 +49,6 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.ResultRow;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
-import uk.co.sleonard.unison.gui.UNISoNController;
-import uk.co.sleonard.unison.gui.UNISoNException;
 import uk.co.sleonard.unison.input.LocationFinder;
 import uk.co.sleonard.unison.input.LocationFinderImpl;
 import uk.co.sleonard.unison.input.NNTPNewsGroup;
@@ -594,8 +594,8 @@ public class HibernateHelper {
 				final String[] options = { defaultOption, "Quit" };
 				final String title = "Database locked";
 				if (null != this.controller) {
-					final int response = this.controller.askQuestion(question, options, title,
-					        defaultOption);
+					final int response = UNISoNController.getGui().askQuestion(question, options,
+					        title, defaultOption);
 					switch (response) {
 						case 0: // delete
 							dbLock.delete();
@@ -881,7 +881,7 @@ public class HibernateHelper {
 	 *
 	 * @param newsgroupsList
 	 *            the newsgroups list
-	 * @param message
+	 * @param data.message
 	 *            the message
 	 * @param session
 	 *            the session

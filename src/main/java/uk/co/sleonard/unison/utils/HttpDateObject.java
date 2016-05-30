@@ -43,7 +43,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-import uk.co.sleonard.unison.gui.UNISoNException;
+import uk.co.sleonard.unison.UNISoNException;
 
 /**
  * HTTP date formatter and parser. Formats dates according to RFC 822 (updated by RFC 1123). Parses

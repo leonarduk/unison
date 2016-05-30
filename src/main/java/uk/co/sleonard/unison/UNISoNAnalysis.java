@@ -1,0 +1,192 @@
+/**
+ * UNISoNCAnalysis
+ *
+ * @author ${author}
+ * @since 30-May-2016
+ */
+package uk.co.sleonard.unison;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.Vector;
+
+import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
+import org.hibernate.SQLQuery;
+
+import uk.co.sleonard.unison.datahandling.DAO.GUIItem;
+import uk.co.sleonard.unison.datahandling.DAO.Location;
+import uk.co.sleonard.unison.datahandling.DAO.Message;
+import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
+import uk.co.sleonard.unison.datahandling.DAO.ResultRow;
+import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
+
+public class UNISoNAnalysis {
+	/** The logger. */
+	private static Logger			logger	= Logger.getLogger(UNISoNAnalysis.class);
+	private final UNISoNController	controller;
+
+	public UNISoNAnalysis(final UNISoNController controller) {
+		this.controller = controller;
+	}
+
+	/**
+	 * Gets the top countries list.
+	 *
+	 * @return the top countries list
+	 */
+	public List<ResultRow> getTopCountriesList() {
+		List<ResultRow> results = null;
+		final HashMap<String, Integer> summaryMap = new HashMap<>();
+
+		for (final ListIterator<Message> iter = this.controller.getMessagesFilter()
+		        .listIterator(); iter.hasNext();) {
+			final Message nextMessage = iter.next();
+
+			String nextCountry;
+			if ((null != nextMessage.getPoster()) && (null != nextMessage.getPoster().getLocation())
+			        && (null != nextMessage.getPoster().getLocation().getCountry())) {
+				nextCountry = nextMessage.getPoster().getLocation().getCountry();
+			}
+			else {
+				nextCountry = "UNKNOWN";
+			}
+
+			Integer count = summaryMap.get(nextCountry);
+			if (null == count) {
+				count = Integer.valueOf(0);
+			}
+			summaryMap.put(nextCountry, Integer.valueOf(count.intValue() + 1));
+		}
+		results = new Vector<>();
+		for (final Entry<String, Integer> entry : summaryMap.entrySet()) {
+			results.add(new ResultRow(entry.getKey(), entry.getValue().intValue(), Location.class));
+		}
+		Collections.sort(results);
+		return results;
+	}
+
+	/**
+	 * Gets the top groups list.
+	 *
+	 * @return the top groups list
+	 */
+	public List<ResultRow> getTopGroupsList() {
+		List<ResultRow> results = null;
+		final HashMap<NewsGroup, Integer> summaryMap = new HashMap<>();
+
+		for (final ListIterator<Message> iter = this.controller.getMessagesFilter()
+		        .listIterator(); iter.hasNext();) {
+			for (final NewsGroup nextGroup : iter.next().getNewsgroups()) {
+				if ((null == this.controller.getSelectedNewsgroups())
+				        || (this.controller.getSelectedNewsgroups().size() == 0)
+				        || this.controller.getSelectedNewsgroups().contains(nextGroup)) {
+					Integer count = summaryMap.get(nextGroup);
+					if (null == count) {
+						count = Integer.valueOf(0);
+					}
+					summaryMap.put(nextGroup, Integer.valueOf(count.intValue() + 1));
+
+				}
+			}
+		}
+		results = new Vector<>();
+		for (final Entry<NewsGroup, Integer> entry : summaryMap.entrySet()) {
+			results.add(
+			        new ResultRow(entry.getKey(), entry.getValue().intValue(), NewsGroup.class));
+		}
+		Collections.sort(results);
+		return results;
+	}
+
+	/**
+	 * Gets the top groups vector.
+	 *
+	 * @return the top groups vector
+	 * @throws HibernateException
+	 *             the hibernate exception
+	 */
+	public Vector<Vector<Object>> getTopGroupsVector() throws HibernateException {
+
+		final String sql = "SELECT count(*) as posts, newsgroup_id FROM newsgroup_message "
+		        + " group by newsgroup_id " + " order by posts desc";
+
+		final SQLQuery query = this.controller.getSession().createSQLQuery(sql);
+
+		final List<?> returnVal = query.list();
+
+		final Vector<Vector<Object>> tableData = new Vector<>();
+		final Iterator<?> iter = returnVal.iterator();
+		while (iter.hasNext()) {
+			final Vector<Object> row = new Vector<>();
+			final Object[] array = (Object[]) iter.next();
+			final int userID = ((Integer) array[1]).intValue();
+
+			final List<NewsGroup> posters = this.controller.getHelper().runQuery(
+			        "from " + NewsGroup.class.getName() + " where id = " + userID,
+			        this.controller.getSession(), NewsGroup.class);
+			if (posters.size() > 0) {
+				final NewsGroup usenetUser = posters.get(0);
+				row.add(new GUIItem<>(usenetUser.getFullName(), usenetUser));
+				row.add(array[0].toString());
+			}
+			else {
+				UNISoNAnalysis.logger.warn("Poster " + userID + " not found");
+			}
+			tableData.add(row);
+		}
+		return tableData;
+	}
+
+	/**
+	 * Gets the top posters.
+	 *
+	 * @return the top posters
+	 */
+	public Vector<ResultRow> getTopPosters() {
+		Vector<ResultRow> results = null;
+		final HashMap<UsenetUser, Integer> summaryMap = new HashMap<>();
+
+		for (final ListIterator<Message> iter = this.controller.getMessagesFilter()
+		        .listIterator(); iter.hasNext();) {
+			final Message next = iter.next();
+
+			// Want to check if any of the groups are selected
+			boolean keep = true;
+			if ((null != this.controller.getSelectedNewsgroups())
+			        && (this.controller.getSelectedNewsgroups().size() > 0)) {
+				final Set<NewsGroup> newsgroupsCopy = new HashSet<>();
+				newsgroupsCopy.addAll(next.getNewsgroups());
+				newsgroupsCopy.removeAll(this.controller.getSelectedNewsgroups());
+				if (newsgroupsCopy.size() == next.getNewsgroups().size()) {
+					keep = false;
+				}
+			}
+
+			final UsenetUser poster = next.getPoster();
+			if (keep && ((null == this.controller.getSelectedPosters())
+			        || (this.controller.getSelectedPosters().size() == 0)
+			        || this.controller.getSelectedPosters().contains(poster))) {
+				Integer count = summaryMap.get(poster);
+				if (null == count) {
+					count = Integer.valueOf(0);
+				}
+				summaryMap.put(poster, Integer.valueOf(count.intValue() + 1));
+			}
+		}
+		results = new Vector<>();
+		for (final Entry<UsenetUser, Integer> entry : summaryMap.entrySet()) {
+			results.add(
+			        new ResultRow(entry.getKey(), entry.getValue().intValue(), UsenetUser.class));
+		}
+		Collections.sort(results);
+		return results;
+	}
+
+}

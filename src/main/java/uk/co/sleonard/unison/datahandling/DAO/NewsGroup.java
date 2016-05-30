@@ -1,3 +1,9 @@
+/**
+ * NewsGroup
+ * 
+ * @author ${author}
+ * @since 30-May-2016
+ */
 package uk.co.sleonard.unison.datahandling.DAO;
 
 import java.util.HashSet;
@@ -5,7 +11,7 @@ import java.util.Set;
 
 /**
  * Represents a news group e.g. soc.senior.issues
- * 
+ *
  * @author Hibernate Tools 3.2.0.b9
  * @since Generated 11-Nov-2007 17:31:30
  *
@@ -15,41 +21,41 @@ public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
 	/**
 	 *
 	 */
-	private static final long	serialVersionUID	= -8526704874026184061L;
+	private static final long serialVersionUID = -8526704874026184061L;
 
 	/** The first message. */
 
-	private int					firstMessage;
+	private int firstMessage;
 
 	/** The full name. */
-	private String				fullName;
+	private String fullName;
 
 	/** The id. */
-	private int					id;
+	private int id;
 
 	/** The last index downloaded. */
-	private int					lastIndexDownloaded;
+	private int lastIndexDownloaded;
 
 	/** The last message. */
-	private int					lastMessage;
+	private int lastMessage;
 
 	/** The last message total. */
-	private int					lastMessageTotal;
+	private int lastMessageTotal;
 
 	/** The last node. */
-	private boolean				lastNode;
+	private boolean lastNode;
 
 	/** Messages in this NewsGroup. */
-	private Set<Message>		messages			= new HashSet<>(0);
+	private Set<Message> messages = new HashSet<>(0);
 
 	/** The name. */
-	private String				name;
+	private String name;
 
 	/** The parent news group. */
-	private NewsGroup			parentNewsGroup;
+	private NewsGroup parentNewsGroup;
 
 	/** Message Threads in this NewsGroup. */
-	private Set<Topic>			topics				= new HashSet<>(0);
+	private Set<Topic> topics = new HashSet<>(0);
 
 	/**
 	 * Instantiates a new news group.
@@ -129,11 +135,7 @@ public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
 			return false;
 		}
 		final NewsGroup that = (NewsGroup) object;
-		if (!this.getFullName().equals(that.getFullName())) {
-			return false;
-		}
-
-		return true;
+		return (this.getFullName().equals(that.getFullName()));
 	}
 
 	/**

@@ -22,18 +22,36 @@ import uk.co.sleonard.unison.datahandling.DAO.IpAddress;
 import uk.co.sleonard.unison.datahandling.DAO.Location;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 
+/**
+ * The Class LocationFinderImpl.
+ */
 public class LocationFinderImpl implements LocationFinder {
 
+	/** The web url. */
 	private final String webUrl;
 
+	/**
+	 * Instantiates a new location finder impl.
+	 */
 	public LocationFinderImpl() {
 		this("http://freegeoip.net/json/");
 	}
 
+	/**
+	 * Instantiates a new location finder impl.
+	 *
+	 * @param url
+	 *            the url
+	 */
 	public LocationFinderImpl(final String url) {
 		this.webUrl = url;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see uk.co.sleonard.unison.input.LocationFinder#createLocation(java.lang.String)
+	 */
 	@Override
 	public Location createLocation(final String ipAddress) {
 		try {

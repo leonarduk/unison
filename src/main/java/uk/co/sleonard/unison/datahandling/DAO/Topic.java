@@ -1,3 +1,9 @@
+/**
+ * Topic
+ * 
+ * @author ${author}
+ * @since 30-May-2016
+ */
 package uk.co.sleonard.unison.datahandling.DAO;
 
 import java.util.HashSet;
@@ -5,7 +11,7 @@ import java.util.Set;
 
 /**
  * Represents a message thread.
- * 
+ *
  * @author Hibernate Tools 3.2.0.b9
  * @since Generated 11-Nov-2007 17:31:30
  *
@@ -15,16 +21,16 @@ public class Topic implements java.io.Serializable {
 	/**
 	 *
 	 */
-	private static final long	serialVersionUID	= -4646650675535168051L;
+	private static final long serialVersionUID = -4646650675535168051L;
 
 	/** The id. */
-	private int					id;
+	private int id;
 
 	/** The newsgroups. */
-	private Set<NewsGroup>		newsgroups			= new HashSet<>(0);
+	private Set<NewsGroup> newsgroups = new HashSet<>(0);
 
 	/** The subject. */
-	private String				subject;
+	private String subject;
 
 	/**
 	 * Instantiates a new topic.
@@ -72,11 +78,8 @@ public class Topic implements java.io.Serializable {
 		if ((this.getId() != that.getId()) || !this.getSubject().equals(that.getSubject())) {
 			return false;
 		}
-		if (!this.getNewsgroups().containsAll(that.getNewsgroups())
-		        || !that.getNewsgroups().containsAll(this.getNewsgroups())) {
-			return false;
-		}
-		return true;
+		return (this.getNewsgroups().containsAll(that.getNewsgroups())
+		        && that.getNewsgroups().containsAll(this.getNewsgroups()));
 	}
 
 	/**

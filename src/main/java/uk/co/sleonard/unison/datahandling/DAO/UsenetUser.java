@@ -1,8 +1,14 @@
+/**
+ * UsenetUser
+ * 
+ * @author ${author}
+ * @since 30-May-2016
+ */
 package uk.co.sleonard.unison.datahandling.DAO;
 
 /**
  * Represents a poster to a news group.
- * 
+ *
  * @author Hibernate Tools 3.2.0.b9
  * @since Generated 11-Nov-2007 17:31:30
  *
@@ -12,25 +18,25 @@ public class UsenetUser implements java.io.Serializable {
 	/**
 	 *
 	 */
-	private static final long	serialVersionUID	= 6240031352036083751L;
+	private static final long serialVersionUID = 6240031352036083751L;
 
 	/** The email. */
-	private String				email;
+	private String email;
 
 	/** The gender. */
-	private String				gender;
+	private String gender;
 
 	/** The id. */
-	private int					id;
+	private int id;
 
 	/** The ipaddress. */
-	private String				ipaddress;
+	private String ipaddress;
 
 	/** The location. */
-	private Location			location;
+	private Location location;
 
 	/** The name. */
-	private String				name;
+	private String name;
 
 	/**
 	 * Instantiates a new usenet user.
@@ -91,11 +97,8 @@ public class UsenetUser implements java.io.Serializable {
 			return false;
 		}
 		final UsenetUser that = (UsenetUser) object;
-		if (this.getId() != that.getId() || !this.getEmail().equals(that.getEmail())
-		        || !this.getName().equals(that.getName())) {
-			return false;
-		}
-		return true;
+		return ((this.getId() == that.getId()) && this.getEmail().equals(that.getEmail())
+		        && this.getName().equals(that.getName()));
 	}
 
 	/**
@@ -160,7 +163,7 @@ public class UsenetUser implements java.io.Serializable {
 	@Override
 	public int hashCode() {
 		int hashCode = 0;
-		hashCode = 29 * hashCode + this.id;
+		hashCode = (29 * hashCode) + this.id;
 
 		return hashCode;
 	}

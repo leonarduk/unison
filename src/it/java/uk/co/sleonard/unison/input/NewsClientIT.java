@@ -6,10 +6,14 @@
  */
 package uk.co.sleonard.unison.input;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Set;
 
+import org.apache.log4j.Logger;
+import org.junit.Assert;
 import org.junit.Test;
 
 import uk.co.sleonard.unison.utils.StringUtils;
@@ -26,6 +30,7 @@ import uk.co.sleonard.unison.utils.StringUtils;
  *
  */
 public class NewsClientIT {
+	private static Logger logger = Logger.getLogger("NewsClient");
 
 	/**
 	 * @throws IOException
@@ -34,7 +39,7 @@ public class NewsClientIT {
 	 */
 	@Test(expected = UnknownHostException.class)
 	public void testConnectForInvalidServer() throws SocketException, IOException {
-		final NewsClient client = new NewsClient();
+		final NewsClient client = new NewsClientImpl();
 		final String hostname = "broken.server";
 		client.connect(hostname, 119);
 	}
@@ -46,11 +51,33 @@ public class NewsClientIT {
 	 */
 	@Test
 	public void testConnectForServersProperties() throws SocketException, IOException {
-		final NewsClient client = new NewsClient();
+		final NewsClient client = new NewsClientImpl();
 		final String[] servers = StringUtils.loadServerList();
 		for (final String hostname : servers) {
 			client.connect(hostname, 119);
 		}
+	}
+
+	@Test
+	public void testRetrieveArticleInfo() throws Exception {
+		final NewsClient client = new NewsClientImpl();
+		final String server = StringUtils.loadServerList()[0];
+		client.connect(server);
+		final Set<NNTPNewsGroup> groups = client.listNNTPNewsgroups("", server);
+		final NNTPNewsGroup group = groups.iterator().next();
+		client.selectNewsgroup(group.getNewsgroup());
+		NewsClientIT.logger.info("Connect to " + server + ":" + group.getNewsgroup());
+		final long lowArticleNumber = group.getFirstArticle();
+		final long highArticleNumber = group.getFirstArticle();
+		final BufferedReader reader = client.retrieveArticleInfo(lowArticleNumber,
+		        highArticleNumber);
+		final BufferedReader bufReader = new BufferedReader(reader);
+
+		final String line = bufReader.readLine();
+		NewsClientIT.logger.info("Message: " + line);
+		Assert.assertNotNull(line);
+		Assert.assertTrue(line.length() > 0);
+		Assert.assertTrue(line.contains(server));
 	}
 
 }

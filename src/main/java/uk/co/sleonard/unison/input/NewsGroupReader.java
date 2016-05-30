@@ -41,7 +41,7 @@ public class NewsGroupReader implements UNISoNLogger {
 	 *            the controller
 	 */
 	public NewsGroupReader(final UNISoNController controller) {
-		this.client = new NewsClient();
+		this.client = new NewsClientImpl();
 	}
 
 	/*

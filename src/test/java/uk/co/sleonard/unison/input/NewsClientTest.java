@@ -22,6 +22,7 @@ import org.mockito.stubbing.Answer;
 
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
+import uk.co.sleonard.unison.utils.StringUtils;
 
 public class NewsClientTest {
 
@@ -32,7 +33,7 @@ public class NewsClientTest {
 	public void setUp() throws Exception {
 		final BufferedWriter writer = Mockito.mock(BufferedWriter.class);
 		this.reader = Mockito.mock(BufferedReader.class);
-		this.client = new NewsClient(writer, this.reader);
+		this.client = new NewsClientImpl(writer, this.reader);
 	}
 
 	@Test
@@ -68,7 +69,7 @@ public class NewsClientTest {
 	@Test
 	public final void testConvertDateToString() {
 		final Date date = new Date();
-		NewsClient.convertDateToString(date);
+		StringUtils.convertDateToString(date);
 	}
 
 	@Test

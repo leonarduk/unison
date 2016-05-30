@@ -113,7 +113,7 @@ public class FullDownloadWorker extends SwingWorker {
 	public FullDownloadWorker(final String server, final LinkedBlockingQueue<NewsArticle> outQueue)
 	        throws UNISoNException {
 		super("FullDownload");
-		this.client = new NewsClient();
+		this.client = new NewsClientImpl();
 		try {
 			this.client.connect(server);
 		}

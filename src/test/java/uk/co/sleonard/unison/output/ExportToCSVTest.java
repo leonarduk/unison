@@ -1,7 +1,10 @@
+/**
+ * ExportToCSVTest
+ * 
+ * @author ${author}
+ * @since 30-May-2016
+ */
 package uk.co.sleonard.unison.output;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,15 +15,15 @@ import java.util.Vector;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import uk.co.sleonard.unison.gui.UNISoNException;
-import uk.co.sleonard.unison.output.ExportToCSV;
 
 /**
  * The Class ExportToCSV.
- * 
+ *
  * @author Elton <elton_12_nunes@hotmail.com>
  * @since v1.2.0
  *
@@ -31,6 +34,23 @@ public class ExportToCSVTest {
 	private ExportToCSV export;
 
 	/**
+	 * Generate JTable with test data.
+	 *
+	 * @return JTable filled.
+	 */
+	private JTable generateJTableToTest() {
+		DefaultTableModel model;
+		model = new DefaultTableModel();
+		final JTable jTable = new JTable(model);
+		model.addColumn(null);
+		model.addColumn(null);
+		model.addColumn(null);
+		model.addRow(new Object[] { "element1", "element2", "test" });
+		model.addRow(new Object[] { "element3", "element4", "test" });
+		return jTable;
+	}
+
+	/**
 	 * Setup.
 	 *
 	 * @throws Exception
@@ -38,7 +58,7 @@ public class ExportToCSVTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		export = new ExportToCSV();
+		this.export = new ExportToCSV();
 
 	}
 
@@ -47,42 +67,26 @@ public class ExportToCSVTest {
 	 */
 	@Test
 	public void testExportTable() {
-		String archiveName = new String("export_test");
-		Vector<String> fieldNames = new Vector<>();
+		final String archiveName = new String("export_test");
+		final Vector<String> fieldNames = new Vector<>();
 		fieldNames.addElement("column1");
 		fieldNames.addElement("column2");
 		fieldNames.addElement("test");
 		try {
-			String currentLine;
-			this.export.exportTable(archiveName, generateJTableToTest(), fieldNames);
-			File file = new File(archiveName);
-			FileReader fileReader = new FileReader(file.getCanonicalPath());
-			BufferedReader reader = new BufferedReader(fileReader);
-			while ((currentLine = reader.readLine()) != null) {
-				assertTrue(currentLine.contains("test"));
+			this.export.exportTable(archiveName, this.generateJTableToTest(), fieldNames);
+			final File file = new File(archiveName);
+			final FileReader fileReader = new FileReader(file.getCanonicalPath());
+			final BufferedReader reader = new BufferedReader(fileReader);
+			String currentLine = reader.readLine();
+			while (currentLine != null) {
+				Assert.assertTrue(currentLine.contains("test"));
+				currentLine = reader.readLine();
 			}
 			reader.close();
 			file.delete();
 		}
 		catch (UNISoNException | IOException f) {
-			fail("ERROR: " + f.getMessage());
+			Assert.fail("ERROR: " + f.getMessage());
 		}
-	}
-
-	/**
-	 * Generate JTable with test data.
-	 * 
-	 * @return JTable filled.
-	 */
-	private JTable generateJTableToTest() {
-		DefaultTableModel model;
-		model = new DefaultTableModel();
-		JTable jTable = new JTable(model);
-		model.addColumn(null);
-		model.addColumn(null);
-		model.addColumn(null);
-		model.addRow(new Object[] { "element1", "element2", "test" });
-		model.addRow(new Object[] { "element3", "element4", "test" });
-		return jTable;
 	}
 }

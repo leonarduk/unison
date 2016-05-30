@@ -36,14 +36,14 @@ public class PajekNetworkFile {
 	private String filename;
 
 	/** The suffix. */
-	protected String SUFFIX;
+	protected String suffix;
 
 	/** The undirected links. */
 	protected List<Relationship> undirectedLinks;
 
 	// Statically assign the suffix
 	{
-		this.SUFFIX = ".net";
+		this.suffix = ".net";
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class PajekNetworkFile {
 	 * @return the file suffix
 	 */
 	public String getFileSuffix() {
-		return this.SUFFIX;
+		return this.suffix;
 	}
 
 	/**
@@ -215,8 +215,8 @@ public class PajekNetworkFile {
 	 */
 	public void saveToFile(final String filenameInput) {
 		this.filename = filenameInput;
-		if (!filenameInput.endsWith(this.SUFFIX)) {
-			this.filename += this.SUFFIX;
+		if (!filenameInput.endsWith(this.suffix)) {
+			this.filename += this.suffix;
 		}
 		FileOutputStream out; // declare a file output object
 		PrintStream p; // declare a print stream object

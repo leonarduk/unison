@@ -68,6 +68,9 @@ public class UNISoNController extends Observable {
 	/** The Constant USENETUSER. */
 	public static final String USENETUSER = UsenetUser.class.getName();
 
+	/** The selected messages. */
+	private static final Vector<Message> selectedMessages = null;
+
 	/** The countries filter. */
 	private Set<String> countriesFilter = null;
 
@@ -80,10 +83,10 @@ public class UNISoNController extends Observable {
 	/** The topics filter. */
 	private Set<Topic> topicsFilter = null;
 
+	// private Vector<NewsGroup> selectedNewsgroups = null;
+
 	/** The filtered. */
 	private boolean filtered = false;
-
-	// private Vector<NewsGroup> selectedNewsgroups = null;
 
 	/** The frame. */
 	private JFrame frame;
@@ -114,9 +117,6 @@ public class UNISoNController extends Observable {
 
 	/** The selected countries. */
 	Set<String> selectedCountries = null;
-
-	/** The selected messages. */
-	private final Vector<Message> selectedMessages = null;
 
 	/** The selected newsgroup. */
 	private NewsGroup selectedNewsgroup;
@@ -344,8 +344,9 @@ public class UNISoNController extends Observable {
 		final HashSet<Message> returnVal = new HashSet<>();
 		for (final Message message1 : (List<Message>) this.helper.runQuery(query, session1,
 		        Message.class)) {
-			if (((null == this.selectedMessages) || (this.selectedMessages.size() == 0)
-			        || this.selectedMessages.contains(message1))
+			if (((null == UNISoNController.selectedMessages)
+			        || (UNISoNController.selectedMessages.size() == 0)
+			        || UNISoNController.selectedMessages.contains(message1))
 			        && ((null == this.selectedPosters) || (this.selectedPosters.size() == 0)
 			                || this.selectedPosters.contains(message1.getPoster()))) {
 				returnVal.add(message1);
@@ -751,7 +752,7 @@ public class UNISoNController extends Observable {
 
 		UNISoNController.logger.debug("refreshDataFromDatabase");
 
-		this.messagesFilter = DataQuery.getInstance().getMessages(this.selectedMessages,
+		this.messagesFilter = DataQuery.getInstance().getMessages(UNISoNController.selectedMessages,
 		        this.getSelectedPosters(), this.session, this.fromDate, this.toDate, this.filtered,
 		        this.getSelectedNewsgroups(), this.getSelectedCountries());
 

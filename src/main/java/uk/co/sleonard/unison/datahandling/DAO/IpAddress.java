@@ -1,8 +1,14 @@
+/**
+ * IpAddress
+ *
+ * @author ${author}
+ * @since 30-May-2016
+ */
 package uk.co.sleonard.unison.datahandling.DAO;
 
 /**
  * The IP address.
- * 
+ *
  * @author Hibernate Tools 3.2.0.b9
  * @since Generated 11-Nov-2007 17:31:30
  *
@@ -12,16 +18,16 @@ public class IpAddress implements java.io.Serializable {
 	/**
 	 *
 	 */
-	private static final long	serialVersionUID	= -7969874241047620708L;
+	private static final long serialVersionUID = -7969874241047620708L;
 
 	/** The id. */
-	private int					id;
+	private int id;
 
 	/** The Ip address. */
-	private String				IpAddress;
+	private String IpAddress;
 
 	/** The location. */
-	private Location			location;
+	private Location location;
 
 	/**
 	 * Instantiates a new ip address.
@@ -66,11 +72,8 @@ public class IpAddress implements java.io.Serializable {
 			return false;
 		}
 		final IpAddress that = (IpAddress) object;
-		if (this.getId() != that.getId() || !this.getIpAddress().equals(that.getIpAddress())
-		        || !this.getLocation().equals(that.getLocation())) {
-			return false;
-		}
-		return true;
+		return ((this.getId() == that.getId()) && this.getIpAddress().equals(that.getIpAddress())
+		        && this.getLocation().equals(that.getLocation()));
 	}
 
 	/**
@@ -109,7 +112,7 @@ public class IpAddress implements java.io.Serializable {
 	@Override
 	public int hashCode() {
 		int hashCode = 0;
-		hashCode = 29 * hashCode + this.id;
+		hashCode = (29 * hashCode) + this.id;
 
 		return hashCode;
 	}

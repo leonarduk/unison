@@ -193,7 +193,12 @@ public class HttpDateObject extends DateFormat {
 	 */
 	@Override
 	public Date parse(final String text, final ParsePosition pos) {
-		int date, month, year, hour, minute, second;
+		int date;
+		int month;
+		int year;
+		int hour;
+		int minute;
+		int second;
 
 		String monthText;
 		int start = 0;

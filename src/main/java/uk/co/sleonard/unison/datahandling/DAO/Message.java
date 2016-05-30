@@ -1,3 +1,9 @@
+/**
+ * Message
+ * 
+ * @author ${author}
+ * @since 30-May-2016
+ */
 package uk.co.sleonard.unison.datahandling.DAO;
 
 import java.util.Date;
@@ -6,7 +12,7 @@ import java.util.Set;
 
 /**
  * Represents a message.
- * 
+ *
  * @author Hibernate Tools 3.2.0.b9
  * @since Generated 11-Nov-2007 17:31:30
  *
@@ -16,34 +22,34 @@ public class Message implements java.io.Serializable {
 	/**
 	 *
 	 */
-	private static final long	serialVersionUID	= -4828381724935020136L;
+	private static final long serialVersionUID = -4828381724935020136L;
 
 	/** The Date created. */
-	private Date				DateCreated;
+	private Date DateCreated;
 
 	/** The id. */
-	private int					id;
+	private int id;
 
 	/** The Message body. */
-	private byte[]				MessageBody;
+	private byte[] MessageBody;
 
 	/** The newsgroups. */
-	private Set<NewsGroup>		newsgroups			= new HashSet<>(0);
+	private Set<NewsGroup> newsgroups = new HashSet<>(0);
 
 	/** The poster. */
-	private UsenetUser			poster;
+	private UsenetUser poster;
 
 	/** The referenced messages. */
-	private String				referencedMessages;
+	private String referencedMessages;
 
 	/** The Subject. */
-	private String				Subject;
+	private String Subject;
 
 	/** The topic. */
-	private Topic				topic;
+	private Topic topic;
 
 	/** The Usenet message id. */
-	private String				UsenetMessageID;
+	private String UsenetMessageID;
 
 	/**
 	 * Instantiates a new message.
@@ -135,12 +141,8 @@ public class Message implements java.io.Serializable {
 		        || !this.getSubject().equals(this.getSubject())) {
 			return false;
 		}
-		if (!this.getNewsgroups().containsAll(that.getNewsgroups())
-		        || !that.getNewsgroups().containsAll(this.getNewsgroups())) {
-			return false;
-		}
-
-		return true;
+		return (this.getNewsgroups().containsAll(that.getNewsgroups())
+		        && that.getNewsgroups().containsAll(this.getNewsgroups()));
 	}
 
 	/**

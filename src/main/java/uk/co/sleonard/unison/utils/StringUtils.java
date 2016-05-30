@@ -10,9 +10,15 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.TimeZone;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -29,7 +35,6 @@ import java.util.zip.ZipOutputStream;
  *
  */
 public class StringUtils {
-
 	/**
 	 * Compress.
 	 *
@@ -65,6 +70,29 @@ public class StringUtils {
 			words.add(tok.nextToken());
 		}
 		return words;
+	}
+
+	/**
+	 * Convert date to string.
+	 *
+	 * @param date
+	 *            the date
+	 * @return the string
+	 */
+	/*
+	 * Returns an NNTP-format date string. This is only required when clients use the NEWGROUPS or
+	 * NEWNEWS methods, therefore rarely: we don't cache any of the variables here.
+	 */
+	public static String convertDateToString(final Date date) {
+		final String NNTP_DATE_FORMAT = "yyyyMMdd HHmmss 'GMT'";
+
+		final DateFormat df = new SimpleDateFormat(NNTP_DATE_FORMAT);
+		final Calendar cal = new GregorianCalendar();
+		final TimeZone gmt = TimeZone.getTimeZone("GMT");
+		cal.setTimeZone(gmt);
+		df.setCalendar(cal);
+		cal.setTime(date);
+		return df.format(date);
 	}
 
 	/**

@@ -1,4 +1,4 @@
-package uk.co.sleonard.unison.gui;
+package uk.co.sleonard.unison;
 
 /**
  * The Interface UNISoNLogger.

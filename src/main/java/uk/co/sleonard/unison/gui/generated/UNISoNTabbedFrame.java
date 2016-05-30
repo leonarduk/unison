@@ -16,84 +16,83 @@ import javax.swing.KeyStroke;
 
 import org.hsqldb.util.DatabaseManagerSwing;
 
+import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.gui.JSplashScreen;
-import uk.co.sleonard.unison.gui.UNISoNController;
 
 /**
  * The Class UNISoNTabbedFrame.
  *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
- * 
+ *
  */
 public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
 
 	/** The Constant serialVersionUID. */
-	private static final long										serialVersionUID	= -273253787613490358L;
+	private static final long serialVersionUID = -273253787613490358L;
 
 	/** The Constant dbDriver. */
-	private final static String										dbDriver			= "org.hsqldb.jdbcDriver";
+	private final static String dbDriver = "org.hsqldb.jdbcDriver";
 
 	/** The Constant dbUser. */
-	private final static String										dbUser				= "sa";
+	private final static String dbUser = "sa";
 
 	/** The Constant DB_URL. */
-	private final static String										DB_URL				= "jdbc:hsqldb:file:DB/projectDB";
+	private final static String DB_URL = "jdbc:hsqldb:file:DB/projectDB";
 
 	/** The Constant GUI_ARGS. */
 	// http://www.electric-spoon.com/cgi-bin/man/man2html?hsqldb-databasemanagerswing+1
-	public static final String										GUI_ARGS[]			= {
-	        "-driver", UNISoNTabbedFrame.dbDriver, "-url", UNISoNTabbedFrame.DB_URL, "-user",
-	        UNISoNTabbedFrame.dbUser, "-noexit" };
+	public static final String GUI_ARGS[] = { "-driver", UNISoNTabbedFrame.dbDriver, "-url",
+	        UNISoNTabbedFrame.DB_URL, "-user", UNISoNTabbedFrame.dbUser, "-noexit" };
 
 	/** The about menu item. */
 	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JMenuItem									aboutMenuItem;
+	private javax.swing.JMenuItem aboutMenuItem;
 
 	/** The delete db menu item. */
-	private javax.swing.JMenuItem									deleteDBMenuItem;
+	private javax.swing.JMenuItem deleteDBMenuItem;
 
 	/** The download news panel1. */
-	private uk.co.sleonard.unison.gui.generated.DownloadNewsPanel	downloadNewsPanel1;
+	private uk.co.sleonard.unison.gui.generated.DownloadNewsPanel downloadNewsPanel1;
 
 	/** The exit menu item. */
-	private javax.swing.JMenuItem									exitMenuItem;
+	private javax.swing.JMenuItem exitMenuItem;
 
 	/** The file menu. */
-	private javax.swing.JMenu										fileMenu;
+	private javax.swing.JMenu fileMenu;
 
 	/** The help menu. */
-	private javax.swing.JMenu										helpMenu;
+	private javax.swing.JMenu helpMenu;
 
 	/** The j menu bar1. */
-	private javax.swing.JMenuBar									jMenuBar1;
+	private javax.swing.JMenuBar jMenuBar1;
 
 	/** The j separator1. */
-	private javax.swing.JSeparator									jSeparator1;
+	private javax.swing.JSeparator jSeparator1;
 
 	/** The j separator2. */
-	private javax.swing.JSeparator									jSeparator2;
+	private javax.swing.JSeparator jSeparator2;
 
 	/** The message store viewer1. */
-	private uk.co.sleonard.unison.gui.generated.MessageStoreViewer	messageStoreViewer1;
+	private uk.co.sleonard.unison.gui.generated.MessageStoreViewer messageStoreViewer1;
 
 	/** The pajek panel1. */
-	private uk.co.sleonard.unison.gui.generated.PajekPanel			pajekPanel1;
+	private uk.co.sleonard.unison.gui.generated.PajekPanel pajekPanel1;
 
 	/** The refresh db menu item. */
-	private javax.swing.JMenuItem									refreshDBMenuItem;
+	private javax.swing.JMenuItem refreshDBMenuItem;
 
 	/** The show d bclient menu item. */
-	private javax.swing.JMenuItem									showDBclientMenuItem;
+	private javax.swing.JMenuItem showDBclientMenuItem;
 
 	/** The tabbed pane. */
-	private javax.swing.JTabbedPane									tabbedPane;
+	private javax.swing.JTabbedPane tabbedPane;
 
 	/** The controller. */
-	private final UNISoNController									controller;
+	private final UNISoNController controller;
 
 	/** The about dialog. */
-	private final AboutDialog										aboutDialog;
+	private final AboutDialog aboutDialog;
 
 	/**
 	 * The main method.

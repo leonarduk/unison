@@ -27,8 +27,8 @@ import org.apache.commons.net.nntp.NNTPReply;
 import org.apache.commons.net.nntp.NewsgroupInfo;
 import org.apache.log4j.Logger;
 
+import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
-import uk.co.sleonard.unison.gui.UNISoNException;
 
 /**
  * The Class NewsClient.

@@ -14,8 +14,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
+import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.gui.GraphPreviewPanel;
-import uk.co.sleonard.unison.gui.UNISoNException;
 
 /**
  * The Class PajekNetworkFile.

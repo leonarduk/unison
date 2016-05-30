@@ -24,12 +24,12 @@ import javax.swing.table.DefaultTableModel;
 
 import org.hibernate.Session;
 
+import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DataQuery;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.gui.GraphPreviewPanel;
-import uk.co.sleonard.unison.gui.UNISoNController;
-import uk.co.sleonard.unison.gui.UNISoNException;
 import uk.co.sleonard.unison.output.ExportToCSV;
 import uk.co.sleonard.unison.output.PajekNetworkFile;
 import uk.co.sleonard.unison.utils.StringUtils;
@@ -154,7 +154,8 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 			this.refreshPajekMatrixTable();
 		}
 		catch (final UNISoNException e) {
-			UNISoNController.getInstance().showAlert("Error: " + e.getMessage());
+			UNISoNController.getInstance();
+			UNISoNController.getGui().showAlert("Error: " + e.getMessage());
 		}
 
 	}
@@ -586,7 +587,8 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 	 *            the string
 	 */
 	private void showStatus(final String string) {
-		UNISoNController.getInstance().showStatus(string);
+		UNISoNController.getInstance();
+		UNISoNController.getGui().showStatus(string);
 	}
 
 	/*

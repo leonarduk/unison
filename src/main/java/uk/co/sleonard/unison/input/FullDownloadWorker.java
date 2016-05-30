@@ -19,11 +19,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.commons.net.MalformedServerReplyException;
 
+import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNException;
+import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
-import uk.co.sleonard.unison.gui.UNISoNController;
-import uk.co.sleonard.unison.gui.UNISoNException;
-import uk.co.sleonard.unison.gui.UNISoNLogger;
 import uk.co.sleonard.unison.utils.HttpDateObject;
 
 /**
@@ -151,7 +151,8 @@ public class FullDownloadWorker extends SwingWorker {
 			return "Interrupted";
 		}
 		catch (final UNISoNException e) {
-			UNISoNController.getInstance().showAlert("Error in download:" + e);
+			UNISoNController.getInstance();
+			UNISoNController.getGui().showAlert("Error in download:" + e);
 			e.printStackTrace();
 			return "FAIL";
 		}

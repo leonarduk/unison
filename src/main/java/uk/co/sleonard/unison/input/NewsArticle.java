@@ -14,7 +14,7 @@ import java.util.List;
 import org.apache.commons.net.nntp.Article;
 import org.apache.log4j.Logger;
 
-import uk.co.sleonard.unison.gui.UNISoNException;
+import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.utils.HttpDateObject;
 import uk.co.sleonard.unison.utils.StringUtils;
 

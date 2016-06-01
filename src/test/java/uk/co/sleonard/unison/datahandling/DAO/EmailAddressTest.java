@@ -6,10 +6,10 @@
  */
 package uk.co.sleonard.unison.datahandling.DAO;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Assert;
 import org.junit.Test;
-
-import uk.co.sleonard.unison.datahandling.DAO.EmailAddress;
 
 /**
  * The Class EmailAddressTest.
@@ -55,13 +55,19 @@ public class EmailAddressTest {
 	 */
 	@Test
 	public void testHashCode() {
-		EmailAddress actual = new EmailAddress("user", "email@corporate.com", "127.0.0.1");
-		Assert.assertEquals(2123816993, actual.hashCode());
-		actual = new EmailAddress("user", "email@corporate.com", null);
-		Assert.assertEquals(-1612454402, actual.hashCode());
-		actual = new EmailAddress("user", null, null);
-		Assert.assertEquals(3629098, actual.hashCode());
-		actual = new EmailAddress(null, null, null);
-		Assert.assertEquals(29791, actual.hashCode());
+		EmailAddress actual1 = null;
+		EmailAddress actual2 = null;
+		actual1 = new EmailAddress("user", "email@corporate.com", "127.0.0.1");
+		actual2 = new EmailAddress("user2", "email2@corporate.com", "127.0.0.2");
+		assertTrue(actual1.hashCode() != actual2.hashCode());
+		actual1 = new EmailAddress("user", "email@corporate.com", null);
+		actual2 = new EmailAddress("user2", "email2@corporate.com", null);
+		assertTrue(actual1.hashCode() != actual2.hashCode());
+		actual1 = new EmailAddress("user", null, null);
+		actual2 = new EmailAddress("user2", null, null);
+		assertTrue(actual1.hashCode() != actual2.hashCode());
+		actual1 = new EmailAddress(null, null, null);
+		actual2 = new EmailAddress(null, null, null);
+		assertTrue(actual1.hashCode() == actual2.hashCode());
 	}
 }

@@ -68,6 +68,6 @@ public class EmailAddressTest {
 		assertTrue(actual1.hashCode() != actual2.hashCode());
 		actual1 = new EmailAddress(null, null, null);
 		actual2 = new EmailAddress(null, null, null);
-		assertTrue(actual1.hashCode() != actual2.hashCode());
+		assertTrue(actual1.hashCode() == actual2.hashCode());
 	}
 }

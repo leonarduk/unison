@@ -55,8 +55,19 @@ public class EmailAddressTest {
 	 */
 	@Test
 	public void testHashCode() {
-		EmailAddress actual1 = new EmailAddress("user", "email@corporate.com", "127.0.0.1");
-		EmailAddress actual2 = new EmailAddress("user2", "email2@corporate.com", "127.0.0.2");
+		EmailAddress actual1 = null;
+		EmailAddress actual2 = null;
+		actual1 = new EmailAddress("user", "email@corporate.com", "127.0.0.1");
+		actual2 = new EmailAddress("user2", "email2@corporate.com", "127.0.0.2");
+		assertTrue(actual1.hashCode() != actual2.hashCode());
+		actual1 = new EmailAddress("user", "email@corporate.com", null);
+		actual2 = new EmailAddress("user2", "email2@corporate.com", null);
+		assertTrue(actual1.hashCode() != actual2.hashCode());
+		actual1 = new EmailAddress("user", null, null);
+		actual2 = new EmailAddress("user2", null, null);
+		assertTrue(actual1.hashCode() != actual2.hashCode());
+		actual1 = new EmailAddress(null, null, null);
+		actual2 = new EmailAddress(null, null, null);
 		assertTrue(actual1.hashCode() != actual2.hashCode());
 	}
 }

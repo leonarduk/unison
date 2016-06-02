@@ -5,7 +5,7 @@ UNISoN is a Java-based NNTP client that can analyse messages to save to a Pajek-
 [![Download unison](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/unison-sna/files/latest/download)
 
 
-Run via [![Java web start](http://unison.sleonard.co.uk/downloads/jnlp/launch.jnlp)] - this is self-signed so you need to allow it
+Run via [Java web start](http://unison.sleonard.co.uk/downloads/jnlp/launch.jnlp) - this is self-signed so you need to allow it
 
 Just Go To *Startmenu >>Java >>Configure Java >> Security >> Edit site list >> Add >> "http://unison.sleonard.co.uk/" >> OK 
 

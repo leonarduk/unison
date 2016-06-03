@@ -556,5 +556,31 @@
 			</url>
 		</repository>
 	</distributionManagement>
+	<developers>
+		<developer>
+			<id>leonarduk</id>
+			<name>Stephen Leonard</name>
+			<email>github@leonarduk.com</email>
+			<roles>
+				<role>Project Manager</role>
+				<role>Architect</role>
+				<role>Developer</role>
+			</roles>
+			<organization>Leonard UK Ltd</organization>
+			<organizationUrl>http://leonarduk.com</organizationUrl>
+			<timezone>0</timezone>
+			<url>http://uk.linkedin.com/in/steveleonard/</url>
+		</developer>
+		<developer>
+			<id>leonarduk</id>
+			<name>Elton Nunes</name>
+			<email>elton_12_nunes@hotmail.com</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>0</timezone>
+			<url>https://br.linkedin.com/in/eltonnunes1/en</url>
+		</developer>
+	</developers><!-- to get to sona type and onto maven central -->
 
 </project>

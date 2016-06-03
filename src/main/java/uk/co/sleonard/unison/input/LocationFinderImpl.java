@@ -49,7 +49,7 @@ public class LocationFinderImpl implements LocationFinder {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see uk.co.sleonard.unison.input.LocationFinder#createLocation(java.lang.String)
 	 */
 	@Override

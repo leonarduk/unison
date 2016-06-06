@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Vector;
+import java.util.regex.Pattern;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -29,6 +30,9 @@ public class LocationFinderImpl implements LocationFinder {
 
 	/** The web url. */
 	private final String webUrl;
+	private static final String IPADDRESS_PATTERN = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+	        + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+	        + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
 
 	/**
 	 * Instantiates a new location finder impl.
@@ -56,6 +60,13 @@ public class LocationFinderImpl implements LocationFinder {
 	public Location createLocation(final String ipAddress) {
 		try {
 
+			// Assure that IP Address
+
+			Pattern pattern = Pattern.compile(IPADDRESS_PATTERN);
+			if (!pattern.matcher(ipAddress).matches()) {
+				return new Location();
+			}
+
 			/**
 			 * {"ip":"213.205.194.135","country_code":"GB","country_name":"United Kingdom"
 			 * ,"region_code":"ENG","region_name":"England","city":"London","zip_code":"EC4N",
@@ -73,13 +84,13 @@ public class LocationFinderImpl implements LocationFinder {
 			final JsonParser jp = new JsonParser(); // from gson
 			final JsonElement root = jp
 			        .parse(new InputStreamReader((InputStream) request.getContent())); // Convert
-			// the
-			// input
-			// stream
-			// to
-			// a
-			// json
-			// element
+			                                                                           // the
+			                                                                           // input
+			                                                                           // stream
+			                                                                           // to
+			                                                                           // a
+			                                                                           // json
+			                                                                           // element
 			final JsonObject rootobj = root.getAsJsonObject(); // May be an array, may be an object.
 
 			final String city = rootobj.get("city").getAsString();

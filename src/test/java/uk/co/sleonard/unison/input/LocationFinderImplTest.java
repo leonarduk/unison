@@ -31,6 +31,10 @@ public class LocationFinderImplTest {
 		Assert.assertEquals("United Kingdom", actual.getCountry());
 		Assert.assertEquals("London", actual.getCity());
 		Assert.assertEquals("GB", actual.getCountryCode());
-	}
 
+		Location actual2 = this.finder.createLocation("wrongipaddress");
+		Assert.assertNull(actual2.getCountry());
+		Assert.assertNull(actual2.getCity());
+		Assert.assertNull(actual2.getCountryCode());
+	}
 }

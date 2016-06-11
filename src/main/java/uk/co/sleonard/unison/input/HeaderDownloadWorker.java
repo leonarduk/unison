@@ -9,7 +9,7 @@ package uk.co.sleonard.unison.input;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.text.ParseException;
+import java.time.format.DateTimeParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
@@ -23,7 +23,7 @@ import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
-import uk.co.sleonard.unison.utils.HttpDateObject;
+import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
  * Class to create a separate Thread for downloading messages.
@@ -291,9 +291,9 @@ public class HeaderDownloadWorker extends SwingWorker {
 		final String from = stt.nextToken();
 		Date date;
 		try {
-			date = HttpDateObject.getParser().parseDate(stt.nextToken());
+			date = StringUtils.stringToDate(stt.nextToken());
 		}
-		catch (final ParseException e) {
+		catch (final DateTimeParseException e) {
 			throw new UNISoNException(e);
 		}
 		final String articleId = stt.nextToken();

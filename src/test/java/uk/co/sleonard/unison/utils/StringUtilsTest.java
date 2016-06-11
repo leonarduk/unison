@@ -6,12 +6,14 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
 import org.junit.Test;
 
-import uk.co.sleonard.unison.utils.StringUtils;
+import uk.co.sleonard.unison.UNISoNException;
 
 /**
  * The Class StringUtilsTest.
@@ -95,4 +97,50 @@ public class StringUtilsTest {
 		assertNotNull(actual);
 		assertTrue(actual.length > 0);
 	}
+
+	/**
+	 * Test stringToDate
+	 */
+	@Test
+	public void testStringToDate() throws UNISoNException {
+		Date actual = null;
+		String expected = null;
+		assertEquals(expected, StringUtils.stringToDate(null));
+		assertEquals(expected, StringUtils.stringToDate(""));
+		expected = "Sat Jun 11 00:00:00 BRT 2016";
+		actual = StringUtils.stringToDate("20160611");
+		assertEquals(expected, actual.toString());
+		expected = "Thu May 12 00:00:00 BRT 1994";
+		actual = StringUtils.stringToDate("12/05/1994");
+		assertEquals(expected, actual.toString());
+		actual = StringUtils.stringToDate("Sun, 18 Jan 2015 15:17:37 -0700");
+		assertTrue(actual.toString().contains("18"));
+		assertTrue(actual.toString().contains("Jan"));
+		assertTrue(actual.toString().contains("2015"));
+		actual = StringUtils.stringToDate("23 Jan 2015 16:28:20 GMT");
+		assertTrue(actual.toString().contains("23"));
+		assertTrue(actual.toString().contains("Jan"));
+		assertTrue(actual.toString().contains("2015"));
+		actual = StringUtils.stringToDate("Sun, 18 Jan 2015 23:40:56 +0000 (UTC)");
+		assertTrue(actual.toString().contains("18"));
+		assertTrue(actual.toString().contains("Jan"));
+		assertTrue(actual.toString().contains("2015"));
+	}
+
+	/**
+	 * Test stringToDate with String length 8 throw DateTimeParseException
+	 */
+	@Test(expected = DateTimeParseException.class)
+	public void testStringToDateExceptionLength8() throws UNISoNException {
+		StringUtils.stringToDate("xxxxxxxx");
+	}
+
+	/**
+	 * Test stringToDate with String length 10 throw DateTimeParseException
+	 */
+	@Test(expected = DateTimeParseException.class)
+	public void testStringToDateExceptionLength10() throws UNISoNException {
+		StringUtils.stringToDate("xx/xx/xxxx");
+	}
+
 }

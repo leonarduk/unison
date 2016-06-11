@@ -12,6 +12,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -23,6 +28,8 @@ import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
+import uk.co.sleonard.unison.UNISoNException;
 
 /**
  * The Class StringUtils. </br>
@@ -195,6 +202,64 @@ public class StringUtils {
 		}
 
 		return new String[] { "empty" };
+	}
+
+	public static Date stringToDate(String text) throws UNISoNException {
+		if ((null == text) || text.equals("")) {
+			return null;
+		}
+		if (text.length() == 8) {
+			try {
+				// 20100101
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+				LocalDate localDate = LocalDate.parse(text, formatter);
+				return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+			}
+			catch (final DateTimeParseException e) {
+				throw new UNISoNException("Failed to parse date:" + text, e);
+			}
+		}
+		else if ((text.length() == 10) && text.contains("/")) {
+			try {
+				// 12/05/1994
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+				LocalDate localDate = LocalDate.parse(text, formatter);
+				return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+			}
+			catch (final DateTimeParseException e) {
+				e.printStackTrace();
+				return null;
+			}
+
+		}
+		else {
+			String dateText = text.trim();
+			if (dateText.substring(0, 1).matches("[a-zA-Z]") && dateText.contains("(")) {
+				// Sun, 18 Jan 2015 23:40:56 +0000 (UTC)
+				// TRIM TO
+				// 18 Jan 2015 23:40:56 +0000
+				dateText = dateText.substring(4, dateText.indexOf("(")).trim();
+
+				DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
+				ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateText, formatter);
+				return Date.from(zonedDateTime.toInstant());
+			}
+			else if (dateText.substring(0, 1).matches("[a-zA-Z]")) {
+				dateText = dateText.substring(4, dateText.length()).trim();
+				// Sun, 18 Jan 2015 23:40:56 +0000
+				// TRIM TO
+				// 18 Jan 2015 23:40:56 +0000
+				DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
+				ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateText, formatter);
+				return Date.from(zonedDateTime.toInstant());
+			}
+			else {
+				// 30 Jan 2015 23:37:13 GMT
+				DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
+				LocalDate localDate = LocalDate.parse(dateText, formatter);
+				return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+			}
+		}
 	}
 
 }

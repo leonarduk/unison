@@ -137,7 +137,7 @@ public class StringUtilsTest {
 	}
 
 	/**
-	 * Test stringToDate with String length 10 throw DateTimeParseException
+	 * Test stringToDate with String length 10 throw UNISoNException
 	 */
 	@Test(expected = UNISoNException.class)
 	public void testStringToDateExceptionLength10() throws UNISoNException {

@@ -106,12 +106,14 @@ public class StringUtilsTest {
 		String expected = null;
 		assertEquals(expected, StringUtils.stringToDate(null));
 		assertEquals(expected, StringUtils.stringToDate(""));
-		expected = "Sat Jun 11 00:00:00 BRT 2016";
 		actual = StringUtils.stringToDate("20160611");
-		assertEquals(expected, actual.toString());
-		expected = "Thu May 12 00:00:00 BRT 1994";
+		assertTrue(actual.toString().contains("11"));
+		assertTrue(actual.toString().contains("Jun"));
+		assertTrue(actual.toString().contains("2016"));
 		actual = StringUtils.stringToDate("12/05/1994");
-		assertEquals(expected, actual.toString());
+		assertTrue(actual.toString().contains("12"));
+		assertTrue(actual.toString().contains("May"));
+		assertTrue(actual.toString().contains("1994"));
 		actual = StringUtils.stringToDate("Sun, 18 Jan 2015 15:17:37 -0700");
 		assertTrue(actual.toString().contains("18"));
 		assertTrue(actual.toString().contains("Jan"));

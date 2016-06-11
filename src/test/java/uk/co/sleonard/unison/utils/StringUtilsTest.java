@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -128,9 +127,9 @@ public class StringUtilsTest {
 	}
 
 	/**
-	 * Test stringToDate with String length 8 throw DateTimeParseException
+	 * Test stringToDate with String length 8 throw UNISoNException
 	 */
-	@Test(expected = DateTimeParseException.class)
+	@Test(expected = UNISoNException.class)
 	public void testStringToDateExceptionLength8() throws UNISoNException {
 		StringUtils.stringToDate("xxxxxxxx");
 	}
@@ -138,7 +137,7 @@ public class StringUtilsTest {
 	/**
 	 * Test stringToDate with String length 10 throw DateTimeParseException
 	 */
-	@Test(expected = DateTimeParseException.class)
+	@Test(expected = UNISoNException.class)
 	public void testStringToDateExceptionLength10() throws UNISoNException {
 		StringUtils.stringToDate("xx/xx/xxxx");
 	}

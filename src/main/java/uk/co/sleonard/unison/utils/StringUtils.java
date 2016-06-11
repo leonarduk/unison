@@ -234,8 +234,7 @@ public class StringUtils {
 				return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 			}
 			catch (final DateTimeParseException e) {
-				e.printStackTrace();
-				return null;
+				throw new UNISoNException("Failed to parse date:" + text, e);
 			}
 
 		}

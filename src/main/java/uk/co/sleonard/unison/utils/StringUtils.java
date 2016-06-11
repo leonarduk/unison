@@ -204,6 +204,13 @@ public class StringUtils {
 		return new String[] { "empty" };
 	}
 
+	/**
+	 * Convert the String with date to Date Object.
+	 *
+	 * @author Elton <elton_12_nunes@hotmail.com>
+	 * @since 11/06/2016
+	 * @return Return the date.
+	 */
 	public static Date stringToDate(String text) throws UNISoNException {
 		if ((null == text) || text.equals("")) {
 			return null;

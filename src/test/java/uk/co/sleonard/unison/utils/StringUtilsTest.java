@@ -106,22 +106,61 @@ public class StringUtilsTest {
 		String expected = null;
 		assertEquals(expected, StringUtils.stringToDate(null));
 		assertEquals(expected, StringUtils.stringToDate(""));
+
+		// 20160611 -> 11 Jun 2016
 		actual = StringUtils.stringToDate("20160611");
 		assertTrue(actual.toString().contains("11"));
 		assertTrue(actual.toString().contains("Jun"));
 		assertTrue(actual.toString().contains("2016"));
-		actual = StringUtils.stringToDate("12/05/1994");
-		assertTrue(actual.toString().contains("12"));
-		assertTrue(actual.toString().contains("May"));
-		assertTrue(actual.toString().contains("1994"));
+		// 13012015 -> 13 Jan 2015
+		actual = StringUtils.stringToDate("13012015");
+		assertTrue(actual.toString().contains("13"));
+		assertTrue(actual.toString().contains("Jan"));
+		assertTrue(actual.toString().contains("2015"));
+		// 12201628 -> 28 Dec 2016
+		actual = StringUtils.stringToDate("12201628");
+		assertTrue(actual.toString().contains("28"));
+		assertTrue(actual.toString().contains("Dec"));
+		assertTrue(actual.toString().contains("2016"));
+
+		// 12/05/1994 -> 12 May 1994
+		for (String separator : StringUtils.DATE_SEPARATORS) {
+			actual = StringUtils.stringToDate("12" + separator + "05" + separator + "1994");
+			assertTrue(actual.toString().contains("12"));
+			assertTrue(actual.toString().contains("May"));
+			assertTrue(actual.toString().contains("1994"));
+
+		}
+		// 2010/12/05 -> 12 May 2010
+		for (String separator : StringUtils.DATE_SEPARATORS) {
+			actual = StringUtils.stringToDate("2010" + separator + "12" + separator + "05");
+			assertTrue(actual.toString().contains("05"));
+			assertTrue(actual.toString().contains("Dec"));
+			assertTrue(actual.toString().contains("2010"));
+
+		}
+		// 12/2014/05 -> 05 Dec 2014
+		for (String separator : StringUtils.DATE_SEPARATORS) {
+			actual = StringUtils.stringToDate("12" + separator + "2014" + separator + "05");
+			assertTrue(actual.toString().contains("05"));
+			assertTrue(actual.toString().contains("Dec"));
+			assertTrue(actual.toString().contains("2014"));
+
+		}
+
+		// Sun, 18 Jan 2015 15:17:37 -0700 -> 12 May 1994
 		actual = StringUtils.stringToDate("Sun, 18 Jan 2015 15:17:37 -0700");
 		assertTrue(actual.toString().contains("18"));
 		assertTrue(actual.toString().contains("Jan"));
 		assertTrue(actual.toString().contains("2015"));
+
+		// 23 Jan 2015 16:28:20 GMT -> 23 Jan 2015
 		actual = StringUtils.stringToDate("23 Jan 2015 16:28:20 GMT");
 		assertTrue(actual.toString().contains("23"));
 		assertTrue(actual.toString().contains("Jan"));
 		assertTrue(actual.toString().contains("2015"));
+
+		// Sun, 18 Jan 2015 23:40:56 +0000 (UTC) -> 18 Jan 2015
 		actual = StringUtils.stringToDate("Sun, 18 Jan 2015 23:40:56 +0000 (UTC)");
 		assertTrue(actual.toString().contains("18"));
 		assertTrue(actual.toString().contains("Jan"));

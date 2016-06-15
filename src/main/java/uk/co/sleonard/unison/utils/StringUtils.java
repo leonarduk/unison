@@ -42,6 +42,9 @@ import uk.co.sleonard.unison.UNISoNException;
  *
  */
 public class StringUtils {
+
+	public static final String[] DATE_SEPARATORS = { "/", "-", ".", "," };
+
 	/**
 	 * Compress.
 	 *
@@ -212,13 +215,41 @@ public class StringUtils {
 	 * @return Return the date.
 	 */
 	public static Date stringToDate(String text) throws UNISoNException {
+
+		String[] symbols = { "dd", "MM", "yyyy" };
+		StringBuilder pattern = null;
+
 		if ((null == text) || text.equals("")) {
 			return null;
 		}
 		if (text.length() == 8) {
 			try {
-				// 20100101
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+				// 20101229
+				pattern = new StringBuilder().append(symbols[2]).append(symbols[1])
+				        .append(symbols[0]);
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern.toString());
+				LocalDate localDate = LocalDate.parse(text, formatter);
+				return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+			}
+			catch (final DateTimeParseException e) {
+				// Try other.
+			}
+			try {
+				// 13122010
+				pattern = new StringBuilder().append(symbols[0]).append(symbols[1])
+				        .append(symbols[2]);
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern.toString());
+				LocalDate localDate = LocalDate.parse(text, formatter);
+				return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+			}
+			catch (final DateTimeParseException e) {
+				// Try other.
+			}
+			try {
+				// 12201601
+				pattern = new StringBuilder().append(symbols[1]).append(symbols[2])
+				        .append(symbols[0]);
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern.toString());
 				LocalDate localDate = LocalDate.parse(text, formatter);
 				return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 			}
@@ -226,17 +257,48 @@ public class StringUtils {
 				throw new UNISoNException("Failed to parse date:" + text, e);
 			}
 		}
-		else if ((text.length() == 10) && text.contains("/")) {
-			try {
-				// 12/05/1994
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-				LocalDate localDate = LocalDate.parse(text, formatter);
-				return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		else if (text.length() == 10) {
+			for (String separator : DATE_SEPARATORS) {
+				if (text.contains(separator)) {
+					try {
+						// Ex.12/05/1994
+						pattern = new StringBuilder().append(symbols[0]).append(separator)
+						        .append(symbols[1]).append(separator).append(symbols[2]);
+						DateTimeFormatter formatter = DateTimeFormatter
+						        .ofPattern(pattern.toString());
+						LocalDate localDate = LocalDate.parse(text, formatter);
+						return Date
+						        .from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+					}
+					catch (final DateTimeParseException e) {
+					}
+					try {
+						// Ex.1994/12/05
+						pattern = new StringBuilder().append(symbols[2]).append(separator)
+						        .append(symbols[1]).append(separator).append(symbols[0]);
+						DateTimeFormatter formatter = DateTimeFormatter
+						        .ofPattern(pattern.toString());
+						LocalDate localDate = LocalDate.parse(text, formatter);
+						return Date
+						        .from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+					}
+					catch (final DateTimeParseException e) {
+					}
+					try {
+						// Ex.12/1994/05
+						pattern = new StringBuilder().append(symbols[1]).append(separator)
+						        .append(symbols[2]).append(separator).append(symbols[0]);
+						DateTimeFormatter formatter = DateTimeFormatter
+						        .ofPattern(pattern.toString());
+						LocalDate localDate = LocalDate.parse(text, formatter);
+						return Date
+						        .from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+					}
+					catch (final DateTimeParseException e) {
+					}
+				}
 			}
-			catch (final DateTimeParseException e) {
-				throw new UNISoNException("Failed to parse date:" + text, e);
-			}
-
+			throw new UNISoNException("Failed to parse date:" + text);
 		}
 		else {
 			String dateText = text.trim();

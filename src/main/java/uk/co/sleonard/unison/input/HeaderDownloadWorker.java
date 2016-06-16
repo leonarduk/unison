@@ -79,11 +79,18 @@ public class HeaderDownloadWorker extends SwingWorker {
 	/** The mode. */
 	private DownloadMode mode;
 
+	private final LinkedBlockingQueue<NewsArticle> queue;
+
 	/**
 	 * Instantiates a new header download worker.
 	 */
 	public HeaderDownloadWorker() {
+		this(UNISoNController.getInstance().getQueue());
+	}
+
+	public HeaderDownloadWorker(final LinkedBlockingQueue<NewsArticle> inputQueue) {
 		super(HeaderDownloadWorker.class.getCanonicalName());
+		this.queue = inputQueue;
 	}
 
 	/*
@@ -97,7 +104,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 		while (this.running) {
 			if (this.downloading) {
 				try {
-					this.storeArticleInfo(UNISoNController.getInstance().getQueue());
+					this.storeArticleInfo(this.queue);
 				}
 				catch (final UNISoNException e) {
 					this.log.alert("ERROR:" + e);
@@ -110,18 +117,6 @@ public class HeaderDownloadWorker extends SwingWorker {
 
 		}
 		return "Completed";
-	}
-
-	public NewsArticle convertMessageToNewsArticle(final int articleNumber, final String subject,
-	        final String from, final Date date, final String articleId, final String references)
-	                throws UNISoNException {
-		final String postingHost = null;
-		final String content = null;
-
-		final NewsArticle article = new NewsArticle(articleId, articleNumber, date, from, subject,
-		        references, content, this.newsgroup, postingHost);
-
-		return article;
 	}
 
 	/*
@@ -303,8 +298,8 @@ public class HeaderDownloadWorker extends SwingWorker {
 		}
 
 		if (this.inDateRange(this.fromDate, this.toDate, date)) {
-			queue.add(this.convertMessageToNewsArticle(articleNumber, subject, from, date,
-			        articleId, references));
+			queue.add(new NewsArticle(articleId, articleNumber, date, from, subject, references,
+			        references));
 			this.kept++;
 			if (!this.mode.equals(DownloadMode.BASIC)) {
 				FullDownloadWorker.addDownloadRequest(articleId, this.mode, this.log);

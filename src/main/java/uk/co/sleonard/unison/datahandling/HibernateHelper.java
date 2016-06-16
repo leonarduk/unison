@@ -95,7 +95,7 @@ public class HibernateHelper {
 	private final UNISoNGUI gui;
 
 	/**
-	 * The main method.
+	 * This opens up a SQL client to access the database directly.
 	 *
 	 * @param args
 	 *            the arguments

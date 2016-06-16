@@ -1,6 +1,6 @@
 /**
  * HeaderDownloadWorkerTest
- * 
+ *
  * @author ${author}
  * @since 30-May-2016
  */
@@ -33,7 +33,7 @@ import uk.co.sleonard.unison.utils.StringUtils;
  */
 public class HeaderDownloadWorkerTest {
 
-	private static Logger			logger	= Logger.getLogger(HeaderDownloadWorkerTest.class);
+	private static Logger			lo1gger	= Logger.getLogger(HeaderDownloadWorkerTest.class);
 	private HeaderDownloadWorker	worker;
 
 	/**
@@ -41,7 +41,7 @@ public class HeaderDownloadWorkerTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		this.worker = new HeaderDownloadWorker();
+		this.worker = new HeaderDownloadWorker(new LinkedBlockingQueue<>());
 	}
 
 	/**
@@ -50,15 +50,6 @@ public class HeaderDownloadWorkerTest {
 	@Ignore
 	@Test
 	public void testConstruct() {
-	}
-
-	/**
-	 * Test Class Constructor.
-	 */
-	@Test
-	public void testConstructor() {
-		final HeaderDownloadWorker worker = new HeaderDownloadWorker();
-		Assert.assertNotNull(worker);
 	}
 
 	/**

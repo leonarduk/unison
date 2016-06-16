@@ -1,6 +1,6 @@
 /**
  * NewsArticle
- * 
+ *
  * @author Stephen <github@leonarduk.com>
  * @since 22-May-2016
  */
@@ -85,6 +85,13 @@ public class NewsArticle implements Comparable<Object> {
 
 		this.setFrom(article.getFrom());
 		this.setSubject(article.getSubject());
+	}
+
+	public NewsArticle(final String articleId2, final int articleNumber2, final Date date2,
+	        final String from2, final String subject2, final String references2,
+	        final String newsgroup) throws UNISoNException {
+		this(articleId2, articleNumber2, date2, from2, subject2, references2, null, newsgroup,
+		        null);
 	}
 
 	/**

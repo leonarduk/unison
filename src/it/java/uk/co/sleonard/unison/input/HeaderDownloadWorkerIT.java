@@ -23,7 +23,8 @@ public class HeaderDownloadWorkerIT {
 	        throws IOException, UNISoNException {
 		final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
 		try (final Reader reader = NewsClientIT.downloadFirstMessage();) {
-			final HeaderDownloadWorker worker = new HeaderDownloadWorker();
+			final HeaderDownloadWorker worker = new HeaderDownloadWorker(
+			        new LinkedBlockingQueue<>());
 			worker.setMode(DownloadMode.BASIC);
 
 			final BufferedReader bufReader = new BufferedReader(reader);

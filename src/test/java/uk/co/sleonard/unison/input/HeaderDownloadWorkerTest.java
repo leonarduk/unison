@@ -1,18 +1,20 @@
 /**
  * HeaderDownloadWorkerTest
- * 
+ *
  * @author ${author}
  * @since 30-May-2016
  */
 package uk.co.sleonard.unison.input;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
@@ -22,6 +24,7 @@ import com.ibm.icu.util.Calendar;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
+import uk.co.sleonard.unison.utils.Downloader;
 import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
@@ -41,24 +44,9 @@ public class HeaderDownloadWorkerTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		this.worker = new HeaderDownloadWorker();
-	}
-
-	/**
-	 * Test construct
-	 */
-	@Ignore
-	@Test
-	public void testConstruct() {
-	}
-
-	/**
-	 * Test Class Constructor.
-	 */
-	@Test
-	public void testConstructor() {
-		final HeaderDownloadWorker worker = new HeaderDownloadWorker();
-		Assert.assertNotNull(worker);
+		this.worker = new HeaderDownloadWorker(new LinkedBlockingQueue<>(),
+		        Mockito.mock(Downloader.class));
+		this.worker.setLog(new UNISoNCLI());
 	}
 
 	/**
@@ -76,9 +64,7 @@ public class HeaderDownloadWorkerTest {
 	 * Test fullStop
 	 */
 	@Test
-	@Ignore
 	public void testFullstop() {
-		final HeaderDownloadWorker worker = new HeaderDownloadWorker();
 		System.out.println("Wait 2 secs and stop");
 		try {
 			Thread.sleep(2000);
@@ -87,7 +73,7 @@ public class HeaderDownloadWorkerTest {
 			e.printStackTrace();
 		}
 		System.out.println("Stop");
-		worker.fullstop();
+		this.worker.fullstop();
 	}
 
 	/**
@@ -97,7 +83,7 @@ public class HeaderDownloadWorkerTest {
 	 *             Signals that an exception has occurred.
 	 */
 	@Test
-	@Ignore
+
 	public void testInitialise() throws UNISoNException {
 
 		final NewsGroupReader ngr = Mockito.mock(NewsGroupReader.class);
@@ -143,6 +129,65 @@ public class HeaderDownloadWorkerTest {
 		Assert.assertTrue(this.worker.isDownloading());
 		this.worker.pause();
 		Assert.assertFalse(this.worker.isDownloading());
+	}
+
+	@Test(expected = UNISoNException.class)
+	public void testQueueMessagesAbort() throws IOException, UNISoNException {
+		final LinkedBlockingQueue<NewsArticle> queue1 = new LinkedBlockingQueue<>();
+		final String messages = "sdsds";
+		this.worker.fullstop();
+		try (Reader reader = new StringReader(messages);) {
+			this.worker.queueMessages(queue1, reader);
+		}
+	}
+
+	@Test
+	public void testQueueMessagesAllDownload() throws IOException, UNISoNException {
+		final LinkedBlockingQueue<NewsArticle> queue1 = new LinkedBlockingQueue<>();
+		final StringBuilder buffer = new StringBuilder();
+		for (int i = 0; i < 500; i++) {
+			buffer.append(i);
+			buffer.append("\t");
+			buffer.append("This is the subject\t");
+			buffer.append("sender@email.com\t" + "2016-04-01\t");
+			buffer.append("1234\t");
+			buffer.append("123@email.com");
+		}
+		this.worker.resume();
+		this.worker.setMode(DownloadMode.ALL);
+		try (Reader reader = new StringReader(buffer.toString());) {
+			this.worker.queueMessages(queue1, reader);
+		}
+	}
+
+	@Test
+	public void testQueueMessagesBasicDownload() throws IOException, UNISoNException {
+		final LinkedBlockingQueue<NewsArticle> queue1 = new LinkedBlockingQueue<>();
+		final StringBuilder buffer = new StringBuilder();
+		buffer.append("300\t");
+		buffer.append("This is the subject\t");
+		buffer.append("sender@email.com\t" + "2016-04-01\t");
+		buffer.append("1234\t");
+		buffer.append("123@email.com");
+		this.worker.resume();
+		this.worker.setMode(DownloadMode.BASIC);
+		try (Reader reader = new StringReader(buffer.toString());) {
+			this.worker.queueMessages(queue1, reader);
+		}
+	}
+
+	/**
+	 * Test construct
+	 *
+	 * @throws InterruptedException
+	 * @throws UNISoNException
+	 * @throws IOException
+	 */
+
+	@Test
+	public void testQueueMessagesNullReader()
+	        throws InterruptedException, IOException, UNISoNException {
+		Assert.assertTrue(this.worker.queueMessages(new LinkedBlockingQueue<>(), null));
 	}
 
 	/**

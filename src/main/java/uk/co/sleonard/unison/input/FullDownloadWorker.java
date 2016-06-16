@@ -53,6 +53,7 @@ public class FullDownloadWorker extends SwingWorker {
 	/**
 	 * Adds the download request.
 	 *
+	 * @Deprecated move to DownloaderImpl if we can
 	 * @param usenetID
 	 *            the usenet id
 	 * @param mode
@@ -62,6 +63,7 @@ public class FullDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
+
 	public synchronized static void addDownloadRequest(final String usenetID,
 	        final DownloadMode mode, final UNISoNLogger log1) throws UNISoNException {
 		final DownloadRequest request = new DownloadRequest(usenetID, mode);

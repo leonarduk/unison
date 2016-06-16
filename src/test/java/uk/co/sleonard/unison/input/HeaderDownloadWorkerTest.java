@@ -12,7 +12,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
@@ -47,7 +46,7 @@ public class HeaderDownloadWorkerTest {
 	/**
 	 * Test construct
 	 */
-	@Ignore
+
 	@Test
 	public void testConstruct() {
 	}
@@ -67,9 +66,7 @@ public class HeaderDownloadWorkerTest {
 	 * Test fullStop
 	 */
 	@Test
-	@Ignore
 	public void testFullstop() {
-		final HeaderDownloadWorker worker = new HeaderDownloadWorker();
 		System.out.println("Wait 2 secs and stop");
 		try {
 			Thread.sleep(2000);
@@ -78,7 +75,7 @@ public class HeaderDownloadWorkerTest {
 			e.printStackTrace();
 		}
 		System.out.println("Stop");
-		worker.fullstop();
+		this.worker.fullstop();
 	}
 
 	/**
@@ -88,7 +85,7 @@ public class HeaderDownloadWorkerTest {
 	 *             Signals that an exception has occurred.
 	 */
 	@Test
-	@Ignore
+
 	public void testInitialise() throws UNISoNException {
 
 		final NewsGroupReader ngr = Mockito.mock(NewsGroupReader.class);

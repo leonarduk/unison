@@ -15,7 +15,6 @@ import org.apache.commons.net.nntp.Article;
 import org.apache.log4j.Logger;
 
 import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.utils.HttpDateObject;
 import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
@@ -333,7 +332,7 @@ public class NewsArticle implements Comparable<Object> {
 	 *             the UNI so n exception
 	 */
 	public void setDate(final String date) throws ParseException, UNISoNException {
-		this.date = HttpDateObject.getParser().parse(date);
+		this.date = StringUtils.stringToDate(date);
 		if (null == date) {
 			throw new UNISoNException("Cannot create article without date field");
 		}

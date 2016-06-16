@@ -6,7 +6,7 @@
 
 package uk.co.sleonard.unison.gui.generated;
 
-import java.text.ParseException;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Observable;
@@ -23,7 +23,6 @@ import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.input.DataHibernatorWorker;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
 import uk.co.sleonard.unison.input.NNTPNewsGroup;
-import uk.co.sleonard.unison.utils.HttpDateObject;
 import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
@@ -95,15 +94,12 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 	private javax.swing.JButton pauseButton;
 
 	/** The to date field. */
-	private javax.swing.JTextField	toDateField;
+	private javax.swing.JTextField toDateField;
 	/** The to date label. */
-	private javax.swing.JLabel		toDateLabel;
+	private javax.swing.JLabel toDateLabel;
 
 	/** The available groups. */
 	private Set<NNTPNewsGroup> availableGroups;
-
-	/** The parser. */
-	HttpDateObject parser = HttpDateObject.getParser();
 
 	/** The controller. */
 	private final UNISoNController controller;
@@ -213,8 +209,9 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 		if (groups.size() > 0) {
 			try {
 				this.log("Download : " + groups);
-				final Date fromDate = this.parser.parseDate(this.fromDateField.getText());
-				final Date toDate = this.parser.parseDate(this.toDateField.getText());
+
+				final Date fromDate = StringUtils.stringToDate(this.fromDateField.getText());
+				final Date toDate = StringUtils.stringToDate(this.toDateField.getText());
 
 				DownloadMode mode;
 				if (this.getTextCheck.isSelected()) {
@@ -230,11 +227,11 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 
 				this.log("Done.");
 			}
-			catch (@SuppressWarnings("unused") final UNISoNException e) {
+			catch (final UNISoNException e) {
 				this.alert("Failed to download. Check your internet connection");
 				this.downloadEnabled(true);
 			}
-			catch (final ParseException e) {
+			catch (final DateTimeParseException e) {
 				this.alert("Failed to parse date : " + e.getMessage());
 				this.downloadEnabled(true);
 			}

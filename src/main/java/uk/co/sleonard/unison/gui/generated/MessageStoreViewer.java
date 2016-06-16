@@ -8,8 +8,8 @@ package uk.co.sleonard.unison.gui.generated;
 
 import java.awt.Dimension;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -43,7 +43,6 @@ import uk.co.sleonard.unison.datahandling.DAO.ResultRow;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.input.FullDownloadWorker;
-import uk.co.sleonard.unison.utils.HttpDateObject;
 import uk.co.sleonard.unison.utils.StringUtils;
 import uk.co.sleonard.unison.utils.TreeNode;
 
@@ -161,9 +160,6 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 
 	/** The topic root. */
 	private TreeNode topicRoot;
-
-	/** The parser. */
-	private final HttpDateObject parser = new HttpDateObject();
 
 	// End of variables declaration//GEN-END:variables
 	/**
@@ -1083,8 +1079,8 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 			final UNISoNController controller = UNISoNController.getInstance();
 
 			if (on) {
-				final Date fromDate = this.parser.parseDate(this.fromDateField.getText());
-				final Date toDate = this.parser.parseDate(this.toDateField.getText());
+				final Date fromDate = StringUtils.stringToDate(this.fromDateField.getText());
+				final Date toDate = StringUtils.stringToDate(this.toDateField.getText());
 				controller.getFilter().setDates(fromDate, toDate);
 
 				final List<GUIItem<Object>> selectedCountries = this.topCountriesList
@@ -1130,7 +1126,7 @@ public class MessageStoreViewer extends javax.swing.JPanel implements Observer, 
 			this.toDateField.setEditable(!on);
 			controller.switchFiltered(on);
 		}
-		catch (final ParseException e) {
+		catch (final DateTimeParseException e) {
 			this.alert("Failed to parse date : " + e.getMessage());
 			this.filterToggle.setSelected(false);
 		}

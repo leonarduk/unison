@@ -16,6 +16,7 @@ import org.junit.Test;
 
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
+import uk.co.sleonard.unison.utils.DownloaderImpl;
 
 public class HeaderDownloadWorkerIT {
 
@@ -24,7 +25,7 @@ public class HeaderDownloadWorkerIT {
 		final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
 		try (final Reader reader = NewsClientIT.downloadFirstMessage();) {
 			final HeaderDownloadWorker worker = new HeaderDownloadWorker(
-			        new LinkedBlockingQueue<>());
+			        new LinkedBlockingQueue<>(), new DownloaderImpl());
 			worker.setMode(DownloadMode.BASIC);
 
 			final BufferedReader bufReader = new BufferedReader(reader);

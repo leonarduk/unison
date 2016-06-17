@@ -1,6 +1,6 @@
 /**
  * UNISoNCLI
- * 
+ *
  * @author ${author}
  * @since 30-May-2016
  */
@@ -18,6 +18,7 @@ import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
+import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 
 /**
  * The Class UNISoNCLI.
@@ -99,7 +100,7 @@ public class UNISoNCLI implements UNISoNLogger {
 	 *             the UNI so n exception
 	 */
 	private void downloadAll(final String searchString, final String host) throws UNISoNException {
-		final Set<NNTPNewsGroup> listNewsgroups = UNISoNController.getInstance()
+		final Set<NewsGroup> listNewsgroups = UNISoNController.getInstance()
 		        .listNewsgroups(searchString, host);
 		UNISoNController.getInstance().quickDownload(listNewsgroups, null, null, this,
 		        DownloadMode.ALL);
@@ -157,7 +158,7 @@ public class UNISoNCLI implements UNISoNLogger {
 	 */
 	private void listNewsgroups(final String searchString, final String host)
 	        throws UNISoNException {
-		final Set<NNTPNewsGroup> listNewsgroups = UNISoNController.getInstance()
+		final Set<NewsGroup> listNewsgroups = UNISoNController.getInstance()
 		        .listNewsgroups(searchString, host);
 		UNISoNController.getInstance().storeNewsgroups(listNewsgroups);
 
@@ -190,7 +191,7 @@ public class UNISoNCLI implements UNISoNLogger {
 	private void quickDownload(final String arg, final Date toDate, final Date fromDate,
 	        final String host) throws UNISoNException {
 		UNISoNController.create();
-		final Set<NNTPNewsGroup> listNewsgroups = UNISoNController.getInstance().listNewsgroups(arg,
+		final Set<NewsGroup> listNewsgroups = UNISoNController.getInstance().listNewsgroups(arg,
 		        host);
 		// HibernateHelper.generateSchema();
 

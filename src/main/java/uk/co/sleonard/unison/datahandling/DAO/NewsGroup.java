@@ -1,6 +1,6 @@
 /**
  * NewsGroup
- * 
+ *
  * @author ${author}
  * @since 30-May-2016
  */
@@ -8,6 +8,8 @@ package uk.co.sleonard.unison.datahandling.DAO;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import org.apache.commons.net.nntp.NewsgroupInfo;
 
 /**
  * Represents a news group e.g. soc.senior.issues
@@ -57,10 +59,19 @@ public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
 	/** Message Threads in this NewsGroup. */
 	private Set<Topic> topics = new HashSet<>(0);
 
+	private int estimatedArticleCount;
+
 	/**
 	 * Instantiates a new news group.
 	 */
 	public NewsGroup() {
+	}
+
+	public NewsGroup(final NewsgroupInfo original) {
+		this.estimatedArticleCount = original.getArticleCount();
+		this.firstMessage = original.getFirstArticle();
+		this.lastMessage = original.getLastArticle();
+		this.name = original.getNewsgroup();
 	}
 
 	/**
@@ -121,7 +132,7 @@ public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
 	 */
 	@Override
 	public int compareTo(final NewsGroup that) {
-		return this.getFullName().compareTo(that.getFullName());
+		return this.getName().compareTo(that.getName());
 	}
 
 	/*
@@ -136,6 +147,14 @@ public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
 		}
 		final NewsGroup that = (NewsGroup) object;
 		return (this.getFullName().equals(that.getFullName()));
+	}
+
+	public int getArticleCount() {
+		final int total = this.lastMessage - this.firstMessage;
+		if (total < this.estimatedArticleCount) {
+			return total;
+		}
+		return this.estimatedArticleCount;
 	}
 
 	/**

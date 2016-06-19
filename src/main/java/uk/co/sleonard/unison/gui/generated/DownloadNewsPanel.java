@@ -189,6 +189,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 	 */
 	private void cancelButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cancelButtonActionPerformed
 		this.controller.getHeaderDownloader().fullstop();
+		this.controller.stopDownload();
 	}// GEN-LAST:event_cancelButtonActionPerformed
 
 	/**
@@ -265,6 +266,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 	 *            the evt
 	 */
 	private void findButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_findButtonActionPerformed
+		final UNISoNController unisonController = UNISoNController.getInstance();
 		final String host = this.hostCombo.getSelectedItem().toString().trim();
 		this.controller.setNntpHost(host);
 		final String group = this.newsgroupField.getText();
@@ -272,7 +274,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 		this.downloadEnabled(false);
 		if (null != group) {
 			try {
-				this.availableGroups = UNISoNController.getInstance().listNewsgroups(group, host);
+				this.availableGroups = unisonController.listNewsgroups(group, host);
 			}
 			catch (final UNISoNException e) {
 				this.alert("Problem downloading: " + e.getMessage());
@@ -285,7 +287,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 			else {
 				this.downloadEnabled(true);
 			}
-			this.availableNewsgroups.setModel(this.getAvailableGroupsModel());
+			this.availableNewsgroups.setModel(this.getAvailableGroupsModel(this.availableGroups));
 		}
 
 	}// GEN-LAST:event_findButtonActionPerformed
@@ -305,11 +307,11 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 	 *
 	 * @return the available groups model
 	 */
-	private ListModel<NewsGroup> getAvailableGroupsModel() {
+	ListModel<NewsGroup> getAvailableGroupsModel(final Set<NewsGroup> availableGroups2) {
 		final DefaultListModel<NewsGroup> model = new DefaultListModel<>();
 
-		if (null != this.availableGroups) {
-			for (final NewsGroup next : this.availableGroups) {
+		if (null != availableGroups2) {
+			for (final NewsGroup next : availableGroups2) {
 				model.addElement(next);
 			}
 		}
@@ -413,7 +415,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 		this.hostCombo.setToolTipText(
 		        "Look at http://freeusenetnews.com/newspage.html?sortby=articles for other hosts if these are broken. Can enter name here.");
 
-		this.availableNewsgroups.setModel(this.getAvailableGroupsModel());
+		this.availableNewsgroups.setModel(this.getAvailableGroupsModel(this.availableGroups));
 		this.availableNewsgroups.setToolTipText(
 		        "The number in brackets is an estimate (provided by the server) which is likely to be higher than actual number of messages as many messages are deleted.");
 		this.availableNewsgroups.addListSelectionListener(

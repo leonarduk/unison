@@ -24,11 +24,6 @@ public class UNISoNControllerTest {
 	}
 
 	@Test
-	public final void testCancelDownload() {
-
-	}
-
-	@Test
 	public final void testCreate() {
 
 	}
@@ -170,7 +165,7 @@ public class UNISoNControllerTest {
 
 	@Test
 	public final void testStopDownload() {
-
+		this.controller.stopDownload();
 	}
 
 	@Test

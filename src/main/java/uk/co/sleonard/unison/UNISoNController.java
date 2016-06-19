@@ -24,6 +24,8 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.gui.UNISoNGUI;
 import uk.co.sleonard.unison.gui.generated.UNISoNTabbedFrame;
+import uk.co.sleonard.unison.input.DataHibernatorPool;
+import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
 import uk.co.sleonard.unison.input.DataHibernatorWorker;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
 import uk.co.sleonard.unison.input.NewsArticle;
@@ -83,6 +85,8 @@ public class UNISoNController {
 
 	private final NewsGroupFilter filter;
 
+	private final DataHibernatorPool pool;
+
 	/**
 	 * Creates the.
 	 *
@@ -108,6 +112,12 @@ public class UNISoNController {
 		return UNISoNController.instance;
 	}
 
+	public static UNISoNController create(final JFrame frame, final DataHibernatorPool pool)
+	        throws UNISoNException {
+		UNISoNController.instance = new UNISoNController(pool);
+		UNISoNController.setGui(new UNISoNGUI(frame));
+		return UNISoNController.instance;
+	}
 	// private static UNISoNController instance;
 
 	public static UNISoNGUI getGui() {
@@ -138,12 +148,18 @@ public class UNISoNController {
 		UNISoNController.gui = gui;
 	}
 
+	private UNISoNController() throws UNISoNException {
+		this(new DataHibernatorPoolImpl());
+	}
+
 	/**
 	 * Instantiates a new UNI so n controller.
 	 *
 	 * @throws UNISoNException
 	 */
-	private UNISoNController() throws UNISoNException {
+	private UNISoNController(final DataHibernatorPool hibernatorPool) throws UNISoNException {
+		this.pool = hibernatorPool;
+
 		this.messageQueue = new LinkedBlockingQueue<>();
 		this.headerDownloader = new HeaderDownloadWorker(this.messageQueue, new DownloaderImpl());
 		this.headerDownloader.initialise();
@@ -161,13 +177,6 @@ public class UNISoNController {
 		}
 
 		this.nntpReader = new NewsGroupReader(this);
-	}
-
-	/**
-	 * Cancel download.
-	 */
-	public void cancelDownload() {
-		this.stopDownload();
 	}
 
 	/**
@@ -447,7 +456,7 @@ public class UNISoNController {
 	 * Stop download.
 	 */
 	public void stopDownload() {
-		DataHibernatorWorker.stopDownload();
+		this.pool.stopAllDownloads();
 		this.setIdleState();
 	}
 

@@ -31,7 +31,7 @@ public class HibernateHelperIT {
 		        .populateQueueWithOneRealMessage();
 		final NewsArticle article = queue.poll();
 		Assert.assertNotNull(article);
-		Assert.assertNotNull(helper.findUsenetUser(article, session));
+		// Assert.assertNotNull(helper.findUsenetUser(article, session));
 		Assert.assertTrue(helper.hibernateData(article, session));
 		final UsenetUser user = helper.findUsenetUser(article, session);
 		Assert.assertNotNull(user);

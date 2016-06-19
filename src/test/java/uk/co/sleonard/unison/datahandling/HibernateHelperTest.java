@@ -13,6 +13,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,6 +23,7 @@ import org.hibernate.NonUniqueResultException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -36,6 +38,7 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.ResultRow;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
+import uk.co.sleonard.unison.input.NewsArticle;
 /**
  * The Class HibernateHelperTest.
  * 
@@ -55,6 +58,8 @@ public class HibernateHelperTest {
 	public void setUp() throws Exception {
 		this.helper = new HibernateHelper(null);
 		this.session = mock(Session.class);
+		when(this.session.beginTransaction()).thenReturn(mock(Transaction.class));
+		when(this.session.getNamedQuery(Matchers.anyString())).thenReturn(mock(Query.class));
 	}
 
 	/**
@@ -330,12 +335,21 @@ public class HibernateHelperTest {
 
 	/**
 	 * Test hibernate data.
+	 * @throws UNISoNException 
 	 */
-	@Ignore
 	@Test
-	public void testHibernateData() {
-		fail("Not yet implemented");
-	}
+	public void testHibernateData() throws UNISoNException {
+String articleID = "124A";
+int articleNumber = 4567;
+Date date = new Date();
+String from = "test@email.com";
+String subject = "Interesting chat";
+String references = "";
+String content = "This is interesting";
+String newsgroups = "alt.interesting"; 
+String postingHost = "testserver";
+NewsArticle article = new NewsArticle(articleID, articleNumber, date, from, subject, references, content, newsgroups, postingHost); 
+this.helper.hibernateData(article, session);	}
 
 	/**
 	 * Test run query.

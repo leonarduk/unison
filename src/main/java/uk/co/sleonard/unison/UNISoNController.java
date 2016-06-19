@@ -28,6 +28,7 @@ import uk.co.sleonard.unison.input.DataHibernatorWorker;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
 import uk.co.sleonard.unison.input.NewsArticle;
 import uk.co.sleonard.unison.input.NewsGroupReader;
+import uk.co.sleonard.unison.utils.DownloaderImpl;
 
 /**
  * The Class UNISoNController.
@@ -143,7 +144,8 @@ public class UNISoNController {
 	 * @throws UNISoNException
 	 */
 	private UNISoNController() throws UNISoNException {
-		this.headerDownloader = new HeaderDownloadWorker();
+		this.messageQueue = new LinkedBlockingQueue<>();
+		this.headerDownloader = new HeaderDownloadWorker(this.messageQueue, new DownloaderImpl());
 		this.headerDownloader.initialise();
 		this.helper = new HibernateHelper(UNISoNController.gui);
 		try {
@@ -159,8 +161,6 @@ public class UNISoNController {
 		}
 
 		this.nntpReader = new NewsGroupReader(this);
-		this.messageQueue = new LinkedBlockingQueue<>();
-
 	}
 
 	/**

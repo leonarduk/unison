@@ -25,13 +25,13 @@ public class Message implements java.io.Serializable {
 	private static final long serialVersionUID = -4828381724935020136L;
 
 	/** The Date created. */
-	private Date DateCreated;
+	private Date dateCreated;
 
 	/** The id. */
 	private int id;
 
 	/** The Message body. */
-	private byte[] MessageBody;
+	private byte[] messageBody;
 
 	/** The newsgroups. */
 	private Set<NewsGroup> newsgroups = new HashSet<>(0);
@@ -43,13 +43,13 @@ public class Message implements java.io.Serializable {
 	private String referencedMessages;
 
 	/** The Subject. */
-	private String Subject;
+	private String subject;
 
 	/** The topic. */
 	private Topic topic;
 
 	/** The Usenet message id. */
-	private String UsenetMessageID;
+	private String usenetMessageID;
 
 	/**
 	 * Instantiates a new message.
@@ -60,27 +60,27 @@ public class Message implements java.io.Serializable {
 	/**
 	 * Instantiates a new message.
 	 *
-	 * @param DateCreated
+	 * @param dateCreated
 	 *            the date created
-	 * @param UsenetMessageID
+	 * @param usenetMessageID
 	 *            the usenet message id
-	 * @param Subject
+	 * @param subject
 	 *            the subject
 	 * @param poster
 	 *            the poster
 	 * @param topic
 	 *            the topic
-	 * @param MessageBody
+	 * @param messageBody
 	 *            the message body
 	 */
-	public Message(final Date DateCreated, final String UsenetMessageID, final String Subject,
-	        final UsenetUser poster, final Topic topic, final byte[] MessageBody) {
-		this.DateCreated = DateCreated;
-		this.UsenetMessageID = UsenetMessageID;
-		this.Subject = Subject;
+	public Message(final Date dateCreated, final String usenetMessageID, final String subject,
+	        final UsenetUser poster, final Topic topic, final byte[] messageBody) {
+		this.dateCreated = dateCreated;
+		this.usenetMessageID = usenetMessageID;
+		this.subject = subject;
 		this.poster = poster;
 		this.topic = topic;
-		this.MessageBody = MessageBody;
+		this.messageBody = messageBody;
 	}
 
 	/**
@@ -106,14 +106,14 @@ public class Message implements java.io.Serializable {
 	public Message(final Date DateCreated, final String UsenetMessageID, final String Subject,
 	        final UsenetUser poster, final Topic topic, final Set<NewsGroup> newsgroups,
 	        final String referencedMessages, final byte[] MessageBody) {
-		this.DateCreated = DateCreated;
-		this.UsenetMessageID = UsenetMessageID;
-		this.Subject = Subject;
+		this.dateCreated = DateCreated;
+		this.usenetMessageID = UsenetMessageID;
+		this.subject = Subject;
 		this.poster = poster;
 		this.topic = topic;
 		this.newsgroups = newsgroups;
 		this.referencedMessages = referencedMessages;
-		this.MessageBody = MessageBody;
+		this.messageBody = MessageBody;
 	}
 
 	/*
@@ -151,7 +151,7 @@ public class Message implements java.io.Serializable {
 	 * @return the date created
 	 */
 	public Date getDateCreated() {
-		return this.DateCreated;
+		return this.dateCreated;
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class Message implements java.io.Serializable {
 	 * @return the message body
 	 */
 	public byte[] getMessageBody() {
-		return this.MessageBody;
+		return this.messageBody;
 	}
 
 	/**
@@ -205,7 +205,7 @@ public class Message implements java.io.Serializable {
 	 * @return the subject
 	 */
 	public String getSubject() {
-		return this.Subject;
+		return this.subject;
 	}
 
 	/**
@@ -223,7 +223,7 @@ public class Message implements java.io.Serializable {
 	 * @return the usenet message id
 	 */
 	public String getUsenetMessageID() {
-		return this.UsenetMessageID;
+		return this.usenetMessageID;
 	}
 
 	/**
@@ -247,7 +247,7 @@ public class Message implements java.io.Serializable {
 	 *            the new date created
 	 */
 	public void setDateCreated(final Date DateCreated) {
-		this.DateCreated = DateCreated;
+		this.dateCreated = DateCreated;
 	}
 
 	/**
@@ -267,7 +267,7 @@ public class Message implements java.io.Serializable {
 	 *            the new message body
 	 */
 	public void setMessageBody(final byte[] MessageBody) {
-		this.MessageBody = MessageBody;
+		this.messageBody = MessageBody;
 	}
 
 	/**
@@ -307,7 +307,7 @@ public class Message implements java.io.Serializable {
 	 *            the new subject
 	 */
 	public void setSubject(final String Subject) {
-		this.Subject = Subject;
+		this.subject = Subject;
 	}
 
 	/**
@@ -327,7 +327,7 @@ public class Message implements java.io.Serializable {
 	 *            the new usenet message id
 	 */
 	public void setUsenetMessageID(final String UsenetMessageID) {
-		this.UsenetMessageID = UsenetMessageID;
+		this.usenetMessageID = UsenetMessageID;
 	}
 
 	/*

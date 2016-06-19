@@ -17,6 +17,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import uk.co.sleonard.unison.UNISoNException;
+import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
@@ -41,12 +42,12 @@ public class NewsClientIT {
 	        throws IOException, UNISoNException {
 		final NewsClient client = new NewsClientImpl();
 		client.connect(server);
-		final Set<NNTPNewsGroup> groups = client.listNNTPNewsgroups("", server);
-		final NNTPNewsGroup group = groups.iterator().next();
-		client.selectNewsgroup(group.getNewsgroup());
-		NewsClientIT.logger.info("Connect to " + server + ":" + group.getNewsgroup());
-		final long lowArticleNumber = group.getFirstArticle();
-		final long highArticleNumber = group.getFirstArticle();
+		final Set<NewsGroup> groups = client.listNewsGroups("", server);
+		final NewsGroup group = groups.iterator().next();
+		client.selectNewsgroup(group.getName());
+		NewsClientIT.logger.info("Connect to " + server + ":" + group.getName());
+		final long lowArticleNumber = group.getFirstMessage();
+		final long highArticleNumber = group.getFirstMessage();
 		final BufferedReader reader = client.retrieveArticleInfo(lowArticleNumber,
 		        highArticleNumber);
 		return reader;

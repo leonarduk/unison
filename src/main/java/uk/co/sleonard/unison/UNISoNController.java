@@ -20,14 +20,15 @@ import org.hibernate.Session;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
+import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.gui.UNISoNGUI;
 import uk.co.sleonard.unison.gui.generated.UNISoNTabbedFrame;
 import uk.co.sleonard.unison.input.DataHibernatorWorker;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
-import uk.co.sleonard.unison.input.NNTPNewsGroup;
 import uk.co.sleonard.unison.input.NewsArticle;
 import uk.co.sleonard.unison.input.NewsGroupReader;
+import uk.co.sleonard.unison.utils.DownloaderImpl;
 
 /**
  * The Class UNISoNController.
@@ -143,7 +144,8 @@ public class UNISoNController {
 	 * @throws UNISoNException
 	 */
 	private UNISoNController() throws UNISoNException {
-		this.headerDownloader = new HeaderDownloadWorker();
+		this.messageQueue = new LinkedBlockingQueue<>();
+		this.headerDownloader = new HeaderDownloadWorker(this.messageQueue, new DownloaderImpl());
 		this.headerDownloader.initialise();
 		this.helper = new HibernateHelper(UNISoNController.gui);
 		try {
@@ -159,8 +161,6 @@ public class UNISoNController {
 		}
 
 		this.nntpReader = new NewsGroupReader(this);
-		this.messageQueue = new LinkedBlockingQueue<>();
-
 	}
 
 	/**
@@ -295,11 +295,11 @@ public class UNISoNController {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	public Set<NNTPNewsGroup> listNewsgroups(final String searchString, final String host)
+	public Set<NewsGroup> listNewsgroups(final String searchString, final String host)
 	        throws UNISoNException {
 
 		this.nntpHost = host;
-		return this.nntpReader.client.listNNTPNewsgroups(searchString, host);
+		return this.nntpReader.client.listNewsGroups(searchString, host);
 	}
 
 	/**
@@ -318,17 +318,16 @@ public class UNISoNController {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	public void quickDownload(final Set<NNTPNewsGroup> groups, final Date fromDate1,
-	        final Date toDate1, final UNISoNLogger log, final DownloadMode mode)
-	                throws UNISoNException {
+	public void quickDownload(final Set<NewsGroup> groups, final Date fromDate1, final Date toDate1,
+	        final UNISoNLogger log, final DownloadMode mode) throws UNISoNException {
 
-		for (final NNTPNewsGroup group : groups) {
+		for (final NewsGroup group : groups) {
 			try {
 				this.nntpReader.client.reconnect();
-				this.nntpReader.client.selectNewsgroup(group.getNewsgroup());
+				this.nntpReader.client.selectNewsgroup(group.getName());
 				this.nntpReader.setMessageCount(group.getArticleCount());
-				this.headerDownloader.initialise(this.nntpReader, group.getFirstArticle(),
-				        group.getLastArticle(), this.nntpHost, group.getNewsgroup(), log, mode,
+				this.headerDownloader.initialise(this.nntpReader, group.getFirstMessage(),
+				        group.getLastMessage(), this.nntpHost, group.getName(), log, mode,
 				        fromDate1, toDate1);
 			}
 			catch (final IOException e) {
@@ -458,7 +457,7 @@ public class UNISoNController {
 	 * @param newsgroups
 	 *            the newsgroups
 	 */
-	public void storeNewsgroups(final Set<NNTPNewsGroup> newsgroups) {
+	public void storeNewsgroups(final Set<NewsGroup> newsgroups) {
 		this.getHelper().storeNewsgroups(newsgroups, this.getSession());
 	}
 

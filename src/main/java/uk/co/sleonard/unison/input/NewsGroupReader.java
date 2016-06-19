@@ -9,6 +9,7 @@ package uk.co.sleonard.unison.input;
 import org.apache.log4j.Logger;
 
 import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNControllerFX;
 import uk.co.sleonard.unison.UNISoNLogger;
 
 /**
@@ -41,6 +42,16 @@ public class NewsGroupReader implements UNISoNLogger {
 	 *            the controller
 	 */
 	public NewsGroupReader(final UNISoNController controller) {
+		this.client = new NewsClientImpl();
+	}
+
+	/**
+	 * Instantiates a new news group reader.
+	 *
+	 * @param controller
+	 *            the controller
+	 */
+	public NewsGroupReader(final UNISoNControllerFX controller) {
 		this.client = new NewsClientImpl();
 	}
 

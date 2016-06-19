@@ -42,7 +42,7 @@
                      </accelerator>
                   </MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
-              <MenuItem mnemonicParsing="false" onAction="#showAboutDialog" text="About UNISoN">
+              <MenuItem mnemonicParsing="false" text="About UNISoN">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="HOME" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>

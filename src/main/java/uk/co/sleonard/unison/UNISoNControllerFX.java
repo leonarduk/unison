@@ -1,14 +1,21 @@
 package uk.co.sleonard.unison;
 
-import java.io.IOException;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import org.apache.log4j.Logger;
+import org.hibernate.Session;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
+import uk.co.sleonard.unison.datahandling.HibernateHelper;
+import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
+import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
+import uk.co.sleonard.unison.gui.UNISoNGUI;
 import uk.co.sleonard.unison.gui.generated.UNISoNTabbedFrameFX;
+import uk.co.sleonard.unison.input.HeaderDownloadWorker;
+import uk.co.sleonard.unison.input.NewsArticle;
+import uk.co.sleonard.unison.input.NewsGroupReader;
+import uk.co.sleonard.unison.utils.DownloaderImpl;
 
 public class UNISoNControllerFX {
 
@@ -19,8 +26,68 @@ public class UNISoNControllerFX {
 	// Reference to the main application
 	private UNISoNTabbedFrameFX unisonTabbedFrameFX;
 
-	public UNISoNControllerFX() {
-		// TODO Auto-generated constructor stub
+	/** The instance. */
+	private static UNISoNController instance;
+
+	/** The logger. */
+	private static Logger logger = Logger.getLogger(UNISoNController.class);
+
+	private static UNISoNGUI gui;
+
+	/** The Constant LOCATION. */
+	public static final String LOCATION = "Location";
+
+	/** The Constant USENETUSER. */
+	public static final String USENETUSER = UsenetUser.class.getName();
+
+	/** The message queue. */
+	private final LinkedBlockingQueue<NewsArticle> messageQueue;
+
+	/** The nntp reader. */
+	private final NewsGroupReader nntpReader;
+
+	/** The header downloader. */
+	private final HeaderDownloadWorker headerDownloader;
+
+	/** The helper. */
+	private final HibernateHelper helper;
+
+	/** The matrix type. */
+	private MatrixType matrixType;
+
+	/** The nntp host. */
+	private String nntpHost;
+
+	/** The session. */
+	private Session session;
+
+	/** The download panel. */
+	private UNISoNLogger downloadPanel;
+
+	private final UNISoNAnalysis analysis;
+
+	private final UNISoNDatabase database;
+
+	private final NewsGroupFilter filter;
+
+	public UNISoNControllerFX() throws UNISoNException {
+		this.messageQueue = new LinkedBlockingQueue<>();
+		this.headerDownloader = new HeaderDownloadWorker(this.messageQueue, new DownloaderImpl());
+		this.headerDownloader.initialise();
+		this.helper = new HibernateHelper(UNISoNControllerFX.gui);
+		try {
+			final Session hibernateSession = this.getHelper().getHibernateSession();
+			this.setSession(hibernateSession);
+			this.filter = new NewsGroupFilter(hibernateSession, this.helper);
+			this.analysis = new UNISoNAnalysis(this.filter, hibernateSession, this.helper);
+			this.database = new UNISoNDatabase(this.filter, hibernateSession, this.helper);
+		}
+		catch (final UNISoNException e) {
+			UNISoNController.getGui().showAlert("Error:" + e.getMessage());
+			throw e;
+		}
+
+		this.nntpReader = new NewsGroupReader(this);
 	}
 
 	@FXML
@@ -35,27 +102,42 @@ public class UNISoNControllerFX {
 	@FXML
 	private void closeApplication() {
 		Platform.exit();
+		System.exit(1);
 	}
 
-	@FXML
-	public void showAboutDialog() {
-		// Load the FXML File.
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(
-			        UNISoNTabbedFrameFX.class.getResource("fxml/AboutDialogLayout.fxml"));
-			Pane pane = (Pane) loader.load();
-			Scene scene = new Scene(pane);
-			Stage aboutDialog = new Stage();
-			aboutDialog.setTitle("About");
-			aboutDialog.setScene(scene);
-			aboutDialog.show();
-		}
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	/**
+	 * Gets the header downloader.
+	 *
+	 * @return the header downloader
+	 */
+	public HeaderDownloadWorker getHeaderDownloader() {
+		return this.headerDownloader;
+	}
 
+	public HibernateHelper getHelper() {
+		return this.helper;
+	}
+
+	/**
+	 * Sets the nntp host.
+	 *
+	 * @param nntpHost
+	 *            the new nntp host
+	 */
+	public void setNntpHost(final String nntpHost) {
+		this.nntpHost = nntpHost;
+	}
+
+	public void setSession(final Session session) {
+		this.session = session;
+	}
+
+	public NewsGroupFilter getFilter() {
+		return this.filter;
+	}
+
+	public UNISoNDatabase getDatabase() {
+		return this.database;
 	}
 
 }

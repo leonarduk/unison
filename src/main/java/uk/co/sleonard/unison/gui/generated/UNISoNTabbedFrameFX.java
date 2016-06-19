@@ -8,8 +8,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import uk.co.sleonard.unison.UNISoNControllerFX;
+import uk.co.sleonard.unison.gui.SplashScreenFX;
 
 /**
  * The class UNISoNTabbedFrameFX
@@ -21,19 +23,30 @@ public class UNISoNTabbedFrameFX extends Application {
 	private Stage primaryStage;
 	private BorderPane rootLayout;
 	private TabPane tabs;
+	private UNISoNControllerFX unisonController;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		this.primaryStage = primaryStage;
-		this.primaryStage.setTitle("UNISoN");
-
-		initRootLayout();
-		showDownloadNewsPanel();
-		showMessageStoreViewer();
-		showPajekPanel();
+		this.primaryStage.setTitle("Loading...");
+		showSplashScreen();
 	}
 
-	private void initRootLayout() {
+	private void showSplashScreen() throws IOException {
+
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(UNISoNTabbedFrameFX.class.getResource("fxml/SplashScreenLayout.fxml"));
+		Pane splashPane = (Pane) loader.load();
+		Scene splashScene = new Scene(splashPane);
+		primaryStage.setScene(splashScene);
+		primaryStage.setTitle("Loading...");
+		primaryStage.show();
+
+		SplashScreenFX controller = loader.getController();
+		controller.setMainApp(this);
+	}
+
+	public void initRootLayout() {
 
 		try {
 			// Load the FXML File.
@@ -42,18 +55,30 @@ public class UNISoNTabbedFrameFX extends Application {
 			rootLayout = (BorderPane) loader.load();
 			tabs = (TabPane) rootLayout.getChildren().get(2);
 
-			// Show scene
-			Scene scene = new Scene(rootLayout);
-			primaryStage.setScene(scene);
-			primaryStage.show();
+			unisonController = (UNISoNControllerFX) loader.getController();
+			unisonController.setUnisonTabbedFrameFX(this);
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+
+	}
+
+	public void showRootLayout() {
+		// Show scene
+		Scene scene = new Scene(rootLayout);
+		primaryStage = new Stage();
+		primaryStage.setScene(scene);
+		primaryStage.setTitle("UNISoN");
+		primaryStage.show();
+
+		showDownloadNewsPanel();
+		showMessageStoreViewer();
+		showPajekPanel();
 	}
 
 	// Shows downloadNewsPanel inside RootLayout.
-	public void showDownloadNewsPanel() {
+	private void showDownloadNewsPanel() {
 		try {
 			// Load the FXML File.
 			FXMLLoader loader = new FXMLLoader();
@@ -62,9 +87,7 @@ public class UNISoNTabbedFrameFX extends Application {
 			AnchorPane downloadNewsPanel = (AnchorPane) loader.load();
 			tabs.getTabs().get(0).setContent(downloadNewsPanel);
 
-			// Give access of the UNISoNTabbedFrame to Controller.
-			UNISoNControllerFX controller = loader.getController();
-			controller.setUnisonTabbedFrameFX(this);
+			this.unisonController.setUnisonTabbedFrameFX(this);
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -72,7 +95,7 @@ public class UNISoNTabbedFrameFX extends Application {
 	}
 
 	// Shows messageStoreViewer inside RootLayout.
-	public void showMessageStoreViewer() {
+	private void showMessageStoreViewer() {
 		try {
 			// Load the FXML File.
 			FXMLLoader loader = new FXMLLoader();
@@ -87,7 +110,7 @@ public class UNISoNTabbedFrameFX extends Application {
 	}
 
 	// Shows PajekPanel inside RootLayout.
-	public void showPajekPanel() {
+	private void showPajekPanel() {
 		try {
 			// Load the FXML File.
 			FXMLLoader loader = new FXMLLoader();
@@ -102,6 +125,16 @@ public class UNISoNTabbedFrameFX extends Application {
 
 	public Stage getPrimStage() {
 		return primaryStage;
+	}
+
+	public UNISoNControllerFX getUnisonController() {
+		return this.unisonController;
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+		System.exit(1);
 	}
 
 	public static void main(String[] args) {

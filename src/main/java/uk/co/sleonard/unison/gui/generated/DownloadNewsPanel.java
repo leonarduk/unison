@@ -20,9 +20,9 @@ import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
+import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.input.DataHibernatorWorker;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
-import uk.co.sleonard.unison.input.NNTPNewsGroup;
 import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
@@ -40,7 +40,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 
 	/** The available newsgroups. */
 	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JList<NNTPNewsGroup> availableNewsgroups;
+	private javax.swing.JList<NewsGroup> availableNewsgroups;
 
 	/** The cancel button. */
 	private javax.swing.JButton cancelButton;
@@ -94,12 +94,12 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 	private javax.swing.JButton pauseButton;
 
 	/** The to date field. */
-	private javax.swing.JTextField toDateField;
+	private javax.swing.JTextField	toDateField;
 	/** The to date label. */
-	private javax.swing.JLabel toDateLabel;
+	private javax.swing.JLabel		toDateLabel;
 
 	/** The available groups. */
-	private Set<NNTPNewsGroup> availableGroups;
+	private Set<NewsGroup> availableGroups;
 
 	/** The controller. */
 	private final UNISoNController controller;
@@ -202,9 +202,9 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 		this.downloadEnabled(false);
 
 		final Object[] items = this.availableNewsgroups.getSelectedValues();
-		final Set<NNTPNewsGroup> groups = new HashSet<>();
+		final Set<NewsGroup> groups = new HashSet<>();
 		for (final Object item : items) {
-			groups.add((NNTPNewsGroup) item);
+			groups.add((NewsGroup) item);
 		}
 		if (groups.size() > 0) {
 			try {
@@ -305,11 +305,11 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 	 *
 	 * @return the available groups model
 	 */
-	private ListModel<NNTPNewsGroup> getAvailableGroupsModel() {
-		final DefaultListModel<NNTPNewsGroup> model = new DefaultListModel<>();
+	private ListModel<NewsGroup> getAvailableGroupsModel() {
+		final DefaultListModel<NewsGroup> model = new DefaultListModel<>();
 
 		if (null != this.availableGroups) {
-			for (final NNTPNewsGroup next : this.availableGroups) {
+			for (final NewsGroup next : this.availableGroups) {
 				model.addElement(next);
 			}
 		}

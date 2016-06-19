@@ -19,12 +19,10 @@ import org.apache.commons.net.nntp.Article;
 import org.apache.commons.net.nntp.NNTPClient;
 import org.apache.log4j.Logger;
 
-import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.utils.Downloader;
-import uk.co.sleonard.unison.utils.DownloaderImpl;
 import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
@@ -88,10 +86,6 @@ public class HeaderDownloadWorker extends SwingWorker {
 	/**
 	 * Instantiates a new header download worker.
 	 */
-	public HeaderDownloadWorker() {
-		this(UNISoNController.getInstance().getQueue(), new DownloaderImpl());
-	}
-
 	public HeaderDownloadWorker(final LinkedBlockingQueue<NewsArticle> inputQueue,
 	        final Downloader downloader1) {
 		super(HeaderDownloadWorker.class.getCanonicalName());

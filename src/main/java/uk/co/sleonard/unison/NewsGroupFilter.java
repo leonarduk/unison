@@ -21,24 +21,26 @@ import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 
 public class NewsGroupFilter {
+	/** The selected messages. */
+	private final static Vector<Message>	selectedMessages	= null;
 	/** The topics filter. */
-	private Set<Topic>		topicsFilter	= null;
+	private Set<Topic>						topicsFilter		= null;
+
 	/** The messages filter. */
-	private Vector<Message>	messagesFilter	= null;
+	private Vector<Message> messagesFilter = null;
 
 	/** The newsgroup filter. */
-	private Set<NewsGroup> newsgroupFilter = null;
-
+	private Set<NewsGroup>		newsgroupFilter		= null;
 	/** The usenet users filter. */
 	private Vector<UsenetUser>	usenetUsersFilter	= null;
 	/** The filtered. */
 	private boolean				filtered				= false;
+
 	/** The message. */
-	private Message				message;
+	private Message message;
 
 	/** The from date. */
-	private Date fromDate;
-
+	private Date				fromDate;
 	/** The to date. */
 	private Date				toDate;
 	/** The selected newsgroup. */
@@ -47,18 +49,16 @@ public class NewsGroupFilter {
 	private Vector<NewsGroup>	selectedNewsgroups;
 	/** The selected posters. */
 	private Vector<UsenetUser>	selectedPosters;
+
 	/** The countries filter. */
-	private Set<String>			countriesFilter	= null;
+	private Set<String> countriesFilter = null;
 
 	/** The tops newsgroups. */
 	private Set<NewsGroup> topsNewsgroups;
 
 	/** The selected countries. */
-	Set<String> selectedCountries = null;
-
-	/** The selected messages. */
-	private final Vector<Message>	selectedMessages	= null;
-	private final Session			session;
+	Set<String>				selectedCountries	= null;
+	private final Session	session;
 
 	private final HibernateHelper helper;
 
@@ -134,7 +134,7 @@ public class NewsGroupFilter {
 	}
 
 	public Vector<Message> getSelectedMessages() {
-		return this.selectedMessages;
+		return NewsGroupFilter.selectedMessages;
 	}
 
 	/**

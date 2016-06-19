@@ -51,7 +51,6 @@ import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.gui.UNISoNGUI;
 import uk.co.sleonard.unison.input.LocationFinder;
 import uk.co.sleonard.unison.input.LocationFinderImpl;
-import uk.co.sleonard.unison.input.NNTPNewsGroup;
 import uk.co.sleonard.unison.input.NewsArticle;
 import uk.co.sleonard.unison.utils.StringUtils;
 
@@ -426,10 +425,6 @@ public class HibernateHelper {
 	 */
 	public synchronized NewsGroup findOrCreateNewsGroup(final Session session,
 	        final String groupName) {
-
-		// if (groupsCache.containsKey(groupName)) {
-		// return groupsCache.get(groupName);
-		// }
 
 		NewsGroup lastGroup = null;
 
@@ -959,22 +954,22 @@ public class HibernateHelper {
 	 * @throws HibernateException
 	 *             the hibernate exception
 	 */
-	public List<NewsGroup> storeNewsgroups(final Set<NNTPNewsGroup> newsgroupsList,
+	public List<NewsGroup> storeNewsgroups(final Set<NewsGroup> newsgroupsList,
 	        final Session session) throws HibernateException {
-		final Iterator<NNTPNewsGroup> iter = newsgroupsList.iterator();
+		final Iterator<NewsGroup> iter = newsgroupsList.iterator();
 		final List<NewsGroup> groups = new Vector<>();
 
 		while (iter.hasNext()) {
-			final NNTPNewsGroup sourceGroup = iter.next();
-			final String groupName = sourceGroup.getNewsgroup().trim();
+			final NewsGroup sourceGroup = iter.next();
+			final String groupName = sourceGroup.getName().trim();
 
 			if (groupName.trim().length() > 0) {
 				final NewsGroup group = this.findOrCreateNewsGroup(session, groupName);
 
 				// Add some stats to the news group
 				group.setLastMessageTotal(sourceGroup.getArticleCount());
-				group.setFirstMessage(sourceGroup.getFirstArticle());
-				group.setLastMessage(sourceGroup.getLastArticle());
+				group.setFirstMessage(sourceGroup.getFirstMessage());
+				group.setLastMessage(sourceGroup.getLastMessage());
 
 				session.saveOrUpdate(group);
 				session.flush();

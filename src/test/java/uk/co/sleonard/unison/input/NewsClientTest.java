@@ -84,10 +84,10 @@ public class NewsClientTest {
 
 	@Ignore
 	@Test
-	public final void testListNNTPNewsgroups() throws UNISoNException {
+	public final void testListNewsGroups() throws UNISoNException {
 		final String wildcard = "";
 		final String nntpserver = "";
-		this.client.listNNTPNewsgroups(wildcard, nntpserver);
+		this.client.listNewsGroups(wildcard, nntpserver);
 	}
 
 	@Ignore

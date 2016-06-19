@@ -216,11 +216,10 @@ public class NewsClientImpl extends NNTPClient implements NewsClient {
 	 *             the UNI so n exception
 	 */
 	@Override
-	@SuppressWarnings("deprecation")
-	public Set<NNTPNewsGroup> listNNTPNewsgroups(final String wildcard, final String nntpserver)
+	public Set<NewsGroup> listNewsGroups(final String wildcard, final String nntpserver)
 	        throws UNISoNException {
 
-		final Set<NNTPNewsGroup> groupSet = new TreeSet<>();
+		final Set<NewsGroup> groupSet = new TreeSet<>();
 
 		try {
 			this.connect(nntpserver);
@@ -232,7 +231,7 @@ public class NewsClientImpl extends NNTPClient implements NewsClient {
 				for (final NewsgroupInfo element : groups) {
 					if ((element.getArticleCount() > 0)
 					        & ((element.getLastArticle() - element.getFirstArticle()) > 0)) {
-						groupSet.add(new NNTPNewsGroup(element));
+						groupSet.add(new NewsGroup(element));
 					}
 				}
 			}

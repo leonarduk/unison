@@ -35,8 +35,7 @@ public interface NewsClient {
 
 	public boolean isConnected();
 
-	public Set<NNTPNewsGroup> listNNTPNewsgroups(String searchString, String host)
-	        throws UNISoNException;
+	public Set<NewsGroup> listNewsGroups(String searchString, String host) throws UNISoNException;
 
 	public int quit() throws IOException;
 

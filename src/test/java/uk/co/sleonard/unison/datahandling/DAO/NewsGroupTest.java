@@ -23,23 +23,20 @@ import org.junit.Test;
  *
  */
 public class NewsGroupTest {
-	/** The nntp ng. */
-	private NewsGroup nntpNG;
-
 	/** The expected article count. */
-	private final int expectedArticleCount = 10;
+	private static final int expectedArticleCount = 10;
 
 	/** The expected first article. */
-	private final int expectedFirstMessage = 2;
+	private static final int expectedFirstMessage = 2;
 
 	/** The expected last article. */
-	private final int expectedLastMessage = 79;
-
-	/** The expected newsgroup. */
-	private final String expectedNewsgroup = "newsgroup";
+	private static final int expectedLastMessage = 79;
 
 	/** The expected posting perm. */
-	private final int expectedPostingPerm = 1;
+	private static final int expectedPostingPerm = 1;
+
+	/** The nntp ng. */
+	private NewsGroup nntpNG;
 
 	/**
 	 * Create a mock of NewsgroupInfo.
@@ -47,9 +44,9 @@ public class NewsGroupTest {
 	 * @return Mock object of NewsgroupInfo
 	 */
 	private NewsgroupInfo generateNewsgroupInfoMock() {
-		return NewsgroupInfoFactory.newsgroupInfo(this.expectedArticleCount,
-		        this.expectedFirstMessage, this.expectedLastMessage, "newsgroup",
-		        this.expectedPostingPerm);
+		return NewsgroupInfoFactory.newsgroupInfo(NewsGroupTest.expectedArticleCount,
+		        NewsGroupTest.expectedFirstMessage, NewsGroupTest.expectedLastMessage, "newsgroup",
+		        NewsGroupTest.expectedPostingPerm);
 	}
 
 	/**
@@ -105,7 +102,7 @@ public class NewsGroupTest {
 	 */
 	@Test
 	public void testGetArticleCount() {
-		Assert.assertEquals(this.expectedArticleCount, this.nntpNG.getArticleCount());
+		Assert.assertEquals(NewsGroupTest.expectedArticleCount, this.nntpNG.getArticleCount());
 	}
 
 	/**
@@ -113,7 +110,7 @@ public class NewsGroupTest {
 	 */
 	@Test
 	public void testGetFirstMessage() {
-		Assert.assertEquals(this.expectedFirstMessage, this.nntpNG.getFirstMessage());
+		Assert.assertEquals(NewsGroupTest.expectedFirstMessage, this.nntpNG.getFirstMessage());
 		final int expected = 10;
 		final NewsGroup actual = new NewsGroup();
 		Assert.assertEquals(0, actual.getFirstMessage());
@@ -146,7 +143,7 @@ public class NewsGroupTest {
 	 */
 	@Test
 	public void testGetLastMessage() {
-		Assert.assertEquals(this.expectedLastMessage, this.nntpNG.getLastMessage());
+		Assert.assertEquals(NewsGroupTest.expectedLastMessage, this.nntpNG.getLastMessage());
 	}
 
 	/**

@@ -72,6 +72,7 @@ public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
 		this.firstMessage = original.getFirstArticle();
 		this.lastMessage = original.getLastArticle();
 		this.name = original.getNewsgroup();
+		this.fullName = this.name;
 	}
 
 	/**

@@ -1,6 +1,6 @@
 /**
  * LocationTest
- * 
+ *
  * @author ${author}
  * @since 20-Jun-2016
  */
@@ -22,22 +22,23 @@ import org.junit.Test;
 public class LocationTest {
 
 	/** The city. */
-	private final String city = "Boston";
+	private final static String city = "Boston";
 
 	/** The country. */
-	private final String country = "United States";
+	private final static String country = "United States";
 
 	/** The country code. */
-	private final String countryCode = "USA";
+	private final static String countryCode = "USA";
 
 	/**
 	 * Test fullString.
 	 */
 	@Test
 	public void testFullString() {
-		final String expected = this.city + ", " + this.country + " (" + this.countryCode + ")";
-		final Location actual = new Location(this.city, this.country, this.countryCode, true, null,
-		        null);
+		final String expected = LocationTest.city + ", " + LocationTest.country + " ("
+		        + LocationTest.countryCode + ")";
+		final Location actual = new Location(LocationTest.city, LocationTest.country,
+		        LocationTest.countryCode, true, null, null);
 		Assert.assertEquals(expected, actual.fullString());
 	}
 
@@ -46,7 +47,7 @@ public class LocationTest {
 	 */
 	@Test
 	public void testGetCity() {
-		final String expected = this.city;
+		final String expected = LocationTest.city;
 		final Location actual = new Location();
 		Assert.assertNull(actual.getCity());
 		actual.setCity(expected);
@@ -58,7 +59,7 @@ public class LocationTest {
 	 */
 	@Test
 	public void testGetCountry() {
-		final String expected = this.country;
+		final String expected = LocationTest.country;
 		final Location actual = new Location();
 		Assert.assertNull(actual.getCountry());
 		actual.setCountry(expected);
@@ -70,7 +71,7 @@ public class LocationTest {
 	 */
 	@Test
 	public void testGetCountryCode() {
-		final String expected = this.countryCode;
+		final String expected = LocationTest.countryCode;
 		final Location actual = new Location();
 		Assert.assertNull(actual.getCountryCode());
 		actual.setCountryCode(expected);
@@ -139,8 +140,9 @@ public class LocationTest {
 	 */
 	@Test
 	public void testToString() {
-		final String expected = this.city + " - " + this.countryCode;
-		final Location actual = new Location(this.city, null, this.countryCode, true, null, null);
+		final String expected = LocationTest.city + " - " + LocationTest.countryCode;
+		final Location actual = new Location(LocationTest.city, null, LocationTest.countryCode,
+		        true, null, null);
 		Assert.assertEquals(expected, actual.toString());
 	}
 

@@ -8,46 +8,46 @@ package uk.co.sleonard.unison.gui.generated;
 
 /**
  * The Class AboutDialog.
- * 
+ *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  *
  */
-public class AboutDialog extends javax.swing.JDialog {
+class AboutDialog extends javax.swing.JDialog {
 
 	/** The Constant serialVersionUID. */
-	private static final long	serialVersionUID	= -3036341591077972567L;
+	private static final long serialVersionUID = -3036341591077972567L;
 
 	/** The j label1. */
 	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JLabel	jLabel1;
+	private javax.swing.JLabel jLabel1;
 
 	/** The j label2. */
-	private javax.swing.JLabel	jLabel2;
+	private javax.swing.JLabel jLabel2;
 
 	/** The j label3. */
-	private javax.swing.JLabel	jLabel3;
+	private javax.swing.JLabel jLabel3;
 
 	/** The j label4. */
-	private javax.swing.JLabel	jLabel4;
+	private javax.swing.JLabel jLabel4;
 
 	/** The j label5. */
-	private javax.swing.JLabel	jLabel5;
+	private javax.swing.JLabel jLabel5;
 
 	/** The j label6. */
-	private javax.swing.JLabel	jLabel6;
+	private javax.swing.JLabel jLabel6;
 
 	/** The j label7. */
-	private javax.swing.JLabel	jLabel7;
+	private javax.swing.JLabel jLabel7;
 
 	/** The j label8. */
-	private javax.swing.JLabel	jLabel8;
+	private javax.swing.JLabel jLabel8;
 
 	/** The j label9. */
-	private javax.swing.JLabel	jLabel9;
+	private javax.swing.JLabel jLabel9;
 
 	/** The ok button. */
-	private javax.swing.JButton	okButton;
+	private javax.swing.JButton okButton;
 
 	/**
 	 * The main method.
@@ -68,7 +68,7 @@ public class AboutDialog extends javax.swing.JDialog {
 	 * @param modal
 	 *            the modal
 	 */
-	public AboutDialog(final java.awt.Frame parent, final boolean modal) {
+	AboutDialog(final java.awt.Frame parent, final boolean modal) {
 		super(parent, modal);
 		this.initComponents();
 	}

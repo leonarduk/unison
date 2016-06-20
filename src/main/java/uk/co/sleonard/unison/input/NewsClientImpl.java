@@ -7,7 +7,6 @@
 package uk.co.sleonard.unison.input;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.ConnectException;
@@ -15,11 +14,8 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Vector;
 
-import org.apache.commons.net.io.DotTerminatedMessageReader;
 import org.apache.commons.net.nntp.NNTPClient;
-import org.apache.commons.net.nntp.NNTPReply;
 import org.apache.commons.net.nntp.NewsgroupInfo;
 import org.apache.log4j.Logger;
 
@@ -33,7 +29,7 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
  * @since v1.0.0
  *
  */
-public class NewsClientImpl extends NNTPClient implements NewsClient {
+class NewsClientImpl extends NNTPClient implements NewsClient {
 
 	/** The logger. */
 	private static Logger	logger	= Logger.getLogger("NewsClient");
@@ -47,24 +43,6 @@ public class NewsClientImpl extends NNTPClient implements NewsClient {
 	 * Instantiates a new news client.
 	 */
 	public NewsClientImpl() {
-	}
-
-	public NewsClientImpl(final BufferedWriter writer, final BufferedReader reader) {
-		this._writer_ = writer;
-		this._reader_ = reader;
-	}
-
-	/**
-	 * Close connection.
-	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	@Override
-	public void closeConnection() throws IOException {
-		if (this.isConnected()) {
-			this.disconnect();
-		}
 	}
 
 	/**
@@ -89,8 +67,8 @@ public class NewsClientImpl extends NNTPClient implements NewsClient {
 	}
 
 	@Override
-	public void connect(final String host, final int port) throws SocketException, IOException {
-		super.connect(host, port);
+	public void connect(final String host1, final int port) throws SocketException, IOException {
+		super.connect(host1, port);
 	}
 
 	/**
@@ -137,27 +115,6 @@ public class NewsClientImpl extends NNTPClient implements NewsClient {
 		catch (final IOException e) {
 			e.printStackTrace();
 			throw new UNISoNException("problem connecting to new server");
-		}
-	}
-
-	/**
-	 * Connect to news group.
-	 *
-	 * @param hostInput
-	 *            the host
-	 * @param newsgroup
-	 *            the newsgroup
-	 * @throws UNISoNException
-	 *             the UNI so n exception
-	 */
-	@Override
-	public void connectToNewsGroup(final String hostInput, final NewsGroup newsgroup)
-	        throws UNISoNException {
-		try {
-			this.connectToNewsGroup(hostInput, newsgroup.getFullName());
-		}
-		catch (final Exception e) {
-			throw new UNISoNException(e);
 		}
 	}
 
@@ -215,6 +172,7 @@ public class NewsClientImpl extends NNTPClient implements NewsClient {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public Set<NewsGroup> listNewsGroups(final String wildcard, final String nntpserver)
 	        throws UNISoNException {
@@ -237,7 +195,7 @@ public class NewsClientImpl extends NNTPClient implements NewsClient {
 			}
 		}
 		catch (final Exception e) {
-			throw new UNISoNException(e);
+			throw new UNISoNException("Failed to connect", e);
 		}
 
 		return groupSet;
@@ -257,7 +215,7 @@ public class NewsClientImpl extends NNTPClient implements NewsClient {
 				this.connect(this.host);
 			}
 			catch (final IOException e) {
-				throw new UNISoNException(e);
+				throw new UNISoNException("Failed to connect", e);
 			}
 		}
 	}
@@ -276,41 +234,6 @@ public class NewsClientImpl extends NNTPClient implements NewsClient {
 	public BufferedReader retrieveArticleInfo(final long lowArticleNumber,
 	        final long highArticleNumber) throws IOException {
 		return super.retrieveArticleInfo(lowArticleNumber, highArticleNumber);
-	}
-
-	/**
-	 * Run command.
-	 *
-	 * @param command
-	 *            the command
-	 * @param args
-	 *            the args
-	 */
-	@Override
-	public void runCommand(final String command, final String args) {
-
-		int result;
-		try {
-			result = this.sendCommand(command, args);
-			if (!NNTPReply.isPositiveCompletion(result)) {
-				throw new RuntimeException("ERROR: " + result);
-			}
-			final Vector<String> list = new Vector<>();
-
-			try (final BufferedReader reader = new BufferedReader(
-			        new DotTerminatedMessageReader(this._reader_));) {
-
-				String line = reader.readLine();
-				while (line != null) {
-					list.addElement(line);
-					line = reader.readLine();
-				}
-			}
-		}
-		catch (final IOException e) {
-			e.printStackTrace();
-		}
-
 	}
 
 	/*

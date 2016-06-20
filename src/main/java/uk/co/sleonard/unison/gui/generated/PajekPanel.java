@@ -43,7 +43,7 @@ import uk.co.sleonard.unison.utils.StringUtils;
  * @since v1.0.0
  *
  */
-public class PajekPanel extends javax.swing.JPanel implements Observer {
+class PajekPanel extends javax.swing.JPanel implements Observer {
 
 	/** The Constant PAJEK_NETWORK_FILE_SUFFIX. */
 	private static final String PAJEK_NETWORK_FILE_SUFFIX = ".net";
@@ -135,7 +135,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 	 * @param frame
 	 *            the frame
 	 */
-	public PajekPanel(final JFrame frame) {
+	PajekPanel(final JFrame frame) {
 		this.pajekHeader = new Vector<>(
 		        Arrays.asList(new String[] { "Subject", "Date", "FROM", "TO" }));
 		try {
@@ -295,7 +295,7 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 	 *            the current message
 	 * @return the referenced message
 	 */
-	public Message getReferencedMessage(final HashMap<String, Message> msgMap, final String key,
+	private Message getReferencedMessage(final HashMap<String, Message> msgMap, final String key,
 	        final Message currentMessage) {
 		Message message = msgMap.get(key);
 

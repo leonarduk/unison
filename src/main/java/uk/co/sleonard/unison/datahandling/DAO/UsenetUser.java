@@ -1,6 +1,6 @@
 /**
  * UsenetUser
- * 
+ *
  * @author ${author}
  * @since 30-May-2016
  */
@@ -53,22 +53,6 @@ public class UsenetUser implements java.io.Serializable {
 	 *            the email
 	 * @param ipaddress
 	 *            the ipaddress
-	 */
-	public UsenetUser(final String name, final String email, final String ipaddress) {
-		this.name = name;
-		this.email = email;
-		this.ipaddress = ipaddress;
-	}
-
-	/**
-	 * Instantiates a new usenet user.
-	 *
-	 * @param name
-	 *            the name
-	 * @param email
-	 *            the email
-	 * @param ipaddress
-	 *            the ipaddress
 	 * @param gender
 	 *            the gender
 	 * @param location
@@ -83,22 +67,62 @@ public class UsenetUser implements java.io.Serializable {
 		this.location = location;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
-	public boolean equals(final Object object) {
-		if (this == object) {
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
 		}
-		if (!(object instanceof UsenetUser)) {
+		if (obj == null) {
 			return false;
 		}
-		final UsenetUser that = (UsenetUser) object;
-		return ((this.getId() == that.getId()) && this.getEmail().equals(that.getEmail())
-		        && this.getName().equals(that.getName()));
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		final UsenetUser other = (UsenetUser) obj;
+		if (this.email == null) {
+			if (other.email != null) {
+				return false;
+			}
+		}
+		else if (!this.email.equals(other.email)) {
+			return false;
+		}
+		if (this.gender == null) {
+			if (other.gender != null) {
+				return false;
+			}
+		}
+		else if (!this.gender.equals(other.gender)) {
+			return false;
+		}
+		if (this.id != other.id) {
+			return false;
+		}
+		if (this.ipaddress == null) {
+			if (other.ipaddress != null) {
+				return false;
+			}
+		}
+		else if (!this.ipaddress.equals(other.ipaddress)) {
+			return false;
+		}
+		if (this.location == null) {
+			if (other.location != null) {
+				return false;
+			}
+		}
+		else if (!this.location.equals(other.location)) {
+			return false;
+		}
+		if (this.name == null) {
+			if (other.name != null) {
+				return false;
+			}
+		}
+		else if (!this.name.equals(other.name)) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -155,17 +179,17 @@ public class UsenetUser implements java.io.Serializable {
 		return this.name;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
-		int hashCode = 0;
-		hashCode = (29 * hashCode) + this.id;
-
-		return hashCode;
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + ((this.email == null) ? 0 : this.email.hashCode());
+		result = (prime * result) + ((this.gender == null) ? 0 : this.gender.hashCode());
+		result = (prime * result) + this.id;
+		result = (prime * result) + ((this.ipaddress == null) ? 0 : this.ipaddress.hashCode());
+		result = (prime * result) + ((this.location == null) ? 0 : this.location.hashCode());
+		result = (prime * result) + ((this.name == null) ? 0 : this.name.hashCode());
+		return result;
 	}
 
 	/**

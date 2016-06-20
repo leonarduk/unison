@@ -1,6 +1,6 @@
 /**
  * Topic
- * 
+ *
  * @author ${author}
  * @since 30-May-2016
  */
@@ -43,16 +43,6 @@ public class Topic implements java.io.Serializable {
 	 *
 	 * @param subject
 	 *            the subject
-	 */
-	public Topic(final String subject) {
-		this.subject = subject;
-	}
-
-	/**
-	 * Instantiates a new topic.
-	 *
-	 * @param subject
-	 *            the subject
 	 * @param newsgroups
 	 *            the newsgroups
 	 */
@@ -61,25 +51,38 @@ public class Topic implements java.io.Serializable {
 		this.newsgroups = newsgroups;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
-	public boolean equals(final Object object) {
-		if (this == object) {
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
 		}
-		if (!(object instanceof Topic)) {
+		if (obj == null) {
 			return false;
 		}
-		final Topic that = (Topic) object;
-		if ((this.getId() != that.getId()) || !this.getSubject().equals(that.getSubject())) {
+		if (this.getClass() != obj.getClass()) {
 			return false;
 		}
-		return (this.getNewsgroups().containsAll(that.getNewsgroups())
-		        && that.getNewsgroups().containsAll(this.getNewsgroups()));
+		final Topic other = (Topic) obj;
+		if (this.id != other.id) {
+			return false;
+		}
+		if (this.newsgroups == null) {
+			if (other.newsgroups != null) {
+				return false;
+			}
+		}
+		else if (!this.newsgroups.equals(other.newsgroups)) {
+			return false;
+		}
+		if (this.subject == null) {
+			if (other.subject != null) {
+				return false;
+			}
+		}
+		else if (!this.subject.equals(other.subject)) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -109,17 +112,14 @@ public class Topic implements java.io.Serializable {
 		return this.subject;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
-		int hashCode = 0;
-		hashCode = (29 * hashCode) + this.id;
-
-		return hashCode;
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + this.id;
+		result = (prime * result) + ((this.newsgroups == null) ? 0 : this.newsgroups.hashCode());
+		result = (prime * result) + ((this.subject == null) ? 0 : this.subject.hashCode());
+		return result;
 	}
 
 	/**

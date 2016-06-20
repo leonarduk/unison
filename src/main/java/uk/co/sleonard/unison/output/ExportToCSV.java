@@ -52,8 +52,8 @@ public class ExportToCSV {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	public void exportTable(final String fileName, final JTable table,
-	        final Vector<String> fieldNames) throws UNISoNException {
+	void exportTable(final String fileName, final JTable table, final Vector<String> fieldNames)
+	        throws UNISoNException {
 		try {
 			final File file = new File(fileName);
 			if (file != null) {

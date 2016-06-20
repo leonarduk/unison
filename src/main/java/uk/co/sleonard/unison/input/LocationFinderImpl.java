@@ -47,7 +47,7 @@ public class LocationFinderImpl implements LocationFinder {
 	 * @param url
 	 *            the url
 	 */
-	public LocationFinderImpl(final String url) {
+	LocationFinderImpl(final String url) {
 		this.webUrl = url;
 	}
 

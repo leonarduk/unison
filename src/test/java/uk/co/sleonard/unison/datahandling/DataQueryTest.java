@@ -47,25 +47,6 @@ public class DataQueryTest {
 	}
 
 	/**
-	 * Test get location.
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Test
-	public void testGetLocations() {
-		Vector<String> countries = new Vector<>();
-		countries.addElement("England");
-		Session session = mock(Session.class);
-		boolean filtered = true;
-		Vector locations = new Vector<Location>();
-		locations.addElement(new Location());
-		when(this.helper.runQuery(Matchers.anyString(), Matchers.any(Session.class),
-		        Matchers.<Class<Location>> any())).thenReturn(locations);
-		Vector<Location> actual = this.dataQuery.getLocations(countries, session, filtered);
-		Vector expected = locations;
-		assertEquals(expected, actual);
-	}
-
-	/**
 	 * Test get location string.
 	 */
 	@Test

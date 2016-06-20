@@ -8,6 +8,7 @@ package uk.co.sleonard.unison.gui.generated;
 
 import java.util.Set;
 
+import javax.swing.JFrame;
 import javax.swing.ListModel;
 
 import org.junit.Assert;
@@ -19,6 +20,7 @@ import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.utils.StringUtils;
 
+@SuppressWarnings("ucd")
 public class DownloadNewsPanelIT {
 
 	private UNISoNController	controller;
@@ -26,7 +28,7 @@ public class DownloadNewsPanelIT {
 
 	@Before
 	public void setUp() throws Exception {
-		this.controller = UNISoNController.create(null);
+		this.controller = UNISoNController.create(new JFrame());
 		this.panel = new DownloadNewsPanel();
 	}
 

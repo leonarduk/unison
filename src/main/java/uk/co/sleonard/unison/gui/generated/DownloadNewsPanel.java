@@ -33,7 +33,7 @@ import uk.co.sleonard.unison.utils.StringUtils;
  *
  */
 @SuppressWarnings("rawtypes")
-public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogger, Observer {
+class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogger, Observer {
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 6581138636992116397L;
@@ -104,7 +104,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 	/** The controller. */
 	private final UNISoNController controller;
 
-	StringBuffer logText;
+	private StringBuffer logText;
 
 	/**
 	 * The main method.
@@ -229,7 +229,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogge
 				this.log("Done.");
 			}
 			catch (final UNISoNException e) {
-				this.alert("Failed to download. Check your internet connection");
+				this.alert("Failed to download. Check your internet connection" + e.getMessage());
 				this.downloadEnabled(true);
 			}
 			catch (final DateTimeParseException e) {

@@ -11,9 +11,6 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.net.nntp.Article;
-import org.apache.log4j.Logger;
-
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.utils.StringUtils;
 
@@ -24,10 +21,7 @@ import uk.co.sleonard.unison.utils.StringUtils;
  * @since v1.0.0
  *
  */
-public class NewsArticle implements Comparable<Object> {
-
-	/** The logger. */
-	private static Logger logger = Logger.getLogger("NewsArtiole");
+public class NewsArticle {
 
 	/** The article id. */
 	private String articleID;
@@ -63,31 +57,7 @@ public class NewsArticle implements Comparable<Object> {
 	public NewsArticle() {
 	}
 
-	/**
-	 * Instantiates a new news article.
-	 *
-	 * @param article
-	 *            the article
-	 * @throws UNISoNException
-	 *             the UNI so n exception
-	 */
-	@SuppressWarnings("deprecation")
-	public NewsArticle(final Article article) throws UNISoNException {
-		this.setArticleId(article.getArticleId());
-		this.setArticleNumber(article.getArticleNumber());
-		try {
-			this.setDate(article.getDate());
-		}
-		catch (final Exception e) {
-			NewsArticle.logger.warn("Failed to parse date: " + this.date);
-			throw new UNISoNException(e);
-		}
-
-		this.setFrom(article.getFrom());
-		this.setSubject(article.getSubject());
-	}
-
-	public NewsArticle(final String articleId2, final int articleNumber2, final Date date2,
+	NewsArticle(final String articleId2, final int articleNumber2, final Date date2,
 	        final String from2, final String subject2, final String references2,
 	        final String newsgroup) throws UNISoNException {
 		this(articleId2, articleNumber2, date2, from2, subject2, references2, null, newsgroup,
@@ -130,26 +100,6 @@ public class NewsArticle implements Comparable<Object> {
 		this.setContent(content);
 		this.setNewsgroups(newsgroups);
 		this.setPostingHost(postingHost);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	@Override
-	public int compareTo(final Object o) {
-		final int myNumber = this.getArticleNumber();
-		final int otherNumber = ((NewsArticle) o).getArticleNumber();
-		if (myNumber < otherNumber) {
-			return -1;
-		}
-		else if (myNumber > otherNumber) {
-			return 1;
-		}
-		else {
-			return 0;
-		}
 	}
 
 	/**
@@ -321,7 +271,7 @@ public class NewsArticle implements Comparable<Object> {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	void setDate(final Date date) throws UNISoNException {
+	private void setDate(final Date date) throws UNISoNException {
 		this.date = date;
 		if (null == date) {
 			throw new UNISoNException("Cannot create article without date field");

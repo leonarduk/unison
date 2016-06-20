@@ -36,7 +36,7 @@ public class DataHibernatorWorker extends SwingWorker {
 	private static int numberofHibernators = 20;
 
 	/** The log. */
-	static UNISoNLogger log;
+	private static UNISoNLogger log;
 
 	/** The workers. */
 	private static ArrayList<DataHibernatorWorker> workers = new ArrayList<>();
@@ -72,17 +72,11 @@ public class DataHibernatorWorker extends SwingWorker {
 	/**
 	 * Stop download.
 	 */
-	public static void stopDownload() {
+	static void stopDownload() {
 		for (final ListIterator<DataHibernatorWorker> iter = DataHibernatorWorker.workers
 		        .listIterator(); iter.hasNext();) {
 			iter.next().interrupt();
 		}
-	}
-
-	public DataHibernatorWorker(final HibernateHelper helper) {
-		super("DataHibernator");
-		this.reader = null;
-		this.helper = helper;
 	}
 
 	/**
@@ -91,7 +85,7 @@ public class DataHibernatorWorker extends SwingWorker {
 	 * @param reader
 	 *            the reader
 	 */
-	public DataHibernatorWorker(final NewsGroupReader reader) {
+	private DataHibernatorWorker(final NewsGroupReader reader) {
 		super("DataHibernatorWorker");
 		this.helper = UNISoNController.getInstance().helper();
 
@@ -150,7 +144,7 @@ public class DataHibernatorWorker extends SwingWorker {
 		return article;
 	}
 
-	public void pollQueue(final LinkedBlockingQueue<NewsArticle> queue, final Session session)
+	private void pollQueue(final LinkedBlockingQueue<NewsArticle> queue, final Session session)
 	        throws InterruptedException {
 		while (!queue.isEmpty()) {
 			if (Thread.interrupted()) {
@@ -177,7 +171,7 @@ public class DataHibernatorWorker extends SwingWorker {
 	/**
 	 * Stop hibernating data.
 	 */
-	public void stopHibernatingData() {
+	private void stopHibernatingData() {
 		DataHibernatorWorker.logger.warn("StopHibernatingData");
 		this.saveToDatabase = false;
 	}

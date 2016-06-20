@@ -30,16 +30,16 @@ public class PajekNetworkFile {
 	private final LinkedList<String> vertices;
 
 	/** The directed links. */
-	protected List<Relationship> directedLinks;
+	private List<Relationship> directedLinks;
 
 	/** The filename. */
 	private String filename;
 
 	/** The suffix. */
-	protected String suffix;
+	private String suffix;
 
 	/** The undirected links. */
-	protected List<Relationship> undirectedLinks;
+	private final List<Relationship> undirectedLinks;
 
 	// Statically assign the suffix
 	{
@@ -80,7 +80,7 @@ public class PajekNetworkFile {
 	 *            the links
 	 * @return the relationship
 	 */
-	public Relationship addRelationship(final String ownerName, final String targetName,
+	Relationship addRelationship(final String ownerName, final String targetName,
 	        final List<Relationship> links) {
 		// ensure the start and end points are included in the network
 		this.addNode(ownerName);
@@ -130,7 +130,7 @@ public class PajekNetworkFile {
 	 *            the links
 	 * @return the list
 	 */
-	protected List<uk.co.sleonard.unison.output.Relationship> createLinks(
+	private List<uk.co.sleonard.unison.output.Relationship> createLinks(
 	        final Vector<Vector<String>> nodePairs,
 	        final List<uk.co.sleonard.unison.output.Relationship> links) {
 		final Iterator<Vector<String>> iter = nodePairs.iterator();
@@ -149,18 +149,6 @@ public class PajekNetworkFile {
 			}
 		}
 		return links;
-	}
-
-	/**
-	 * Creates the undirected links.
-	 *
-	 * @param tableData
-	 *            the table data
-	 * @return the list
-	 */
-	public List<Relationship> createUndirectedLinks(final Vector<Vector<String>> tableData) {
-		this.undirectedLinks = this.createLinks(tableData, this.undirectedLinks);
-		return this.undirectedLinks;
 	}
 
 	/**

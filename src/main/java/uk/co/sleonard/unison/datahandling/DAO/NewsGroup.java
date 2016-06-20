@@ -19,15 +19,13 @@ import org.apache.commons.net.nntp.NewsgroupInfo;
  *
  */
 public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
-
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = -8526704874026184061L;
-
+	private static final long	serialVersionUID	= -8526704874026184061L;
 	/** The first message. */
 
-	private int firstMessage;
+	private int					firstMessage;
 
 	/** The full name. */
 	private String fullName;
@@ -67,22 +65,13 @@ public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
 	public NewsGroup() {
 	}
 
+	@SuppressWarnings("deprecation")
 	public NewsGroup(final NewsgroupInfo original) {
 		this.estimatedArticleCount = original.getArticleCount();
 		this.firstMessage = original.getFirstArticle();
 		this.lastMessage = original.getLastArticle();
 		this.name = original.getNewsgroup();
 		this.fullName = this.name;
-	}
-
-	/**
-	 * Instantiates a new news group.
-	 *
-	 * @param name
-	 *            the name
-	 */
-	public NewsGroup(final String name) {
-		this.name = name;
 	}
 
 	/**

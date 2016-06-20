@@ -36,7 +36,7 @@ public class DataQuery {
 	private final HibernateHelper helper;
 
 	/** The yyyy mmdd formatter. */
-	SimpleDateFormat yyyyMMDDFormatter = new SimpleDateFormat("yyyy-MM-dd");
+	private final SimpleDateFormat yyyyMMDDFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
 	/**
 	 * Instantiates a new data query.
@@ -79,30 +79,8 @@ public class DataQuery {
 	 *            the table type
 	 * @return the base query
 	 */
-	protected StringBuffer getBaseQuery(final Class<?> tableType) {
+	private StringBuffer getBaseQuery(final Class<?> tableType) {
 		return new StringBuffer(" FROM " + tableType.getName());
-	}
-
-	/**
-	 * Gets the locations.
-	 *
-	 * @param countries
-	 *            the countries
-	 * @param session
-	 *            the session
-	 * @param filtered
-	 *            the filtered
-	 * @return the locations
-	 */
-	public Vector<Location> getLocations(final Vector<String> countries, final Session session,
-	        final boolean filtered) {
-		DataQuery.logger.debug("getLocations : " + countries);
-		if (filtered && (null != countries) && (countries.size() > 0)) {
-			final StringBuffer sqlBuffer = this.getLocationsSQL(countries);
-
-			return this.helper.runQuery(sqlBuffer.toString(), session, Location.class);
-		}
-		return null;
 	}
 
 	/**
@@ -112,7 +90,7 @@ public class DataQuery {
 	 *            the countries
 	 * @return the locations sql
 	 */
-	public StringBuffer getLocationsSQL(final Vector<String> countries) {
+	StringBuffer getLocationsSQL(final Vector<String> countries) {
 		final StringBuffer sqlBuffer = this.getBaseQuery(Location.class);
 		if (null != countries) {
 			sqlBuffer.append(" where country in ( ");
@@ -134,7 +112,7 @@ public class DataQuery {
 	 *            the users
 	 * @return the message ids string
 	 */
-	public StringBuffer getMessageIdsString(final Vector<Message> users) {
+	StringBuffer getMessageIdsString(final Vector<Message> users) {
 		DataQuery.logger.debug("getMessageIdsString");
 
 		final StringBuffer buf = new StringBuffer();
@@ -249,7 +227,7 @@ public class DataQuery {
 	 *            the users
 	 * @return the usenet user ids string
 	 */
-	public StringBuffer getUsenetUserIdsString(final Vector<UsenetUser> users) {
+	StringBuffer getUsenetUserIdsString(final Vector<UsenetUser> users) {
 		DataQuery.logger.debug("getUsenetUserIdsString");
 
 		final StringBuffer buf = new StringBuffer();
@@ -274,7 +252,7 @@ public class DataQuery {
 	 *            the delimiter
 	 * @return the string
 	 */
-	public String join(final Collection<String> s, final String delimiter) {
+	String join(final Collection<String> s, final String delimiter) {
 		final StringBuffer buffer = new StringBuffer();
 		final Iterator<String> iter = s.iterator();
 		while (iter.hasNext()) {

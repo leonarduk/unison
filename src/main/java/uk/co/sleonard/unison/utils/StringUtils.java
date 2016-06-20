@@ -43,7 +43,7 @@ import uk.co.sleonard.unison.UNISoNException;
  */
 public class StringUtils {
 
-	public static final String[] DATE_SEPARATORS = { "/", "-", ".", "," };
+	static final String[] DATE_SEPARATORS = { "/", "-", ".", "," };
 
 	/**
 	 * Compress.
@@ -72,7 +72,7 @@ public class StringUtils {
 	 *            the comma separated string
 	 * @return the list
 	 */
-	public static List<String> convertCommasToList(final String commaSeparatedString) {
+	static List<String> convertCommasToList(final String commaSeparatedString) {
 		final Vector<String> words = new Vector<>();
 
 		final StringTokenizer tok = new StringTokenizer(commaSeparatedString, ",");
@@ -214,9 +214,9 @@ public class StringUtils {
 	 * @since 11/06/2016
 	 * @return Return the date.
 	 */
-	public static Date stringToDate(String text) throws UNISoNException {
+	public static Date stringToDate(final String text) throws UNISoNException {
 
-		String[] symbols = { "dd", "MM", "yyyy" };
+		final String[] symbols = { "dd", "MM", "yyyy" };
 		StringBuilder pattern = null;
 
 		if ((null == text) || text.equals("")) {
@@ -227,8 +227,8 @@ public class StringUtils {
 				// 20101229
 				pattern = new StringBuilder().append(symbols[2]).append(symbols[1])
 				        .append(symbols[0]);
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern.toString());
-				LocalDate localDate = LocalDate.parse(text, formatter);
+				final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern.toString());
+				final LocalDate localDate = LocalDate.parse(text, formatter);
 				return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 			}
 			catch (final DateTimeParseException e) {
@@ -238,8 +238,8 @@ public class StringUtils {
 				// 13122010
 				pattern = new StringBuilder().append(symbols[0]).append(symbols[1])
 				        .append(symbols[2]);
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern.toString());
-				LocalDate localDate = LocalDate.parse(text, formatter);
+				final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern.toString());
+				final LocalDate localDate = LocalDate.parse(text, formatter);
 				return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 			}
 			catch (final DateTimeParseException e) {
@@ -249,8 +249,8 @@ public class StringUtils {
 				// 12201601
 				pattern = new StringBuilder().append(symbols[1]).append(symbols[2])
 				        .append(symbols[0]);
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern.toString());
-				LocalDate localDate = LocalDate.parse(text, formatter);
+				final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern.toString());
+				final LocalDate localDate = LocalDate.parse(text, formatter);
 				return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 			}
 			catch (final DateTimeParseException e) {
@@ -258,15 +258,15 @@ public class StringUtils {
 			}
 		}
 		else if (text.length() == 10) {
-			for (String separator : DATE_SEPARATORS) {
+			for (final String separator : StringUtils.DATE_SEPARATORS) {
 				if (text.contains(separator)) {
 					try {
 						// Ex.12/05/1994
 						pattern = new StringBuilder().append(symbols[0]).append(separator)
 						        .append(symbols[1]).append(separator).append(symbols[2]);
-						DateTimeFormatter formatter = DateTimeFormatter
+						final DateTimeFormatter formatter = DateTimeFormatter
 						        .ofPattern(pattern.toString());
-						LocalDate localDate = LocalDate.parse(text, formatter);
+						final LocalDate localDate = LocalDate.parse(text, formatter);
 						return Date
 						        .from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 					}
@@ -276,9 +276,9 @@ public class StringUtils {
 						// Ex.1994/12/05
 						pattern = new StringBuilder().append(symbols[2]).append(separator)
 						        .append(symbols[1]).append(separator).append(symbols[0]);
-						DateTimeFormatter formatter = DateTimeFormatter
+						final DateTimeFormatter formatter = DateTimeFormatter
 						        .ofPattern(pattern.toString());
-						LocalDate localDate = LocalDate.parse(text, formatter);
+						final LocalDate localDate = LocalDate.parse(text, formatter);
 						return Date
 						        .from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 					}
@@ -288,9 +288,9 @@ public class StringUtils {
 						// Ex.12/1994/05
 						pattern = new StringBuilder().append(symbols[1]).append(separator)
 						        .append(symbols[2]).append(separator).append(symbols[0]);
-						DateTimeFormatter formatter = DateTimeFormatter
+						final DateTimeFormatter formatter = DateTimeFormatter
 						        .ofPattern(pattern.toString());
-						LocalDate localDate = LocalDate.parse(text, formatter);
+						final LocalDate localDate = LocalDate.parse(text, formatter);
 						return Date
 						        .from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 					}
@@ -308,8 +308,8 @@ public class StringUtils {
 				// 18 Jan 2015 23:40:56 +0000
 				dateText = dateText.substring(4, dateText.indexOf("(")).trim();
 
-				DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
-				ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateText, formatter);
+				final DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
+				final ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateText, formatter);
 				return Date.from(zonedDateTime.toInstant());
 			}
 			else if (dateText.substring(0, 1).matches("[a-zA-Z]")) {
@@ -317,14 +317,14 @@ public class StringUtils {
 				// Sun, 18 Jan 2015 23:40:56 +0000
 				// TRIM TO
 				// 18 Jan 2015 23:40:56 +0000
-				DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
-				ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateText, formatter);
+				final DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
+				final ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateText, formatter);
 				return Date.from(zonedDateTime.toInstant());
 			}
 			else {
 				// 30 Jan 2015 23:37:13 GMT
-				DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
-				LocalDate localDate = LocalDate.parse(dateText, formatter);
+				final DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
+				final LocalDate localDate = LocalDate.parse(dateText, formatter);
 				return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 			}
 		}

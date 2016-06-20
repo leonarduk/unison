@@ -23,16 +23,16 @@ public class NewsGroupReader implements UNISoNLogger {
 	private static Logger logger = Logger.getLogger("NewsGroupReader");
 
 	/** The client. */
-	public NewsClient client;
+	NewsClient client;
 
 	/** The message count. */
 	private int messageCount;
 
 	/** The msgs skipped. */
-	int msgsSkipped = 0;
+	private int msgsSkipped = 0;
 
 	/** The msgs stored. */
-	int msgsStored = 0;
+	private int msgsStored = 0;
 
 	/**
 	 * Instantiates a new news group reader.
@@ -97,14 +97,14 @@ public class NewsGroupReader implements UNISoNLogger {
 	/**
 	 * Increment messages skipped.
 	 */
-	public synchronized void incrementMessagesSkipped() {
+	synchronized void incrementMessagesSkipped() {
 		this.msgsSkipped++;
 	}
 
 	/**
 	 * Increment messages stored.
 	 */
-	public synchronized void incrementMessagesStored() {
+	synchronized void incrementMessagesStored() {
 		this.msgsStored++;
 	}
 
@@ -162,7 +162,7 @@ public class NewsGroupReader implements UNISoNLogger {
 	/**
 	 * Show download status.
 	 */
-	public synchronized void showDownloadStatus() {
+	synchronized void showDownloadStatus() {
 		final int i = this.getMessagesSkipped() + this.getMessagesStored();
 
 		if (this.getMessageCount() > 0) {

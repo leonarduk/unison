@@ -81,7 +81,7 @@ public class FullDownloadWorker extends SwingWorker {
 	 *
 	 * @return the int
 	 */
-	public static int queueSize() {
+	static int queueSize() {
 		return FullDownloadWorker.downloadQueue.size();
 	}
 
@@ -93,7 +93,7 @@ public class FullDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	public static void startDownloaders(final int numberOfDownloaders) throws UNISoNException {
+	private static void startDownloaders(final int numberOfDownloaders) throws UNISoNException {
 
 		for (int i = 0; i < numberOfDownloaders; i++) {
 			final String host = UNISoNController.getInstance().getNntpHost();
@@ -112,7 +112,7 @@ public class FullDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	public FullDownloadWorker(final String server, final LinkedBlockingQueue<NewsArticle> outQueue)
+	FullDownloadWorker(final String server, final LinkedBlockingQueue<NewsArticle> outQueue)
 	        throws UNISoNException {
 		super("FullDownload");
 		this.client = new NewsClientImpl();
@@ -120,7 +120,7 @@ public class FullDownloadWorker extends SwingWorker {
 			this.client.connect(server);
 		}
 		catch (final IOException e) {
-			throw new UNISoNException(e);
+			throw new UNISoNException("Failed to connect", e);
 		}
 
 		this.start();
@@ -231,7 +231,7 @@ public class FullDownloadWorker extends SwingWorker {
 			date = StringUtils.stringToDate(headerFields.get("DATE"));
 		}
 		catch (final DateTimeParseException e) {
-			throw new UNISoNException(e);
+			throw new UNISoNException("Failed to parse date", e);
 		}
 
 		final NewsArticle article = new NewsArticle(headerFields.get("MESSAGE-ID"), messageNumber,
@@ -272,7 +272,7 @@ public class FullDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	public NewsArticle downloadArticle(final DownloadRequest request) throws UNISoNException {
+	NewsArticle downloadArticle(final DownloadRequest request) throws UNISoNException {
 		NewsArticle article = null;
 		try {
 			switch (request.getMode()) {
@@ -312,7 +312,7 @@ public class FullDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	public NewsArticle downloadFullMessage(final DownloadRequest request)
+	NewsArticle downloadFullMessage(final DownloadRequest request)
 	        throws IOException, UNISoNException {
 		try (Reader reader = this.client.retrieveArticle(request.getUsenetID());) {
 			NewsArticle article = null;
@@ -381,7 +381,7 @@ public class FullDownloadWorker extends SwingWorker {
 	 *            The Reader instance
 	 * @return String
 	 */
-	public String readerToString(final Reader reader) {
+	private String readerToString(final Reader reader) {
 		String temp = null;
 		StringBuffer sb = null;
 		final BufferedReader bufReader = new BufferedReader(reader);

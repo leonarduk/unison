@@ -1,3 +1,9 @@
+/**
+ * JSplashScreen
+ * 
+ * @author ${author}
+ * @since 20-Jun-2016
+ */
 package uk.co.sleonard.unison.gui;
 
 /*
@@ -30,35 +36,18 @@ import javax.swing.border.BevelBorder;
 
 /**
  * The Class JSplashScreen.
- * 
+ *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
- * 
+ *
  */
 public class JSplashScreen extends JDialog {
 
 	/** The Constant serialVersionUID. */
-	private static final long	serialVersionUID	= -6087186647558684188L;
+	private static final long serialVersionUID = -6087186647558684188L;
 
 	/** The status bar. */
-	JProgressBar				statusBar;
-
-	/**
-	 * The Class CloseJNSplash.
-	 */
-	class CloseJNSplash implements Runnable {
-
-		/*
-		 * (non-Javadoc)
-		 *
-		 * @see java.lang.Runnable#run()
-		 */
-		@Override
-		public synchronized void run() {
-			JSplashScreen.this.setVisible(false);
-			JSplashScreen.this.dispose();
-		}
-	}
+	private JProgressBar statusBar;
 
 	/**
 	 * Instantiates a new j splash screen.
@@ -143,5 +132,22 @@ public class JSplashScreen extends JDialog {
 	public void showStatus(final int currentStatus) {
 		// Update Splash-Screen's status bar in AWT thread
 		this.statusBar.setValue(currentStatus);
+	}
+
+	/**
+	 * The Class CloseJNSplash.
+	 */
+	class CloseJNSplash implements Runnable {
+
+		/*
+		 * (non-Javadoc)
+		 *
+		 * @see java.lang.Runnable#run()
+		 */
+		@Override
+		public synchronized void run() {
+			JSplashScreen.this.setVisible(false);
+			JSplashScreen.this.dispose();
+		}
 	}
 }

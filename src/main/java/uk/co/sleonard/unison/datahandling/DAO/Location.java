@@ -78,31 +78,65 @@ public class Location implements java.io.Serializable {
 		this.IpAddresses = IpAddresses;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
-	public boolean equals(final Object object) {
-		if (this == object) {
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
 		}
-		if (!(object instanceof Location)) {
+		if (obj == null) {
 			return false;
 		}
-		final Location that = (Location) object;
-		if ((this.getId() != that.getId()) || !this.getCity().equals(that.getCity())
-		        || !this.getCountry().equals(that.getCountry())
-		        || !this.getCountryCode().equals(this.getCountryCode())) {
+		if (this.getClass() != obj.getClass()) {
 			return false;
 		}
-		if (!this.getIpAddresses().containsAll(that.getIpAddresses())
-		        || !that.getIpAddresses().containsAll(this.getIpAddresses())) {
+		final Location other = (Location) obj;
+		if (this.City == null) {
+			if (other.City != null) {
+				return false;
+			}
+		}
+		else if (!this.City.equals(other.City)) {
 			return false;
 		}
-		return (this.getPosters().containsAll(that.getPosters())
-		        && that.getPosters().containsAll(this.getPosters()));
+		if (this.Country == null) {
+			if (other.Country != null) {
+				return false;
+			}
+		}
+		else if (!this.Country.equals(other.Country)) {
+			return false;
+		}
+		if (this.CountryCode == null) {
+			if (other.CountryCode != null) {
+				return false;
+			}
+		}
+		else if (!this.CountryCode.equals(other.CountryCode)) {
+			return false;
+		}
+		if (this.Guessed != other.Guessed) {
+			return false;
+		}
+		if (this.IpAddresses == null) {
+			if (other.IpAddresses != null) {
+				return false;
+			}
+		}
+		else if (!this.IpAddresses.equals(other.IpAddresses)) {
+			return false;
+		}
+		if (this.id != other.id) {
+			return false;
+		}
+		if (this.posters == null) {
+			if (other.posters != null) {
+				return false;
+			}
+		}
+		else if (!this.posters.equals(other.posters)) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -168,17 +202,18 @@ public class Location implements java.io.Serializable {
 		return this.posters;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
-		int hashCode = 0;
-		hashCode = (29 * hashCode) + this.id;
-
-		return hashCode;
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + ((this.City == null) ? 0 : this.City.hashCode());
+		result = (prime * result) + ((this.Country == null) ? 0 : this.Country.hashCode());
+		result = (prime * result) + ((this.CountryCode == null) ? 0 : this.CountryCode.hashCode());
+		result = (prime * result) + (this.Guessed ? 1231 : 1237);
+		result = (prime * result) + ((this.IpAddresses == null) ? 0 : this.IpAddresses.hashCode());
+		result = (prime * result) + this.id;
+		result = (prime * result) + ((this.posters == null) ? 0 : this.posters.hashCode());
+		return result;
 	}
 
 	/**

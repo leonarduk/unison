@@ -1,13 +1,12 @@
+/**
+ * GUIItem
+ *
+ * @author ${author}
+ * @since 20-Jun-2016
+ */
 package uk.co.sleonard.unison.datahandling.DAO;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Vector;
-
 import org.apache.log4j.Logger;
-
-import uk.co.sleonard.unison.datahandling.HibernateHelper;
 
 /**
  * The Class GUIItem.
@@ -21,53 +20,13 @@ public class GUIItem<T> {
 
 	/** The Constant logger. */
 	@SuppressWarnings("unused")
-	private static final Logger	logger	= Logger.getLogger("GUIItem");
+	private static final Logger logger = Logger.getLogger("GUIItem");
 
 	/** The name. */
-	private final String		name;
+	private final String name;
 
 	/** The object. */
-	private final T				object;
-
-	/**
-	 * Gets the GUI list.
-	 *
-	 * @param list
-	 *            the list
-	 * @param helper
-	 *            the helper
-	 * @return the GUI list
-	 */
-	public static Vector<GUIItem<?>> getGUIList(final List<?> list, final HibernateHelper helper) {
-		final Vector<GUIItem<?>> returnList = new Vector<>();
-
-		for (final ListIterator<?> iter = list.listIterator(); iter.hasNext();) {
-			final Object next = iter.next();
-			String text = null;
-			if (next instanceof NewsGroup) {
-				text = ((NewsGroup) next).getFullName();
-			}
-			else {
-				text = helper.getText(next);
-			}
-			returnList.add(new GUIItem<>(text, next));
-		}
-		return returnList;
-	}
-
-	/**
-	 * Gets the GUI list.
-	 *
-	 * @param array
-	 *            the array
-	 * @param helper
-	 *            the helper
-	 * @return the GUI list
-	 */
-	public static Vector<GUIItem<?>> getGUIList(final Object[] array,
-	        final HibernateHelper helper) {
-		return GUIItem.getGUIList(Arrays.asList(array), helper);
-	}
+	private final T object;
 
 	/**
 	 * Instantiates a new GUI item.

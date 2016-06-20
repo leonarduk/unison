@@ -46,9 +46,6 @@ public class HeaderDownloadWorker extends SwingWorker {
 	/** The start index. */
 	private int startIndex;
 
-	/** The newsgroup. */
-	private String newsgroup;
-
 	/** The from date. */
 	private Date fromDate;
 
@@ -232,7 +229,6 @@ public class HeaderDownloadWorker extends SwingWorker {
 		this.startIndex = startIndex1;
 		this.endIndex = endIndex1;
 		this.newsReader = reader;
-		this.newsgroup = newsgroup1;
 		this.fromDate = from;
 		this.toDate = to;
 
@@ -278,7 +274,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 		this.downloading = false;
 	}
 
-	public void processMessage(final LinkedBlockingQueue<NewsArticle> queue, final String line)
+	void processMessage(final LinkedBlockingQueue<NewsArticle> queue1, final String line)
 	        throws UNISoNException {
 		// Extract the article information
 		// Mandatory format (from NNTP RFC 2980) is :
@@ -293,7 +289,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 			date = StringUtils.stringToDate(stt.nextToken());
 		}
 		catch (final DateTimeParseException e) {
-			throw new UNISoNException(e);
+			throw new UNISoNException("Failed to parse date", e);
 		}
 		final String articleId = stt.nextToken();
 		String references = stt.nextToken();
@@ -302,7 +298,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 		}
 
 		if (this.inDateRange(this.fromDate, this.toDate, date)) {
-			queue.add(new NewsArticle(articleId, articleNumber, date, from, subject, references,
+			queue1.add(new NewsArticle(articleId, articleNumber, date, from, subject, references,
 			        references));
 			this.kept++;
 			if (!this.mode.equals(DownloadMode.BASIC)) {
@@ -325,7 +321,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	public boolean queueMessages(final LinkedBlockingQueue<NewsArticle> queue1, final Reader reader)
+	boolean queueMessages(final LinkedBlockingQueue<NewsArticle> queue1, final Reader reader)
 	        throws IOException, UNISoNException {
 		if (reader != null) {
 			final BufferedReader bufReader = new BufferedReader(reader);
@@ -395,8 +391,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	public boolean storeArticleInfo(final LinkedBlockingQueue<NewsArticle> queue)
-	        throws UNISoNException {
+	boolean storeArticleInfo(final LinkedBlockingQueue<NewsArticle> queue1) throws UNISoNException {
 
 		try {
 			this.logTally = 0;
@@ -408,7 +403,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 			for (int i = this.startIndex; i < this.endIndex; i += 500) {
 				try (final Reader reader = this.newsReader.client.retrieveArticleInfo(
 				        Long.valueOf(i).longValue(), Long.valueOf(i + 500).longValue());) {
-					this.queueMessages(queue, reader);
+					this.queueMessages(queue1, reader);
 				}
 			}
 		}

@@ -8,7 +8,6 @@ package uk.co.sleonard.unison.datahandling;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.sql.BatchUpdateException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -117,16 +116,6 @@ public class HibernateHelper {
 	}
 
 	/**
-	 * Close hibernate session factory.
-	 *
-	 * @throws HibernateException
-	 *             the hibernate exception
-	 */
-	public void closeHibernateSessionFactory() throws HibernateException {
-		HibernateHelper.sessionFactory.close();
-	}
-
-	/**
 	 * Creates the location.
 	 *
 	 * @param article
@@ -159,8 +148,8 @@ public class HibernateHelper {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	public Message createMessage(final NewsArticle article, final Topic topic,
-	        final UsenetUser poster) throws UNISoNException {
+	Message createMessage(final NewsArticle article, final Topic topic, final UsenetUser poster)
+	        throws UNISoNException {
 		Message message;
 		byte[] body = null;
 		if (null != article.getContent()) {
@@ -208,95 +197,6 @@ public class HibernateHelper {
 	}
 
 	/**
-	 * Fetch all.
-	 *
-	 * @param <T>
-	 *            the generic type
-	 * @param classtype
-	 *            the classtype
-	 * @param session
-	 *            the session
-	 * @return the list
-	 * @throws GenericJDBCException
-	 *             the generic jdbc exception
-	 */
-	public <T> List<T> fetchAll(final Class<T> classtype, final Session session)
-	        throws GenericJDBCException {
-		final String query = "from " + classtype.getName();
-		final List<T> returnVal = this.runQuery(query, session, classtype);
-		return returnVal;
-	}
-
-	/**
-	 * Fetch base news groups.
-	 *
-	 * @param session
-	 *            the session
-	 * @return the list
-	 * @throws GenericJDBCException
-	 *             the generic jdbc exception
-	 */
-	public List<NewsGroup> fetchBaseNewsGroups(final Session session) throws GenericJDBCException {
-		final String query = "from " + NewsGroup.class.getName() + " where lastnode is true";
-		final List<NewsGroup> returnVal = this.runQuery(query, session, NewsGroup.class);
-		return returnVal;
-	}
-
-	/**
-	 * Fetch or insert.
-	 *
-	 * @param session
-	 *            the session
-	 * @param storable
-	 *            the storable
-	 * @param dbList
-	 *            the db list
-	 * @return the serializable
-	 * @throws HibernateException
-	 *             the hibernate exception
-	 */
-	public Serializable fetchOrInsert(final Session session, final Serializable storableInput,
-	        final List<?> dbList) throws HibernateException {
-		Serializable storable = storableInput;
-		if (dbList.size() > 0) {
-			storable = (Serializable) dbList.get(0);
-		}
-		else {
-			session.saveOrUpdate(storable);
-		}
-		return storable;
-	}
-
-	/**
-	 * Find by key.
-	 *
-	 * @param key
-	 *            the key
-	 * @param session
-	 *            the session
-	 * @param objclass
-	 *            the objclass
-	 * @return the object
-	 * @throws HibernateException
-	 *             the hibernate exception
-	 */
-	public Object findByKey(final int key, final Session session, final Class<?> objclass)
-	        throws HibernateException {
-		final String queryText = objclass.getName() + ".findByKey";
-		final Query query = session.getNamedQuery(queryText);
-		query.setInteger("key", key);
-		Object uniqueResult = null;
-		try {
-			uniqueResult = query.uniqueResult();
-		}
-		catch (final NonUniqueResultException e) {
-			throw new RuntimeException(
-			        "Got non-unique result for " + key + " on " + objclass.getName() + " " + e);
-		}
-		return uniqueResult;
-	}
-
-	/**
 	 * Find by key.
 	 *
 	 * @param key
@@ -327,7 +227,7 @@ public class HibernateHelper {
 		return uniqueResult;
 	}
 
-	public Message findMessage(final Message aMessage, final Session session) {
+	Message findMessage(final Message aMessage, final Session session) {
 		Message message;
 		message = (Message) this.findByKey(aMessage.getUsenetMessageID(), session, Message.class);
 		return message;
@@ -364,8 +264,7 @@ public class HibernateHelper {
 	 *            the ip address
 	 * @return the location
 	 */
-	private synchronized Location findOrCreateLocation(final Session session,
-	        final IpAddress ipAddress) {
+	synchronized Location findOrCreateLocation(final Session session, final IpAddress ipAddress) {
 		Location location;
 		location = this.locationFinder.createLocation(ipAddress.getIpAddress());
 
@@ -423,8 +322,7 @@ public class HibernateHelper {
 	 *            the group name
 	 * @return the news group
 	 */
-	public synchronized NewsGroup findOrCreateNewsGroup(final Session session,
-	        final String groupName) {
+	synchronized NewsGroup findOrCreateNewsGroup(final Session session, final String groupName) {
 
 		NewsGroup lastGroup = null;
 
@@ -504,8 +402,7 @@ public class HibernateHelper {
 		return poster;
 	}
 
-	public synchronized UsenetUser findUsenetUser(final NewsArticle article,
-	        final Session session) {
+	synchronized UsenetUser findUsenetUser(final NewsArticle article, final Session session) {
 		final EmailAddress emailAddress = UsenetUserHelper.parseFromField(article);
 		return (UsenetUser) this.findByKey(emailAddress.getEmail(), session, UsenetUser.class);
 	}
@@ -529,25 +426,6 @@ public class HibernateHelper {
 	}
 
 	/**
-	 * Gets the google map url.
-	 *
-	 * @param city
-	 *            the city
-	 * @return the google map url
-	 */
-	public String getGoogleMapURL(final String city) {
-		String googleUrl;
-		if (!city.equals("(Private Address)")) {
-			googleUrl = "http://maps.google.com/maps?f=q&hl=en&geocode=&q=" + city
-			        + "&ie=UTF8&z=12&om=1";
-		}
-		else {
-			googleUrl = "UNKNOWN LOCATION";
-		}
-		return googleUrl;
-	}
-
-	/**
 	 * Gets the hibernate config.
 	 *
 	 * @return the hibernate config
@@ -560,11 +438,6 @@ public class HibernateHelper {
 	 */
 	private Configuration getHibernateConfig()
 	        throws HibernateException, MappingException, NamingException {
-		// Hashtable<String, String> env = new Hashtable<String, String>();
-		// env.put(Context.INITIAL_CONTEXT_FACTORY,
-		// "com.sun.jndi.fscontext.RefFSContextFactory");
-		// env.put(Context.PROVIDER_URL, "file:/");
-		// Context initialContext = new InitialContext(env);
 		final Configuration config = new Configuration().configure();
 
 		// show what config we have just read in
@@ -672,7 +545,7 @@ public class HibernateHelper {
 	 *            the session
 	 * @return the list results
 	 */
-	public <T> Vector<ResultRow> getListResults(final String query, final Class<T> type,
+	<T> Vector<ResultRow> getListResults(final String query, final Class<T> type,
 	        final Session session) {
 		final List<T> resultsRows = this.runSQLQuery(query, session, type);
 		final Vector<ResultRow> resultsVector = new Vector<>();
@@ -819,7 +692,7 @@ public class HibernateHelper {
 	 * @return the vector
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> Vector<T> runQuery(final Query query, final Class<T> type) {
+	<T> Vector<T> runQuery(final Query query, final Class<T> type) {
 		HibernateHelper.logger.debug("runSQL: " + query);
 		// TODO create prepared statements
 		Vector<?> returnVal = null;
@@ -871,7 +744,8 @@ public class HibernateHelper {
 	 *            the type
 	 * @return the list
 	 */
-	public <T> List<T> runSQLQuery(final String query, final Session session, final Class<T> type) {
+	private <T> List<T> runSQLQuery(final String query, final Session session,
+	        final Class<T> type) {
 		HibernateHelper.logger.debug("runSQL: " + query);
 		return this.runQuery(session.createSQLQuery(query), type);
 	}
@@ -888,7 +762,7 @@ public class HibernateHelper {
 	 * @throws HibernateException
 	 *             the hibernate exception
 	 */
-	public synchronized void storeNewsgroups(final List<String> newsgroupsList,
+	private synchronized void storeNewsgroups(final List<String> newsgroupsList,
 	        final Message messageInput, final Session session) throws HibernateException {
 		Message message = messageInput;
 		message = this.findOrCreateMessage(message, session);

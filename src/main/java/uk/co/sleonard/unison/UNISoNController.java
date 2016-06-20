@@ -6,7 +6,6 @@
  */
 package uk.co.sleonard.unison;
 
-import java.awt.HeadlessException;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Set;
@@ -14,7 +13,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.JFrame;
 
-import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
 import uk.co.sleonard.unison.datahandling.DataQuery;
@@ -22,9 +20,7 @@ import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
-import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.gui.UNISoNGUI;
-import uk.co.sleonard.unison.gui.generated.UNISoNTabbedFrame;
 import uk.co.sleonard.unison.input.DataHibernatorPool;
 import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
 import uk.co.sleonard.unison.input.DataHibernatorWorker;
@@ -46,16 +42,7 @@ public class UNISoNController {
 	/** The instance. */
 	private static UNISoNController instance;
 
-	/** The logger. */
-	private static Logger logger = Logger.getLogger(UNISoNController.class);
-
 	private static UNISoNGUI gui;
-
-	/** The Constant LOCATION. */
-	public static final String LOCATION = "Location";
-
-	/** The Constant USENETUSER. */
-	public static final String USENETUSER = UsenetUser.class.getName();
 
 	/** The message queue. */
 	private final LinkedBlockingQueue<NewsArticle> messageQueue;
@@ -68,9 +55,6 @@ public class UNISoNController {
 
 	/** The helper. */
 	private final HibernateHelper helper;
-
-	/** The matrix type. */
-	private MatrixType matrixType;
 
 	/** The nntp host. */
 	private String nntpHost;
@@ -92,17 +76,6 @@ public class UNISoNController {
 	/**
 	 * Creates the.
 	 *
-	 * @return
-	 * @throws UNISoNException
-	 * @throws HeadlessException
-	 */
-	public static UNISoNController create() throws HeadlessException, UNISoNException {
-		return UNISoNController.create(new JFrame());
-	}
-
-	/**
-	 * Creates the.
-	 *
 	 * @param frame
 	 *            the frame
 	 * @return the UNI so n controller
@@ -112,7 +85,7 @@ public class UNISoNController {
 		return UNISoNController.create(frame, new DataHibernatorPoolImpl());
 	}
 
-	public static UNISoNController create(final JFrame frame, final DataHibernatorPool pool)
+	private static UNISoNController create(final JFrame frame, final DataHibernatorPool pool)
 	        throws UNISoNException {
 		UNISoNController.instance = new UNISoNController(pool);
 		UNISoNController.setGui(new UNISoNGUI(frame));
@@ -133,18 +106,7 @@ public class UNISoNController {
 		return UNISoNController.instance;
 	}
 
-	/**
-	 * Sets the frame.
-	 *
-	 * @param frame2
-	 *            the new frame
-	 */
-	protected static void setFrame(final UNISoNTabbedFrame frame2) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public static void setGui(final UNISoNGUI gui) {
+	private static void setGui(final UNISoNGUI gui) {
 		UNISoNController.gui = gui;
 	}
 
@@ -212,15 +174,6 @@ public class UNISoNController {
 
 	public HibernateHelper getHelper() {
 		return this.helper;
-	}
-
-	/**
-	 * Gets the matrix type.
-	 *
-	 * @return the matrix type
-	 */
-	public MatrixType getMatrixType() {
-		return this.matrixType;
 	}
 
 	/**
@@ -343,20 +296,6 @@ public class UNISoNController {
 	}
 
 	/**
-	 * Sets the connected state.
-	 */
-	public void setConnectedState() {
-		this.setButtonState(false, true, false, true);
-	}
-
-	/**
-	 * Sets the connecting state.
-	 */
-	public void setConnectingState() {
-		this.setButtonState(false, false, false, true);
-	}
-
-	/**
 	 * Sets the downloading state.
 	 *
 	 * @param progress
@@ -381,28 +320,10 @@ public class UNISoNController {
 	}
 
 	/**
-	 * Once the header download worker completes it will call this. This method will tell the
-	 * download panel to update itself.
-	 */
-	public void setHeaderDownloaderFinished() {
-		this.headerDownloader.notifyObservers();
-	}
-
-	/**
 	 * Sets the idle state.
 	 */
-	public void setIdleState() {
+	private void setIdleState() {
 		this.setButtonState(true, false, false, false);
-	}
-
-	/**
-	 * Sets the matrix type.
-	 *
-	 * @param type
-	 *            the new matrix type
-	 */
-	public void setMatrixType(final MatrixType type) {
-		this.matrixType = type;
 	}
 
 	/**
@@ -424,32 +345,11 @@ public class UNISoNController {
 	}
 
 	/**
-	 * Show error message.
-	 *
-	 * @param message
-	 *            the message
-	 */
-	private void showErrorMessage(final String messageText) {
-		// this.frame.showErrorMessage(message);
-		UNISoNController.logger.warn(messageText);
-	}
-
-	/**
 	 * Stop download.
 	 */
 	public void stopDownload() {
 		this.pool.stopAllDownloads();
 		this.setIdleState();
-	}
-
-	/**
-	 * Store newsgroups.
-	 *
-	 * @param newsgroups
-	 *            the newsgroups
-	 */
-	public void storeNewsgroups(final Set<NewsGroup> newsgroups) {
-		this.getHelper().storeNewsgroups(newsgroups, this.getSession());
 	}
 
 	/**

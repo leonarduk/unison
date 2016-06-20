@@ -29,6 +29,7 @@ import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
 import uk.co.sleonard.unison.input.DataHibernatorWorker;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
 import uk.co.sleonard.unison.input.NewsArticle;
+import uk.co.sleonard.unison.input.NewsClient;
 import uk.co.sleonard.unison.input.NewsGroupReader;
 import uk.co.sleonard.unison.utils.DownloaderImpl;
 
@@ -59,10 +60,10 @@ public class UNISoNController {
 	private final LinkedBlockingQueue<NewsArticle> messageQueue;
 
 	/** The nntp reader. */
-	private final NewsGroupReader nntpReader;
+	private NewsGroupReader nntpReader;
 
 	/** The header downloader. */
-	private final HeaderDownloadWorker headerDownloader;
+	private HeaderDownloadWorker headerDownloader;
 
 	/** The helper. */
 	private final HibernateHelper helper;
@@ -107,9 +108,7 @@ public class UNISoNController {
 	 * @throws UNISoNException
 	 */
 	public static UNISoNController create(final JFrame frame) throws UNISoNException {
-		UNISoNController.instance = new UNISoNController();
-		UNISoNController.setGui(new UNISoNGUI(frame));
-		return UNISoNController.instance;
+		return UNISoNController.create(frame, new DataHibernatorPoolImpl());
 	}
 
 	public static UNISoNController create(final JFrame frame, final DataHibernatorPool pool)
@@ -177,36 +176,6 @@ public class UNISoNController {
 		}
 
 		this.nntpReader = new NewsGroupReader(this);
-	}
-
-	/**
-	 * Connect to news group.
-	 *
-	 * @param newsgroup
-	 *            the newsgroup
-	 * @deprecated
-	 */
-	@Deprecated
-	private void connectToNewsGroup(final String newsgroup) {
-		this.setConnectingState();
-		UNISoNController.getGui().showStatus("Connect to " + newsgroup);
-
-		// TODO need to filter by data and allow more than one newsgroup
-		this.getFilter().setSelectedNewsgroup(newsgroup);
-		final String host = null;// this.frame.getSelectedHost();
-		try {
-			this.nntpReader.client.connectToNewsGroup(host, newsgroup);
-			this.setConnectedState();
-
-			UNISoNController.getGui()
-			        .showStatus("MESSAGES:" + this.nntpReader.getNumberOfMessages());
-		}
-		catch (@SuppressWarnings("unused") final java.net.UnknownHostException e) {
-			this.showErrorMessage(newsgroup + " not found on " + host);
-		}
-		catch (final Exception e) {
-			this.showErrorMessage("ERROR: " + e);
-		}
 	}
 
 	public UNISoNAnalysis getAnalysis() {
@@ -306,9 +275,8 @@ public class UNISoNController {
 	 */
 	public Set<NewsGroup> listNewsgroups(final String searchString, final String host)
 	        throws UNISoNException {
-
-		this.nntpHost = host;
-		return this.nntpReader.client.listNewsGroups(searchString, host);
+		this.setNntpHost(host);
+		return this.getNntpReader().getClient().listNewsGroups(searchString, host);
 	}
 
 	/**
@@ -329,15 +297,19 @@ public class UNISoNController {
 	 */
 	public void quickDownload(final Set<NewsGroup> groups, final Date fromDate1, final Date toDate1,
 	        final UNISoNLogger log, final DownloadMode mode) throws UNISoNException {
+		final NewsGroupReader reader = this.getNntpReader();
+		final NewsClient client = reader.getClient();
+		final HeaderDownloadWorker headerDownloader2 = this.getHeaderDownloader();
+		final String nntpHost2 = this.getNntpHost();
 
 		for (final NewsGroup group : groups) {
 			try {
-				this.nntpReader.client.reconnect();
-				this.nntpReader.client.selectNewsgroup(group.getName());
-				this.nntpReader.setMessageCount(group.getArticleCount());
-				this.headerDownloader.initialise(this.nntpReader, group.getFirstMessage(),
-				        group.getLastMessage(), this.nntpHost, group.getName(), log, mode,
-				        fromDate1, toDate1);
+				client.reconnect();
+				client.selectNewsgroup(group.getName());
+				reader.setMessageCount(group.getArticleCount());
+				headerDownloader2.initialise(reader, group.getFirstMessage(),
+				        group.getLastMessage(), nntpHost2, group.getName(), log, mode, fromDate1,
+				        toDate1);
 			}
 			catch (final IOException e) {
 				e.printStackTrace();
@@ -402,6 +374,10 @@ public class UNISoNController {
 		this.downloadPanel = downloadPanel;
 	}
 
+	public void setHeaderDownloader(final HeaderDownloadWorker downloadWorker) {
+		this.headerDownloader = downloadWorker;
+	}
+
 	/**
 	 * Once the header download worker completes it will call this. This method will tell the
 	 * download panel to update itself.
@@ -435,6 +411,10 @@ public class UNISoNController {
 	 */
 	public void setNntpHost(final String nntpHost) {
 		this.nntpHost = nntpHost;
+	}
+
+	public void setNntpReader(final NewsGroupReader reader) {
+		this.nntpReader = reader;
 	}
 
 	public void setSession(final Session session) {

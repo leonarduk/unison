@@ -6,12 +6,23 @@
  */
 package uk.co.sleonard.unison;
 
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.swing.JFrame;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
+import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
+import uk.co.sleonard.unison.input.HeaderDownloadWorker;
+import uk.co.sleonard.unison.input.NewsClient;
+import uk.co.sleonard.unison.input.NewsGroupReader;
+import uk.co.sleonard.unison.input.UNISoNCLI;
 
 public class UNISoNControllerTest {
 
@@ -109,7 +120,22 @@ public class UNISoNControllerTest {
 	}
 
 	@Test
-	public final void testQuickDownload() {
+	public final void testQuickDownload() throws UNISoNException {
+		final Set<NewsGroup> groups = new HashSet<>();
+		groups.add(new NewsGroup("alt.news"));
+		final Date fromDate1 = null;
+		final Date toDate1 = null;
+		final UNISoNLogger log = new UNISoNCLI();
+		final DownloadMode mode = DownloadMode.ALL;
+		this.controller.setNntpHost("testNNTP");
+		final NewsGroupReader reader = Mockito.mock(NewsGroupReader.class);
+		final NewsClient client = Mockito.mock(NewsClient.class);
+		final HeaderDownloadWorker downloadWorker = Mockito.mock(HeaderDownloadWorker.class);
+		this.controller.setHeaderDownloader(downloadWorker);
+		;
+		Mockito.when(reader.getClient()).thenReturn(client);
+		this.controller.setNntpReader(reader);
+		this.controller.quickDownload(groups, fromDate1, toDate1, log, mode);
 
 	}
 

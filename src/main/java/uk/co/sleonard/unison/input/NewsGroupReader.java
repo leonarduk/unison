@@ -54,6 +54,10 @@ public class NewsGroupReader implements UNISoNLogger {
 		NewsGroupReader.logger.warn(message);
 	}
 
+	public NewsClient getClient() {
+		return this.client;
+	}
+
 	/**
 	 * Gets the message count.
 	 *
@@ -123,6 +127,18 @@ public class NewsGroupReader implements UNISoNLogger {
 		NewsGroupReader.logger.info(message);
 	}
 
+	// public void startDownload(String newsgroup, Date toDate, Date fromDate)
+	// throws UNISoNException {
+	// Set<NNTPNewsGroup> listNewsgroups = UNISoNController.getInstance()
+	// .listNewsgroups(newsgroup);
+	// UNISoNController.getInstance().quickDownload(listNewsgroups, fromDate,
+	// toDate, this);
+	// }
+
+	public void setClient(final NewsClient client) {
+		this.client = client;
+	}
+
 	/**
 	 * Sets the downloader finished.
 	 *
@@ -132,14 +148,6 @@ public class NewsGroupReader implements UNISoNLogger {
 	public void setDownloaderFinished(final FullDownloadWorker worker) {
 		// throw new RuntimeException("not implemented");
 	}
-
-	// public void startDownload(String newsgroup, Date toDate, Date fromDate)
-	// throws UNISoNException {
-	// Set<NNTPNewsGroup> listNewsgroups = UNISoNController.getInstance()
-	// .listNewsgroups(newsgroup);
-	// UNISoNController.getInstance().quickDownload(listNewsgroups, fromDate,
-	// toDate, this);
-	// }
 
 	/**
 	 * Sets the message count.

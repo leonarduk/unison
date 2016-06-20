@@ -1,17 +1,17 @@
+/**
+ * IpAddressTest
+ * 
+ * @author ${author}
+ * @since 20-Jun-2016
+ */
 package uk.co.sleonard.unison.datahandling.DAO;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
+import org.junit.Assert;
 import org.junit.Test;
-
-import uk.co.sleonard.unison.datahandling.DAO.IpAddress;
-import uk.co.sleonard.unison.datahandling.DAO.Location;
 
 /**
  * The Class IpAddressTest.
- * 
+ *
  * @author Elton <elton_12_nunes@hotmail.com>
  * @since v1.2.0
  *
@@ -23,7 +23,7 @@ public class IpAddressTest {
 	 */
 	@Test
 	public void testGetId() {
-		assertEquals(0, new IpAddress().getId());
+		Assert.assertEquals(0, new IpAddress().getId());
 	}
 
 	/**
@@ -31,13 +31,13 @@ public class IpAddressTest {
 	 */
 	@Test
 	public void testGetIpAddress() {
-		String expected = "127.0.0.1";
+		final String expected = "127.0.0.1";
 		IpAddress actual = new IpAddress();
-		assertNull(actual.getIpAddress());
+		Assert.assertNull(actual.getIpAddress());
 		actual.setIpAddress(expected);
-		assertEquals(expected, actual.getIpAddress());
+		Assert.assertEquals(expected, actual.getIpAddress());
 		actual = new IpAddress(expected, null);
-		assertEquals(expected, actual.getIpAddress()); // Constructor Test
+		Assert.assertEquals(expected, actual.getIpAddress()); // Constructor Test
 	}
 
 	/**
@@ -45,15 +45,15 @@ public class IpAddressTest {
 	 */
 	@Test
 	public void testGetLocation() {
-		Location expected = new Location();
+		final Location expected = new Location();
 		expected.setCity("Madrid");
 		IpAddress actual = new IpAddress();
-		assertNull(actual.getLocation());
+		Assert.assertNull(actual.getLocation());
 		actual.setLocation(expected);
-		assertEquals(expected.getCity(), actual.getLocation().getCity());
-		actual = new IpAddress(expected);
-		assertEquals(expected.getCity(), actual.getLocation().getCity()); // Constructor
-		                                                                  // Test
+		Assert.assertEquals(expected.getCity(), actual.getLocation().getCity());
+		actual = new IpAddress(null, expected);
+		Assert.assertEquals(expected.getCity(), actual.getLocation().getCity()); // Constructor
+		// Test
 	}
 
 	/**
@@ -61,24 +61,25 @@ public class IpAddressTest {
 	 */
 	@Test
 	public void testHashCode() {
-		TestIpAddress actual1 = new TestIpAddress();
-		TestIpAddress actual2 = new TestIpAddress();
-		actual1.setIdSuper(10);
-		actual2.setIdSuper(20);
-		assertTrue(actual1.hashCode() != actual2.hashCode());
+		final TestIpAddress actual1 = new TestIpAddress();
+		final TestIpAddress actual2 = new TestIpAddress();
+		actual1.setIpAddress("124");
+		actual2.setIpAddress("556");
+		Assert.assertTrue(actual1.hashCode() != actual2.hashCode());
 	}
 
 }
 
 /**
  * Extends IpAddress class to change setId(protected)
- * 
+ *
  * @author Elton <elton_12_nunes@hotmail.com>
  *
  */
 @SuppressWarnings("serial")
 class TestIpAddress extends IpAddress {
-	void setIdSuper(int id) {
-		super.setId(id);
+	@Override
+	public void setIpAddress(final String IpAddress) {
+		super.setIpAddress(IpAddress);
 	}
 }

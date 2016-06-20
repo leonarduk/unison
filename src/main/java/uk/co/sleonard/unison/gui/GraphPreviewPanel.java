@@ -57,82 +57,16 @@ import uk.co.sleonard.unison.output.Relationship;
 public class GraphPreviewPanel extends JPanel {
 
 	/** The Constant serialVersionUID. */
-	private static final long	serialVersionUID	= 7584897717727915747L;
+	private static final long serialVersionUID = 7584897717727915747L;
 
 	/** the graph. */
-	Graph						graph;
+	private final Graph graph;
 
 	/** the visual component and renderer for the graph. */
-	VisualizationViewer			vv;
+	private final VisualizationViewer vv;
 
 	/** The show labels. */
-	boolean						showLabels;
-
-	/**
-	 * The Class UnicodeVertexStringer.
-	 */
-	class UnicodeVertexStringer implements VertexStringer {
-
-		/** The map. */
-		Map<Vertex, String> map = new HashMap<>();
-
-		/**
-		 * Instantiates a new unicode vertex stringer.
-		 *
-		 * @param vertices
-		 *            the vertices
-		 * @param labels
-		 *            the labels
-		 */
-		public UnicodeVertexStringer(final Vertex[] vertices, final List<String> labels) {
-			for (int i = 0; i < vertices.length; i++) {
-				this.map.put(vertices[i], labels.get(i));
-			}
-		}
-
-		/*
-		 * (non-Javadoc)
-		 *
-		 * @see
-		 * edu.uci.ics.jung.graph.decorators.VertexStringer#getLabel(edu.uci.ics.jung.graph.Vertex)
-		 */
-		@Override
-		public String getLabel(final ArchetypeVertex v) {
-			if (GraphPreviewPanel.this.showLabels) {
-				return this.map.get(v);
-			}
-			return "";
-		}
-	}
-
-	/**
-	 * The Class UsenetVertex.
-	 */
-	class UsenetVertex extends DirectedSparseVertex {
-
-		/** The label. */
-		private final String label;
-
-		/**
-		 * Instantiates a new usenet vertex.
-		 *
-		 * @param label
-		 *            the label
-		 */
-		public UsenetVertex(final String label) {
-			this.label = label;
-		}
-
-		/*
-		 * (non-Javadoc)
-		 *
-		 * @see edu.uci.ics.jung.graph.impl.AbstractSparseVertex#toString()
-		 */
-		@Override
-		public String toString() {
-			return this.label;
-		}
-	}
+	boolean showLabels;
 
 	/**
 	 * a driver for this demo.
@@ -246,5 +180,71 @@ public class GraphPreviewPanel extends JPanel {
 			}
 		}
 		return v;
+	}
+
+	/**
+	 * The Class UnicodeVertexStringer.
+	 */
+	private class UnicodeVertexStringer implements VertexStringer {
+
+		/** The map. */
+		Map<Vertex, String> map = new HashMap<>();
+
+		/**
+		 * Instantiates a new unicode vertex stringer.
+		 *
+		 * @param vertices
+		 *            the vertices
+		 * @param labels
+		 *            the labels
+		 */
+		public UnicodeVertexStringer(final Vertex[] vertices, final List<String> labels) {
+			for (int i = 0; i < vertices.length; i++) {
+				this.map.put(vertices[i], labels.get(i));
+			}
+		}
+
+		/*
+		 * (non-Javadoc)
+		 *
+		 * @see
+		 * edu.uci.ics.jung.graph.decorators.VertexStringer#getLabel(edu.uci.ics.jung.graph.Vertex)
+		 */
+		@Override
+		public String getLabel(final ArchetypeVertex v) {
+			if (GraphPreviewPanel.this.showLabels) {
+				return this.map.get(v);
+			}
+			return "";
+		}
+	}
+
+	/**
+	 * The Class UsenetVertex.
+	 */
+	class UsenetVertex extends DirectedSparseVertex {
+
+		/** The label. */
+		private final String label;
+
+		/**
+		 * Instantiates a new usenet vertex.
+		 *
+		 * @param label
+		 *            the label
+		 */
+		public UsenetVertex(final String label) {
+			this.label = label;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 *
+		 * @see edu.uci.ics.jung.graph.impl.AbstractSparseVertex#toString()
+		 */
+		@Override
+		public String toString() {
+			return this.label;
+		}
 	}
 }

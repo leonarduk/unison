@@ -57,12 +57,12 @@ public class NewsGroupFilter {
 	private Set<NewsGroup> topsNewsgroups;
 
 	/** The selected countries. */
-	Set<String>				selectedCountries	= null;
+	private Set<String>		selectedCountries	= null;
 	private final Session	session;
 
 	private final HibernateHelper helper;
 
-	public NewsGroupFilter(final Session session, final HibernateHelper helper) {
+	NewsGroupFilter(final Session session, final HibernateHelper helper) {
 		super();
 		this.clear();
 		this.session = session;

@@ -16,16 +16,12 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 
 public interface NewsClient {
 
-	public void closeConnection() throws IOException;
-
 	public void connect(final String server) throws IOException;
 
 	public void connect(String hostname, int i) throws IOException;
 
 	public void connect(String server, int port, String username, String password)
 	        throws UNISoNException;
-
-	public void connectToNewsGroup(String hostInput, NewsGroup newsgroup) throws UNISoNException;
 
 	public void connectToNewsGroup(String host, String newsgroup) throws Exception;
 
@@ -47,8 +43,6 @@ public interface NewsClient {
 
 	public BufferedReader retrieveArticleInfo(final long lowArticleNumber,
 	        final long highArticleNumber) throws IOException;
-
-	public void runCommand(String command, String args);
 
 	public boolean selectNewsgroup(String newsgroup1) throws IOException;
 

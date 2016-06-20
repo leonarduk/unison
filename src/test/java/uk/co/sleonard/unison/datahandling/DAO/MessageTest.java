@@ -1,26 +1,23 @@
+/**
+ * MessageTest
+ *
+ * @author ${author}
+ * @since 20-Jun-2016
+ */
 package uk.co.sleonard.unison.datahandling.DAO;
-
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.ibm.icu.util.Calendar;
 
-import uk.co.sleonard.unison.datahandling.DAO.Message;
-import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
-import uk.co.sleonard.unison.datahandling.DAO.Topic;
-import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
-
 /**
  * The Class MessageTest.
- * 
+ *
  * @author Elton <elton_12_nunes@hotmail.com>
  * @since v1.2.0
  *
@@ -33,44 +30,34 @@ public class MessageTest {
 	@Test
 	public void testConstructors() {
 		Message actual = null;
-		Date expected1 = Calendar.getInstance().getTime();
-		String expected2 = "usenetMessage";
-		String expected3 = "subject";
-		UsenetUser expected4 = new UsenetUser();
-		Topic expected5 = new Topic();
-		Set<NewsGroup> expected6 = new HashSet<>();
-		String expected7 = "refMess";
-		byte[] expected8 = { 10, 10, 10 };
+		final Date expected1 = Calendar.getInstance().getTime();
+		final String expected2 = "usenetMessage";
+		final String expected3 = "subject";
+		final UsenetUser expected4 = new UsenetUser();
+		final Topic expected5 = new Topic();
+		final Set<NewsGroup> expected6 = new HashSet<>();
+		final String expected7 = "refMess";
+		final byte[] expected8 = { 10, 10, 10 };
 		actual = new Message(expected1, expected2, expected3, expected4, expected5, expected6,
 		        expected7, expected8);
 
-		assertEquals(expected1, actual.getDateCreated());
-		assertEquals(expected2, actual.getUsenetMessageID());
-		assertEquals(expected3, actual.getSubject());
-		assertEquals(expected4, actual.getPoster());
-		assertEquals(expected5, actual.getTopic());
-		assertEquals(expected6, actual.getNewsgroups());
-		assertEquals(expected7, actual.getReferencedMessages());
-		assertArrayEquals(expected8, actual.getMessageBody());
+		Assert.assertEquals(expected1, actual.getDateCreated());
+		Assert.assertEquals(expected2, actual.getUsenetMessageID());
+		Assert.assertEquals(expected3, actual.getSubject());
+		Assert.assertEquals(expected4, actual.getPoster());
+		Assert.assertEquals(expected5, actual.getTopic());
+		Assert.assertEquals(expected6, actual.getNewsgroups());
+		Assert.assertEquals(expected7, actual.getReferencedMessages());
+		Assert.assertArrayEquals(expected8, actual.getMessageBody());
 
-		actual = new Message(expected1, expected2, expected3, expected4, expected5, expected8);
-		assertEquals(expected1, actual.getDateCreated());
-		assertEquals(expected2, actual.getUsenetMessageID());
-		assertEquals(expected3, actual.getSubject());
-		assertEquals(expected4, actual.getPoster());
-		assertEquals(expected5, actual.getTopic());
-		assertArrayEquals(expected8, actual.getMessageBody());
-	}
-
-	/**
-	 * Test toString.
-	 */
-	@Test
-	public void testToString() {
-		String expected = "Subject:null";
-		Message actual = new Message();
-		actual.setSubject("Subject");
-		assertEquals(expected, actual.toString());
+		actual = new Message(expected1, expected2, expected3, expected4, expected5, expected6,
+		        expected7, expected8);
+		Assert.assertEquals(expected1, actual.getDateCreated());
+		Assert.assertEquals(expected2, actual.getUsenetMessageID());
+		Assert.assertEquals(expected3, actual.getSubject());
+		Assert.assertEquals(expected4, actual.getPoster());
+		Assert.assertEquals(expected5, actual.getTopic());
+		Assert.assertArrayEquals(expected8, actual.getMessageBody());
 	}
 
 	/**
@@ -78,11 +65,11 @@ public class MessageTest {
 	 */
 	@Test
 	public void testGetDateCreated() {
-		Date expected = Calendar.getInstance().getTime();
-		Message actual = new Message();
-		assertNull(actual.getDateCreated());
+		final Date expected = Calendar.getInstance().getTime();
+		final Message actual = new Message();
+		Assert.assertNull(actual.getDateCreated());
 		actual.setDateCreated(expected);
-		assertEquals(0, expected.compareTo(actual.getDateCreated()));
+		Assert.assertEquals(0, expected.compareTo(actual.getDateCreated()));
 	}
 
 	/**
@@ -90,7 +77,7 @@ public class MessageTest {
 	 */
 	@Test
 	public void testGetId() {
-		assertEquals(0, new Message().getId());
+		Assert.assertEquals(0, new Message().getId());
 	}
 
 	/**
@@ -98,11 +85,11 @@ public class MessageTest {
 	 */
 	@Test
 	public void testGetMessageBody() {
-		byte[] expecteds = { 0, 1, 2, 3, 4 };
-		Message actuals = new Message();
-		assertNull(actuals.getMessageBody());
+		final byte[] expecteds = { 0, 1, 2, 3, 4 };
+		final Message actuals = new Message();
+		Assert.assertNull(actuals.getMessageBody());
 		actuals.setMessageBody(expecteds);
-		assertArrayEquals(expecteds, actuals.getMessageBody());
+		Assert.assertArrayEquals(expecteds, actuals.getMessageBody());
 	}
 
 	/**
@@ -110,12 +97,12 @@ public class MessageTest {
 	 */
 	@Test
 	public void testGetNewsgroups() {
-		Set<NewsGroup> expected = new HashSet<>();
-		Message actual = new Message();
-		assertEquals(expected.size(), actual.getNewsgroups().size());
+		final Set<NewsGroup> expected = new HashSet<>();
+		final Message actual = new Message();
+		Assert.assertEquals(expected.size(), actual.getNewsgroups().size());
 		expected.add(new NewsGroup());
 		actual.setNewsgroups(expected);
-		assertEquals(expected.size(), actual.getNewsgroups().size());
+		Assert.assertEquals(expected.size(), actual.getNewsgroups().size());
 	}
 
 	/**
@@ -123,11 +110,11 @@ public class MessageTest {
 	 */
 	@Test
 	public void testGetPoster() {
-		UsenetUser expected = new UsenetUser();
-		Message actual = new Message();
-		assertNull(actual.getPoster());
+		final UsenetUser expected = new UsenetUser();
+		final Message actual = new Message();
+		Assert.assertNull(actual.getPoster());
 		actual.setPoster(expected);
-		assertEquals(expected, actual.getPoster());
+		Assert.assertEquals(expected, actual.getPoster());
 	}
 
 	/**
@@ -135,11 +122,11 @@ public class MessageTest {
 	 */
 	@Test
 	public void testGetReferencedMessages() {
-		String expected = new String("refMess");
-		Message actual = new Message();
-		assertNull(actual.getReferencedMessages());
+		final String expected = new String("refMess");
+		final Message actual = new Message();
+		Assert.assertNull(actual.getReferencedMessages());
 		actual.setReferencedMessages(expected);
-		assertEquals(expected, actual.getReferencedMessages());
+		Assert.assertEquals(expected, actual.getReferencedMessages());
 	}
 
 	/**
@@ -147,11 +134,11 @@ public class MessageTest {
 	 */
 	@Test
 	public void testGetSubject() {
-		String expected = new String("subject");
-		Message actual = new Message();
-		assertNull(actual.getSubject());
+		final String expected = new String("subject");
+		final Message actual = new Message();
+		Assert.assertNull(actual.getSubject());
 		actual.setSubject(expected);
-		assertEquals(expected, actual.getSubject());
+		Assert.assertEquals(expected, actual.getSubject());
 	}
 
 	/**
@@ -159,12 +146,12 @@ public class MessageTest {
 	 */
 	@Test
 	public void testGetTopic() {
-		Topic expected = new Topic();
+		final Topic expected = new Topic();
 		expected.setSubject("sub");
-		Message actual = new Message();
-		assertNull(actual.getTopic());
+		final Message actual = new Message();
+		Assert.assertNull(actual.getTopic());
 		actual.setTopic(expected);
-		assertEquals(expected.getSubject(), actual.getTopic().getSubject());
+		Assert.assertEquals(expected.getSubject(), actual.getTopic().getSubject());
 	}
 
 	/**
@@ -172,11 +159,11 @@ public class MessageTest {
 	 */
 	@Test
 	public void testGetUsenetMessageID() {
-		String expected = new String("usenetMessId");
-		Message actual = new Message();
-		assertNull(actual.getUsenetMessageID());
+		final String expected = new String("usenetMessId");
+		final Message actual = new Message();
+		Assert.assertNull(actual.getUsenetMessageID());
 		actual.setUsenetMessageID(expected);
-		assertEquals(expected, actual.getUsenetMessageID());
+		Assert.assertEquals(expected, actual.getUsenetMessageID());
 	}
 
 	/**
@@ -184,24 +171,36 @@ public class MessageTest {
 	 */
 	@Test
 	public void testHashCode() {
-		TestMessage actual1 = new TestMessage();
-		TestMessage actual2 = new TestMessage();
-		actual1.setIdSuper(1);
-		actual2.setIdSuper(2);
-		assertTrue(actual1.hashCode() != actual2.hashCode());
+		final TestMessage actual1 = new TestMessage();
+		final TestMessage actual2 = new TestMessage();
+		actual1.setSubject("abc");
+		actual2.setSubject("def");
+		Assert.assertTrue(actual1.hashCode() != actual2.hashCode());
+	}
+
+	/**
+	 * Test toString.
+	 */
+	@Test
+	public void testToString() {
+		final String expected = "Subject:null";
+		final Message actual = new Message();
+		actual.setSubject("Subject");
+		Assert.assertEquals(expected, actual.toString());
 	}
 
 }
 
 /**
  * Extends Message to change setId(protected)
- * 
+ *
  * @author Elton <elton_12_nunes@hotmail.com>
  *
  */
 @SuppressWarnings("serial")
 class TestMessage extends Message {
-	void setIdSuper(int id) {
-		super.setId(id);
+	@Override
+	public void setSubject(final String Subject) {
+		super.setSubject(Subject);
 	}
 }

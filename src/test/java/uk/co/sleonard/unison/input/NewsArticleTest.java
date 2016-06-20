@@ -1,24 +1,24 @@
+/**
+ * NewsArticleTest
+ *
+ * @author ${author}
+ * @since 20-Jun-2016
+ */
 package uk.co.sleonard.unison.input;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.text.ParseException;
 import java.util.List;
 
-import org.apache.commons.net.nntp.Article;
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.ibm.icu.util.Calendar;
 
 import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.input.NewsArticle;
 
 /**
  * The Class NewsArticleTest.
- * 
+ *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  *
@@ -26,73 +26,15 @@ import uk.co.sleonard.unison.input.NewsArticle;
 public class NewsArticleTest {
 
 	/**
-	 * Test constructor NewsArticle(final Article article).
-	 * 
-	 * @throws UNISoNException
-	 *             Signals that an exception in application has occurred..
-	 */
-	@Test
-	public void testConstructorArticle() throws UNISoNException {
-		Article expected = new Article();
-		expected.setArticleId("ART");
-		expected.setArticleNumber(100);
-		expected.setFrom("from");
-		expected.setSubject("subject");
-		expected.setDate("Wed, 11 May 2016 13:10:00 GMT");
-		NewsArticle actual = new NewsArticle(expected);
-		assertEquals(expected.getArticleId(), actual.getArticleId());
-		assertEquals(expected.getFrom(), actual.getFrom());
-		assertEquals(expected.getSubject(), actual.getSubject());
-	}
-
-	/**
-	 * Test getRefencesList.
-	 */
-	@Test
-	public void testGetReferencesList() {
-		NewsArticle test = new NewsArticle();
-		test.setReferences("<effrl8$hmn$2@emma.aioe.org> <effupe$hr0$1@netlx020.civ.utwente.nl>");
-		List<String> actual = test.getReferencesList();
-		assertEquals(2, actual.size());
-	}
-
-	/**
-	 * Test isFullHeader.
-	 */
-	@Test
-	public void testIsFullHeader() {
-		NewsArticle actual = new NewsArticle();
-		assertFalse(actual.isFullHeader());
-		actual.setPostingHost("postingHost");
-		assertTrue(actual.isFullHeader());
-	}
-
-	/**
-	 * Test compareTo.
-	 */
-	@Test
-	public void testCompareTo() {
-		NewsArticle other = new NewsArticle();
-		other.setArticleNumber(2);
-		NewsArticle actual = new NewsArticle();
-		actual.setArticleNumber(2);
-		assertEquals(0, actual.compareTo(other));
-		actual.setArticleNumber(1);
-		assertEquals(-1, actual.compareTo(other));
-		actual.setArticleNumber(3);
-		assertEquals(1, actual.compareTo(other));
-	}
-
-	/**
 	 * Test getArticleId.
 	 */
 	@Test
 	public void testGetArticleId() {
-		String expected = "articleId";
-		NewsArticle actual = new NewsArticle();
-		assertNull(actual.getArticleId());
+		final String expected = "articleId";
+		final NewsArticle actual = new NewsArticle();
+		Assert.assertNull(actual.getArticleId());
 		actual.setArticleId(expected);
-		assertEquals(expected, actual.getArticleId());
+		Assert.assertEquals(expected, actual.getArticleId());
 	}
 
 	/**
@@ -100,7 +42,7 @@ public class NewsArticleTest {
 	 */
 	@Test(expected = NullPointerException.class)
 	public void testGetArticleIdThrowException() {
-		NewsArticle actual = new NewsArticle();
+		final NewsArticle actual = new NewsArticle();
 		actual.setArticleId(null);
 	}
 
@@ -109,11 +51,11 @@ public class NewsArticleTest {
 	 */
 	@Test
 	public void testGetContent() {
-		String expected = "content";
-		NewsArticle actual = new NewsArticle();
-		assertNull(actual.getContent());
+		final String expected = "content";
+		final NewsArticle actual = new NewsArticle();
+		Assert.assertNull(actual.getContent());
 		actual.setContent(expected);
-		assertEquals(expected, actual.getContent());
+		Assert.assertEquals(expected, actual.getContent());
 	}
 
 	/**
@@ -126,13 +68,13 @@ public class NewsArticleTest {
 	 */
 	@Test
 	public void testGetDate() throws ParseException, UNISoNException {
-		String dateExpected = "Wed, 11 May 2016 13:10:00 GMT";
-		NewsArticle test = new NewsArticle();
-		assertNull(test.getDate());
+		final String dateExpected = "Wed, 11 May 2016 13:10:00 GMT";
+		final NewsArticle test = new NewsArticle();
+		Assert.assertNull(test.getDate());
 		test.setDate(dateExpected);
-		Calendar actual = Calendar.getInstance();
+		final Calendar actual = Calendar.getInstance();
 		actual.setTime(test.getDate());
-		assertEquals(4, actual.get(Calendar.MONTH));
+		Assert.assertEquals(4, actual.get(Calendar.MONTH));
 	}
 
 	/**
@@ -140,11 +82,11 @@ public class NewsArticleTest {
 	 */
 	@Test
 	public void testGetFrom() {
-		String expected = "user";
-		NewsArticle actual = new NewsArticle();
-		assertNull(actual.getFrom());
+		final String expected = "user";
+		final NewsArticle actual = new NewsArticle();
+		Assert.assertNull(actual.getFrom());
 		actual.setFrom(expected);
-		assertEquals(expected, actual.getFrom());
+		Assert.assertEquals(expected, actual.getFrom());
 	}
 
 	/**
@@ -152,7 +94,7 @@ public class NewsArticleTest {
 	 */
 	@Test(expected = NullPointerException.class)
 	public void testGetFromThrowException() {
-		NewsArticle actual = new NewsArticle();
+		final NewsArticle actual = new NewsArticle();
 		actual.setFrom(null);
 	}
 
@@ -164,11 +106,11 @@ public class NewsArticleTest {
 	 */
 	@Test
 	public void testGetNewsgroupsList() throws UNISoNException {
-		String newsgroups = "newsgroup1,newsgroup2,newsgroup3";
-		NewsArticle test = new NewsArticle("article", 0, Calendar.getInstance().getTime(), "from",
-		        null, null, null, newsgroups, null);
-		List<String> actual = test.getNewsgroupsList();
-		assertEquals(3, actual.size());
+		final String newsgroups = "newsgroup1,newsgroup2,newsgroup3";
+		final NewsArticle test = new NewsArticle("article", 0, Calendar.getInstance().getTime(),
+		        "from", null, null, null, newsgroups, null);
+		final List<String> actual = test.getNewsgroupsList();
+		Assert.assertEquals(3, actual.size());
 	}
 
 	/**
@@ -176,11 +118,11 @@ public class NewsArticleTest {
 	 */
 	@Test
 	public void testGetPostingHost() {
-		String expected = "posting";
-		NewsArticle actual = new NewsArticle();
-		assertNull(actual.getPostingHost());
+		final String expected = "posting";
+		final NewsArticle actual = new NewsArticle();
+		Assert.assertNull(actual.getPostingHost());
 		actual.setPostingHost(expected);
-		assertEquals(expected, actual.getPostingHost());
+		Assert.assertEquals(expected, actual.getPostingHost());
 	}
 
 	/**
@@ -188,11 +130,22 @@ public class NewsArticleTest {
 	 */
 	@Test
 	public void testGetReferences() {
-		String expected = "references";
-		NewsArticle actual = new NewsArticle();
-		assertNull(actual.getReferences());
+		final String expected = "references";
+		final NewsArticle actual = new NewsArticle();
+		Assert.assertNull(actual.getReferences());
 		actual.setReferences(expected);
-		assertEquals(expected, actual.getReferences());
+		Assert.assertEquals(expected, actual.getReferences());
+	}
+
+	/**
+	 * Test getRefencesList.
+	 */
+	@Test
+	public void testGetReferencesList() {
+		final NewsArticle test = new NewsArticle();
+		test.setReferences("<effrl8$hmn$2@emma.aioe.org> <effupe$hr0$1@netlx020.civ.utwente.nl>");
+		final List<String> actual = test.getReferencesList();
+		Assert.assertEquals(2, actual.size());
 	}
 
 	/**
@@ -200,11 +153,22 @@ public class NewsArticleTest {
 	 */
 	@Test
 	public void testGetSubject() {
-		String expected = "subject";
-		NewsArticle actual = new NewsArticle();
-		assertNull(actual.getSubject());
+		final String expected = "subject";
+		final NewsArticle actual = new NewsArticle();
+		Assert.assertNull(actual.getSubject());
 		actual.setSubject(expected);
-		assertEquals(expected, actual.getSubject());
+		Assert.assertEquals(expected, actual.getSubject());
+	}
+
+	/**
+	 * Test isFullHeader.
+	 */
+	@Test
+	public void testIsFullHeader() {
+		final NewsArticle actual = new NewsArticle();
+		Assert.assertFalse(actual.isFullHeader());
+		actual.setPostingHost("postingHost");
+		Assert.assertTrue(actual.isFullHeader());
 	}
 
 	/**
@@ -212,9 +176,9 @@ public class NewsArticleTest {
 	 */
 	@Test
 	public void testToString() {
-		NewsArticle test = new NewsArticle();
+		final NewsArticle test = new NewsArticle();
 		test.setArticleNumber(100);
-		assertTrue(test.toString().contains("Number: 100"));
+		Assert.assertTrue(test.toString().contains("Number: 100"));
 	}
 
 }

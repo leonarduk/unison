@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hsqldb.util.DatabaseManagerSwing;
+import org.junit.Assert;
 
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
@@ -160,8 +161,7 @@ public class UNISoNCLI implements UNISoNLogger {
 	        throws UNISoNException {
 		final Set<NewsGroup> listNewsgroups = UNISoNController.getInstance()
 		        .listNewsgroups(searchString, host);
-		UNISoNController.getInstance().storeNewsgroups(listNewsgroups);
-
+		Assert.assertTrue(listNewsgroups.size() > 0);
 	}
 
 	/*
@@ -190,13 +190,13 @@ public class UNISoNCLI implements UNISoNLogger {
 	 */
 	private void quickDownload(final String arg, final Date toDate, final Date fromDate,
 	        final String host) throws UNISoNException {
-		UNISoNController.create();
+		UNISoNController.create(null);
 		final Set<NewsGroup> listNewsgroups = UNISoNController.getInstance().listNewsgroups(arg,
 		        host);
 		// HibernateHelper.generateSchema();
 
 		try {
-			UNISoNController.create();
+			UNISoNController.create(null);
 			UNISoNController.getInstance().quickDownload(listNewsgroups, fromDate, toDate, this,
 			        DownloadMode.BASIC);
 		}

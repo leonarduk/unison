@@ -36,7 +36,7 @@ public class UNISoNAnalysis {
 	private final Session			session;
 	private final HibernateHelper	helper;
 
-	public UNISoNAnalysis(final NewsGroupFilter filter, final Session session,
+	UNISoNAnalysis(final NewsGroupFilter filter, final Session session,
 	        final HibernateHelper helper) {
 		this.filter = filter;
 		this.session = session;
@@ -90,7 +90,9 @@ public class UNISoNAnalysis {
 
 		for (final ListIterator<Message> iter = this.filter.getMessagesFilter().listIterator(); iter
 		        .hasNext();) {
-			for (final NewsGroup nextGroup : iter.next().getNewsgroups()) {
+			Message next = iter.next();
+			Set<NewsGroup> newsgroups = next.getNewsgroups();
+			for (final NewsGroup nextGroup : newsgroups) {
 				if ((null == this.filter.getSelectedNewsgroups())
 				        || (this.filter.getSelectedNewsgroups().size() == 0)
 				        || this.filter.getSelectedNewsgroups().contains(nextGroup)) {

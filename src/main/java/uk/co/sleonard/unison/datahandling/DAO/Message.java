@@ -1,11 +1,12 @@
 /**
  * Message
- * 
+ *
  * @author ${author}
  * @since 30-May-2016
  */
 package uk.co.sleonard.unison.datahandling.DAO;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -60,32 +61,6 @@ public class Message implements java.io.Serializable {
 	/**
 	 * Instantiates a new message.
 	 *
-	 * @param dateCreated
-	 *            the date created
-	 * @param usenetMessageID
-	 *            the usenet message id
-	 * @param subject
-	 *            the subject
-	 * @param poster
-	 *            the poster
-	 * @param topic
-	 *            the topic
-	 * @param messageBody
-	 *            the message body
-	 */
-	public Message(final Date dateCreated, final String usenetMessageID, final String subject,
-	        final UsenetUser poster, final Topic topic, final byte[] messageBody) {
-		this.dateCreated = dateCreated;
-		this.usenetMessageID = usenetMessageID;
-		this.subject = subject;
-		this.poster = poster;
-		this.topic = topic;
-		this.messageBody = messageBody;
-	}
-
-	/**
-	 * Instantiates a new message.
-	 *
 	 * @param DateCreated
 	 *            the date created
 	 * @param UsenetMessageID
@@ -116,33 +91,81 @@ public class Message implements java.io.Serializable {
 		this.messageBody = MessageBody;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
-	public boolean equals(final Object object) {
-		if (this == object) {
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
 		}
-		if (!(object instanceof Message)) {
+		if (obj == null) {
 			return false;
 		}
-		final Message that = (Message) object;
-		if ((this.getId() != that.getId())
-		        || ((null != this.getMessageBody())
-		                && !this.getMessageBody().equals(that.getMessageBody()))
-		        || !this.getTopic().equals(that.getTopic())
-		        || !this.getUsenetMessageID().equals(that.getUsenetMessageID())
-		        || !this.getDateCreated().equals(that.getDateCreated())
-		        || !this.getReferencedMessages().equals(that.getReferencedMessages())
-		        || !this.getPoster().equals(that.getPoster())
-		        || !this.getSubject().equals(this.getSubject())) {
+		if (this.getClass() != obj.getClass()) {
 			return false;
 		}
-		return (this.getNewsgroups().containsAll(that.getNewsgroups())
-		        && that.getNewsgroups().containsAll(this.getNewsgroups()));
+		final Message other = (Message) obj;
+		if (this.dateCreated == null) {
+			if (other.dateCreated != null) {
+				return false;
+			}
+		}
+		else if (!this.dateCreated.equals(other.dateCreated)) {
+			return false;
+		}
+		if (this.id != other.id) {
+			return false;
+		}
+		if (!Arrays.equals(this.messageBody, other.messageBody)) {
+			return false;
+		}
+		if (this.newsgroups == null) {
+			if (other.newsgroups != null) {
+				return false;
+			}
+		}
+		else if (!this.newsgroups.equals(other.newsgroups)) {
+			return false;
+		}
+		if (this.poster == null) {
+			if (other.poster != null) {
+				return false;
+			}
+		}
+		else if (!this.poster.equals(other.poster)) {
+			return false;
+		}
+		if (this.referencedMessages == null) {
+			if (other.referencedMessages != null) {
+				return false;
+			}
+		}
+		else if (!this.referencedMessages.equals(other.referencedMessages)) {
+			return false;
+		}
+		if (this.subject == null) {
+			if (other.subject != null) {
+				return false;
+			}
+		}
+		else if (!this.subject.equals(other.subject)) {
+			return false;
+		}
+		if (this.topic == null) {
+			if (other.topic != null) {
+				return false;
+			}
+		}
+		else if (!this.topic.equals(other.topic)) {
+			return false;
+		}
+		if (this.usenetMessageID == null) {
+			if (other.usenetMessageID != null) {
+				return false;
+			}
+		}
+		else if (!this.usenetMessageID.equals(other.usenetMessageID)) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -226,18 +249,22 @@ public class Message implements java.io.Serializable {
 		return this.usenetMessageID;
 	}
 
-	/**
-	 * Need to implement this to avoid NonUniqueObjectException //TODO
-	 * http://forum.springframework.org/showthread.php?t=22261
-	 *
-	 * @return the int
-	 */
 	@Override
 	public int hashCode() {
-		int hashCode = 0;
-		hashCode = (29 * hashCode) + this.id;
-
-		return hashCode;
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + ((this.dateCreated == null) ? 0 : this.dateCreated.hashCode());
+		result = (prime * result) + this.id;
+		result = (prime * result) + Arrays.hashCode(this.messageBody);
+		result = (prime * result) + ((this.newsgroups == null) ? 0 : this.newsgroups.hashCode());
+		result = (prime * result) + ((this.poster == null) ? 0 : this.poster.hashCode());
+		result = (prime * result)
+		        + ((this.referencedMessages == null) ? 0 : this.referencedMessages.hashCode());
+		result = (prime * result) + ((this.subject == null) ? 0 : this.subject.hashCode());
+		result = (prime * result) + ((this.topic == null) ? 0 : this.topic.hashCode());
+		result = (prime * result)
+		        + ((this.usenetMessageID == null) ? 0 : this.usenetMessageID.hashCode());
+		return result;
 	}
 
 	/**

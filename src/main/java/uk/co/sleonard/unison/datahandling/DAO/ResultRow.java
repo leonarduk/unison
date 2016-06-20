@@ -1,8 +1,14 @@
+/**
+ * ResultRow
+ * 
+ * @author ${author}
+ * @since 20-Jun-2016
+ */
 package uk.co.sleonard.unison.datahandling.DAO;
 
 /**
  * The Class ResultRow.
- * 
+ *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  *
@@ -10,13 +16,13 @@ package uk.co.sleonard.unison.datahandling.DAO;
 public class ResultRow implements Comparable<ResultRow> {
 
 	/** The key. */
-	private final Object	key;
+	private final Object key;
 
 	/** The type. */
-	private final Class<?>	type;
+	private final Class<?> type;
 
 	/** The count. */
-	private final int		count;
+	private final int count;
 
 	/**
 	 * Instantiates a new result row.
@@ -112,8 +118,8 @@ public class ResultRow implements Comparable<ResultRow> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + this.count;
-		result = prime * result + (this.key == null ? 0 : this.key.hashCode());
+		result = (prime * result) + this.count;
+		result = (prime * result) + (this.key == null ? 0 : this.key.hashCode());
 		return result;
 	}
 

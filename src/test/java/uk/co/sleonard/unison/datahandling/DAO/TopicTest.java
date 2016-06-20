@@ -1,20 +1,34 @@
+/**
+ * TopicTest
+ *
+ * @author ${author}
+ * @since 20-Jun-2016
+ */
 package uk.co.sleonard.unison.datahandling.DAO;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.Assert;
 import org.junit.Test;
 
-import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
-import uk.co.sleonard.unison.datahandling.DAO.Topic;
+/**
+ * Extends Topic to change setId(protected)
+ *
+ * @author Elton <elton_12_nunes@hotmail.com>
+ *
+ */
+@SuppressWarnings("serial")
+class TestTopic extends Topic {
+	@Override
+	public void setSubject(final String subject) {
+		super.setSubject(subject);
+	}
+}
 
 /**
  * The Class TopicTest.
- * 
+ *
  * @author Elton <elton_12_nunes@hotmail.com>
  * @since v1.2.0
  *
@@ -27,34 +41,12 @@ public class TopicTest {
 	@Test
 	public void testConstructor() {
 		Topic actual = null;
-		String expected = "subject";
-		Set<NewsGroup> expected2 = new HashSet<>();
+		final String expected = "subject";
+		final Set<NewsGroup> expected2 = new HashSet<>();
 
 		actual = new Topic(expected, expected2);
-		assertEquals(expected, actual.getSubject());
-		assertEquals(expected2, actual.getNewsgroups());
-	}
-
-	/**
-	 * Test hashCode
-	 */
-	@Test
-	public void testHashCode() {
-		TestTopic actual1 = new TestTopic();
-		TestTopic actual2 = new TestTopic();
-		actual1.setIdSuper(7);
-		actual2.setIdSuper(52);
-		assertTrue(actual1.hashCode() != actual2.hashCode());
-	}
-
-	/**
-	 * Test toString.
-	 */
-	@Test
-	public void testToString() {
-		String expected = new String("subject");
-		Topic actual = new Topic(expected);
-		assertEquals(expected, actual.toString());
+		Assert.assertEquals(expected, actual.getSubject());
+		Assert.assertEquals(expected2, actual.getNewsgroups());
 	}
 
 	/**
@@ -62,7 +54,7 @@ public class TopicTest {
 	 */
 	@Test
 	public void testGetId() {
-		assertEquals(0, new Topic().getId());
+		Assert.assertEquals(0, new Topic().getId());
 	}
 
 	/**
@@ -70,12 +62,12 @@ public class TopicTest {
 	 */
 	@Test
 	public void testGetNewsgroups() {
-		Set<NewsGroup> expected = new HashSet<NewsGroup>(0);
-		Topic actual = new Topic();
-		assertEquals(expected.size(), actual.getNewsgroups().size());
+		final Set<NewsGroup> expected = new HashSet<>(0);
+		final Topic actual = new Topic();
+		Assert.assertEquals(expected.size(), actual.getNewsgroups().size());
 		expected.add(new NewsGroup());
 		actual.setNewsgroups(expected);
-		assertEquals(expected.size(), actual.getNewsgroups().size());
+		Assert.assertEquals(expected.size(), actual.getNewsgroups().size());
 	}
 
 	/**
@@ -83,23 +75,32 @@ public class TopicTest {
 	 */
 	@Test
 	public void testGetSubject() {
-		String expected = "subject";
-		Topic actual = new Topic();
-		assertNull(actual.getSubject());
+		final String expected = "subject";
+		final Topic actual = new Topic();
+		Assert.assertNull(actual.getSubject());
 		actual.setSubject(expected);
-		assertEquals(expected, actual.getSubject());
+		Assert.assertEquals(expected, actual.getSubject());
 	}
-}
 
-/**
- * Extends Topic to change setId(protected)
- * 
- * @author Elton <elton_12_nunes@hotmail.com>
- *
- */
-@SuppressWarnings("serial")
-class TestTopic extends Topic {
-	void setIdSuper(int id) {
-		super.setId(id);
+	/**
+	 * Test hashCode
+	 */
+	@Test
+	public void testHashCode() {
+		final TestTopic actual1 = new TestTopic();
+		final TestTopic actual2 = new TestTopic();
+		actual1.setSubject("abc");
+		actual2.setSubject("def");
+		Assert.assertTrue(actual1.hashCode() != actual2.hashCode());
+	}
+
+	/**
+	 * Test toString.
+	 */
+	@Test
+	public void testToString() {
+		final String expected = new String("subject");
+		final Topic actual = new Topic(expected, null);
+		Assert.assertEquals(expected, actual.toString());
 	}
 }

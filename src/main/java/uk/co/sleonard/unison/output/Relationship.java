@@ -16,7 +16,7 @@ package uk.co.sleonard.unison.output;
 public class Relationship {
 
 	/** The directed. */
-	private boolean directed = true;
+	private final boolean directed = true;
 
 	/** The owner. */
 	private final int owner;
@@ -25,7 +25,7 @@ public class Relationship {
 	private final int target;
 
 	/** The value. */
-	public int value = 1;
+	private int value = 1;
 
 	/**
 	 * Instantiates a new relationship.
@@ -40,24 +40,31 @@ public class Relationship {
 		this.target = target;
 	}
 
-	/**
-	 * Need to over-ride hashcode and equals to be able to make a compund key.
-	 *
-	 * @param obj
-	 *            the obj
-	 * @return true, if successful
-	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (!(obj instanceof Relationship)) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
 			return false;
 		}
 		final Relationship other = (Relationship) obj;
-
-		// Not interested in value - if we have this link
-		// already we will just add to this one
-		return ((other.getOwner() == this.getOwner()) && (other.getTarget() == this.getTarget())
-		        && (other.isDirected() == this.isDirected()));
+		if (this.directed != other.directed) {
+			return false;
+		}
+		if (this.owner != other.owner) {
+			return false;
+		}
+		if (this.target != other.target) {
+			return false;
+		}
+		if (this.value != other.value) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -87,20 +94,15 @@ public class Relationship {
 		return this.value;
 	}
 
-	/**
-	 * Need to over-ride hashcode and equals to be able to make a compund key.
-	 *
-	 * @return the int
-	 * @Override
-	 */
 	@Override
 	public int hashCode() {
-		int hashcode = this.owner + this.target;
-
-		if (this.isDirected()) {
-			hashcode++;
-		}
-		return hashcode;
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + (this.directed ? 1231 : 1237);
+		result = (prime * result) + this.owner;
+		result = (prime * result) + this.target;
+		result = (prime * result) + this.value;
+		return result;
 	}
 
 	/**
@@ -108,7 +110,7 @@ public class Relationship {
 	 *
 	 * @return the int
 	 */
-	public int incrementValue() {
+	int incrementValue() {
 		return ++this.value;
 	}
 
@@ -119,13 +121,6 @@ public class Relationship {
 	 */
 	public boolean isDirected() {
 		return this.directed;
-	}
-
-	/**
-	 * Make undirected.
-	 */
-	public void makeUndirected() {
-		this.directed = false;
 	}
 
 	/*

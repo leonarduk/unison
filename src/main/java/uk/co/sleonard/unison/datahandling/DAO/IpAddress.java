@@ -38,16 +38,6 @@ public class IpAddress implements java.io.Serializable {
 	/**
 	 * Instantiates a new ip address.
 	 *
-	 * @param location
-	 *            the location
-	 */
-	public IpAddress(final Location location) {
-		this.location = location;
-	}
-
-	/**
-	 * Instantiates a new ip address.
-	 *
 	 * @param IpAddress
 	 *            the ip address
 	 * @param location
@@ -58,22 +48,38 @@ public class IpAddress implements java.io.Serializable {
 		this.location = location;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
-	public boolean equals(final Object object) {
-		if (this == object) {
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
 		}
-		if (!(object instanceof IpAddress)) {
+		if (obj == null) {
 			return false;
 		}
-		final IpAddress that = (IpAddress) object;
-		return ((this.getId() == that.getId()) && this.getIpAddress().equals(that.getIpAddress())
-		        && this.getLocation().equals(that.getLocation()));
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		final IpAddress other = (IpAddress) obj;
+		if (this.IpAddress == null) {
+			if (other.IpAddress != null) {
+				return false;
+			}
+		}
+		else if (!this.IpAddress.equals(other.IpAddress)) {
+			return false;
+		}
+		if (this.id != other.id) {
+			return false;
+		}
+		if (this.location == null) {
+			if (other.location != null) {
+				return false;
+			}
+		}
+		else if (!this.location.equals(other.location)) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -103,18 +109,14 @@ public class IpAddress implements java.io.Serializable {
 		return this.location;
 	}
 
-	/**
-	 * Need to implement this to avoid NonUniqueObjectException //TODO
-	 * http://forum.springframework.org/showthread.php?t=22261
-	 *
-	 * @return the int
-	 */
 	@Override
 	public int hashCode() {
-		int hashCode = 0;
-		hashCode = (29 * hashCode) + this.id;
-
-		return hashCode;
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + ((this.IpAddress == null) ? 0 : this.IpAddress.hashCode());
+		result = (prime * result) + this.id;
+		result = (prime * result) + ((this.location == null) ? 0 : this.location.hashCode());
+		return result;
 	}
 
 	/**

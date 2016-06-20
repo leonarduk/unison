@@ -43,12 +43,12 @@ public class UNISoNDatabaseTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public final void testGetMessages() {
-		final Topic topic = new Topic("topic");
+		final Topic topic = new Topic("topic", null);
 		final Vector<Message> messages = new Vector<>();
 		final byte[] messageBody = "eggs".getBytes();
 		final Message msg = new Message(new Date(), "234", "All about me",
-		        new UsenetUser("poster", "poster@email.com", "127.0.0.1"), new Topic("topic"),
-		        messageBody);
+		        new UsenetUser("poster", "poster@email.com", "127.0.0.1", null, null),
+		        new Topic("topic", null), null, null, messageBody);
 		messages.add(msg);
 		Mockito.when(this.helper2.runQuery(Matchers.anyString(), Matchers.any(Session.class),
 		        Matchers.any(Class.class))).thenReturn(messages);

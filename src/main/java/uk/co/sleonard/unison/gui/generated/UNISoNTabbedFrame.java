@@ -44,7 +44,7 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
 
 	/** The Constant GUI_ARGS. */
 	// http://www.electric-spoon.com/cgi-bin/man/man2html?hsqldb-databasemanagerswing+1
-	public static final String GUI_ARGS[] = { "-driver", UNISoNTabbedFrame.dbDriver, "-url",
+	private static final String GUI_ARGS[] = { "-driver", UNISoNTabbedFrame.dbDriver, "-url",
 	        UNISoNTabbedFrame.DB_URL, "-user", UNISoNTabbedFrame.dbUser, "-noexit" };
 
 	/** The about menu item. */
@@ -296,7 +296,7 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
 	 * @param message
 	 *            the message
 	 */
-	public void showAlert(final String message) {
+	private void showAlert(final String message) {
 		JOptionPane.showMessageDialog(this, message);
 	}
 

@@ -25,12 +25,9 @@ import javax.swing.SwingUtilities;
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  */
-public abstract class SwingWorker extends Observable implements Runnable {
+abstract class SwingWorker extends Observable implements Runnable {
 	/** The thread var. */
-	protected final ThreadVar threadVar;
-
-	/** The value. */
-	private Object value;				 // see getValue(), setValue()
+	private final ThreadVar threadVar;
 
 	/**
 	 * Start a thread that will call the <code>construct</code> method and then exit.
@@ -38,7 +35,7 @@ public abstract class SwingWorker extends Observable implements Runnable {
 	 * @param name
 	 *            the name
 	 */
-	public SwingWorker(final String name) {
+	SwingWorker(final String name) {
 		final Thread t = new Thread(this, name);
 		this.threadVar = new ThreadVar(t);
 	}
@@ -59,41 +56,10 @@ public abstract class SwingWorker extends Observable implements Runnable {
 	}
 
 	/**
-	 * Return the value created by the <code>construct</code> method. Returns null if either the
-	 * constructing thread or the current thread was interrupted before a value was produced.
-	 *
-	 * @return the value created by the <code>construct</code> method
-	 */
-	public Object get() {
-		while (true) {
-			final Thread t = this.threadVar.get();
-			if (t == null) {
-				return this.getValue();
-			}
-			try {
-				t.join();
-			}
-			catch (@SuppressWarnings("unused") final InterruptedException e) {
-				Thread.currentThread().interrupt(); // propagate
-				return null;
-			}
-		}
-	}
-
-	/**
-	 * Get the value produced by the worker thread, or null if it hasn't been constructed yet.
-	 *
-	 * @return the value
-	 */
-	protected synchronized Object getValue() {
-		return this.value;
-	}
-
-	/**
 	 * A new method that interrupts the worker thread. Call this method to force the worker to stop
 	 * what it's doing.
 	 */
-	public void interrupt() {
+	void interrupt() {
 		final Thread t = this.threadVar.get();
 		if (t != null) {
 			t.interrupt();
@@ -126,7 +92,7 @@ public abstract class SwingWorker extends Observable implements Runnable {
 	 *            the new value
 	 */
 	private synchronized void setValue(final Object x) {
-		this.value = x;
+		//
 	}
 
 	/**
@@ -142,7 +108,7 @@ public abstract class SwingWorker extends Observable implements Runnable {
 	/**
 	 * Class to maintain reference to current worker thread under separate synchronization control.
 	 */
-	private static class ThreadVar {
+	static class ThreadVar {
 
 		/** The thread. */
 		private Thread thread;

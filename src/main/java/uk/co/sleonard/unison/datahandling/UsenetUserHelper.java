@@ -1,6 +1,6 @@
 /**
  * UsenetUserHelper
- * 
+ *
  * @author ${author}
  * @since 30-May-2016
  */
@@ -18,7 +18,7 @@ import uk.co.sleonard.unison.input.NewsArticle;
  * @since v1.0.0
  *
  */
-public class UsenetUserHelper {
+class UsenetUserHelper {
 
 	/** The logger. */
 	private static Logger logger = Logger.getLogger("PopulateUsenetUser");
@@ -139,7 +139,7 @@ public class UsenetUserHelper {
 		return emailAddress;
 	}
 
-	public static EmailAddress parseFromField(final NewsArticle article) {
+	static EmailAddress parseFromField(final NewsArticle article) {
 		return UsenetUserHelper.parseFromField(article.getFrom(), article.getPostingHost());
 	}
 
@@ -152,8 +152,7 @@ public class UsenetUserHelper {
 	 *            the ip address
 	 * @return the email address
 	 */
-	public static EmailAddress parseFromField(final String emailStringInput,
-	        final String ipAddress) {
+	static EmailAddress parseFromField(final String emailStringInput, final String ipAddress) {
 		String emailString = emailStringInput;
 		UsenetUserHelper.logger.debug("createUser: " + emailString + " " + ipAddress);
 

@@ -188,7 +188,8 @@ public class NewsGroupTest {
 	 */
 	@Test
 	public void testGetParentNewsGroup() {
-		final NewsGroup expected = new NewsGroup("newsname");
+		final NewsGroup expected = new NewsGroup("alt.news", null, null, null, 1, 2, 1, 2, null,
+		        true);
 		final NewsGroup actual = new NewsGroup();
 		Assert.assertNull(actual.getParentNewsGroup());
 		actual.setParentNewsGroup(expected);
@@ -214,8 +215,8 @@ public class NewsGroupTest {
 	public void testHashCode() {
 		final TestNewsGroup actual1 = new TestNewsGroup();
 		final TestNewsGroup actual2 = new TestNewsGroup();
-		actual1.setIdSuper(5);
-		actual2.setIdSuper(93);
+		actual1.setFullName("abc");
+		actual2.setFullName("def");
 		Assert.assertTrue(actual1.hashCode() != actual2.hashCode());
 	}
 
@@ -252,7 +253,8 @@ public class NewsGroupTest {
  */
 @SuppressWarnings("serial")
 class TestNewsGroup extends NewsGroup {
-	void setIdSuper(final int id) {
-		super.setId(id);
+	@Override
+	public void setFullName(final String fullName) {
+		super.setFullName(fullName);
 	}
 }

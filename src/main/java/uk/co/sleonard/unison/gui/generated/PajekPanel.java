@@ -27,6 +27,7 @@ import org.hibernate.Session;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DataQuery;
+import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
@@ -227,8 +228,9 @@ public class PajekPanel extends javax.swing.JPanel implements Observer {
 		        .getMessagesFilter();
 		final HashMap<String, Message> msgMap = new HashMap<>();
 
+		final HibernateHelper helper = UNISoNController.getInstance().getHelper();
 		// Load ALL messages into map so can get complete referemce
-		final Vector<Message> allMessages = DataQuery.getInstance().getMessages(null, null,
+		final Vector<Message> allMessages = new DataQuery(helper).getMessages(null, null,
 		        this.session, null, null, false, null, null);
 		for (final Object next : allMessages) {
 			final Message msg = (Message) next;

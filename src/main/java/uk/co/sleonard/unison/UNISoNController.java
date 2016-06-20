@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
+import uk.co.sleonard.unison.datahandling.DataQuery;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
@@ -168,7 +169,8 @@ public class UNISoNController {
 			this.setSession(hibernateSession);
 			this.filter = new NewsGroupFilter(hibernateSession, this.helper);
 			this.analysis = new UNISoNAnalysis(this.filter, hibernateSession, this.helper);
-			this.database = new UNISoNDatabase(this.filter, hibernateSession, this.helper);
+			this.database = new UNISoNDatabase(this.filter, hibernateSession, this.helper,
+			        new DataQuery(this.helper));
 		}
 		catch (final UNISoNException e) {
 			UNISoNController.getGui().showAlert("Error:" + e.getMessage());

@@ -15,7 +15,6 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
-import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.datahandling.DAO.Location;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
@@ -38,22 +37,6 @@ public class DataQuery {
 
 	/** The yyyy mmdd formatter. */
 	SimpleDateFormat yyyyMMDDFormatter = new SimpleDateFormat("yyyy-MM-dd");
-
-	/**
-	 * Gets the single instance of DataQuery.
-	 *
-	 * @return single instance of DataQuery
-	 */
-	public static DataQuery getInstance() {
-		return DataQueryHelper.getInstance();
-	}
-
-	/**
-	 * Instantiates a new data query.
-	 */
-	protected DataQuery() {
-		this(UNISoNController.getInstance().helper());
-	}
 
 	/**
 	 * Instantiates a new data query.
@@ -302,23 +285,4 @@ public class DataQuery {
 		}
 		return buffer.toString();
 	}
-
-	/**
-	 * The Class DataQueryHelper.
-	 */
-	static class DataQueryHelper {
-
-		/** The instance. */
-		static DataQuery instance = new DataQuery();
-
-		/**
-		 * Gets the single instance of DataQueryHelper.
-		 *
-		 * @return single instance of DataQueryHelper
-		 */
-		static DataQuery getInstance() {
-			return DataQueryHelper.instance;
-		}
-	}
-
 }

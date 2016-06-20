@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
 import uk.co.sleonard.unison.NewsGroupFilter;
-import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
@@ -26,18 +25,14 @@ public class UNISoNDatabase extends Observable {
 	private final Session			session;
 	private final NewsGroupFilter	filter;
 	private final HibernateHelper	helper;
+	private final DataQuery			dataQuery;
 
 	public UNISoNDatabase(final NewsGroupFilter filter2, final Session session2,
-	        final HibernateHelper helper2) {
+	        final HibernateHelper helper2, final DataQuery dataQuery) {
 		this.session = session2;
 		this.filter = filter2;
 		this.helper = helper2;
-	}
-
-	public UNISoNDatabase(final UNISoNController controller) {
-		this.session = controller.getSession();
-		this.filter = controller.getFilter();
-		this.helper = controller.getHelper();
+		this.dataQuery = dataQuery;
 	}
 
 	/**
@@ -52,8 +47,8 @@ public class UNISoNDatabase extends Observable {
 	public Set<Message> getMessages(final Topic topic, final Session session1) {
 		final String query = "from  Message  where topic_id = " + topic.getId();
 		final HashSet<Message> returnVal = new HashSet<>();
-		for (final Message message1 : (List<Message>) this.helper.runQuery(query, session1,
-		        Message.class)) {
+		final List<Message> results = this.helper.runQuery(query, session1, Message.class);
+		for (final Message message1 : results) {
 			if (((null == this.filter.getSelectedMessages())
 			        || (this.filter.getSelectedMessages().size() == 0)
 			        || this.filter.getSelectedMessages().contains(message1))
@@ -82,12 +77,11 @@ public class UNISoNDatabase extends Observable {
 	 * Refresh data from database.
 	 */
 	public void refreshDataFromDatabase() {
-
 		UNISoNDatabase.logger.debug("refreshDataFromDatabase");
 
-		this.filter.setMessagesFilter(DataQuery.getInstance().getMessages(
-		        this.filter.getSelectedMessages(), this.filter.getSelectedPosters(), this.session,
-		        this.filter.getFromDate(), this.filter.getToDate(), this.filter.isFiltered(),
+		this.filter.setMessagesFilter(this.dataQuery.getMessages(this.filter.getSelectedMessages(),
+		        this.filter.getSelectedPosters(), this.session, this.filter.getFromDate(),
+		        this.filter.getToDate(), this.filter.isFiltered(),
 		        this.filter.getSelectedNewsgroups(), this.filter.getSelectedCountries()));
 
 		this.filter.clear();
@@ -151,6 +145,12 @@ public class UNISoNDatabase extends Observable {
 			}
 		}
 		this.notifyObservers();
+	}
+
+	@Override
+	public String toString() {
+		return "UNISoNDatabase [session=" + this.session + ", filter=" + this.filter + ", helper="
+		        + this.helper + "]";
 	}
 
 }

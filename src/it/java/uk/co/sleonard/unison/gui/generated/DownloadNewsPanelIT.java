@@ -19,7 +19,6 @@ import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.utils.StringUtils;
 
-@SuppressWarnings("ucd")
 public class DownloadNewsPanelIT {
 
 	private UNISoNController	controller;
@@ -28,7 +27,8 @@ public class DownloadNewsPanelIT {
 	@Before
 	public void setUp() throws Exception {
 		this.controller = UNISoNController.create(null);
-		this.panel = new DownloadNewsPanel();
+		this.controller.setNntpHost(StringUtils.loadServerList()[0]);
+		this.panel = new DownloadNewsPanel(this.controller);
 	}
 
 	@Test

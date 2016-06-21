@@ -57,6 +57,7 @@ public class FullDownloadWorkerTest {
 	/**
 	 * Test AddDownloadRequest.
 	 */
+	@Ignore
 	@Test
 	public void testAddDownloadRequest() {
 		try {

@@ -48,7 +48,7 @@ public class NewsClientTest {
 		StringUtils.convertDateToString(date);
 	}
 
-	@Ignore        // doesnt seem to be unit test
+	// doesnt seem to be unit test
 	@Test
 	public final void testDisconnect() {
 		this.client.disconnect();

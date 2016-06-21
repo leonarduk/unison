@@ -14,7 +14,6 @@ import java.util.Vector;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import uk.co.sleonard.unison.UNISoNException;
@@ -103,7 +102,6 @@ public class PajekNetworkFileTest {
 	/**
 	 * test getPreviewPanel Ignored by Error (No X11 DISPLAY) in Travis CI.
 	 */
-	@Ignore
 	@Test
 	public void testGetPreviewPanel() {
 		try {

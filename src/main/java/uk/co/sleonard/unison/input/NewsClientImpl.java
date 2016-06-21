@@ -29,7 +29,7 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
  * @since v1.0.0
  *
  */
-class NewsClientImpl extends NNTPClient implements NewsClient {
+public class NewsClientImpl extends NNTPClient implements NewsClient {
 
 	/** The logger. */
 	private static Logger	logger	= Logger.getLogger("NewsClient");

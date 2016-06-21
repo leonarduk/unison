@@ -15,8 +15,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
-import uk.co.sleonard.unison.UNISoNController;
-import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 
@@ -49,6 +47,10 @@ public class DataHibernatorWorker extends SwingWorker {
 
 	private final HibernateHelper helper;
 
+	private final LinkedBlockingQueue<NewsArticle> queue;
+
+	private final Session session;
+
 	/**
 	 * Sets the logger.
 	 *
@@ -61,11 +63,17 @@ public class DataHibernatorWorker extends SwingWorker {
 
 	/**
 	 * Start hibernators.
+	 *
+	 * @param helper2
+	 * @param queue2
+	 * @param session2
 	 */
-	public synchronized static void startHibernators() {
+	public synchronized static void startHibernators(final NewsGroupReader nntpReader,
+	        final HibernateHelper helper2, final LinkedBlockingQueue<NewsArticle> queue2,
+	        final Session session2) {
 		while (DataHibernatorWorker.workers.size() < DataHibernatorWorker.numberofHibernators) {
 			DataHibernatorWorker.workers
-			        .add(new DataHibernatorWorker(UNISoNController.getInstance().getNntpReader()));
+			        .add(new DataHibernatorWorker(nntpReader, helper2, queue2, session2));
 		}
 	}
 
@@ -84,12 +92,16 @@ public class DataHibernatorWorker extends SwingWorker {
 	 *
 	 * @param reader
 	 *            the reader
+	 * @param helper2
+	 * @param session
 	 */
-	private DataHibernatorWorker(final NewsGroupReader reader) {
+	private DataHibernatorWorker(final NewsGroupReader reader, final HibernateHelper helper2,
+	        final LinkedBlockingQueue<NewsArticle> queue, final Session session2) {
 		super("DataHibernatorWorker");
-		this.helper = UNISoNController.getInstance().helper();
-
+		this.helper = helper2;
 		this.reader = reader;
+		this.queue = queue;
+		this.session = session2;
 		DataHibernatorWorker.logger
 		        .debug("Creating " + this.getClass() + " " + reader.getNumberOfMessages());
 		this.start();
@@ -102,19 +114,17 @@ public class DataHibernatorWorker extends SwingWorker {
 	 */
 	@Override
 	public Object construct() {
-		final LinkedBlockingQueue<NewsArticle> queue = UNISoNController.getInstance().getQueue();
 		DataHibernatorWorker.logger
-		        .debug("construct : " + this.saveToDatabase + " queue " + queue.size());
+		        .debug("construct : " + this.saveToDatabase + " queue " + this.queue.size());
 
 		try {
 			// HAve one session per worker rather than per message
-			final Session session = UNISoNController.getInstance().helper().getHibernateSession();
 			while (this.saveToDatabase) {
-				this.pollQueue(queue, session);
+				this.pollQueue(this.queue, this.session);
 				// wait a second
 				Thread.sleep(5000);
 				// completed save so close down
-				if (queue.isEmpty()) {
+				if (this.queue.isEmpty()) {
 					this.saveToDatabase = false;
 				}
 			}
@@ -125,9 +135,6 @@ public class DataHibernatorWorker extends SwingWorker {
 		}
 		catch (@SuppressWarnings("unused") final InterruptedException e) {
 			return "Interrupted";
-		}
-		catch (final UNISoNException e) {
-			DataHibernatorWorker.log.alert("Error: " + e.getMessage());
 		}
 		return "Completed";
 	}

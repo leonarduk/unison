@@ -74,9 +74,9 @@ public class RelationshipTest {
 	@Test
 	public void testHashCode() {
 		final Relationship test = new Relationship(10, 20);
-		Assert.assertEquals(37606473, test.hashCode());
+		Assert.assertEquals(40022, test.hashCode());
 		test.incrementValue();
-		Assert.assertEquals(37606474, test.hashCode());
+		Assert.assertEquals(40023, test.hashCode());
 	}
 
 	/**

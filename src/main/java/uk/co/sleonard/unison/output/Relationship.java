@@ -16,7 +16,7 @@ package uk.co.sleonard.unison.output;
 public class Relationship {
 
 	/** The directed. */
-	private final boolean directed = true;
+	private final static boolean directed = true;
 
 	/** The owner. */
 	private final int owner;
@@ -52,9 +52,6 @@ public class Relationship {
 			return false;
 		}
 		final Relationship other = (Relationship) obj;
-		if (this.directed != other.directed) {
-			return false;
-		}
 		if (this.owner != other.owner) {
 			return false;
 		}
@@ -98,7 +95,6 @@ public class Relationship {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = (prime * result) + (this.directed ? 1231 : 1237);
 		result = (prime * result) + this.owner;
 		result = (prime * result) + this.target;
 		result = (prime * result) + this.value;
@@ -120,7 +116,7 @@ public class Relationship {
 	 * @return true, if is directed
 	 */
 	public boolean isDirected() {
-		return this.directed;
+		return Relationship.directed;
 	}
 
 	/*

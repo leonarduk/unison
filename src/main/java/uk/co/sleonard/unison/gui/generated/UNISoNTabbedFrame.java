@@ -196,7 +196,8 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
 	// ">//GEN-BEGIN:initComponents
 	private void initComponents() {
 		this.tabbedPane = new javax.swing.JTabbedPane();
-		this.downloadNewsPanel1 = new uk.co.sleonard.unison.gui.generated.DownloadNewsPanel();
+		this.downloadNewsPanel1 = new uk.co.sleonard.unison.gui.generated.DownloadNewsPanel(
+		        UNISoNController.getInstance());
 		this.messageStoreViewer1 = new uk.co.sleonard.unison.gui.generated.MessageStoreViewer();
 		this.pajekPanel1 = new uk.co.sleonard.unison.gui.generated.PajekPanel(this);
 		this.jMenuBar1 = new javax.swing.JMenuBar();

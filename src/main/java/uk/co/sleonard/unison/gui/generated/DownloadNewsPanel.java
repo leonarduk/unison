@@ -116,9 +116,11 @@ class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogger, Obse
 		java.awt.EventQueue.invokeLater(() -> {
 			UNISoNTabbedFrame frame;
 			try {
+
 				frame = new UNISoNTabbedFrame();
 				frame.setVisible(true);
-				final DownloadNewsPanel panel = new DownloadNewsPanel();
+				final DownloadNewsPanel panel = new DownloadNewsPanel(
+		                UNISoNController.getInstance());
 				frame.add(panel);
 				panel.setVisible(true);
 			}
@@ -132,9 +134,11 @@ class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogger, Obse
 	// End of variables declaration//GEN-END:variables
 	/**
 	 * Creates new form DownloadNewsPanel.
+	 *
+	 * @param unisonController
 	 */
-	public DownloadNewsPanel() {
-		this.controller = UNISoNController.getInstance();
+	public DownloadNewsPanel(final UNISoNController unisonController) {
+		this.controller = unisonController;
 
 		this.initComponents();
 

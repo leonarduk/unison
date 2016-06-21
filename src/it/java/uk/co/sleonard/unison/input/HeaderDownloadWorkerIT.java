@@ -11,12 +11,15 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Test;
 
 import uk.co.sleonard.unison.UNISoNException;
+import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.utils.DownloaderImpl;
+import uk.co.sleonard.unison.utils.StringUtils;
 
 public class HeaderDownloadWorkerIT {
 
@@ -24,8 +27,15 @@ public class HeaderDownloadWorkerIT {
 	        throws IOException, UNISoNException {
 		final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
 		try (final Reader reader = NewsClientIT.downloadFirstMessage();) {
+			final String nntpHost = StringUtils.loadServerList()[0];
+			final LinkedBlockingQueue<NewsArticle> queue1 = new LinkedBlockingQueue<>();
+			final NewsClient newsClient1 = new NewsClientImpl();
+			final HibernateHelper helper2 = null;
+			final Session session2 = null;
+			final NewsGroupReader groupReader = null;
 			final HeaderDownloadWorker worker = new HeaderDownloadWorker(
-			        new LinkedBlockingQueue<>(), new DownloaderImpl());
+			        new LinkedBlockingQueue<>(), new DownloaderImpl(nntpHost, queue1, newsClient1,
+			                groupReader, helper2, session2));
 			worker.setMode(DownloadMode.BASIC);
 
 			final BufferedReader bufReader = new BufferedReader(reader);

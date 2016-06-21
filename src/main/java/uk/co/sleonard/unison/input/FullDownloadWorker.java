@@ -18,10 +18,12 @@ import java.util.StringTokenizer;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.commons.net.MalformedServerReplyException;
+import org.hibernate.Session;
 
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
+import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.utils.StringUtils;
@@ -50,6 +52,8 @@ public class FullDownloadWorker extends SwingWorker {
 	/** The download. */
 	private boolean download = true;
 
+	private final LinkedBlockingQueue<NewsArticle> outQueue;
+
 	/**
 	 * Adds the download request.
 	 *
@@ -60,24 +64,30 @@ public class FullDownloadWorker extends SwingWorker {
 	 *            the mode
 	 * @param log1
 	 *            the log
+	 * @param nntpReader
+	 * @param helper
+	 * @param session
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
 
 	public synchronized static void addDownloadRequest(final String usenetID,
-	        final DownloadMode mode, final UNISoNLogger log1) throws UNISoNException {
+	        final DownloadMode mode, final UNISoNLogger log1, final String nntpHost,
+	        final LinkedBlockingQueue<NewsArticle> queue, final NewsClient newsClient,
+	        final NewsGroupReader nntpReader, final HibernateHelper helper, final Session session)
+	                throws UNISoNException {
 		final DownloadRequest request = new DownloadRequest(usenetID, mode);
 
 		FullDownloadWorker.log = log1;
 		FullDownloadWorker.downloadQueue.add(request);
 		if (FullDownloadWorker.downloaders.size() < 1) {
-			FullDownloadWorker.startDownloaders(1);
+			FullDownloadWorker.startDownloaders(1, nntpHost, queue, newsClient);
 		}
-		DataHibernatorWorker.startHibernators();
+		DataHibernatorWorker.startHibernators(nntpReader, helper, queue, session);
 	}
 
 	/**
-	 * Queue size.
+	 * s Queue size.
 	 *
 	 * @return the int
 	 */
@@ -93,12 +103,12 @@ public class FullDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	private static void startDownloaders(final int numberOfDownloaders) throws UNISoNException {
-
+	private static void startDownloaders(final int numberOfDownloaders, final String host,
+	        final LinkedBlockingQueue<NewsArticle> queue, final NewsClient newsClient)
+	                throws UNISoNException {
 		for (int i = 0; i < numberOfDownloaders; i++) {
-			final String host = UNISoNController.getInstance().getNntpHost();
-			FullDownloadWorker.downloaders
-			        .add(new FullDownloadWorker(host, UNISoNController.getInstance().getQueue()));
+
+			FullDownloadWorker.downloaders.add(new FullDownloadWorker(host, queue, newsClient));
 		}
 	}
 
@@ -109,13 +119,15 @@ public class FullDownloadWorker extends SwingWorker {
 	 *            the server
 	 * @param outQueue
 	 *            the out queue
+	 * @param newsClient
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	FullDownloadWorker(final String server, final LinkedBlockingQueue<NewsArticle> outQueue)
-	        throws UNISoNException {
+	FullDownloadWorker(final String server, final LinkedBlockingQueue<NewsArticle> outQueue,
+	        final NewsClient newsClient) throws UNISoNException {
 		super("FullDownload");
-		this.client = new NewsClientImpl();
+		this.outQueue = outQueue;
+		this.client = newsClient;
 		try {
 			this.client.connect(server);
 		}
@@ -133,13 +145,12 @@ public class FullDownloadWorker extends SwingWorker {
 	 */
 	@Override
 	public Object construct() {
-
 		System.out.println("construct");
 
 		try {
 			while (this.download) {
 				while (FullDownloadWorker.downloadQueue.size() > 0) {
-					this.storeNextMessage();
+					this.storeNextMessage(this.outQueue);
 				}
 				// Wait a bit. If no messages then close downloader
 				Thread.sleep(5000);
@@ -170,7 +181,7 @@ public class FullDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	private NewsArticle convertHeaderStringToArticle(final String theInfo) throws UNISoNException {
+	NewsArticle convertHeaderStringToArticle(final String theInfo) throws UNISoNException {
 		final HashMap<String, String> headerFields = new HashMap<>();
 
 		final StringTokenizer st = new StringTokenizer(theInfo, "\n");
@@ -409,14 +420,12 @@ public class FullDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	private boolean storeNextMessage() throws UNISoNException {
+	private boolean storeNextMessage(final LinkedBlockingQueue<NewsArticle> queue)
+	        throws UNISoNException {
 		final DownloadRequest request = this.pollQueue();
 
 		final NewsArticle article = this.downloadArticle(request);
 		if (null != article) {
-			final LinkedBlockingQueue<NewsArticle> queue = UNISoNController.getInstance()
-			        .getQueue();
-
 			FullDownloadWorker.log.log("Got:" + article.getSubject() + " " + article.getFrom() + " "
 			        + article.getArticleId() + " to q: " + queue.size() + "[" + new Date());
 

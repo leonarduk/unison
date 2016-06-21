@@ -43,6 +43,7 @@ import uk.co.sleonard.unison.datahandling.DAO.ResultRow;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.input.FullDownloadWorker;
+import uk.co.sleonard.unison.input.NewsClientImpl;
 import uk.co.sleonard.unison.utils.StringUtils;
 import uk.co.sleonard.unison.utils.TreeNode;
 
@@ -420,13 +421,15 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 	 */
 	private void headersButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_headersButtonActionPerformed
 		try {
-			for (final Message message : UNISoNController.getInstance().getFilter()
-			        .getMessagesFilter()) {
+			final UNISoNController instance = UNISoNController.getInstance();
+			for (final Message message : instance.getFilter().getMessagesFilter()) {
 				// only download for messages that need it
 				if (null == message.getPoster().getLocation()) {
+					final String nntpHost = instance.getNntpHost();
 					FullDownloadWorker.addDownloadRequest(message.getUsenetMessageID(),
-					        DownloadMode.HEADERS,
-					        UNISoNController.getInstance().getDownloadPanel());
+					        DownloadMode.HEADERS, instance.getDownloadPanel(), nntpHost,
+					        instance.getQueue(), new NewsClientImpl(), instance.getNntpReader(),
+					        instance.getHelper(), instance.getSession());
 				}
 			}
 		}

@@ -73,6 +73,8 @@ public class UNISoNController {
 
 	private final DataHibernatorPool pool;
 
+	private NewsClient client;
+
 	/**
 	 * Creates the.
 	 *
@@ -123,8 +125,6 @@ public class UNISoNController {
 		this.pool = hibernatorPool;
 
 		this.messageQueue = new LinkedBlockingQueue<>();
-		this.headerDownloader = new HeaderDownloadWorker(this.messageQueue, new DownloaderImpl());
-		this.headerDownloader.initialise();
 		this.helper = new HibernateHelper(UNISoNController.gui);
 		try {
 			final Session hibernateSession = this.getHelper().getHibernateSession();
@@ -200,7 +200,8 @@ public class UNISoNController {
 	 * @return the queue
 	 */
 	public LinkedBlockingQueue<NewsArticle> getQueue() {
-		DataHibernatorWorker.startHibernators();
+		DataHibernatorWorker.startHibernators(this.getNntpReader(), this.helper, this.messageQueue,
+		        this.session);
 		return this.messageQueue;
 	}
 
@@ -253,14 +254,14 @@ public class UNISoNController {
 	public void quickDownload(final Set<NewsGroup> groups, final Date fromDate1, final Date toDate1,
 	        final UNISoNLogger log, final DownloadMode mode) throws UNISoNException {
 		final NewsGroupReader reader = this.getNntpReader();
-		final NewsClient client = reader.getClient();
+		this.client = reader.getClient();
 		final HeaderDownloadWorker headerDownloader2 = this.getHeaderDownloader();
 		final String nntpHost2 = this.getNntpHost();
 
 		for (final NewsGroup group : groups) {
 			try {
-				client.reconnect();
-				client.selectNewsgroup(group.getName());
+				this.client.reconnect();
+				this.client.selectNewsgroup(group.getName());
 				reader.setMessageCount(group.getArticleCount());
 				headerDownloader2.initialise(reader, group.getFirstMessage(),
 				        group.getLastMessage(), nntpHost2, group.getName(), log, mode, fromDate1,
@@ -288,11 +289,6 @@ public class UNISoNController {
 	 */
 	private void setButtonState(final boolean connectButtonState, final boolean downloadButtonState,
 	        final boolean pauseButtonState, final boolean cancelButtonState) {
-		// The command line version does not do this
-		// if (null != this.frame) {
-		// this.frame.setButtonState(connectButtonState, downloadButtonState,
-		// pauseButtonState, cancelButtonState);
-		// }
 	}
 
 	/**
@@ -334,6 +330,11 @@ public class UNISoNController {
 	 */
 	public void setNntpHost(final String nntpHost) {
 		this.nntpHost = nntpHost;
+		this.headerDownloader = new HeaderDownloadWorker(this.messageQueue,
+		        new DownloaderImpl(this.nntpHost, this.messageQueue, this.client, this.nntpReader,
+		                this.helper, this.session));
+		this.headerDownloader.initialise();
+
 	}
 
 	public void setNntpReader(final NewsGroupReader reader) {

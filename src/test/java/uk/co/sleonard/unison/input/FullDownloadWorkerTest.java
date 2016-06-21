@@ -1,23 +1,27 @@
 /**
  * FullDownloadWorkerTest
- * 
+ *
  * @author ${author}
  * @since 30-May-2016
  */
 package uk.co.sleonard.unison.input;
 
 import java.io.IOException;
+import java.io.Reader;
+import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 
-import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
+import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.utils.StringUtils;
@@ -32,7 +36,9 @@ import uk.co.sleonard.unison.utils.StringUtils;
 public class FullDownloadWorkerTest {
 
 	/** The worker. */
-	private FullDownloadWorker worker;
+	private FullDownloadWorker	worker;
+	private NewsClient			newsClient;
+	private LinkedBlockingQueue	outQueue;
 
 	/**
 	 * Setup.
@@ -42,21 +48,31 @@ public class FullDownloadWorkerTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		this.worker = new FullDownloadWorker(StringUtils.loadServerList()[0], null);
+		this.newsClient = Mockito.mock(NewsClient.class);
+		this.outQueue = new LinkedBlockingQueue<>();
+		this.worker = new FullDownloadWorker(StringUtils.loadServerList()[0], this.outQueue,
+		        this.newsClient);
 	}
 
 	/**
 	 * Test AddDownloadRequest.
 	 */
-	@Ignore
 	@Test
 	public void testAddDownloadRequest() {
 		try {
+			final String nntpHost = "testserver";
+			final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
+			queue.add(new NewsArticle("123", 1, new Date(), "eg@mail.com", "Lets talk", "", "alt"));
+			final NewsGroupReader reader = Mockito.mock(NewsGroupReader.class);
+			final HibernateHelper helper = Mockito.mock(HibernateHelper.class);
+			final Session session = Mockito.mock(Session.class);
 			FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
-			        DownloadMode.ALL, Mockito.mock(UNISoNLogger.class));
+			        DownloadMode.ALL, Mockito.mock(UNISoNLogger.class), nntpHost, queue,
+			        this.newsClient, reader, helper, session);
 			Assert.assertTrue(FullDownloadWorker.queueSize() >= 1);
 		}
 		catch (final UNISoNException e) {
+			e.printStackTrace();
 			Assert.fail("ERROR: " + e.getMessage());
 		}
 	}
@@ -70,7 +86,7 @@ public class FullDownloadWorkerTest {
 		FullDownloadWorker actual;
 		try {
 			actual = new FullDownloadWorker(StringUtils.loadServerList()[0],
-			        Mockito.mock(LinkedBlockingQueue.class));
+			        new LinkedBlockingQueue(), this.newsClient);
 			Assert.assertNotNull(actual);
 		}
 		catch (final UNISoNException e) {
@@ -78,11 +94,23 @@ public class FullDownloadWorkerTest {
 		}
 	}
 
+	@Ignore
+	@Test
+	public void testConvertHeaderStringToArticle() throws Exception {
+		final String theInfo = "";
+		this.worker.convertHeaderStringToArticle(theInfo);
+	}
+
 	/**
 	 * Test DownloadArticle.
+	 *
+	 * @throws IOException
 	 */
+	@Ignore
 	@Test
-	public void testDownloadArticle() {
+	public void testDownloadArticle() throws IOException {
+		final Reader value = Mockito.mock(Reader.class);
+		Mockito.when(this.newsClient.retrieveArticle(Matchers.anyString())).thenReturn(value);
 		final DownloadRequest request = new DownloadRequest(
 		        "<n9rgdm$g9b$3@news4.open-news-network.org>", DownloadMode.ALL);
 		try {
@@ -96,24 +124,6 @@ public class FullDownloadWorkerTest {
 	}
 
 	/**
-	 * Test DownloadFullMessage.
-	 */
-	@Ignore
-	@Test
-	public void testDownloadFullMessage() {
-		Assert.fail("Not yet implemented");
-	}
-
-	/**
-	 * Test finished.
-	 */
-	@Ignore
-	@Test
-	public void testFinished() {
-		Assert.fail("Not yet implemented");
-	}
-
-	/**
 	 * Test fullDownloadWorker.
 	 */
 	// 5 2006-04-28 <Baf4g.374$Lj1.115@fe10.lga> Re: Novel brain-penetrating
@@ -122,12 +132,12 @@ public class FullDownloadWorkerTest {
 	// <1146149630.481616.212070@i39g2000cwa.googlegroups.com>
 	// 4 mult-sclerosis 3 -1 -1 -1 -1 uk.people.support.mult-sclerosis true
 	@Test
-	@Ignore
 	public void testFullDownloadWorker() {
-		final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<NewsArticle>();
+		final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
 		FullDownloadWorker worker = null;
 		try {
-			worker = new FullDownloadWorker(UNISoNController.getInstance().getNntpHost(), queue);
+			final String nntpHost = "testserver";
+			worker = new FullDownloadWorker(nntpHost, queue, this.newsClient);
 		}
 		catch (final UNISoNException e1) {
 			e1.printStackTrace();
@@ -146,32 +156,4 @@ public class FullDownloadWorkerTest {
 			e.printStackTrace();
 		}
 	}
-
-	/**
-	 * Test QueueSize.
-	 */
-	@Ignore
-	@Test
-	public void testQueueSize() {
-		Assert.fail("Not yet implemented");
-	}
-
-	/**
-	 * Test ReaderToString.
-	 */
-	@Ignore
-	@Test
-	public void testReaderToString() {
-		Assert.fail("Not yet implemented");
-	}
-
-	/**
-	 * Test start downloaders.
-	 */
-	@Ignore
-	@Test
-	public void testStartDownloaders() {
-		Assert.fail("Not yet implemented");
-	}
-
 }

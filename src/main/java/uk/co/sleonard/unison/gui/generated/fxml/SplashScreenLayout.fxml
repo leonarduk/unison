@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="109.0" prefWidth="425.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uk.co.sleonard.unison.gui.SplashScreenFX">
+   <children>
+      <ProgressBar fx:id="progressBar" layoutX="34.0" layoutY="83.0" prefHeight="13.0" prefWidth="357.0" progress="0.0" />
+      <Label layoutX="28.0" layoutY="2.0" text="UNISoN">
+         <font>
+            <Font size="32.0" />
+         </font>
+      </Label>
+      <Label layoutX="30.0" layoutY="37.0" text="UseNet Incorporates Social Networks">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="329.0" layoutY="3.0" text="V0.0     June 2016" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="425.0" layoutX="206.0" layoutY="-148.0" rotate="90.0" strokeType="INSIDE" width="13.0">
+         <stroke>
+            <LinearGradient endX="1.0" endY="1.0" startX="0.21904761904761905">
+               <stops>
+                  <Stop color="#4194e0" />
+                  <Stop color="BLACK" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </stroke>
+      </Rectangle>
+   </children>
+</Pane>

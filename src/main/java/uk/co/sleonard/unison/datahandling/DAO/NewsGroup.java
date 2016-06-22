@@ -376,7 +376,7 @@ public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
 	 */
 	@Override
 	public String toString() {
-		return this.getFullName();
+		return this.getFullName() + "(" + this.getArticleCount() + ")";
 	}
 
 }

@@ -8,6 +8,8 @@ package uk.co.sleonard.unison;
 
 import java.util.Set;
 
+import javax.swing.ListModel;
+
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,9 +28,20 @@ public class UNISoNControllerIT {
 	}
 
 	@Test
+	public final void testGetAvailableGroupsModel() throws UNISoNException {
+		final Set<NewsGroup> groups = this.controller.listNewsgroups("",
+		        StringUtils.loadServerList()[0], this.controller.getNntpReader().getClient());
+		final ListModel<NewsGroup> model = this.controller.getAvailableGroupsModel(groups);
+		final NewsGroup firstGroup = model.getElementAt(0);
+		Assert.assertNotNull(firstGroup);
+		Assert.assertTrue(org.apache.commons.lang.StringUtils.isNotEmpty(firstGroup.getFullName()));
+
+	}
+
+	@Test
 	public final void testListnewsgroups() throws UNISoNException {
 		final Set<NewsGroup> groups = this.controller.listNewsgroups("",
-		        StringUtils.loadServerList()[0]);
+		        StringUtils.loadServerList()[0], this.controller.getNntpReader().getClient());
 		Assert.assertTrue(groups.size() > 0);
 		UNISoNControllerIT.logger.info("Found " + groups.size());
 

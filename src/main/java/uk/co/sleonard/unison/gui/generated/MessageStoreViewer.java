@@ -162,6 +162,8 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 	/** The topic root. */
 	private TreeNode topicRoot;
 
+	private final UNISoNController controller;
+
 	// End of variables declaration//GEN-END:variables
 	/**
 	 * Creates new form MessageStoreViewer.
@@ -176,10 +178,11 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 		this.subjectField.setPreferredSize(size);
 		this.senderField.setMaximumSize(size);
 		this.senderField.setPreferredSize(size);
+		this.controller = UNISoNController.getInstance();
 
 		try {
 
-			this.session = UNISoNController.getInstance().helper().getHibernateSession();
+			this.session = this.controller.helper().getHibernateSession();
 
 			// FIXME disable all non-workng parts
 			// headersButton.setVisible(false);
@@ -189,8 +192,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 			this.switchFilter(this.filterToggle.isSelected());
 		}
 		catch (final UNISoNException e) {
-			UNISoNController.getInstance();
-			UNISoNController.getGui().showAlert("Error :" + e.getMessage());
+			this.controller.getGui().showAlert("Error :" + e.getMessage());
 		}
 	}
 
@@ -248,8 +250,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 	@Override
 	public void alert(final String message) {
 		this.log(message);
-		UNISoNController.getInstance();
-		UNISoNController.getGui().showAlert(message);
+		this.controller.getGui().showAlert(message);
 	}
 
 	/**
@@ -350,8 +351,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 			this.switchFilter(this.filterToggle.isSelected());
 		}
 		catch (final UNISoNException e) {
-			UNISoNController.getInstance();
-			UNISoNController.getGui().showAlert("Error :" + e.getMessage());
+			this.controller.getGui().showAlert("Error :" + e.getMessage());
 		}
 	}// GEN-LAST:event_filterToggleActionPerformed
 

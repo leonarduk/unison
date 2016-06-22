@@ -65,6 +65,16 @@ public class UNISoNControllerTest {
 	}
 
 	@Test
+	public void testRequestDownload() throws Exception {
+		final String group = "group";
+		final String host = "host";
+		final StatusMonitor monitor = Mockito.mock(StatusMonitor.class);
+		final UNISoNLogger logger = new UNISoNCLI();
+		final NewsClient client = Mockito.mock(NewsClient.class);
+		this.controller.requestDownload(group, host, monitor, logger, client);
+	}
+
+	@Test
 	public final void testStopDownload() {
 		this.controller.stopDownload();
 	}

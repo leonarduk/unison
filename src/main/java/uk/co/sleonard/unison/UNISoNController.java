@@ -7,11 +7,15 @@
 package uk.co.sleonard.unison;
 
 import java.io.IOException;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.ListModel;
 
 import org.hibernate.Session;
 
@@ -29,6 +33,7 @@ import uk.co.sleonard.unison.input.NewsArticle;
 import uk.co.sleonard.unison.input.NewsClient;
 import uk.co.sleonard.unison.input.NewsGroupReader;
 import uk.co.sleonard.unison.utils.DownloaderImpl;
+import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
  * The Class UNISoNController.
@@ -42,7 +47,7 @@ public class UNISoNController {
 	/** The instance. */
 	private static UNISoNController instance;
 
-	private static UNISoNGUI gui;
+	private UNISoNGUI gui;
 
 	/** The message queue. */
 	private final LinkedBlockingQueue<NewsArticle> messageQueue;
@@ -90,14 +95,10 @@ public class UNISoNController {
 	private static UNISoNController create(final JFrame frame, final DataHibernatorPool pool)
 	        throws UNISoNException {
 		UNISoNController.instance = new UNISoNController(pool);
-		UNISoNController.setGui(new UNISoNGUI(frame));
+		UNISoNController.instance.setGui(new UNISoNGUI(frame));
 		return UNISoNController.instance;
 	}
 	// private static UNISoNController instance;
-
-	public static UNISoNGUI getGui() {
-		return UNISoNController.gui;
-	}
 
 	/**
 	 * Gets the single instance of UNISoNController.
@@ -106,10 +107,6 @@ public class UNISoNController {
 	 */
 	public static UNISoNController getInstance() {
 		return UNISoNController.instance;
-	}
-
-	private static void setGui(final UNISoNGUI gui) {
-		UNISoNController.gui = gui;
 	}
 
 	private UNISoNController() throws UNISoNException {
@@ -125,7 +122,7 @@ public class UNISoNController {
 		this.pool = hibernatorPool;
 
 		this.messageQueue = new LinkedBlockingQueue<>();
-		this.helper = new HibernateHelper(UNISoNController.gui);
+		this.helper = new HibernateHelper(this.gui);
 		try {
 			final Session hibernateSession = this.getHelper().getHibernateSession();
 			this.setSession(hibernateSession);
@@ -135,15 +132,78 @@ public class UNISoNController {
 			        new DataQuery(this.helper));
 		}
 		catch (final UNISoNException e) {
-			UNISoNController.getGui().showAlert("Error:" + e.getMessage());
+			this.getGui().showAlert("Error:" + e.getMessage());
 			throw e;
 		}
 
 		this.nntpReader = new NewsGroupReader(this);
 	}
 
+	public void cancel() {
+		this.getHeaderDownloader().fullstop();
+		this.stopDownload();
+	}
+
+	public void download(final StatusMonitor monitor, final Object[] items,
+	        final String fromDateString, final String toDateString, final UNISoNLogger logger,
+	        final boolean locationSelected, final boolean getTextSelected) {
+		monitor.downloadEnabled(false);
+
+		final Set<NewsGroup> groups = new HashSet<>();
+		for (final Object item : items) {
+			groups.add((NewsGroup) item);
+		}
+		if (groups.size() > 0) {
+			try {
+				logger.log("Download : " + groups);
+				final Date fromDate = StringUtils.stringToDate(fromDateString);
+				final Date toDate = StringUtils.stringToDate(toDateString);
+
+				DownloadMode mode;
+				if (getTextSelected) {
+					mode = DownloadMode.ALL;
+				}
+				else {
+					if (locationSelected) {
+						mode = DownloadMode.HEADERS;
+					}
+					else {
+						mode = DownloadMode.BASIC;
+					}
+				}
+				this.quickDownload(groups, fromDate, toDate, logger, mode);
+
+				logger.log("Done.");
+			}
+			catch (final UNISoNException e) {
+				logger.alert("Failed to download. Check your internet connection" + e.getMessage());
+				monitor.downloadEnabled(true);
+			}
+			catch (final DateTimeParseException e) {
+				logger.alert("Failed to parse date : " + e.getMessage());
+				monitor.downloadEnabled(true);
+			}
+		}
+	}
+
 	public UNISoNAnalysis getAnalysis() {
 		return this.analysis;
+	}
+
+	/**
+	 * Gets the available groups model.
+	 *
+	 * @return the available groups model
+	 */
+	public ListModel<NewsGroup> getAvailableGroupsModel(final Set<NewsGroup> availableGroups2) {
+		final DefaultListModel<NewsGroup> model = new DefaultListModel<>();
+
+		if (null != availableGroups2) {
+			for (final NewsGroup next : availableGroups2) {
+				model.addElement(next);
+			}
+		}
+		return model;
 	}
 
 	public UNISoNDatabase getDatabase() {
@@ -161,6 +221,10 @@ public class UNISoNController {
 
 	public NewsGroupFilter getFilter() {
 		return this.filter;
+	}
+
+	public UNISoNGUI getGui() {
+		return this.gui;
 	}
 
 	/**
@@ -229,10 +293,10 @@ public class UNISoNController {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	public Set<NewsGroup> listNewsgroups(final String searchString, final String host)
-	        throws UNISoNException {
+	public Set<NewsGroup> listNewsgroups(final String searchString, final String host,
+	        final NewsClient client2) throws UNISoNException {
 		this.setNntpHost(host);
-		return this.getNntpReader().getClient().listNewsGroups(searchString, host);
+		return client2.listNewsGroups(searchString, host);
 	}
 
 	/**
@@ -275,6 +339,31 @@ public class UNISoNController {
 		}
 	}
 
+	public void requestDownload(final String group, final String host, final StatusMonitor monitor,
+	        final UNISoNLogger logger, final NewsClient client2) {
+		this.setNntpHost(host);
+		logger.log("Find groups matching : " + group + " on " + host);
+		monitor.downloadEnabled(false);
+
+		if (null != group) {
+			try {
+				final Set<NewsGroup> availableGroups2 = this.listNewsgroups(group, host, client2);
+				if ((null == availableGroups2) || (availableGroups2.size() == 0)) {
+					logger.alert("No groups found for string : " + group + " on " + host
+					        + ".\nPerhaps another host?");
+
+				}
+				else {
+					monitor.downloadEnabled(true);
+				}
+				monitor.updateAvailableGroups(availableGroups2);
+			}
+			catch (final UNISoNException e) {
+				logger.alert("Problem downloading: " + e.getMessage());
+			}
+		}
+	}
+
 	/**
 	 * Sets the button state.
 	 *
@@ -309,6 +398,10 @@ public class UNISoNController {
 	 */
 	public void setDownloadPanel(final UNISoNLogger downloadPanel) {
 		this.downloadPanel = downloadPanel;
+	}
+
+	private void setGui(final UNISoNGUI gui) {
+		this.gui = gui;
 	}
 
 	public void setHeaderDownloader(final HeaderDownloadWorker downloadWorker) {

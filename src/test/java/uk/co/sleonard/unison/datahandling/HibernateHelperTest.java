@@ -3,16 +3,13 @@ package uk.co.sleonard.unison.datahandling;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +28,6 @@ import org.mockito.Matchers;
 import org.powermock.api.mockito.PowerMockito;
 
 import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.datahandling.DAO.IpAddress;
 import uk.co.sleonard.unison.datahandling.DAO.Location;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
@@ -250,32 +246,6 @@ String postingHost = "testserver";
 NewsArticle article = new NewsArticle(articleID, articleNumber, date, from, subject, references, content, newsgroups, postingHost); 
 this.helper.hibernateData(article, session);	}
 
-	/**
-	 * Test run query.
-	 */
-	@Ignore
-	@Test
-	public void testRunQueryQuery() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test run query.
-	 */
-	@Ignore
-	@Test
-	public void testRunQueryStringSession() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test run sql query.
-	 */
-	@Ignore
-	@Test
-	public void testRunSQLQuery() {
-		fail("Not yet implemented");
-	}
 
 	/**
 	 * Test store newsgroups.
@@ -320,7 +290,6 @@ this.helper.hibernateData(article, session);	}
 	 * Test data (old).
 	 */
 	public void testData() throws Exception {
-		Session session = null; // TODO mock this and add expected return
 		String query = "SELECT  n.fullname, count(*) as total"
 		        + " FROM newsgroup n, newsgroup_topic as nt, message m "
 		        + " where nt.topic_id = m.topic_id " + " and n.newsgroup_id = nt.newsgroup_id "

@@ -237,9 +237,11 @@ public class NewsGroupTest {
 	 */
 	@Test
 	public void testToString() {
-		final String expected = new String("fullname");
+		final String expected = new String("fullname(10)");
 		final NewsGroup actual = new NewsGroup();
 		actual.setFullName("fullname");
+		actual.setLastMessage(10);
+		actual.setArticleCount(10);
 		Assert.assertEquals(expected, actual.toString());
 	}
 

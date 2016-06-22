@@ -164,7 +164,6 @@ public class FullDownloadWorker extends SwingWorker {
 			return "Interrupted";
 		}
 		catch (final UNISoNException e) {
-			UNISoNController.getInstance();
 			UNISoNController.getGui().showAlert("Error in download:" + e);
 			e.printStackTrace();
 			return "FAIL";

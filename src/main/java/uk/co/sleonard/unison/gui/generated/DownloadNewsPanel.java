@@ -142,6 +142,7 @@ class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogger, Obse
 
 		this.initComponents();
 
+		this.controller.setNntpHost(StringUtils.loadServerList()[0]);
 		this.controller.getHeaderDownloader().addObserver(this);
 
 		this.controller.setNntpHost(this.hostCombo.getSelectedItem().toString());

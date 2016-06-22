@@ -6,7 +6,6 @@
  */
 package uk.co.sleonard.unison.gui;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -37,15 +36,6 @@ public class UNISoNGUI {
 		        JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options,
 		        defaultOption);
 		return response;
-	}
-
-	/**
-	 *
-	 * @return
-	 */
-	public DefaultListModel<?> getCountriesFilter() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/**

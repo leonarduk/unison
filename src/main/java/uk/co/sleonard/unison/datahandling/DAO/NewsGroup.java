@@ -259,6 +259,10 @@ public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
 		return this.lastNode;
 	}
 
+	public void setArticleCount(final int i) {
+		this.estimatedArticleCount = i;
+	}
+
 	/**
 	 * Sets the first message.
 	 *
@@ -376,7 +380,7 @@ public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
 	 */
 	@Override
 	public String toString() {
-		return this.getFullName();
+		return this.getFullName() + "(" + this.getArticleCount() + ")";
 	}
 
 }

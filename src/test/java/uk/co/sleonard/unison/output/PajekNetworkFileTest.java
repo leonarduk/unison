@@ -16,8 +16,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.co.sleonard.unison.UNISoNException;
-
 /**
  * The Class PajekNetworkFile.
  *
@@ -97,19 +95,6 @@ public class PajekNetworkFileTest {
 	public void testGetFileSuffix() {
 		final String expected = ".net";
 		Assert.assertEquals(expected, this.file.getFileSuffix());
-	}
-
-	/**
-	 * test getPreviewPanel Ignored by Error (No X11 DISPLAY) in Travis CI.
-	 */
-	@Test
-	public void testGetPreviewPanel() {
-		try {
-			Assert.assertNotNull(this.file.getPreviewPanel());
-		}
-		catch (final UNISoNException e) {
-			Assert.fail("ERROR : " + e.getMessage());
-		}
 	}
 
 	/**

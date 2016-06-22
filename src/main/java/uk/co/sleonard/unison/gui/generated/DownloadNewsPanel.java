@@ -6,20 +6,13 @@
 
 package uk.co.sleonard.unison.gui.generated;
 
-import java.time.format.DateTimeParseException;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
-import javax.swing.DefaultListModel;
-import javax.swing.ListModel;
-
+import uk.co.sleonard.unison.StatusMonitor;
 import uk.co.sleonard.unison.UNISoNController;
-import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
-import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.input.DataHibernatorWorker;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
@@ -33,7 +26,8 @@ import uk.co.sleonard.unison.utils.StringUtils;
  *
  */
 @SuppressWarnings("rawtypes")
-class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogger, Observer {
+class DownloadNewsPanel extends javax.swing.JPanel
+        implements UNISoNLogger, Observer, StatusMonitor {
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 6581138636992116397L;
@@ -162,6 +156,7 @@ class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogger, Obse
 		this.getTextCheck.setVisible(false);
 		this.downloadProgressBar.setVisible(false);
 		this.downloadProgressLabel.setVisible(false);
+
 	}
 
 	/*
@@ -172,8 +167,7 @@ class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogger, Obse
 	@Override
 	public void alert(final String message) {
 		this.log(message);
-		UNISoNController.getInstance();
-		UNISoNController.getGui().showAlert(message);
+		this.controller.getGui().showAlert(message);
 	}
 
 	/**
@@ -193,8 +187,7 @@ class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogger, Obse
 	 *            the evt
 	 */
 	private void cancelButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cancelButtonActionPerformed
-		this.controller.getHeaderDownloader().fullstop();
-		this.controller.stopDownload();
+		this.controller.cancel();
 	}// GEN-LAST:event_cancelButtonActionPerformed
 
 	/**
@@ -205,43 +198,9 @@ class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogger, Obse
 	 */
 	@SuppressWarnings("deprecation")
 	private void downloadButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_downloadButtonActionPerformed
-		this.downloadEnabled(false);
-
-		final Object[] items = this.availableNewsgroups.getSelectedValues();
-		final Set<NewsGroup> groups = new HashSet<>();
-		for (final Object item : items) {
-			groups.add((NewsGroup) item);
-		}
-		if (groups.size() > 0) {
-			try {
-				this.log("Download : " + groups);
-
-				final Date fromDate = StringUtils.stringToDate(this.fromDateField.getText());
-				final Date toDate = StringUtils.stringToDate(this.toDateField.getText());
-
-				DownloadMode mode;
-				if (this.getTextCheck.isSelected()) {
-					mode = DownloadMode.ALL;
-				}
-				else if (this.getLocationCheck.isSelected()) {
-					mode = DownloadMode.HEADERS;
-				}
-				else {
-					mode = DownloadMode.BASIC;
-				}
-				this.controller.quickDownload(groups, fromDate, toDate, this, mode);
-
-				this.log("Done.");
-			}
-			catch (final UNISoNException e) {
-				this.alert("Failed to download. Check your internet connection" + e.getMessage());
-				this.downloadEnabled(true);
-			}
-			catch (final DateTimeParseException e) {
-				this.alert("Failed to parse date : " + e.getMessage());
-				this.downloadEnabled(true);
-			}
-		}
+		this.controller.download(this, this.availableNewsgroups.getSelectedValues(),
+		        this.fromDateField.getText(), this.toDateField.getText(), this,
+		        this.getLocationCheck.isSelected(), this.getTextCheck.isSelected());
 	}// GEN-LAST:event_downloadButtonActionPerformed
 
 	/**
@@ -250,7 +209,8 @@ class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogger, Obse
 	 * @param enabled
 	 *            the enabled
 	 */
-	private void downloadEnabled(final boolean enabled) {
+	@Override
+	public void downloadEnabled(final boolean enabled) {
 		this.downloadButton.setEnabled(enabled);
 		this.fromDateLabel.setEnabled(enabled);
 		this.toDateLabel.setEnabled(enabled);
@@ -271,30 +231,9 @@ class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogger, Obse
 	 *            the evt
 	 */
 	private void findButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_findButtonActionPerformed
-		final UNISoNController unisonController = UNISoNController.getInstance();
-		final String host = this.hostCombo.getSelectedItem().toString().trim();
-		this.controller.setNntpHost(host);
-		final String group = this.newsgroupField.getText();
-		this.log("Find groups matching : " + group + " on " + this.controller.getNntpHost());
-		this.downloadEnabled(false);
-		if (null != group) {
-			try {
-				this.availableGroups = unisonController.listNewsgroups(group, host);
-			}
-			catch (final UNISoNException e) {
-				this.alert("Problem downloading: " + e.getMessage());
-			}
-			if ((null == this.availableGroups) || (this.availableGroups.size() == 0)) {
-				this.alert("No groups found for string : " + group + " on "
-				        + this.controller.getNntpHost() + ".\nPerhaps another host?");
-
-			}
-			else {
-				this.downloadEnabled(true);
-			}
-			this.availableNewsgroups.setModel(this.getAvailableGroupsModel(this.availableGroups));
-		}
-
+		this.controller.requestDownload(this.newsgroupField.getText(),
+		        this.hostCombo.getSelectedItem().toString().trim(), this, this,
+		        this.controller.getNntpReader().getClient());
 	}// GEN-LAST:event_findButtonActionPerformed
 
 	/**
@@ -306,22 +245,6 @@ class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogger, Obse
 	void formMousePressed(final java.awt.event.MouseEvent evt) {// GEN-FIRST:event_formMousePressed
 		// TODO add your handling code here:
 	}// GEN-LAST:event_formMousePressed
-
-	/**
-	 * Gets the available groups model.
-	 *
-	 * @return the available groups model
-	 */
-	ListModel<NewsGroup> getAvailableGroupsModel(final Set<NewsGroup> availableGroups2) {
-		final DefaultListModel<NewsGroup> model = new DefaultListModel<>();
-
-		if (null != availableGroups2) {
-			for (final NewsGroup next : availableGroups2) {
-				model.addElement(next);
-			}
-		}
-		return model;
-	}
 
 	/**
 	 * This method is called from within the constructor to initialize the form. WARNING: Do NOT
@@ -420,7 +343,7 @@ class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogger, Obse
 		this.hostCombo.setToolTipText(
 		        "Look at http://freeusenetnews.com/newspage.html?sortby=articles for other hosts if these are broken. Can enter name here.");
 
-		this.availableNewsgroups.setModel(this.getAvailableGroupsModel(this.availableGroups));
+		this.updateAvailableGroups(this.availableGroups);
 		this.availableNewsgroups.setToolTipText(
 		        "The number in brackets is an estimate (provided by the server) which is likely to be higher than actual number of messages as many messages are deleted.");
 		this.availableNewsgroups.addListSelectionListener(
@@ -625,5 +548,11 @@ class DownloadNewsPanel extends javax.swing.JPanel implements UNISoNLogger, Obse
 			// } else if (observable instanceof UNISoNController) {
 			// UNISoNController controller = (UNISoNController) observable;
 		}
+	}
+
+	@Override
+	public void updateAvailableGroups(final Set<NewsGroup> availableGroups2) {
+		this.availableNewsgroups
+		        .setModel(this.controller.getAvailableGroupsModel(availableGroups2));
 	}
 }

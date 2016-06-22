@@ -101,10 +101,10 @@ public class UNISoNCLI implements UNISoNLogger {
 	 *             the UNI so n exception
 	 */
 	private void downloadAll(final String searchString, final String host) throws UNISoNException {
-		final Set<NewsGroup> listNewsgroups = UNISoNController.getInstance()
-		        .listNewsgroups(searchString, host);
-		UNISoNController.getInstance().quickDownload(listNewsgroups, null, null, this,
-		        DownloadMode.ALL);
+		final UNISoNController instance = UNISoNController.getInstance();
+		final Set<NewsGroup> listNewsgroups = instance.listNewsgroups(searchString, host,
+		        instance.getNntpReader().getClient());
+		instance.quickDownload(listNewsgroups, null, null, this, DownloadMode.ALL);
 	}
 
 	/**
@@ -159,8 +159,9 @@ public class UNISoNCLI implements UNISoNLogger {
 	 */
 	private void listNewsgroups(final String searchString, final String host)
 	        throws UNISoNException {
-		final Set<NewsGroup> listNewsgroups = UNISoNController.getInstance()
-		        .listNewsgroups(searchString, host);
+		final UNISoNController instance = UNISoNController.getInstance();
+		final Set<NewsGroup> listNewsgroups = instance.listNewsgroups(searchString, host,
+		        instance.getNntpReader().getClient());
 		Assert.assertTrue(listNewsgroups.size() > 0);
 	}
 
@@ -191,14 +192,14 @@ public class UNISoNCLI implements UNISoNLogger {
 	private void quickDownload(final String arg, final Date toDate, final Date fromDate,
 	        final String host) throws UNISoNException {
 		UNISoNController.create(null);
-		final Set<NewsGroup> listNewsgroups = UNISoNController.getInstance().listNewsgroups(arg,
-		        host);
+		final UNISoNController instance = UNISoNController.getInstance();
+		final Set<NewsGroup> listNewsgroups = instance.listNewsgroups(arg, host,
+		        instance.getNntpReader().getClient());
 		// HibernateHelper.generateSchema();
 
 		try {
 			UNISoNController.create(null);
-			UNISoNController.getInstance().quickDownload(listNewsgroups, fromDate, toDate, this,
-			        DownloadMode.BASIC);
+			instance.quickDownload(listNewsgroups, fromDate, toDate, this, DownloadMode.BASIC);
 		}
 		catch (final UNISoNException e) {
 			UNISoNCLI.logger.fatal("Error downloading messages", e);

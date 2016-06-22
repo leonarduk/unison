@@ -109,6 +109,8 @@ class PajekPanel extends javax.swing.JPanel implements Observer {
 	/** The pajek header. */
 	private final Vector<String> pajekHeader;
 
+	private UNISoNController controller;
+
 	/**
 	 * The main method.
 	 *
@@ -141,7 +143,8 @@ class PajekPanel extends javax.swing.JPanel implements Observer {
 		try {
 
 			this.frame = frame;
-			this.session = UNISoNController.getInstance().helper().getHibernateSession();
+			this.controller = UNISoNController.getInstance();
+			this.session = this.controller.helper().getHibernateSession();
 			this.initComponents();
 
 			// FIXME disable non-working parts
@@ -156,8 +159,7 @@ class PajekPanel extends javax.swing.JPanel implements Observer {
 			this.refreshPajekMatrixTable();
 		}
 		catch (final UNISoNException e) {
-			UNISoNController.getInstance();
-			UNISoNController.getGui().showAlert("Error: " + e.getMessage());
+			this.controller.getGui().showAlert("Error: " + e.getMessage());
 		}
 
 	}
@@ -591,8 +593,7 @@ class PajekPanel extends javax.swing.JPanel implements Observer {
 	 *            the string
 	 */
 	private void showStatus(final String string) {
-		UNISoNController.getInstance();
-		UNISoNController.getGui().showStatus(string);
+		this.controller.getGui().showStatus(string);
 	}
 
 	/*

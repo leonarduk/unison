@@ -75,6 +75,7 @@ public class NewsClientIT {
 		final NewsClient client = new NewsClientImpl();
 		final String[] servers = StringUtils.loadServerList();
 		for (final String hostname : servers) {
+			NewsClientIT.logger.info("Try " + hostname);
 			client.connect(hostname, 119);
 		}
 	}

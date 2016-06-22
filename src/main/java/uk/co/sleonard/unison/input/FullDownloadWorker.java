@@ -54,6 +54,8 @@ public class FullDownloadWorker extends SwingWorker {
 
 	private final LinkedBlockingQueue<NewsArticle> outQueue;
 
+	private final UNISoNController controller;
+
 	/**
 	 * Adds the download request.
 	 *
@@ -128,6 +130,7 @@ public class FullDownloadWorker extends SwingWorker {
 		super("FullDownload");
 		this.outQueue = outQueue;
 		this.client = newsClient;
+		this.controller = UNISoNController.getInstance();
 		try {
 			this.client.connect(server);
 		}
@@ -164,7 +167,7 @@ public class FullDownloadWorker extends SwingWorker {
 			return "Interrupted";
 		}
 		catch (final UNISoNException e) {
-			UNISoNController.getGui().showAlert("Error in download:" + e);
+			this.controller.getGui().showAlert("Error in download:" + e);
 			e.printStackTrace();
 			return "FAIL";
 		}

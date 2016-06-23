@@ -6,8 +6,10 @@
  */
 package uk.co.sleonard.unison;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
@@ -39,7 +41,7 @@ public class UNISoNAnalysisTest {
 	public void setUp() throws Exception {
 		this.session = Mockito.mock(Session.class);
 		final UNISoNGUI gui = Mockito.mock(UNISoNGUI.class);
-		this.helper = new HibernateHelper(gui);
+		this.helper = Mockito.mock(HibernateHelper.class);
 		this.filter = Mockito.mock(NewsGroupFilter.class);
 		this.analysis = new UNISoNAnalysis(this.filter, this.session, this.helper);
 
@@ -70,6 +72,19 @@ public class UNISoNAnalysisTest {
 	@Test
 	public final void testGetTopGroupsVector() {
 		final SQLQuery query = Mockito.mock(SQLQuery.class);
+		Mockito.when(this.session.createSQLQuery(Matchers.anyString())).thenReturn(query);
+		this.analysis.getTopGroupsVector();
+	}
+
+	@Test
+	public final void testGetTopGroupsVectorResults() {
+		final SQLQuery query = Mockito.mock(SQLQuery.class);
+		final List value = new ArrayList<>();
+		value.add(new Object[] { "name", Integer.valueOf(1) });
+		Mockito.when(query.list()).thenReturn(value);
+		final Vector<NewsGroup> posters = new Vector<>();
+		Mockito.when(this.helper.runQuery(Matchers.anyString(), Matchers.any(Session.class),
+		        Matchers.any(Class.class))).thenReturn(posters);
 		Mockito.when(this.session.createSQLQuery(Matchers.anyString())).thenReturn(query);
 		this.analysis.getTopGroupsVector();
 	}

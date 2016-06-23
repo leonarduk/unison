@@ -267,7 +267,7 @@ public class FullDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	private NewsArticle convertReaderToArticle(final Reader reader) throws UNISoNException {
+	NewsArticle convertReaderToArticle(final Reader reader) throws UNISoNException {
 		if (reader != null) {
 			final String theInfo = this.readerToString(reader);
 			return this.convertHeaderStringToArticle(theInfo);

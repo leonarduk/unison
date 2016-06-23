@@ -26,7 +26,6 @@ import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.gui.UNISoNGUI;
 import uk.co.sleonard.unison.input.DataHibernatorPool;
-import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
 import uk.co.sleonard.unison.input.DataHibernatorWorker;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
 import uk.co.sleonard.unison.input.NewsArticle;
@@ -80,19 +79,7 @@ public class UNISoNController {
 
 	private NewsClient client;
 
-	/**
-	 * Creates the.
-	 *
-	 * @param frame
-	 *            the frame
-	 * @return the UNI so n controller
-	 * @throws UNISoNException
-	 */
-	public static UNISoNController create(final JFrame frame) throws UNISoNException {
-		return UNISoNController.create(frame, new DataHibernatorPoolImpl());
-	}
-
-	private static UNISoNController create(final JFrame frame, final DataHibernatorPool pool)
+	public static UNISoNController create(final JFrame frame, final DataHibernatorPool pool)
 	        throws UNISoNException {
 		UNISoNController.instance = new UNISoNController(pool);
 		UNISoNController.instance.setGui(new UNISoNGUI(frame));
@@ -107,10 +94,6 @@ public class UNISoNController {
 	 */
 	public static UNISoNController getInstance() {
 		return UNISoNController.instance;
-	}
-
-	private UNISoNController() throws UNISoNException {
-		this(new DataHibernatorPoolImpl());
 	}
 
 	/**
@@ -144,7 +127,7 @@ public class UNISoNController {
 		this.stopDownload();
 	}
 
-	public void download(final StatusMonitor monitor, final Object[] items,
+	public void download(final StatusMonitor monitor, final NewsGroup[] items,
 	        final String fromDateString, final String toDateString, final UNISoNLogger logger,
 	        final boolean locationSelected, final boolean getTextSelected) {
 		monitor.downloadEnabled(false);

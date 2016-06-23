@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
+import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
 import uk.co.sleonard.unison.utils.StringUtils;
 
 public class UNISoNControllerIT {
@@ -24,7 +25,7 @@ public class UNISoNControllerIT {
 
 	@Before
 	public void setUp() throws Exception {
-		this.controller = UNISoNController.create(null);
+		this.controller = UNISoNController.create(null, new DataHibernatorPoolImpl());
 	}
 
 	@Test

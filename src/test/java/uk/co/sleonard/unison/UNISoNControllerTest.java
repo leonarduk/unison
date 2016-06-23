@@ -12,6 +12,7 @@ import java.util.Set;
 
 import javax.swing.JFrame;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -20,6 +21,7 @@ import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
+import uk.co.sleonard.unison.input.DataHibernatorPool;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
 import uk.co.sleonard.unison.input.NewsClient;
 import uk.co.sleonard.unison.input.NewsGroupReader;
@@ -27,12 +29,91 @@ import uk.co.sleonard.unison.input.UNISoNCLI;
 
 public class UNISoNControllerTest {
 
-	private UNISoNController controller;
+	private UNISoNController	controller;
+	private NewsGroupReader		reader;
+	private NewsClient			client;
+
+	public void doDownload(final boolean locationSelected, final boolean getTextSelected) {
+		final NewsGroup[] items = { new NewsGroup("alt,news", null, new HashSet<>(),
+		        new HashSet<>(), 1, 2, 1, 2, "alt.news", true) };
+		final String fromDateString = "2016-06-06";
+		this.doDownload(locationSelected, getTextSelected, items, fromDateString);
+	}
+
+	public void doDownload(final boolean locationSelected, final boolean getTextSelected,
+	        final NewsGroup[] items, final String fromDateString) {
+		final StatusMonitor monitor = Mockito.mock(StatusMonitor.class);
+		final UNISoNLogger logger = new UNISoNCLI();
+		final String toDateString = "2016-09-09";
+		this.controller.download(monitor, items, fromDateString, toDateString, logger,
+		        locationSelected, getTextSelected);
+	}
 
 	@Before
 	public void setUp() throws Exception {
 		final JFrame frame = Mockito.mock(JFrame.class);
-		this.controller = UNISoNController.create(frame);
+		this.controller = UNISoNController.create(frame, Mockito.mock(DataHibernatorPool.class));
+		this.controller.setNntpHost("testNNTP");
+		this.reader = Mockito.mock(NewsGroupReader.class);
+		this.client = Mockito.mock(NewsClient.class);
+		final HeaderDownloadWorker downloadWorker = Mockito.mock(HeaderDownloadWorker.class);
+		this.controller.setHeaderDownloader(downloadWorker);
+		Mockito.when(this.reader.getClient()).thenReturn(this.client);
+		this.controller.setNntpReader(this.reader);
+
+	}
+
+	@Test
+	public void testAvailableGroupsModel() throws Exception {
+		Assert.assertEquals(0, this.controller.getAvailableGroupsModel(null).getSize());
+		final Set<NewsGroup> availableGroups2 = new HashSet<>();
+		Assert.assertEquals(0, this.controller.getAvailableGroupsModel(availableGroups2).getSize());
+		availableGroups2.add(Mockito.mock(NewsGroup.class));
+		Assert.assertEquals(1, this.controller.getAvailableGroupsModel(availableGroups2).getSize());
+	}
+
+	@Test
+	public final void testDownload() {
+		final boolean locationSelected = true;
+		final boolean getTextSelected = true;
+		this.doDownload(locationSelected, getTextSelected);
+	}
+
+	@Test
+	public final void testDownloadEmptyGroup() {
+		final boolean locationSelected = true;
+		final boolean getTextSelected = true;
+		this.doDownload(locationSelected, getTextSelected, new NewsGroup[] {}, "2016-06-06");
+	}
+
+	@Test
+	public final void testDownloadException() throws UNISoNException {
+		final boolean locationSelected = true;
+		final boolean getTextSelected = true;
+		Mockito.doThrow(new UNISoNException("test")).when(this.client).reconnect();
+		this.doDownload(locationSelected, getTextSelected);
+	}
+
+	@Test
+	public final void testDownloadInvalidDate() {
+		final boolean locationSelected = true;
+		final boolean getTextSelected = true;
+		this.doDownload(locationSelected, getTextSelected,
+		        new NewsGroup[] { Mockito.mock(NewsGroup.class) }, "Friday next week");
+	}
+
+	@Test
+	public final void testDownloadTextLocationNotSelected() {
+		final boolean locationSelected = false;
+		final boolean getTextSelected = false;
+		this.doDownload(locationSelected, getTextSelected);
+	}
+
+	@Test
+	public final void testDownloadTextNotSelected() {
+		final boolean locationSelected = true;
+		final boolean getTextSelected = false;
+		this.doDownload(locationSelected, getTextSelected);
 	}
 
 	@Test
@@ -53,13 +134,6 @@ public class UNISoNControllerTest {
 		final Date toDate1 = null;
 		final UNISoNLogger log = new UNISoNCLI();
 		final DownloadMode mode = DownloadMode.ALL;
-		this.controller.setNntpHost("testNNTP");
-		final NewsGroupReader reader = Mockito.mock(NewsGroupReader.class);
-		final NewsClient client = Mockito.mock(NewsClient.class);
-		final HeaderDownloadWorker downloadWorker = Mockito.mock(HeaderDownloadWorker.class);
-		this.controller.setHeaderDownloader(downloadWorker);
-		Mockito.when(reader.getClient()).thenReturn(client);
-		this.controller.setNntpReader(reader);
 		this.controller.quickDownload(groups, fromDate1, toDate1, log, mode);
 
 	}

@@ -198,7 +198,7 @@ class DownloadNewsPanel extends javax.swing.JPanel
 	 */
 	@SuppressWarnings("deprecation")
 	private void downloadButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_downloadButtonActionPerformed
-		this.controller.download(this, this.availableNewsgroups.getSelectedValues(),
+		this.controller.download(this, (NewsGroup[]) this.availableNewsgroups.getSelectedValues(),
 		        this.fromDateField.getText(), this.toDateField.getText(), this,
 		        this.getLocationCheck.isSelected(), this.getTextCheck.isSelected());
 	}// GEN-LAST:event_downloadButtonActionPerformed

@@ -10,6 +10,8 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.sql.BatchUpdateException;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -20,11 +22,12 @@ import org.hibernate.NonUniqueResultException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.Transaction;import org.hibernate.exception.GenericJDBCException;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Matchers;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 
 import uk.co.sleonard.unison.UNISoNException;
@@ -245,6 +248,23 @@ String newsgroups = "alt.interesting";
 String postingHost = "testserver";
 NewsArticle article = new NewsArticle(articleID, articleNumber, date, from, subject, references, content, newsgroups, postingHost); 
 this.helper.hibernateData(article, session);	}
+
+	@Test
+	public void testHibernateDataGenericJDBCException() throws UNISoNException {
+String articleID = "124A";
+int articleNumber = 4567;
+Date date = new Date();
+String from = "test@email.com";
+String subject = "Interesting chat";
+String references = "";
+String content = "This is interesting";
+String newsgroups = "alt.interesting"; 
+String postingHost = "testserver";
+GenericJDBCException genericJDBCException = new GenericJDBCException("test", new BatchUpdateException(new int[]{1,2},new SQLException()), "select");
+Mockito.when(this.session.beginTransaction()).thenThrow(genericJDBCException);
+NewsArticle article = new NewsArticle(articleID, articleNumber, date, from, subject, references, content, newsgroups, postingHost); 
+this.helper.hibernateData(article, session);	}
+
 
 
 	/**

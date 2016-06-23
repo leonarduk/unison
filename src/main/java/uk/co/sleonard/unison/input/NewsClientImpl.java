@@ -29,7 +29,7 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
  * @since v1.0.0
  *
  */
-public class NewsClientImpl extends NNTPClient implements NewsClient {
+public class NewsClientImpl implements NewsClient {
 
 	/** The logger. */
 	private static Logger	logger	= Logger.getLogger("NewsClient");
@@ -37,12 +37,18 @@ public class NewsClientImpl extends NNTPClient implements NewsClient {
 	private String			host;
 
 	/** The message count. */
-	private int messageCount;
+	private int					messageCount;
+	private final NNTPClient	client;
 
 	/**
 	 * Instantiates a new news client.
 	 */
 	public NewsClientImpl() {
+		this(new NNTPClient());
+	}
+
+	public NewsClientImpl(final NNTPClient nntpClient) {
+		this.client = nntpClient;
 	}
 
 	/**
@@ -68,7 +74,7 @@ public class NewsClientImpl extends NNTPClient implements NewsClient {
 
 	@Override
 	public void connect(final String host1, final int port) throws SocketException, IOException {
-		super.connect(host1, port);
+		this.client.connect(host1, port);
 	}
 
 	/**
@@ -95,7 +101,7 @@ public class NewsClientImpl extends NNTPClient implements NewsClient {
 
 				// See if we need to authenticate
 				if (username != null) {
-					this.authenticate(username, password);
+					this.client.authenticate(username, password);
 				}
 				this.host = server;
 			}
@@ -143,8 +149,8 @@ public class NewsClientImpl extends NNTPClient implements NewsClient {
 	@Override
 	public void disconnect() {
 		try {
-			this.logout();
-			this.disconnect();
+			this.client.logout();
+			this.client.disconnect();
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -159,6 +165,12 @@ public class NewsClientImpl extends NNTPClient implements NewsClient {
 	@Override
 	public int getMessageCount() {
 		return this.messageCount;
+	}
+
+	@Override
+	public boolean isConnected() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	/**
@@ -182,7 +194,7 @@ public class NewsClientImpl extends NNTPClient implements NewsClient {
 		try {
 			this.connect(nntpserver);
 
-			final NewsgroupInfo[] groups = this.listNewsgroups(wildcard.toLowerCase());
+			final NewsgroupInfo[] groups = this.client.listNewsgroups(wildcard.toLowerCase());
 			NewsClientImpl.logger.info("Number of Groups matching " + wildcard + " on " + nntpserver
 			        + ": " + (null != groups ? groups.length : 0));
 			if (null != groups) {
@@ -199,6 +211,12 @@ public class NewsClientImpl extends NNTPClient implements NewsClient {
 		}
 
 		return groupSet;
+	}
+
+	@Override
+	public int quit() throws IOException {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	/**
@@ -222,18 +240,18 @@ public class NewsClientImpl extends NNTPClient implements NewsClient {
 
 	@Override
 	public Reader retrieveArticle(final String articleId) throws IOException {
-		return super.retrieveArticle(articleId);
+		return this.client.retrieveArticle(articleId);
 	}
 
 	@Override
 	public Reader retrieveArticleHeader(final String articleId) throws IOException {
-		return super.retrieveArticleHeader(articleId);
+		return this.client.retrieveArticleHeader(articleId);
 	}
 
 	@Override
 	public BufferedReader retrieveArticleInfo(final long lowArticleNumber,
 	        final long highArticleNumber) throws IOException {
-		return super.retrieveArticleInfo(lowArticleNumber, highArticleNumber);
+		return this.client.retrieveArticleInfo(lowArticleNumber, highArticleNumber);
 	}
 
 	/*
@@ -243,7 +261,7 @@ public class NewsClientImpl extends NNTPClient implements NewsClient {
 	 */
 	@Override
 	public boolean selectNewsgroup(final String newsgroup) throws IOException {
-		return super.selectNewsgroup(newsgroup);
+		return this.client.selectNewsgroup(newsgroup);
 	}
 
 	/**

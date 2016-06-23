@@ -191,14 +191,12 @@ public class UNISoNCLI implements UNISoNLogger {
 	 */
 	private void quickDownload(final String arg, final Date toDate, final Date fromDate,
 	        final String host) throws UNISoNException {
-		UNISoNController.create(null);
 		final UNISoNController instance = UNISoNController.getInstance();
 		final Set<NewsGroup> listNewsgroups = instance.listNewsgroups(arg, host,
 		        instance.getNntpReader().getClient());
 		// HibernateHelper.generateSchema();
 
 		try {
-			UNISoNController.create(null);
 			instance.quickDownload(listNewsgroups, fromDate, toDate, this, DownloadMode.BASIC);
 		}
 		catch (final UNISoNException e) {

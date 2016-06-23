@@ -20,6 +20,7 @@ import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
 import uk.co.sleonard.unison.gui.JSplashScreen;
+import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
 
 /**
  * The Class UNISoNTabbedFrame.
@@ -107,7 +108,7 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
 		final JSplashScreen splash = new JSplashScreen("Loading ...", this);
 		splash.setProgress(10);
 
-		this.controller = UNISoNController.create(this);
+		this.controller = UNISoNController.create(this, new DataHibernatorPoolImpl());
 
 		splash.setProgress(50);
 		this.initComponents();

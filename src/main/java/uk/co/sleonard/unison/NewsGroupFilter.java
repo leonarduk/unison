@@ -22,9 +22,9 @@ import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 
 public class NewsGroupFilter {
 	/** The selected messages. */
-	private final static Vector<Message>	selectedMessages	= null;
+	private Vector<Message>	selectedMessages	= null;
 	/** The topics filter. */
-	private Set<Topic>						topicsFilter		= null;
+	private Set<Topic>		topicsFilter		= null;
 
 	/** The messages filter. */
 	private Vector<Message> messagesFilter = null;
@@ -75,6 +75,11 @@ public class NewsGroupFilter {
 		this.setTopsNewsgroups(new HashSet<>());
 		this.topicsFilter = new HashSet<>();
 		this.countriesFilter = new HashSet<>();
+		this.messagesFilter = new Vector<>();
+		this.selectedPosters = new Vector<>();
+		this.selectedCountries = new HashSet<>();
+		this.selectedNewsgroups = new Vector<>();
+		this.selectedMessages = new Vector<>();
 	}
 
 	public Set<String> getCountriesFilter() {
@@ -85,13 +90,8 @@ public class NewsGroupFilter {
 		return this.fromDate;
 	}
 
-	/**
-	 * Gets the locations filter.
-	 *
-	 * @return the locations filter
-	 */
-	public Set<String> getLocationsFilter() {
-		return this.getCountriesFilter();
+	public Message getMessage() {
+		return this.message;
 	}
 
 	/**
@@ -134,7 +134,7 @@ public class NewsGroupFilter {
 	}
 
 	public Vector<Message> getSelectedMessages() {
-		return NewsGroupFilter.selectedMessages;
+		return this.selectedMessages;
 	}
 
 	/**
@@ -217,6 +217,10 @@ public class NewsGroupFilter {
 		return this.filtered;
 	}
 
+	public void setCountriesFilter(final Set<String> countriesFilter) {
+		this.countriesFilter = countriesFilter;
+	}
+
 	/**
 	 * Sets the dates.
 	 *
@@ -238,8 +242,16 @@ public class NewsGroupFilter {
 		this.fromDate = fromDate;
 	}
 
+	public void setMessage(final Message message) {
+		this.message = message;
+	}
+
 	public void setMessagesFilter(final Vector<Message> messagesFilter) {
 		this.messagesFilter = messagesFilter;
+	}
+
+	public void setNewsgroupFilter(final Set<NewsGroup> newsgroupFilter) {
+		this.newsgroupFilter = newsgroupFilter;
 	}
 
 	/**
@@ -260,6 +272,10 @@ public class NewsGroupFilter {
 	 */
 	public void setSelectedMessage(final Message message) {
 		this.message = message;
+	}
+
+	public void setSelectedMessages(final Vector<Message> selectedMessages2) {
+		this.selectedMessages = selectedMessages2;
 	}
 
 	/**
@@ -311,7 +327,15 @@ public class NewsGroupFilter {
 		this.toDate = toDate;
 	}
 
+	public void setTopicsFilter(final Set<Topic> topicsFilter) {
+		this.topicsFilter = topicsFilter;
+	}
+
 	public void setTopsNewsgroups(final Set<NewsGroup> topsNewsgroups) {
 		this.topsNewsgroups = topsNewsgroups;
+	}
+
+	public void setUsenetUsersFilter(final Vector<UsenetUser> usenetUsersFilter) {
+		this.usenetUsersFilter = usenetUsersFilter;
 	}
 }

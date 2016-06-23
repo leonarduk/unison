@@ -32,6 +32,7 @@ import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.gui.GraphPreviewPanel;
+import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
 import uk.co.sleonard.unison.output.ExportToCSV;
 import uk.co.sleonard.unison.output.PajekNetworkFile;
 import uk.co.sleonard.unison.utils.StringUtils;
@@ -121,7 +122,7 @@ class PajekPanel extends javax.swing.JPanel implements Observer {
 	 */
 	public static void main(final String[] args) throws UNISoNException {
 		final JFrame frame = new JFrame();
-		UNISoNController.create(frame);
+		UNISoNController.create(frame, new DataHibernatorPoolImpl());
 
 		final PajekPanel panel = new PajekPanel(frame);
 		frame.add(panel);

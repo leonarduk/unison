@@ -99,7 +99,7 @@ public class FullDownloadWorkerTest {
 	}
 
 	@Test
-	public void testconvertHeaderStringToArticle() throws Exception {
+	public void testConvertHeaderStringToArticle() throws Exception {
 		final String info = "Path: fleegle.mixmin.net!news.mixmin.net!news.glorb.com!xmission!news.alt.net!news.astraweb.com!border5.newsrouter.astraweb.com!not-for-mail"
 		        + "\nReply-To: \"Replica\" <replica@yang-online.com>"
 		        + "\nFrom: \"Replica\" <replica@yang-online.com"
@@ -120,19 +120,12 @@ public class FullDownloadWorkerTest {
 		final NewsArticle actual = this.worker.convertHeaderStringToArticle(info);
 	}
 
-	@Ignore
-	@Test
-	public void testConvertHeaderStringToArticle() throws Exception {
-		final String theInfo = "";
-		this.worker.convertHeaderStringToArticle(theInfo);
-	}
-
 	/**
 	 * Test DownloadArticle.
 	 *
 	 * @throws IOException
 	 */
-	@Ignore               // hangs
+	@Ignore                // hangs
 	@Test
 	public void testDownloadArticle() throws IOException {
 		final Reader value = Mockito.mock(Reader.class);

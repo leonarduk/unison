@@ -16,6 +16,8 @@ import uk.co.sleonard.unison.gui.SplashScreenFX;
 /**
  * The class UNISoNTabbedFrameFX
  * 
+ * The class UNISoNTabbedFrameFX is responsible by union of three Stages: DownloadNewsPanel, MessageStoreViewer and PajekPanel.
+ * 
  * @author Elton <elton_12_nunes@hotmail.com>
  */
 public class UNISoNTabbedFrameFX extends Application {
@@ -44,6 +46,7 @@ public class UNISoNTabbedFrameFX extends Application {
 
 		SplashScreenFX controller = loader.getController();
 		controller.setMainApp(this);
+		controller.load();
 	}
 
 	public void initRootLayout() {

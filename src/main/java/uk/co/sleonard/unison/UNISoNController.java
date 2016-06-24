@@ -145,7 +145,7 @@ public class UNISoNController {
 	private UNISoNController() throws UNISoNException {
 		this.headerDownloader = new HeaderDownloadWorker();
 		this.headerDownloader.initialise();
-		this.helper = new HibernateHelper(UNISoNController.gui);
+		this.helper = null;
 		try {
 			final Session hibernateSession = this.getHelper().getHibernateSession();
 			this.setSession(hibernateSession);
@@ -320,7 +320,7 @@ public class UNISoNController {
 	 */
 	public void quickDownload(final Set<NNTPNewsGroup> groups, final Date fromDate1,
 	        final Date toDate1, final UNISoNLogger log, final DownloadMode mode)
-	                throws UNISoNException {
+	        throws UNISoNException {
 
 		for (final NNTPNewsGroup group : groups) {
 			try {

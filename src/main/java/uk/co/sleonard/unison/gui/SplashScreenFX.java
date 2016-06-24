@@ -28,59 +28,37 @@ public class SplashScreenFX {
 
 	@FXML
 	private void initialize() {
+		
+	}
+	
+	public void load() {
+		setProgress(0.2);
 		Task<Void> task = new Task<Void>() {
 			@Override
 			protected Void call() {
-				setProgress(0.5);
-				return null;
+				main.initRootLayout();
+		    	UNISoNControllerFX controller = main.getUnisonController();
+		    	final UNISoNDatabase database = controller.getDatabase();
+		    	return null;
 			}
-
-			@Override
-			protected void succeeded() {
-				Platform.runLater(new Runnable() {
-			        public void run() {
-				        main.initRootLayout();
-				        UNISoNControllerFX controller = main.getUnisonController();
-				        final UNISoNDatabase database = controller.getDatabase();
-				        setProgress(1.0);
-				        main.getPrimStage().close();
-				        main.showRootLayout();
-			        }
-		        });
-			}
-		};
-		new Thread(task).start();
-	}
-
-	public void initializeDB() {
-		Task<Void> task = new Task<Void>() {
-			@Override
-			protected Void call() throws Exception {
-				UNISoNControllerFX controller = main.getUnisonController();
-
-				final UNISoNDatabase database = controller.getDatabase();
-				// database.addObserver(this.downloadNewsPanel1);
-		        // database.addObserver(this.messageStoreViewer1);
-		        // database.addObserver(this.pajekPanel1);
-		        // database.addObserver(this); ADD LATER MY OBSERVERS
-		        // database.refreshDataFromDatabase();
-
-				return null;
-			}
-
+			
 			@Override
 			protected void succeeded() {
 				super.succeeded();
-				setProgress(1.0);
-				main.getPrimStage().close();
-				main.showRootLayout();
+				Platform.runLater(new Runnable(){
+					@Override
+					public void run() {
+						setProgress(1.0);
+						main.getPrimStage().close();
+						main.showRootLayout();
+					}
+				});
 			}
 		};
-
 		new Thread(task).start();
 	}
 
-	public void setProgress(Double value) {
+	public void setProgress(Double value){
 		progressBar.setProgress(value);
 	}
 

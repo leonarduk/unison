@@ -11,6 +11,7 @@ import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.gui.UNISoNGUI;
+import uk.co.sleonard.unison.gui.UNISoNGUIFX;
 import uk.co.sleonard.unison.gui.generated.UNISoNTabbedFrameFX;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
 import uk.co.sleonard.unison.input.NewsArticle;
@@ -26,12 +27,12 @@ public class UNISoNControllerFX {
 	private UNISoNTabbedFrameFX unisonTabbedFrameFX;
 
 	/** The instance. */
-	private static UNISoNController instance;
+	private static UNISoNControllerFX instance;
 
 	/** The logger. */
-	private static Logger logger = Logger.getLogger(UNISoNController.class);
+	private static Logger logger = Logger.getLogger(UNISoNControllerFX.class);
 
-	private static UNISoNGUI gui;
+	private static UNISoNGUIFX gui;
 
 	/** The Constant LOCATION. */
 	public static final String LOCATION = "Location";
@@ -116,6 +117,11 @@ public class UNISoNControllerFX {
 	public HibernateHelper getHelper() {
 		return this.helper;
 	}
+	
+	public static UNISoNGUIFX getGui() {
+		return UNISoNControllerFX.gui;
+	}
+
 
 	/**
 	 * Sets the nntp host.

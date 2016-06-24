@@ -1,4 +1,4 @@
-package uk.co.sleonard.unison.gui.generated;
+package uk.co.sleonard.unison.gui;
 
 /**
  * The class DownloadNewsPanelFX

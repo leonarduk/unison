@@ -1,4 +1,4 @@
-package uk.co.sleonard.unison.gui.generated;
+package uk.co.sleonard.unison.gui;
 
 import java.io.IOException;
 
@@ -11,7 +11,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import uk.co.sleonard.unison.UNISoNControllerFX;
-import uk.co.sleonard.unison.gui.SplashScreenFX;
 
 /**
  * The class UNISoNTabbedFrameFX

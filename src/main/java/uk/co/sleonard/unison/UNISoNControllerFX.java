@@ -12,7 +12,7 @@ import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.gui.UNISoNGUI;
 import uk.co.sleonard.unison.gui.UNISoNGUIFX;
-import uk.co.sleonard.unison.gui.generated.UNISoNTabbedFrameFX;
+import uk.co.sleonard.unison.gui.UNISoNTabbedFrameFX;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
 import uk.co.sleonard.unison.input.NewsArticle;
 import uk.co.sleonard.unison.input.NewsGroupReader;

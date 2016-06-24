@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
 import uk.co.sleonard.unison.UNISoNControllerFX;
 import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
-import uk.co.sleonard.unison.gui.generated.UNISoNTabbedFrameFX;
 
 /**
  * The class SplashScreen

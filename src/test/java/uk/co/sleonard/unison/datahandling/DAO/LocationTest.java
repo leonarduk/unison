@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
  * The Class LocationTest.
@@ -29,6 +30,41 @@ public class LocationTest {
 
 	/** The country code. */
 	private final static String countryCode = "USA";
+
+	@Test
+	public void testEquals() throws Exception {
+		final boolean guessed = true;
+		final List<UsenetUser> posters = new ArrayList<>();
+		final List<IpAddress> ipAddresses = new ArrayList<>();
+		final Location l1 = new Location(LocationTest.city, LocationTest.country,
+		        LocationTest.countryCode, guessed, posters, ipAddresses);
+		Location l2 = new Location(LocationTest.city, LocationTest.country,
+		        LocationTest.countryCode, !guessed, posters, ipAddresses);
+		Assert.assertTrue(l1.equals(l1));
+		Assert.assertEquals(l1, l1);
+		Assert.assertFalse(l1.equals(l2));
+		Assert.assertNotEquals(l1, l2);
+		l2 = new Location(LocationTest.city + "Wrong", LocationTest.country,
+		        LocationTest.countryCode, guessed, posters, ipAddresses);
+		Assert.assertNotEquals(l1, l2);
+		l2 = new Location(LocationTest.city, LocationTest.country + "Wrong",
+		        LocationTest.countryCode, guessed, posters, ipAddresses);
+		Assert.assertNotEquals(l1, l2);
+		l2 = new Location(LocationTest.city, LocationTest.country,
+		        LocationTest.countryCode + "Wrong", guessed, posters, ipAddresses);
+		Assert.assertNotEquals(l1, l2);
+		final List<UsenetUser> posters2 = new ArrayList<>();
+		posters2.add(Mockito.mock(UsenetUser.class));
+		l2 = new Location(LocationTest.city, LocationTest.country, LocationTest.countryCode,
+		        guessed, posters2, ipAddresses);
+		Assert.assertNotEquals(l1, l2);
+		final List<IpAddress> ipAdddresses2 = new ArrayList<>();
+		ipAdddresses2.add(Mockito.mock(IpAddress.class));
+		l2 = new Location(LocationTest.city, LocationTest.country, LocationTest.countryCode,
+		        guessed, posters, ipAdddresses2);
+		Assert.assertNotEquals(l1, l2);
+
+	}
 
 	/**
 	 * Test fullString.

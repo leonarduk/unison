@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -42,7 +44,7 @@
                      </accelerator>
                   </MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
-              <MenuItem mnemonicParsing="false" text="About UNISoN">
+              <MenuItem mnemonicParsing="false" onAction="#showAboutDialog" text="About UNISoN">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="HOME" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
@@ -53,7 +55,11 @@
       </MenuBar>
    </top>
    <bottom>
-      <AnchorPane prefHeight="25.0" BorderPane.alignment="CENTER" />
+      <AnchorPane prefHeight="25.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="statusLabel" layoutX="15.0" layoutY="4.0" />
+            <ProgressBar fx:id="statusProgress" layoutX="481.0" layoutY="4.0" prefHeight="18.0" prefWidth="122.0" progress="0.0" />
+         </children></AnchorPane>
    </bottom>
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">

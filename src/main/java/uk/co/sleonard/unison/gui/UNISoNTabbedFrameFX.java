@@ -15,13 +15,22 @@ import uk.co.sleonard.unison.UNISoNControllerFX;
 /**
  * The class UNISoNTabbedFrameFX
  * 
- * The class UNISoNTabbedFrameFX is responsible by union of three Stages: DownloadNewsPanel, MessageStoreViewer and PajekPanel.
+ * The class UNISoNTabbedFrameFX is responsible by union of three Stages: DownloadNewsPanel,
+ * MessageStoreViewer and PajekPanel.
+ * 
+ * Order: 1st Show splash screen is called. <br/>
+ * 2nd Splash screen call load() to call initRootLayout and initialize UNISoNController and use
+ * setInstance to get unisonController instance and set inside UNISoNControllerFX static variable.
+ * <br/>
+ * 3rd Method load() inside Splash screen call showRootLayout to show rootLayout and other screens
+ * (I need improve this architecture). <br/>
  * 
  * @author Elton <elton_12_nunes@hotmail.com>
  */
 public class UNISoNTabbedFrameFX extends Application {
 
 	private Stage primaryStage;
+	private Stage aboutDialogStage;
 	private BorderPane rootLayout;
 	private TabPane tabs;
 	private UNISoNControllerFX unisonController;
@@ -59,6 +68,7 @@ public class UNISoNTabbedFrameFX extends Application {
 
 			unisonController = (UNISoNControllerFX) loader.getController();
 			unisonController.setUnisonTabbedFrameFX(this);
+			unisonController.setInstance();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -77,6 +87,7 @@ public class UNISoNTabbedFrameFX extends Application {
 		showDownloadNewsPanel();
 		showMessageStoreViewer();
 		showPajekPanel();
+		loadAboutDialog();
 	}
 
 	// Shows downloadNewsPanel inside RootLayout.
@@ -90,6 +101,8 @@ public class UNISoNTabbedFrameFX extends Application {
 			tabs.getTabs().get(0).setContent(downloadNewsPanel);
 
 			this.unisonController.setUnisonTabbedFrameFX(this);
+			this.unisonController.setDownloadNewsPanelFX(loader.getController());
+
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -123,6 +136,29 @@ public class UNISoNTabbedFrameFX extends Application {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/** Loads about dialog **/
+	private void loadAboutDialog() {
+		try {
+			// Load the FXML File.
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(
+			        UNISoNTabbedFrameFX.class.getResource("fxml/AboutDialogLayout.fxml"));
+			Pane paneAboutDialog = (Pane) loader.load();
+			Scene aboutScene = new Scene(paneAboutDialog);
+			this.aboutDialogStage = new Stage();
+			this.aboutDialogStage.setScene(aboutScene);
+			this.aboutDialogStage.setTitle("About UNISoN");
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/** Show about dialog **/
+	public void showAboutDialog() {
+		this.aboutDialogStage.show();
 	}
 
 	public Stage getPrimStage() {

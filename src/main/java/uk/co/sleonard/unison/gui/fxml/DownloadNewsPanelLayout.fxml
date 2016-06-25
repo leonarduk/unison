@@ -12,14 +12,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="391.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uk.co.sleonard.unison.UNISoNControllerFX">
+<AnchorPane prefHeight="391.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uk.co.sleonard.unison.gui.DownloadNewsPanelFX">
    <children>
-      <TextField layoutX="96.0" layoutY="9.0" prefHeight="25.0" prefWidth="179.0">
+      <TextField fx:id="newsGroupField" layoutX="96.0" layoutY="9.0" prefHeight="25.0" prefWidth="179.0">
          <tooltip>
             <Tooltip text="Type in full or part name (use * for wild character, e.g. *senior* for all groups with \&quot;senior\&quot; in the name)" />
          </tooltip>
       </TextField>
-      <ComboBox layoutX="96.0" layoutY="55.0" prefHeight="25.0" prefWidth="178.0">
+      <ComboBox fx:id="hostCombo" layoutX="96.0" layoutY="55.0" prefHeight="25.0" prefWidth="178.0">
          <tooltip>
             <Tooltip text="Look at http://freeusenetnews.com/newspage.html?sortby=articles for other hosts if these are broken. Can enter name here." />
          </tooltip>
@@ -41,17 +41,17 @@
          </tooltip>
       </Label>
       <Separator layoutX="285.0" layoutY="-1.0" orientation="VERTICAL" prefHeight="407.0" prefWidth="0.0" />
-      <ListView layoutX="14.0" layoutY="95.0" prefHeight="294.0" prefWidth="260.0">
+      <ListView fx:id="availableNewsgroups" layoutX="14.0" layoutY="95.0" prefHeight="294.0" prefWidth="260.0">
          <tooltip>
             <Tooltip text="The number in brackets is an estimate (provided by the server) which is likely to be higher than actual number of messages as many messages are deleted." />
          </tooltip>
       </ListView>
-      <TextArea layoutX="408.0" layoutY="6.0" prefHeight="384.0" prefWidth="200.0">
+      <TextArea fx:id="notesArea" layoutX="408.0" layoutY="6.0" prefHeight="384.0" prefWidth="200.0">
          <tooltip>
             <Tooltip text="Empty Tooltip" />
          </tooltip>
       </TextArea>
-      <Button layoutX="297.0" layoutY="7.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="100.0" text="Find Groups">
+      <Button fx:id="findButton" layoutX="297.0" layoutY="7.0" mnemonicParsing="false" onAction="#findGroups" prefHeight="31.0" prefWidth="100.0" text="Find Groups">
          <tooltip>
             <Tooltip text="Enter name or part name (* for wild chararcter) the n click here" />
          </tooltip>

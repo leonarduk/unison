@@ -16,6 +16,7 @@ import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
  */
 public class SplashScreenFX {
 
+	// Components Variables
 	@FXML
 	private ProgressBar progressBar;
 
@@ -27,37 +28,37 @@ public class SplashScreenFX {
 
 	@FXML
 	private void initialize() {
-		
+
 	}
-	
+
 	public void load() {
 		setProgress(0.2);
 		Task<Void> task = new Task<Void>() {
 			@Override
 			protected Void call() {
 				main.initRootLayout();
-		    	UNISoNControllerFX controller = main.getUnisonController();
-		    	final UNISoNDatabase database = controller.getDatabase();
-		    	return null;
+				UNISoNControllerFX controller = main.getUnisonController();
+				final UNISoNDatabase database = controller.getDatabase();
+				return null;
 			}
-			
+
 			@Override
 			protected void succeeded() {
 				super.succeeded();
-				Platform.runLater(new Runnable(){
-					@Override
-					public void run() {
-						setProgress(1.0);
-						main.getPrimStage().close();
-						main.showRootLayout();
-					}
-				});
+				Platform.runLater(new Runnable() {
+			        @Override
+			        public void run() {
+				        setProgress(1.0);
+				        main.getPrimStage().close();
+				        main.showRootLayout();
+			        }
+		        });
 			}
 		};
 		new Thread(task).start();
 	}
 
-	public void setProgress(Double value){
+	public void setProgress(Double value) {
 		progressBar.setProgress(value);
 	}
 

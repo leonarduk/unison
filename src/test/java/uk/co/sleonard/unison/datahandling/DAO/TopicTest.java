@@ -21,8 +21,8 @@ import org.junit.Test;
 @SuppressWarnings("serial")
 class TestTopic extends Topic {
 	@Override
-	public void setSubject(final String subject) {
-		super.setSubject(subject);
+	public Topic setSubject(final String subject) {
+		return super.setSubject(subject);
 	}
 }
 

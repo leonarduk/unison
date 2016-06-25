@@ -11,6 +11,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Represents a message.
  *
@@ -52,6 +55,8 @@ public class Message implements java.io.Serializable {
 	/** The Usenet message id. */
 	private String usenetMessageID;
 
+	Log logger = LogFactory.getLog(Message.class);
+
 	/**
 	 * Instantiates a new message.
 	 */
@@ -61,11 +66,11 @@ public class Message implements java.io.Serializable {
 	/**
 	 * Instantiates a new message.
 	 *
-	 * @param DateCreated
+	 * @param dateCreated
 	 *            the date created
-	 * @param UsenetMessageID
+	 * @param usenetMessageID
 	 *            the usenet message id
-	 * @param Subject
+	 * @param subject
 	 *            the subject
 	 * @param poster
 	 *            the poster
@@ -75,20 +80,20 @@ public class Message implements java.io.Serializable {
 	 *            the newsgroups
 	 * @param referencedMessages
 	 *            the referenced messages
-	 * @param MessageBody
+	 * @param messageBody
 	 *            the message body
 	 */
-	public Message(final Date DateCreated, final String UsenetMessageID, final String Subject,
+	public Message(final Date dateCreated, final String usenetMessageID, final String subject,
 	        final UsenetUser poster, final Topic topic, final Set<NewsGroup> newsgroups,
-	        final String referencedMessages, final byte[] MessageBody) {
-		this.dateCreated = DateCreated;
-		this.usenetMessageID = UsenetMessageID;
-		this.subject = Subject;
+	        final String referencedMessages, final byte[] messageBody) {
+		this.dateCreated = dateCreated;
+		this.usenetMessageID = usenetMessageID;
+		this.subject = subject;
 		this.poster = poster;
 		this.topic = topic;
 		this.newsgroups = newsgroups;
 		this.referencedMessages = referencedMessages;
-		this.messageBody = MessageBody;
+		this.messageBody = messageBody;
 	}
 
 	@Override
@@ -97,24 +102,31 @@ public class Message implements java.io.Serializable {
 			return true;
 		}
 		if (obj == null) {
+			this.logger.debug("thatOne is null");
 			return false;
 		}
 		if (this.getClass() != obj.getClass()) {
+			this.logger.debug("thatOne is a " + obj.getClass().getName());
 			return false;
 		}
 		final Message other = (Message) obj;
 		if (this.dateCreated == null) {
 			if (other.dateCreated != null) {
+				this.logger.debug("thatOne doesn't have null dateCreated");
 				return false;
 			}
 		}
 		else if (!this.dateCreated.equals(other.dateCreated)) {
+			this.logger.debug("thatOne has a different dateCreated");
 			return false;
 		}
 		if (this.id != other.id) {
+			this.logger.debug("thatOne has different Id");
+
 			return false;
 		}
 		if (!Arrays.equals(this.messageBody, other.messageBody)) {
+			this.logger.debug("thatOne has a different body");
 			return false;
 		}
 		if (this.newsgroups == null) {
@@ -131,6 +143,7 @@ public class Message implements java.io.Serializable {
 			}
 		}
 		else if (!this.poster.equals(other.poster)) {
+			this.logger.debug("thatOne has different poster" + this.poster + ":" + other.poster);
 			return false;
 		}
 		if (this.referencedMessages == null) {

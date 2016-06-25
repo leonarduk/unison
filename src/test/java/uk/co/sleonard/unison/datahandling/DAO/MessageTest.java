@@ -6,12 +6,14 @@
  */
 package uk.co.sleonard.unison.datahandling.DAO;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.ibm.icu.util.Calendar;
 
@@ -58,6 +60,61 @@ public class MessageTest {
 		Assert.assertEquals(expected4, actual.getPoster());
 		Assert.assertEquals(expected5, actual.getTopic());
 		Assert.assertArrayEquals(expected8, actual.getMessageBody());
+	}
+
+	@Test
+	public void testEquals() throws Exception {
+		final Date dateCreated = new Date();
+		final String usenetMessageID = "ID1";
+		final String subject = "Bad day";
+		final UsenetUser poster = new UsenetUser("Steve", "test@email.com", "127.0.0.1", "male",
+		        new Location("city", "Country", "CountryCode", false, new ArrayList<>(),
+		                new ArrayList<>()));
+		final Set<NewsGroup> newsgroups = new HashSet<>();
+		final Set<Topic> topics = new HashSet<>();
+		final Set<Message> messages = new HashSet<>();
+		newsgroups.add(new NewsGroup("alt.rubbish", null, topics, messages, 2, 2, 1, 2,
+		        "alt.rubbish", true));
+		final Topic topic = new Topic("rubbish", newsgroups);
+		topics.add(topic);
+		final String referencedMessages = null;
+		final byte[] messageBody = "This is bad".getBytes();
+		final Message thisOne = new Message(dateCreated, usenetMessageID, subject, poster, topic,
+		        newsgroups, referencedMessages, messageBody);
+		final Message sameOne = new Message(dateCreated, usenetMessageID, subject, poster, topic,
+		        newsgroups, referencedMessages, messageBody);
+
+		Assert.assertEquals(thisOne, sameOne);
+		Assert.assertEquals(thisOne, thisOne);
+		Assert.assertTrue(thisOne.equals(sameOne));
+
+		final Calendar instance = Calendar.getInstance();
+		instance.add(Calendar.YEAR, 1);
+		final Message thatone = new Message(instance.getTime(), usenetMessageID, subject, poster,
+		        topic, newsgroups, referencedMessages, messageBody);
+		Assert.assertFalse(thisOne + ":" + thatone, thisOne.equals(thatone));
+
+		Assert.assertFalse(thisOne.equals(new Message(dateCreated, usenetMessageID + "2", subject,
+		        poster, topic, newsgroups, referencedMessages, messageBody)));
+		Assert.assertFalse(thisOne.equals(new Message(dateCreated, usenetMessageID, subject + "2",
+		        poster, topic, newsgroups, referencedMessages, messageBody)));
+		Assert.assertFalse(thisOne.equals(new Message(dateCreated, usenetMessageID, subject,
+		        new UsenetUser(poster).setGender("female"), topic, newsgroups, referencedMessages,
+		        messageBody)));
+		Assert.assertFalse(thisOne.equals(new Message(dateCreated, usenetMessageID, subject, poster,
+		        new Topic(topic).setSubject("new subject"), newsgroups, referencedMessages,
+		        messageBody)));
+		Assert.assertFalse(thisOne.equals(new Message(dateCreated, usenetMessageID, subject, poster,
+		        topic, newsgroups, "new@message.com", messageBody)));
+		Assert.assertFalse(thisOne.equals(new Message(dateCreated, usenetMessageID, subject, poster,
+		        topic, newsgroups, referencedMessages, "another".getBytes())));
+		final Set<NewsGroup> newsgroups2 = new HashSet<>(newsgroups);
+		newsgroups2.add(Mockito.mock(NewsGroup.class));
+		Assert.assertFalse(thisOne.equals(new Message(dateCreated, usenetMessageID, subject, poster,
+		        topic, newsgroups2, referencedMessages, messageBody)));
+		Assert.assertFalse(thisOne.equals(null));
+		Assert.assertFalse(thisOne.equals("eggs"));
+
 	}
 
 	/**

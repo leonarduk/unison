@@ -67,6 +67,10 @@ public class UsenetUser implements java.io.Serializable {
 		this.location = location;
 	}
 
+	public UsenetUser(final UsenetUser poster) {
+		this(poster.name, poster.email, poster.ipaddress, poster.gender, poster.location);
+	}
+
 	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {
@@ -197,9 +201,11 @@ public class UsenetUser implements java.io.Serializable {
 	 *
 	 * @param email
 	 *            the new email
+	 * @return
 	 */
-	public void setEmail(final String email) {
+	public UsenetUser setEmail(final String email) {
 		this.email = email;
+		return this;
 	}
 
 	/**
@@ -207,9 +213,11 @@ public class UsenetUser implements java.io.Serializable {
 	 *
 	 * @param gender
 	 *            the new gender
+	 * @return
 	 */
-	public void setGender(final String gender) {
+	public UsenetUser setGender(final String gender) {
 		this.gender = gender;
+		return this;
 	}
 
 	/**
@@ -217,9 +225,11 @@ public class UsenetUser implements java.io.Serializable {
 	 *
 	 * @param id
 	 *            the new id
+	 * @return
 	 */
-	protected void setId(final int id) {
+	protected UsenetUser setId(final int id) {
 		this.id = id;
+		return this;
 	}
 
 	/**
@@ -227,9 +237,11 @@ public class UsenetUser implements java.io.Serializable {
 	 *
 	 * @param ipaddress
 	 *            the new ipaddress
+	 * @return
 	 */
-	public void setIpaddress(final String ipaddress) {
+	public UsenetUser setIpaddress(final String ipaddress) {
 		this.ipaddress = ipaddress;
+		return this;
 	}
 
 	/**
@@ -237,9 +249,11 @@ public class UsenetUser implements java.io.Serializable {
 	 *
 	 * @param location
 	 *            the new location
+	 * @return
 	 */
-	public void setLocation(final Location location) {
+	public UsenetUser setLocation(final Location location) {
 		this.location = location;
+		return this;
 	}
 
 	/**
@@ -247,9 +261,11 @@ public class UsenetUser implements java.io.Serializable {
 	 *
 	 * @param name
 	 *            the new name
+	 * @return
 	 */
-	public void setName(final String name) {
+	public UsenetUser setName(final String name) {
 		this.name = name;
+		return this;
 	}
 
 	/*

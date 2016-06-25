@@ -51,6 +51,11 @@ public class Topic implements java.io.Serializable {
 		this.newsgroups = newsgroups;
 	}
 
+	public Topic(final Topic topic) {
+		this(topic.subject, topic.newsgroups);
+		this.id = topic.id;
+	}
+
 	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {
@@ -127,9 +132,11 @@ public class Topic implements java.io.Serializable {
 	 *
 	 * @param id
 	 *            the new id
+	 * @return
 	 */
-	protected void setId(final int id) {
+	protected Topic setId(final int id) {
 		this.id = id;
+		return this;
 	}
 
 	/**
@@ -137,9 +144,11 @@ public class Topic implements java.io.Serializable {
 	 *
 	 * @param newsgroups
 	 *            the new newsgroups
+	 * @return
 	 */
-	public void setNewsgroups(final Set<NewsGroup> newsgroups) {
+	public Topic setNewsgroups(final Set<NewsGroup> newsgroups) {
 		this.newsgroups = newsgroups;
+		return this;
 	}
 
 	/**
@@ -147,9 +156,11 @@ public class Topic implements java.io.Serializable {
 	 *
 	 * @param subject
 	 *            the new subject
+	 * @return
 	 */
-	public void setSubject(final String subject) {
+	public Topic setSubject(final String subject) {
 		this.subject = subject;
+		return this;
 	}
 
 	/*

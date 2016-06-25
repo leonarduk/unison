@@ -54,28 +54,28 @@ public class Location implements java.io.Serializable {
 	/**
 	 * Instantiates a new location.
 	 *
-	 * @param City
+	 * @param city
 	 *            the city
-	 * @param Country
+	 * @param country
 	 *            the country
-	 * @param CountryCode
+	 * @param countryCode
 	 *            the country code
-	 * @param Guessed
+	 * @param guessed
 	 *            the guessed
 	 * @param posters
 	 *            the posters
-	 * @param IpAddresses
+	 * @param ipAddresses
 	 *            the ip addresses
 	 */
-	public Location(final String City, final String Country, final String CountryCode,
-	        final boolean Guessed, final List<UsenetUser> posters,
-	        final List<IpAddress> IpAddresses) {
-		this.City = City;
-		this.Country = Country;
-		this.CountryCode = CountryCode;
-		this.Guessed = Guessed;
+	public Location(final String city, final String country, final String countryCode,
+	        final boolean guessed, final List<UsenetUser> posters,
+	        final List<IpAddress> ipAddresses) {
+		this.City = city;
+		this.Country = country;
+		this.CountryCode = countryCode;
+		this.Guessed = guessed;
 		this.posters = posters;
-		this.IpAddresses = IpAddresses;
+		this.IpAddresses = ipAddresses;
 	}
 
 	@Override

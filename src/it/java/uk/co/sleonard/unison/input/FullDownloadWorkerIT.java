@@ -32,11 +32,21 @@ public class FullDownloadWorkerIT {
 	}
 
 	@Test
-	public final void testDownloadArticle() throws UNISoNException, InterruptedException {
+	public final void testDownloadArticleHeaders() throws UNISoNException, InterruptedException {
+		final NewsArticle header = this.outQueue.take();
+		final String usenetID = header.getArticleId();
+		final DownloadRequest request = new DownloadRequest(usenetID, DownloadMode.HEADERS);
+		final NewsArticle article = this.worker.downloadArticle(request);
+		Assert.assertEquals(header.getArticleId(), article.getArticleId());
+	}
+
+	@Test
+	public final void testDownloadFullArticle() throws UNISoNException, InterruptedException {
 		final NewsArticle header = this.outQueue.take();
 		final String usenetID = header.getArticleId();
 		final DownloadRequest request = new DownloadRequest(usenetID, DownloadMode.ALL);
 		final NewsArticle article = this.worker.downloadArticle(request);
 		Assert.assertEquals(header.getArticleId(), article.getArticleId());
 	}
+
 }

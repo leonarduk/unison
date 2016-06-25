@@ -58,7 +58,7 @@ public class FullDownloadWorkerTest {
 	 * Test AddDownloadRequest.
 	 */
 	@Test
-	public void testAddDownloadRequest() {
+	public void testAddDownloadRequestAll() {
 		try {
 			final String nntpHost = "testserver";
 			final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
@@ -71,6 +71,33 @@ public class FullDownloadWorkerTest {
 			queue.add(new NewsArticle("123", 1, new Date(), "eg@mail.com", "Lets talk", "", "alt"));
 			FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
 			        DownloadMode.ALL, Mockito.mock(UNISoNLogger.class), nntpHost, queue,
+			        this.newsClient, reader, helper, session);
+
+			// Assert.assertTrue(FullDownloadWorker.queueSize() >= 1);
+		}
+		catch (final UNISoNException e) {
+			e.printStackTrace();
+			Assert.fail("ERROR: " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Test AddDownloadRequest.
+	 */
+	@Test
+	public void testAddDownloadRequestHeader() {
+		try {
+			final String nntpHost = "testserver";
+			final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
+			final NewsGroupReader reader = Mockito.mock(NewsGroupReader.class);
+			final HibernateHelper helper = Mockito.mock(HibernateHelper.class);
+			final Session session = Mockito.mock(Session.class);
+			FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
+			        DownloadMode.HEADERS, Mockito.mock(UNISoNLogger.class), nntpHost, queue,
+			        this.newsClient, reader, helper, session);
+			queue.add(new NewsArticle("123", 1, new Date(), "eg@mail.com", "Lets talk", "", "alt"));
+			FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
+			        DownloadMode.HEADERS, Mockito.mock(UNISoNLogger.class), nntpHost, queue,
 			        this.newsClient, reader, helper, session);
 
 			// Assert.assertTrue(FullDownloadWorker.queueSize() >= 1);
@@ -125,7 +152,7 @@ public class FullDownloadWorkerTest {
 	 *
 	 * @throws IOException
 	 */
-	@Ignore                // hangs
+	@Ignore                 // hangs
 	@Test
 	public void testDownloadArticle() throws IOException {
 		final Reader value = Mockito.mock(Reader.class);

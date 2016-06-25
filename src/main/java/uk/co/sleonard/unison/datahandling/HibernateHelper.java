@@ -48,7 +48,7 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.ResultRow;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
-import uk.co.sleonard.unison.gui.UNISoNGUI;
+import uk.co.sleonard.unison.gui.UNISoNGUIFX;
 import uk.co.sleonard.unison.input.LocationFinder;
 import uk.co.sleonard.unison.input.LocationFinderImpl;
 import uk.co.sleonard.unison.input.NewsArticle;
@@ -91,7 +91,7 @@ public class HibernateHelper {
 
 	private final LocationFinder locationFinder;
 
-	private final UNISoNGUI gui;
+	private final UNISoNGUIFX gui;
 
 	/**
 	 * This opens up a SQL client to access the database directly.
@@ -111,7 +111,7 @@ public class HibernateHelper {
 	 * @param controller
 	 *            the controller
 	 */
-	public HibernateHelper(final UNISoNGUI gui) {
+	public HibernateHelper(final UNISoNGUIFX gui) {
 		this.gui = gui;
 		this.locationFinder = new LocationFinderImpl();
 	}

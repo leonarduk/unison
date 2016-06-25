@@ -21,7 +21,7 @@ import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.ResultRow;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
-import uk.co.sleonard.unison.gui.UNISoNGUI;
+import uk.co.sleonard.unison.gui.UNISoNGUIFX;
 
 public class UNISoNAnalysisTest {
 
@@ -35,7 +35,7 @@ public class UNISoNAnalysisTest {
 	@Before
 	public void setUp() throws Exception {
 		this.session = Mockito.mock(Session.class);
-		final UNISoNGUI gui = Mockito.mock(UNISoNGUI.class);
+		final UNISoNGUIFX gui = Mockito.mock(UNISoNGUIFX.class);
 		this.helper = new HibernateHelper(gui);
 		this.filter = Mockito.mock(NewsGroupFilter.class);
 		this.analysis = new UNISoNAnalysis(this.filter, this.session, this.helper);

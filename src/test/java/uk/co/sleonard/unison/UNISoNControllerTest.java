@@ -8,19 +8,18 @@ package uk.co.sleonard.unison;
 
 import javax.swing.JFrame;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 public class UNISoNControllerTest {
 
-	private UNISoNController controller;
+	private UNISoNControllerFX controller;
 
 	@Before
 	public void setUp() throws Exception {
 		final JFrame frame = Mockito.mock(JFrame.class);
-		this.controller = UNISoNController.create(frame);
+		this.controller = new UNISoNControllerFX();
 	}
 
 	@Test
@@ -106,11 +105,6 @@ public class UNISoNControllerTest {
 	@Test
 	public final void testListNewsgroups() {
 
-	}
-
-	public final void testMatrixType() {
-		this.controller.setMatrixType(MatrixType.REPLY_TO_ALL);
-		Assert.assertEquals(MatrixType.REPLY_TO_ALL, this.controller.getMatrixType());
 	}
 
 	@Test

@@ -147,7 +147,7 @@ public class UNISoNController {
 		this.messageQueue = new LinkedBlockingQueue<>();
 		this.headerDownloader = new HeaderDownloadWorker(this.messageQueue, new DownloaderImpl());
 		this.headerDownloader.initialise();
-		this.helper = new HibernateHelper(UNISoNController.gui);
+		this.helper = null;
 		try {
 			final Session hibernateSession = this.getHelper().getHibernateSession();
 			this.setSession(hibernateSession);

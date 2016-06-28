@@ -1,8 +1,13 @@
 package uk.co.sleonard.unison.gui;
 
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 
 import javafx.application.Platform;
@@ -11,24 +16,29 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import uk.co.sleonard.unison.UNISoNControllerFX;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
+import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
+import uk.co.sleonard.unison.input.HeaderDownloadWorker;
 import uk.co.sleonard.unison.input.NNTPNewsGroup;
 import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
  * The class DownloadNewsPanelFX, Controller of the Tab Download Messages.
- * 
+ *
  * @author Elton <elton_12_nunes@hotmail.com>
+ * @since 25-Jun-2016
  */
-public class DownloadNewsPanelFX implements UNISoNLogger {
+public class DownloadNewsPanelFX implements UNISoNLogger, Observer {
 
-	// Components Variables
+	/** -------------------- Components Variables ------------------ */
 	/** The newsgroup field. */
 	@FXML
 	private TextField newsGroupField;
@@ -44,6 +54,31 @@ public class DownloadNewsPanelFX implements UNISoNLogger {
 	/** The notes area. */
 	@FXML
 	private TextArea notesArea;
+	/** The cancel button. */
+	@FXML
+	private Button cancelButton;
+	/** The download button. */
+	@FXML
+	private Button downloadButton;
+	/** The from date field. */
+	@FXML
+	private TextField fromDateField;
+	/** The from date label. */
+	@FXML
+	private Label fromDateLabel;
+	/** The get location check. */
+	@FXML
+	private CheckBox getLocationCheck;
+	/** The pause button. */
+	@FXML
+	private Button pauseButton;
+	/** The to date field. */
+	@FXML
+	private TextField toDateField;
+	/** The to date label. */
+	@FXML
+	private Label toDateLabel;
+	/** -------------------- Components Variables ------------------ */
 
 	private UNISoNControllerFX controller;
 
@@ -83,7 +118,7 @@ public class DownloadNewsPanelFX implements UNISoNLogger {
 				controller.setNntpHost(host);
 				final String group = newsGroupField.getText();
 				log("Find groups matching : " + group + " on " + controller.getNntpHost());
-				// this.downloadEnabled(false); TODO Implement later.
+				downloadEnabled(false);
 				if (null != group) {
 					try {
 						availableGroups = controller.listNewsgroups(group, host);
@@ -97,7 +132,7 @@ public class DownloadNewsPanelFX implements UNISoNLogger {
 
 					}
 					else {
-						// this.downloadEnabled(true); TODO Implement later
+						downloadEnabled(true);
 					}
 					availableNewsgroups.setItems(getAvailableGroupsItems());
 				}
@@ -121,6 +156,83 @@ public class DownloadNewsPanelFX implements UNISoNLogger {
 	}
 
 	/**
+	 * Download button action performed.
+	 */
+	@FXML
+	private void downloadButtonActionPerformed() {
+		this.downloadEnabled(false);
+
+		final Object[] items = this.availableNewsgroups.getSelectionModel().getSelectedItems()
+		        .toArray();
+		final Set<NNTPNewsGroup> groups = new HashSet<>();
+		for (final Object item : items) {
+			groups.add((NNTPNewsGroup) item);
+		}
+		if (groups.size() > 0) {
+			try {
+				this.log("Download : " + groups);
+
+				final Date fromDate = StringUtils.stringToDate(this.fromDateField.getText());
+				final Date toDate = StringUtils.stringToDate(this.toDateField.getText());
+
+				DownloadMode mode;
+				// FIXME Disable until start improving gui
+				// if (this.getTextCheck.isSelected()) {
+				// mode = DownloadMode.ALL;
+				// }
+				// else
+				if (this.getLocationCheck.isSelected()) {
+					mode = DownloadMode.HEADERS;
+				}
+				else {
+					mode = DownloadMode.BASIC;
+				}
+				this.controller.quickDownload(groups, fromDate, toDate, this, mode);
+
+				this.log("Done.");
+			}
+			catch (final UNISoNException e) {
+				this.alert("Failed to download. Check your internet connection");
+				this.downloadEnabled(true);
+			}
+			catch (final DateTimeParseException e) {
+				this.alert("Failed to parse date : " + e.getMessage());
+				this.downloadEnabled(true);
+			}
+		}
+	}
+
+	/**
+	 * Pause button action performed.
+	 *
+	 * @param evt
+	 *            the evt
+	 */
+	@FXML
+	private void pauseButtonActionPerformed() {
+		final HeaderDownloadWorker headerDownloader = this.controller.getHeaderDownloader();
+		if (headerDownloader.isDownloading()) {
+			headerDownloader.pause();
+			this.pauseButton.setText("Resume");
+		}
+		else {
+			this.pauseButton.setText("Pause");
+			headerDownloader.resume();
+		}
+	}
+
+	/**
+	 * Cancel button action performed.
+	 *
+	 * @param evt
+	 *            the evt
+	 */
+	@FXML
+	private void cancelButtonActionPerformed() {
+		this.controller.getHeaderDownloader().fullstop();
+	}
+
+	/**
 	 * Gets the available groups model.
 	 *
 	 * @return the available groups model
@@ -128,6 +240,25 @@ public class DownloadNewsPanelFX implements UNISoNLogger {
 	private ObservableList<NNTPNewsGroup> getAvailableGroupsItems() {
 		List<NNTPNewsGroup> listGroups = new ArrayList<>(availableGroups);
 		return FXCollections.observableList(listGroups);
+	}
+
+	/**
+	 * Download enabled.
+	 *
+	 * @param enabled
+	 *            the enabled
+	 */
+	private void downloadEnabled(final boolean enabled) {
+		this.downloadButton.setDisable(!enabled);
+		this.fromDateLabel.setDisable(!enabled);
+		this.toDateLabel.setDisable(!enabled);
+		this.fromDateField.setDisable(!enabled);
+		this.toDateField.setDisable(!enabled);
+		this.getLocationCheck.setDisable(!enabled);
+
+		// these are off when download on & vice versa
+		this.cancelButton.setDisable(enabled);
+		this.pauseButton.setDisable(enabled);
 	}
 
 	@Override
@@ -141,5 +272,17 @@ public class DownloadNewsPanelFX implements UNISoNLogger {
 		this.logText.append(message + "\n");
 		this.notesArea.setText(this.logText.toString());
 
+	}
+
+	@Override
+	public void update(Observable observable, Object arg) {
+		if (observable instanceof HeaderDownloadWorker) {
+			final HeaderDownloadWorker headerDownloader = (HeaderDownloadWorker) observable;
+			if (!headerDownloader.isDownloading()) {
+				this.downloadEnabled(true);
+			}
+			// } else if (observable instanceof UNISoNController) {
+			// UNISoNController controller = (UNISoNController) observable;
+		}
 	}
 }

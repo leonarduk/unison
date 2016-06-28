@@ -15,7 +15,7 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
-import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNControllerFX;
 import uk.co.sleonard.unison.datahandling.DAO.Location;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
@@ -52,7 +52,7 @@ public class DataQuery {
 	 * Instantiates a new data query.
 	 */
 	protected DataQuery() {
-		this(UNISoNController.getInstance().helper());
+		this(UNISoNControllerFX.getInstance().getHelper());
 	}
 
 	/**

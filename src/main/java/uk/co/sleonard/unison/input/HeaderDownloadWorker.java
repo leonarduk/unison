@@ -19,7 +19,7 @@ import org.apache.commons.net.nntp.Article;
 import org.apache.commons.net.nntp.NNTPClient;
 import org.apache.log4j.Logger;
 
-import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNControllerFX;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
@@ -97,7 +97,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 		while (this.running) {
 			if (this.downloading) {
 				try {
-					this.storeArticleInfo(UNISoNController.getInstance().getQueue());
+					this.storeArticleInfo(UNISoNControllerFX.getInstance().getQueue());
 				}
 				catch (final UNISoNException e) {
 					this.log.alert("ERROR:" + e);
@@ -114,7 +114,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 
 	public NewsArticle convertMessageToNewsArticle(final int articleNumber, final String subject,
 	        final String from, final Date date, final String articleId, final String references)
-	                throws UNISoNException {
+	        throws UNISoNException {
 		final String postingHost = null;
 		final String content = null;
 

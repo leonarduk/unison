@@ -26,6 +26,7 @@ import uk.co.sleonard.unison.UNISoNControllerFX;
  * (I need improve this architecture). <br/>
  * 
  * @author Elton <elton_12_nunes@hotmail.com>
+ * @since 18-jun-2016
  */
 public class UNISoNTabbedFrameFX extends Application {
 
@@ -104,6 +105,7 @@ public class UNISoNTabbedFrameFX extends Application {
 
 			this.unisonController.setUnisonTabbedFrameFX(this);
 			this.unisonController.setDownloadNewsPanelFX(loader.getController());
+			this.unisonController.getDatabase().addObserver(loader.getController());
 
 		}
 		catch (IOException e) {
@@ -120,6 +122,8 @@ public class UNISoNTabbedFrameFX extends Application {
 			loader.setLocation(classLoader.getResource("fxml/MessageStoreViewerLayout.fxml"));
 			AnchorPane messageStoreViewer = (AnchorPane) loader.load();
 			tabs.getTabs().get(1).setContent(messageStoreViewer);
+			// this.unisonController.getDatabase().addObserver(loader.getController()); TODO
+			// UNCOMMENT AFTER CREATE THE CONTROLLER (MESSAGE STORE VIEWER)
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -135,6 +139,8 @@ public class UNISoNTabbedFrameFX extends Application {
 			loader.setLocation(classLoader.getResource("fxml/PajekPanelLayout.fxml"));
 			AnchorPane messageStoreViewer = (AnchorPane) loader.load();
 			tabs.getTabs().get(2).setContent(messageStoreViewer);
+			// this.unisonController.getDatabase().addObserver(loader.getController()); TODO
+			// UNCOMMENT AFTER CREATE THE CONTROLLER (PAJEK PANEL)
 		}
 		catch (IOException e) {
 			e.printStackTrace();

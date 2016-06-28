@@ -15,17 +15,17 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
 import uk.co.sleonard.unison.NewsGroupFilter;
-import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNControllerFX;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 
 public class UNISoNDatabase extends Observable {
-	private static Logger			logger	= Logger.getLogger(UNISoNDatabase.class);
-	private final Session			session;
-	private final NewsGroupFilter	filter;
-	private final HibernateHelper	helper;
+	private static Logger logger = Logger.getLogger(UNISoNDatabase.class);
+	private final Session session;
+	private final NewsGroupFilter filter;
+	private final HibernateHelper helper;
 
 	public UNISoNDatabase(final NewsGroupFilter filter2, final Session session2,
 	        final HibernateHelper helper2) {
@@ -34,7 +34,7 @@ public class UNISoNDatabase extends Observable {
 		this.helper = helper2;
 	}
 
-	public UNISoNDatabase(final UNISoNController controller) {
+	public UNISoNDatabase(final UNISoNControllerFX controller) {
 		this.session = controller.getSession();
 		this.filter = controller.getFilter();
 		this.helper = controller.getHelper();

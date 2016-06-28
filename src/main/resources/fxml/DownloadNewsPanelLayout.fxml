@@ -46,7 +46,7 @@
             <Tooltip text="The number in brackets is an estimate (provided by the server) which is likely to be higher than actual number of messages as many messages are deleted." />
          </tooltip>
       </ListView>
-      <TextArea fx:id="notesArea" layoutX="408.0" layoutY="6.0" prefHeight="384.0" prefWidth="200.0">
+      <TextArea fx:id="notesArea" editable="false" layoutX="408.0" layoutY="6.0" prefHeight="384.0" prefWidth="200.0">
          <tooltip>
             <Tooltip text="Empty Tooltip" />
          </tooltip>
@@ -56,7 +56,7 @@
             <Tooltip text="Enter name or part name (* for wild chararcter) the n click here" />
          </tooltip>
       </Button>
-      <CheckBox disable="true" layoutX="297.0" layoutY="78.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="101.0" text="Get Extras">
+      <CheckBox fx:id="getLocationCheck" disable="true" layoutX="297.0" layoutY="78.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="101.0" text="Get Extras">
          <font>
             <Font size="14.0" />
          </font>
@@ -64,28 +64,28 @@
             <Tooltip text="Downloads Location &amp; Crossposts" />
          </tooltip>
       </CheckBox>
-      <Label disable="true" layoutX="297.0" layoutY="131.0" text="Date From">
+      <Label fx:id="fromDateLabel" disable="true" layoutX="297.0" layoutY="131.0" text="Date From">
          <tooltip>
             <Tooltip text="In YYYYMMDD format eg 20071201" />
          </tooltip>
       </Label>
-      <TextField disable="true" layoutX="297.0" layoutY="148.0" prefHeight="25.0" prefWidth="100.0">
+      <TextField fx:id="fromDateField" disable="true" layoutX="297.0" layoutY="148.0" prefHeight="25.0" prefWidth="100.0">
          <tooltip>
             <Tooltip text="In YYYYMMDD format eg 20071201" />
          </tooltip>
       </TextField>
-      <Label disable="true" layoutX="297.0" layoutY="184.0" text="Date To">
+      <Label fx:id="toDateLabel" disable="true" layoutX="297.0" layoutY="184.0" text="Date To">
          <tooltip>
             <Tooltip text="In YYYYMMDD format eg 20071201" />
          </tooltip>
       </Label>
-      <TextField disable="true" layoutX="297.0" layoutY="203.0" prefHeight="25.0" prefWidth="100.0">
+      <TextField fx:id="toDateField" disable="true" layoutX="297.0" layoutY="203.0" prefHeight="25.0" prefWidth="100.0">
          <tooltip>
             <Tooltip text="In YYYYMMDD format eg 20071201" />
          </tooltip>
       </TextField>
-      <Button disable="true" layoutX="297.0" layoutY="275.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="100.0" text="Download" />
-      <Button disable="true" layoutX="297.0" layoutY="315.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="100.0" text="Pause" />
-      <Button disable="true" layoutX="297.0" layoutY="355.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="100.0" text="Cancel" />
+      <Button fx:id="downloadButton" disable="true" layoutX="297.0" layoutY="275.0" mnemonicParsing="false" onAction="#downloadButtonActionPerformed" prefHeight="31.0" prefWidth="100.0" text="Download" />
+      <Button fx:id="pauseButton" disable="true" layoutX="297.0" layoutY="315.0" mnemonicParsing="false" onAction="#pauseButtonActionPerformed" prefHeight="31.0" prefWidth="100.0" text="Pause" />
+      <Button fx:id="cancelButton" disable="true" layoutX="297.0" layoutY="355.0" mnemonicParsing="false" onAction="#cancelButtonActionPerformed" prefHeight="31.0" prefWidth="100.0" text="Cancel" />
    </children>
 </AnchorPane>

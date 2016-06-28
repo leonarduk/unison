@@ -19,7 +19,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.commons.net.MalformedServerReplyException;
 
-import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNControllerFX;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest;
@@ -94,9 +94,9 @@ public class FullDownloadWorker extends SwingWorker {
 	public static void startDownloaders(final int numberOfDownloaders) throws UNISoNException {
 
 		for (int i = 0; i < numberOfDownloaders; i++) {
-			final String host = UNISoNController.getInstance().getNntpHost();
+			final String host = UNISoNControllerFX.getInstance().getNntpHost();
 			FullDownloadWorker.downloaders
-			        .add(new FullDownloadWorker(host, UNISoNController.getInstance().getQueue()));
+			        .add(new FullDownloadWorker(host, UNISoNControllerFX.getInstance().getQueue()));
 		}
 	}
 
@@ -147,12 +147,12 @@ public class FullDownloadWorker extends SwingWorker {
 				}
 			}
 		}
-		catch (@SuppressWarnings("unused") final InterruptedException e) {
+		catch (final InterruptedException e) {
 			return "Interrupted";
 		}
 		catch (final UNISoNException e) {
-			UNISoNController.getInstance();
-			UNISoNController.getGui().showAlert("Error in download:" + e);
+			UNISoNControllerFX.getInstance();
+			UNISoNControllerFX.getGui().showAlert("Error in download:" + e);
 			e.printStackTrace();
 			return "FAIL";
 		}
@@ -412,7 +412,7 @@ public class FullDownloadWorker extends SwingWorker {
 
 		final NewsArticle article = this.downloadArticle(request);
 		if (null != article) {
-			final LinkedBlockingQueue<NewsArticle> queue = UNISoNController.getInstance()
+			final LinkedBlockingQueue<NewsArticle> queue = UNISoNControllerFX.getInstance()
 			        .getQueue();
 
 			FullDownloadWorker.log.log("Got:" + article.getSubject() + " " + article.getFrom() + " "

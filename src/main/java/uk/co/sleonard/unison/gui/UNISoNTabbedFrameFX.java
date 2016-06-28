@@ -45,7 +45,8 @@ public class UNISoNTabbedFrameFX extends Application {
 	private void showSplashScreen() throws IOException {
 
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(UNISoNTabbedFrameFX.class.getResource("fxml/SplashScreenLayout.fxml"));
+		ClassLoader classLoader = getClass().getClassLoader();
+		loader.setLocation(classLoader.getResource("fxml/SplashScreenLayout.fxml"));
 		Pane splashPane = (Pane) loader.load();
 		Scene splashScene = new Scene(splashPane);
 		primaryStage.setScene(splashScene);
@@ -62,7 +63,8 @@ public class UNISoNTabbedFrameFX extends Application {
 		try {
 			// Load the FXML File.
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(UNISoNTabbedFrameFX.class.getResource("fxml/RootLayout.fxml"));
+			ClassLoader classLoader = getClass().getClassLoader();
+			loader.setLocation(classLoader.getResource("fxml/RootLayout.fxml"));
 			rootLayout = (BorderPane) loader.load();
 			tabs = (TabPane) rootLayout.getChildren().get(2);
 
@@ -95,8 +97,8 @@ public class UNISoNTabbedFrameFX extends Application {
 		try {
 			// Load the FXML File.
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(
-			        UNISoNTabbedFrameFX.class.getResource("fxml/DownloadNewsPanelLayout.fxml"));
+			ClassLoader classLoader = getClass().getClassLoader();
+			loader.setLocation(classLoader.getResource("fxml/DownloadNewsPanelLayout.fxml"));
 			AnchorPane downloadNewsPanel = (AnchorPane) loader.load();
 			tabs.getTabs().get(0).setContent(downloadNewsPanel);
 
@@ -114,8 +116,8 @@ public class UNISoNTabbedFrameFX extends Application {
 		try {
 			// Load the FXML File.
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(
-			        UNISoNTabbedFrameFX.class.getResource("fxml/MessageStoreViewerLayout.fxml"));
+			ClassLoader classLoader = getClass().getClassLoader();
+			loader.setLocation(classLoader.getResource("fxml/MessageStoreViewerLayout.fxml"));
 			AnchorPane messageStoreViewer = (AnchorPane) loader.load();
 			tabs.getTabs().get(1).setContent(messageStoreViewer);
 		}
@@ -129,7 +131,8 @@ public class UNISoNTabbedFrameFX extends Application {
 		try {
 			// Load the FXML File.
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(UNISoNTabbedFrameFX.class.getResource("fxml/PajekPanelLayout.fxml"));
+			ClassLoader classLoader = getClass().getClassLoader();
+			loader.setLocation(classLoader.getResource("fxml/PajekPanelLayout.fxml"));
 			AnchorPane messageStoreViewer = (AnchorPane) loader.load();
 			tabs.getTabs().get(2).setContent(messageStoreViewer);
 		}
@@ -143,8 +146,8 @@ public class UNISoNTabbedFrameFX extends Application {
 		try {
 			// Load the FXML File.
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(
-			        UNISoNTabbedFrameFX.class.getResource("fxml/AboutDialogLayout.fxml"));
+			ClassLoader classLoader = getClass().getClassLoader();
+			loader.setLocation(classLoader.getResource("fxml/AboutDialogLayout.fxml"));
 			Pane paneAboutDialog = (Pane) loader.load();
 			Scene aboutScene = new Scene(paneAboutDialog);
 			this.aboutDialogStage = new Stage();

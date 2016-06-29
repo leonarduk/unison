@@ -4,8 +4,10 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.Tooltip?>
@@ -15,24 +17,33 @@
 
 <AnchorPane prefHeight="391.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uk.co.sleonard.unison.gui.MessageStoreViewerFX">
    <children>
-      <TreeView layoutX="10.0" layoutY="10.0" prefHeight="174.0" prefWidth="180.0" />
-      <TreeView layoutX="10.0" layoutY="194.0" prefHeight="193.0" prefWidth="180.0" />
-      <TreeView layoutX="200.0" layoutY="194.0" prefHeight="193.0" prefWidth="200.0" />
       <TabPane layoutX="411.0" layoutY="195.0" prefHeight="193.0" prefWidth="190.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Posters">
                <content>
-                  <ListView />
+                  <ScrollPane fx:id="topPostersScrollPane">
+                     <content>
+                        <ListView fx:id="topPostersList" />
+                     </content>
+                  </ScrollPane>
                </content>
           </Tab>
           <Tab text="Groups">
                <content>
-                  <ListView prefHeight="156.0" prefWidth="166.0" />
+                  <ScrollPane fx:id="topGroupsScrollPane">
+                     <content>
+                        <ListView fx:id="topGroupsList" />
+                     </content>
+                  </ScrollPane>
                </content>
           </Tab>
             <Tab text="Countries">
                <content>
-                  <ListView prefHeight="156.0" prefWidth="166.0" />
+                  <ScrollPane fx:id="topCountriesScrollPane">
+                     <content>
+                        <ListView fx:id="topCountriesList" />
+                     </content>
+                  </ScrollPane>
                </content>
             </Tab>
         </tabs>
@@ -80,15 +91,30 @@
          <tooltip>
             <Tooltip text="In YYYYMMDD format, e.g. 20160101" />
          </tooltip></TextField>
-      <Button fx:id="headersButton" layoutX="410.0" layoutY="88.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="190.0" text="Get Extras">
+      <Button fx:id="headersButton" layoutX="410.0" layoutY="88.0" mnemonicParsing="false" onAction="#headersButton" prefHeight="25.0" prefWidth="190.0" text="Get Extras">
          <tooltip>
             <Tooltip text="Download extra fields: location and crossposts for messages in filter" />
          </tooltip></Button>
-      <Button fx:id="refreshButton" layoutX="411.0" layoutY="159.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="190.0" text="Refresh Data" />
-      <ToggleButton fx:id="filterToggle" layoutX="410.0" layoutY="124.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="190.0" text="Filter">
+      <Button fx:id="refreshButton" layoutX="411.0" layoutY="159.0" mnemonicParsing="false" onAction="#refreshDataButton" prefHeight="25.0" prefWidth="190.0" text="Refresh Data" />
+      <ToggleButton fx:id="filterToggle" layoutX="410.0" layoutY="124.0" mnemonicParsing="false" onAction="#filterToggle" prefHeight="25.0" prefWidth="190.0" text="Filter">
          <tooltip>
             <Tooltip text="Enter date values, select groups or posters in lists, or combination then click filter" />
          </tooltip>
       </ToggleButton>
+      <ScrollPane fx:id="groupsScrollPane" layoutX="10.0" layoutY="10.0" prefHeight="175.0" prefWidth="180.0">
+         <content>
+            <TreeView fx:id="groupsHierarchy" prefHeight="200.0" prefWidth="200.0" />
+         </content>
+      </ScrollPane>
+      <ScrollPane fx:id="topicsScrollPane" layoutX="10.0" layoutY="194.0" prefHeight="193.0" prefWidth="180.0">
+         <content>
+            <TreeView fx:id="topicsHierarchy" prefHeight="200.0" prefWidth="200.0" />
+         </content>
+      </ScrollPane>
+      <ScrollPane fx:id="bodyScrollPane" layoutX="201.0" layoutY="193.0" prefHeight="193.0" prefWidth="200.0">
+         <content>
+            <TextArea fx:id="bodyPane" editable="false" prefHeight="200.0" prefWidth="200.0" />
+         </content>
+      </ScrollPane>
    </children>
 </AnchorPane>

@@ -425,6 +425,16 @@ public class UNISoNControllerFX {
 		return UNISoNControllerFX.gui;
 	}
 
+	/**
+	 * Sets the download panel.
+	 *
+	 * @param downloadPanel
+	 *            the new download panel
+	 */
+	public void setDownloadPanel(final UNISoNLogger downloadPanel) {
+		this.downloadPanel = downloadPanel;
+	}
+
 	public static void setGui(final UNISoNGUIFX gui) {
 		UNISoNControllerFX.gui = gui;
 	}

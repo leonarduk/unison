@@ -26,6 +26,7 @@ import uk.co.sleonard.unison.UNISoNControllerFX;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
+import uk.co.sleonard.unison.input.DataHibernatorWorker;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
 import uk.co.sleonard.unison.input.NNTPNewsGroup;
 import uk.co.sleonard.unison.utils.StringUtils;
@@ -100,6 +101,10 @@ public class DownloadNewsPanelFX implements UNISoNLogger, Observer {
 		this.controller = UNISoNControllerFX.getInstance();
 		logText = new StringBuffer();
 
+		this.controller.getHeaderDownloader().addObserver(this);
+		DataHibernatorWorker.setLogger(this);
+		this.controller.setDownloadPanel(this);
+
 		List<String> listServers = Arrays.asList(StringUtils.loadServerList());
 		ObservableList<String> list = FXCollections.observableList(listServers);
 		this.hostCombo.setItems(list);
@@ -159,7 +164,7 @@ public class DownloadNewsPanelFX implements UNISoNLogger, Observer {
 	 * Download button action performed.
 	 */
 	@FXML
-	private void downloadButtonActionPerformed() {
+	private void downloadButton() {
 		this.downloadEnabled(false);
 
 		final Object[] items = this.availableNewsgroups.getSelectionModel().getSelectedItems()
@@ -209,7 +214,7 @@ public class DownloadNewsPanelFX implements UNISoNLogger, Observer {
 	 *            the evt
 	 */
 	@FXML
-	private void pauseButtonActionPerformed() {
+	private void pauseButton() {
 		final HeaderDownloadWorker headerDownloader = this.controller.getHeaderDownloader();
 		if (headerDownloader.isDownloading()) {
 			headerDownloader.pause();
@@ -228,7 +233,7 @@ public class DownloadNewsPanelFX implements UNISoNLogger, Observer {
 	 *            the evt
 	 */
 	@FXML
-	private void cancelButtonActionPerformed() {
+	private void cancelButton() {
 		this.controller.getHeaderDownloader().fullstop();
 	}
 

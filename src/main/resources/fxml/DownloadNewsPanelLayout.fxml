@@ -84,8 +84,8 @@
             <Tooltip text="In YYYYMMDD format eg 20071201" />
          </tooltip>
       </TextField>
-      <Button fx:id="downloadButton" disable="true" layoutX="297.0" layoutY="275.0" mnemonicParsing="false" onAction="#downloadButtonActionPerformed" prefHeight="31.0" prefWidth="100.0" text="Download" />
-      <Button fx:id="pauseButton" disable="true" layoutX="297.0" layoutY="315.0" mnemonicParsing="false" onAction="#pauseButtonActionPerformed" prefHeight="31.0" prefWidth="100.0" text="Pause" />
-      <Button fx:id="cancelButton" disable="true" layoutX="297.0" layoutY="355.0" mnemonicParsing="false" onAction="#cancelButtonActionPerformed" prefHeight="31.0" prefWidth="100.0" text="Cancel" />
+      <Button fx:id="downloadButton" disable="true" layoutX="297.0" layoutY="275.0" mnemonicParsing="false" onAction="#downloadButton" prefHeight="31.0" prefWidth="100.0" text="Download" />
+      <Button fx:id="pauseButton" disable="true" layoutX="297.0" layoutY="315.0" mnemonicParsing="false" onAction="#pauseButton" prefHeight="31.0" prefWidth="100.0" text="Pause" />
+      <Button fx:id="cancelButton" disable="true" layoutX="297.0" layoutY="355.0" mnemonicParsing="false" onAction="#cancelButton" prefHeight="31.0" prefWidth="100.0" text="Cancel" />
    </children>
 </AnchorPane>

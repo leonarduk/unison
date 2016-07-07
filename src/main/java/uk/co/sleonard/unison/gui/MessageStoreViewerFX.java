@@ -167,31 +167,25 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 	 * Creates new form MessageStoreViewer.
 	 */
 	public MessageStoreViewerFX() {
-		// this.initComponents();
-		//
-		// final Dimension size = this.sentDateField.getPreferredSize();
-		// this.sentDateField.setMaximumSize(size);
-		// this.sentDateField.setPreferredSize(size);
-		// this.subjectField.setMaximumSize(size);
-		// this.subjectField.setPreferredSize(size);
-		// this.senderField.setMaximumSize(size);
-		// this.senderField.setPreferredSize(size);
-		//
-		// try {
-		//
-		// this.session = UNISoNControllerFX.getInstance().helper().getHibernateSession();
-		//
-		// // FIXME disable all non-workng parts
-		// // headersButton.setVisible(false);
-		// this.getBodyButton.setVisible(false);
-		// this.missingMessagesCheck.setVisible(false);
-		//
-		// this.switchFilter(this.filterToggle.isSelected());
-		// }
-		// catch (final UNISoNException e) {
-		// UNISoNControllerFX.getInstance();
-		// UNISoNControllerFX.getGui().showAlert("Error :" + e.getMessage());
-		// }
+	}
+
+	@FXML
+	private void initialize() {
+		try {
+
+			this.session = UNISoNControllerFX.getInstance().getHelper().getHibernateSession();
+
+			// FIXME disable all non-workng parts
+			// headersButton.setVisible(false);
+			// this.getBodyButton.setVisible(false);
+			// this.missingMessagesCheck.setVisible(false);
+
+			this.switchFilter(this.filterToggle.isSelected());
+		}
+		catch (final UNISoNException e) {
+			UNISoNControllerFX.getInstance();
+			UNISoNControllerFX.getGui().showAlert("Error :" + e.getMessage());
+		}
 	}
 
 	/**

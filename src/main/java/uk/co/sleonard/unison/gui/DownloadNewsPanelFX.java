@@ -268,14 +268,20 @@ public class DownloadNewsPanelFX implements UNISoNLogger, Observer {
 
 	@Override
 	public void alert(String message) {
-		this.log(message);
-		UNISoNControllerFX.getGui().showAlert(message);
+		// Changed to platform runlater to ensures what are thread fx
+		Platform.runLater(() -> {
+			this.log(message);
+			UNISoNControllerFX.getGui().showAlert(message);
+		});
 	}
 
 	@Override
 	public void log(String message) {
-		this.logText.append(message + "\n");
-		this.notesArea.setText(this.logText.toString());
+		// Changed to platform runlater to ensures what are thread fx
+		Platform.runLater(() -> {
+			this.logText.append(message + "\n");
+			this.notesArea.setText(this.logText.toString());
+		});
 
 	}
 

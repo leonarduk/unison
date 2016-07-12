@@ -34,7 +34,8 @@ import uk.co.sleonard.unison.utils.StringUtils;
 /**
  * The class DownloadNewsPanelFX, Controller of the Tab Download Messages.
  *
- * @author Elton <elton_12_nunes@hotmail.com>
+ * @author Stephen <github@leonarduk.com> and adapted to JavaFX by Elton
+ *         <elton_12_nunes@hotmail.com>
  * @since 25-Jun-2016
  */
 public class DownloadNewsPanelFX implements UNISoNLogger, Observer {
@@ -99,7 +100,7 @@ public class DownloadNewsPanelFX implements UNISoNLogger, Observer {
 	@FXML
 	private void initialize() {
 		this.controller = UNISoNControllerFX.getInstance();
-		logText = new StringBuffer();
+		this.logText = new StringBuffer();
 
 		this.controller.getHeaderDownloader().addObserver(this);
 		DataHibernatorWorker.setLogger(this);
@@ -118,28 +119,28 @@ public class DownloadNewsPanelFX implements UNISoNLogger, Observer {
 		Task<Void> task = new Task<Void>() {
 			@Override
 			protected Void call() {
-				final String host = hostCombo.getSelectionModel().getSelectedItem().toString()
-		                .trim();
-				controller.setNntpHost(host);
-				final String group = newsGroupField.getText();
-				log("Find groups matching : " + group + " on " + controller.getNntpHost());
+				final String host = DownloadNewsPanelFX.this.hostCombo.getSelectionModel().getSelectedItem().toString()
+						.trim();
+				DownloadNewsPanelFX.this.controller.setNntpHost(host);
+				final String group = DownloadNewsPanelFX.this.newsGroupField.getText();
+				log("Find groups matching : " + group + " on " + DownloadNewsPanelFX.this.controller.getNntpHost());
 				downloadEnabled(false);
 				if (null != group) {
 					try {
-						availableGroups = controller.listNewsgroups(group, host);
-					}
-					catch (UNISoNException e) {
+						DownloadNewsPanelFX.this.availableGroups = DownloadNewsPanelFX.this.controller
+								.listNewsgroups(group, host);
+					} catch (UNISoNException e) {
 						alert("Problem downloading: " + e.getMessage());
 					}
-					if ((null == availableGroups) || (availableGroups.size() == 0)) {
+					if ((null == DownloadNewsPanelFX.this.availableGroups)
+							|| (DownloadNewsPanelFX.this.availableGroups.size() == 0)) {
 						alert("No groups found for string : " + group + " on "
-		                        + controller.getNntpHost() + ".\nPerhaps another host?");
+								+ DownloadNewsPanelFX.this.controller.getNntpHost() + ".\nPerhaps another host?");
 
-					}
-					else {
+					} else {
 						downloadEnabled(true);
 					}
-					availableNewsgroups.setItems(getAvailableGroupsItems());
+					DownloadNewsPanelFX.this.availableNewsgroups.setItems(getAvailableGroupsItems());
 				}
 				return null;
 			}
@@ -148,12 +149,12 @@ public class DownloadNewsPanelFX implements UNISoNLogger, Observer {
 			protected void succeeded() {
 				super.succeeded();
 				Platform.runLater(new Runnable() {
-			        @Override
-			        public void run() {
-				        controller.setStatusLabel("");
-				        controller.setStatusProgress(0.0);
-			        }
-		        });
+					@Override
+					public void run() {
+						DownloadNewsPanelFX.this.controller.setStatusLabel("");
+						DownloadNewsPanelFX.this.controller.setStatusProgress(0.0);
+					}
+				});
 
 			}
 		};
@@ -167,8 +168,7 @@ public class DownloadNewsPanelFX implements UNISoNLogger, Observer {
 	private void downloadButton() {
 		this.downloadEnabled(false);
 
-		final Object[] items = this.availableNewsgroups.getSelectionModel().getSelectedItems()
-		        .toArray();
+		final Object[] items = this.availableNewsgroups.getSelectionModel().getSelectedItems().toArray();
 		final Set<NNTPNewsGroup> groups = new HashSet<>();
 		for (final Object item : items) {
 			groups.add((NNTPNewsGroup) item);
@@ -188,19 +188,16 @@ public class DownloadNewsPanelFX implements UNISoNLogger, Observer {
 				// else
 				if (this.getLocationCheck.isSelected()) {
 					mode = DownloadMode.HEADERS;
-				}
-				else {
+				} else {
 					mode = DownloadMode.BASIC;
 				}
 				this.controller.quickDownload(groups, fromDate, toDate, this, mode);
 
 				this.log("Done.");
-			}
-			catch (final UNISoNException e) {
+			} catch (final UNISoNException e) {
 				this.alert("Failed to download. Check your internet connection");
 				this.downloadEnabled(true);
-			}
-			catch (final DateTimeParseException e) {
+			} catch (final DateTimeParseException e) {
 				this.alert("Failed to parse date : " + e.getMessage());
 				this.downloadEnabled(true);
 			}
@@ -219,8 +216,7 @@ public class DownloadNewsPanelFX implements UNISoNLogger, Observer {
 		if (headerDownloader.isDownloading()) {
 			headerDownloader.pause();
 			this.pauseButton.setText("Resume");
-		}
-		else {
+		} else {
 			this.pauseButton.setText("Pause");
 			headerDownloader.resume();
 		}
@@ -243,7 +239,7 @@ public class DownloadNewsPanelFX implements UNISoNLogger, Observer {
 	 * @return the available groups model
 	 */
 	private ObservableList<NNTPNewsGroup> getAvailableGroupsItems() {
-		List<NNTPNewsGroup> listGroups = new ArrayList<>(availableGroups);
+		List<NNTPNewsGroup> listGroups = new ArrayList<>(this.availableGroups);
 		return FXCollections.observableList(listGroups);
 	}
 

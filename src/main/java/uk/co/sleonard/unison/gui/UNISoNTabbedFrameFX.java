@@ -26,7 +26,8 @@ import uk.co.sleonard.unison.UNISoNControllerFX;
  * 3rd Method load() inside Splash screen call showRootLayout to show rootLayout and other screens
  * (I need improve this architecture). <br/>
  * 
- * @author Elton <elton_12_nunes@hotmail.com>
+ * @author Stephen <github@leonarduk.com> and adapted to JavaFX by Elton
+ *         <elton_12_nunes@hotmail.com>
  * @since 18-jun-2016
  */
 public class UNISoNTabbedFrameFX extends Application {

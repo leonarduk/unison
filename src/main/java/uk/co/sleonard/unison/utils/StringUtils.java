@@ -215,18 +215,20 @@ public class StringUtils {
 	 * @return Return the date.
 	 */
 	public static Date stringToDate(final String text) throws UNISoNException {
-
-		final String[] symbols = { "dd", "MM", "yyyy" };
 		StringBuilder pattern = null;
 
 		if ((null == text) || text.equals("")) {
 			return null;
 		}
+
+		final String yyyy = "yyyy";
+		final String dd = "dd";
+		final String mm = "MM";
+
 		if (text.length() == 8) {
 			try {
 				// 20101229
-				pattern = new StringBuilder().append(symbols[2]).append(symbols[1])
-				        .append(symbols[0]);
+				pattern = new StringBuilder().append(yyyy).append(mm).append(dd);
 				final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern.toString());
 				final LocalDate localDate = LocalDate.parse(text, formatter);
 				return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -236,8 +238,7 @@ public class StringUtils {
 			}
 			try {
 				// 13122010
-				pattern = new StringBuilder().append(symbols[0]).append(symbols[1])
-				        .append(symbols[2]);
+				pattern = new StringBuilder().append(dd).append(mm).append(yyyy);
 				final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern.toString());
 				final LocalDate localDate = LocalDate.parse(text, formatter);
 				return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -247,8 +248,7 @@ public class StringUtils {
 			}
 			try {
 				// 12201601
-				pattern = new StringBuilder().append(symbols[1]).append(symbols[2])
-				        .append(symbols[0]);
+				pattern = new StringBuilder().append(mm).append(yyyy).append(dd);
 				final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern.toString());
 				final LocalDate localDate = LocalDate.parse(text, formatter);
 				return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -262,8 +262,8 @@ public class StringUtils {
 				if (text.contains(separator)) {
 					try {
 						// Ex.12/05/1994
-						pattern = new StringBuilder().append(symbols[0]).append(separator)
-						        .append(symbols[1]).append(separator).append(symbols[2]);
+						pattern = new StringBuilder().append(dd).append(separator).append(mm)
+						        .append(separator).append(yyyy);
 						final DateTimeFormatter formatter = DateTimeFormatter
 						        .ofPattern(pattern.toString());
 						final LocalDate localDate = LocalDate.parse(text, formatter);
@@ -274,8 +274,8 @@ public class StringUtils {
 					}
 					try {
 						// Ex.1994/12/05
-						pattern = new StringBuilder().append(symbols[2]).append(separator)
-						        .append(symbols[1]).append(separator).append(symbols[0]);
+						pattern = new StringBuilder().append(yyyy).append(separator).append(mm)
+						        .append(separator).append(dd);
 						final DateTimeFormatter formatter = DateTimeFormatter
 						        .ofPattern(pattern.toString());
 						final LocalDate localDate = LocalDate.parse(text, formatter);
@@ -286,8 +286,8 @@ public class StringUtils {
 					}
 					try {
 						// Ex.12/1994/05
-						pattern = new StringBuilder().append(symbols[1]).append(separator)
-						        .append(symbols[2]).append(separator).append(symbols[0]);
+						pattern = new StringBuilder().append(mm).append(separator).append(yyyy)
+						        .append(separator).append(dd);
 						final DateTimeFormatter formatter = DateTimeFormatter
 						        .ofPattern(pattern.toString());
 						final LocalDate localDate = LocalDate.parse(text, formatter);

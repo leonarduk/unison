@@ -1,5 +1,8 @@
 package uk.co.sleonard.unison.gui;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -9,12 +12,11 @@ import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
 
 /**
  * The class SplashScreen
- * 
- * @author Elton <elton_12_nunes@hotmail.com>
- * @since 18 de jun de 2016
  *
+ * @author Elton <elton_12_nunes@hotmail.com>
+ * @since 18-Jun-2016
  */
-public class SplashScreenFX {
+public class SplashScreenFX implements Observer {
 
 	// Components Variables
 	@FXML
@@ -33,12 +35,14 @@ public class SplashScreenFX {
 
 	public void load() {
 		setProgress(0.2);
+		Observer o = this;	// Reference to SplashScreenFX used inside TASK.
 		Task<Void> task = new Task<Void>() {
 			@Override
 			protected Void call() {
 				main.initRootLayout();
 				UNISoNControllerFX controller = main.getUnisonController();
 				final UNISoNDatabase database = controller.getDatabase();
+				database.addObserver(o);
 				return null;
 			}
 
@@ -48,6 +52,10 @@ public class SplashScreenFX {
 				Platform.runLater(new Runnable() {
 			        @Override
 			        public void run() {
+				        UNISoNControllerFX controller = main.getUnisonController();
+				        final UNISoNDatabase database = controller.getDatabase();
+				        database.refreshDataFromDatabase();
+
 				        setProgress(1.0);
 				        main.getPrimStage().close();
 				        main.showRootLayout();
@@ -70,6 +78,13 @@ public class SplashScreenFX {
 
 		this.main = main;
 
+	}
+
+	@Override
+	public void update(Observable observable, Object arg) {
+		if (observable instanceof UNISoNDatabase) {
+			UNISoNControllerFX.getGui().showAlert("GUI has been refreshed from the database");
+		}
 	}
 
 }

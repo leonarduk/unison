@@ -58,7 +58,7 @@
       <AnchorPane prefHeight="25.0" BorderPane.alignment="CENTER">
          <children>
             <Label fx:id="statusLabel" layoutX="15.0" layoutY="4.0" />
-            <ProgressBar fx:id="statusProgress" layoutX="481.0" layoutY="4.0" prefHeight="18.0" prefWidth="122.0" progress="0.0" />
+            <ProgressBar fx:id="statusProgress" layoutX="481.0" layoutY="4.0" prefHeight="18.0" prefWidth="127.0" progress="0.0" />
          </children></AnchorPane>
    </bottom>
    <center>

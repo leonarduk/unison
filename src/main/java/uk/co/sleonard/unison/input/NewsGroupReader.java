@@ -170,7 +170,7 @@ public class NewsGroupReader implements UNISoNLogger {
 
 		if (this.getMessageCount() > 0) {
 			final int progress = (i * 100) / this.getMessageCount();
-			UNISoNController.getInstance().setDownloadingState(progress);
+			UNISoNControllerFX.getInstance().setDownloadingState(progress);
 		}
 
 	}

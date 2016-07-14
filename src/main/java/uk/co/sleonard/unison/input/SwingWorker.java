@@ -8,7 +8,7 @@ package uk.co.sleonard.unison.input;
 
 import java.util.Observable;
 
-import javax.swing.SwingUtilities;
+import javafx.application.Platform;
 
 /**
  * from http://java.sun.com/products/jfc/tsc/articles/threads/threads2.html
@@ -116,7 +116,7 @@ public abstract class SwingWorker extends Observable implements Runnable {
 		}
 		final Runnable doFinished = () -> SwingWorker.this.finished();
 
-		SwingUtilities.invokeLater(doFinished);
+		Platform.runLater(doFinished);
 	}
 
 	/**

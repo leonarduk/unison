@@ -29,7 +29,9 @@ import org.hibernate.Session;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -39,7 +41,11 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import uk.co.sleonard.unison.UNISoNControllerFX;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
@@ -49,6 +55,7 @@ import uk.co.sleonard.unison.datahandling.DAO.Location;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.ResultRow;
+import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.input.FullDownloadWorker;
 import uk.co.sleonard.unison.utils.StringUtils;
@@ -184,9 +191,42 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 			this.switchFilter(this.filterToggle.isSelected());
 
 			this.newsgroupTreeRoot = new TreeNode(null, "NewsGroups");
+			this.topicRoot = new TreeNode(null, "Topics");
+
+			// Add Event in groupsHierarchy
+			EventHandler<MouseEvent> mouseEventHandle = (MouseEvent event) -> {
+				handleMouseClicked(event);
+			};
+			this.groupsHierarchy.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEventHandle);
+			// ----------------------------
+
 		} catch (final UNISoNException e) {
 			UNISoNControllerFX.getInstance();
 			UNISoNControllerFX.getGui().showAlert("Error :" + e.getMessage());
+		}
+	}
+
+	/**
+	 * Event of mouse clicked in Node into groupsHierarchy(TreeView) Groups
+	 * hierarchy value changed.
+	 * 
+	 * @param event
+	 *            Mouse event.
+	 */
+	private void handleMouseClicked(MouseEvent event) {
+		Node node = event.getPickResult().getIntersectedNode();
+		// Accept clicks only on node cells, and not on empty spaces of the
+		// TreeView
+		if (node instanceof Text || (node instanceof TreeCell && ((TreeCell) node).getText() != null)) {
+			Object item = ((TreeItem) this.groupsHierarchy.getSelectionModel().getSelectedItem()).getValue();
+			// Assure that is a item.
+			if (item instanceof NewsGroup) {
+				UNISoNControllerFX.getInstance().getFilter().setSelectedNewsgroup((NewsGroup) item);
+			} else {
+				UNISoNControllerFX.getInstance().getFilter().setSelectedNewsgroup((String) item);
+			}
+
+			this.notifySelectedNewsGroupObservers();
 		}
 	}
 
@@ -199,10 +239,10 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 	 *            the child object
 	 * @return the tree node
 	 */
-	/*
-	 * protected TreeNode addChildNode(final TreeNode root, final Object
-	 * childObject) { return this.addChildNode(root, childObject, ""); }
-	 */
+	protected TreeNode addChildNode(final TreeNode root, final Object childObject) {
+		return this.addChildNode(root, childObject, "");
+	}
+
 	/**
 	 * Adds the child node.
 	 *
@@ -214,24 +254,25 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 	 *            the name
 	 * @return the tree node
 	 */
-	/*
-	 * protected TreeNode addChildNode(final TreeNode root, final Object
-	 * childObject, final String nameInput) { String name = nameInput; if
-	 * (childObject instanceof Set<?>) { if (((Set<?>) childObject).size() == 0)
-	 * { // if no entries then don't add it return null; } } else if
-	 * (childObject instanceof String) { name += " : " + childObject; } else {
-	 * name +=
-	 * UNISoNControllerFX.getInstance().getHelper().getText(childObject); }
-	 * 
-	 * final TreeNode child = new TreeNode(childObject, name); root.add(child);
-	 * 
-	 * return child; }
-	 */
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see uk.co.sleonard.unison.gui.UNISoNLogger#alert(java.lang.String)
-	 */
+	protected TreeNode addChildNode(final TreeNode root, final Object childObject, final String nameInput) {
+		String name = nameInput;
+		if (childObject instanceof Set<?>) {
+			if (((Set<?>) childObject).size() == 0) {
+				// if no entries then don't add it
+				return null;
+			}
+		} else if (childObject instanceof String) {
+			name += " : " + childObject;
+		} else {
+			name += UNISoNControllerFX.getInstance().getHelper().getText(childObject);
+		}
+
+		final TreeNode child = new TreeNode(childObject, name);
+		root.getChildren().add(child);
+
+		return child;
+	}
+
 	@Override
 	public void alert(final String message) {
 		this.log(message);
@@ -411,10 +452,10 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 	/**
 	 * Notify selected news group observers.
 	 */
-	/*
-	 * public void notifySelectedNewsGroupObservers() {
-	 * this.refreshTopicHierarchy(); }
-	 */
+	public void notifySelectedNewsGroupObservers() {
+		this.refreshTopicHierarchy();
+	}
+
 	/**
 	 * Refresh button action performed.
 	 *
@@ -433,7 +474,7 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 		// this.refreshTopPostersTable();
 
 		// this.refreshMessagePane(); ACTIVATE AGAIN LATER
-		// this.refreshTopicHierarchy(); ACTIVATE AGAIN LATER
+		this.refreshTopicHierarchy();
 		this.refreshNewsGroupHierarchy();
 
 		// this.refreshTopCountries(); ACTIVATE AGAIN LATER
@@ -525,11 +566,7 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 				}
 
 				if (null == node) {
-					if (data instanceof NewsGroup) {
-						node = new TreeNode(((NewsGroup) data).getName(), namePart);
-					} else {
-						node = new TreeNode(data, namePart);
-					}
+					node = new TreeNode(data, namePart);
 					parent.getChildren().add(node);
 					node.getParent().setValue(parent);
 					nodeMap.put(pathSoFar, node);
@@ -602,30 +639,33 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 	/**
 	 * Refresh topic hierarchy.
 	 */
-	/*
-	 * private void refreshTopicHierarchy() { // TODO reinstate that topics
-	 * reflect the highlighted newsgroup
-	 * 
-	 * this.topicRoot.removeAllChildren();
-	 * 
-	 * final UNISoNControllerFX controller = UNISoNControllerFX.getInstance();
-	 * final NewsGroup selectedNewsgroup =
-	 * controller.getFilter().getSelectedNewsgroup(); if (null !=
-	 * selectedNewsgroup) {
-	 * this.topicRoot.setName(selectedNewsgroup.getFullName()); final Set<Topic>
-	 * topics = selectedNewsgroup.getTopics(); final Set<Topic> topicsFilter =
-	 * controller.getFilter().getTopicsFilter(); for (final Topic topic :
-	 * topics) { if ((null == topicsFilter) || topicsFilter.contains(topic)) {
-	 * final int lastIndex = topic.getSubject().length();
-	 * this.addChildNode(this.topicRoot, topic, topic.getSubject().substring(0,
-	 * lastIndex)); } }
-	 * 
-	 * } else { this.topicRoot.setName("No group selected"); }
-	 * 
-	 * // This actually refreshes the tree // ((DefaultTreeModel)
-	 * this.topicsHierarchy.getModel()).reload(); TODO // ADAPT TO JAVAFX
-	 * this.topicsHierarchy.refresh(); }
-	 */
+	private void refreshTopicHierarchy() {
+		// TODO reinstate that topics reflect the highlighted newsgroup
+
+		this.topicRoot.getChildren().clear();
+
+		final UNISoNControllerFX controller = UNISoNControllerFX.getInstance();
+		final NewsGroup selectedNewsgroup = controller.getFilter().getSelectedNewsgroup();
+		if (null != selectedNewsgroup) {
+			this.topicRoot.setName(selectedNewsgroup.getFullName());
+			final Set<Topic> topics = selectedNewsgroup.getTopics();
+			final Set<Topic> topicsFilter = controller.getFilter().getTopicsFilter();
+			for (final Topic topic : topics) {
+				if ((null == topicsFilter) || topicsFilter.contains(topic)) {
+					final int lastIndex = topic.getSubject().length();
+					this.addChildNode(this.topicRoot, topic, topic.getSubject().substring(0, lastIndex));
+				}
+			}
+
+		} else {
+			this.topicRoot.setName("No group selected");
+		}
+
+		// This actually refreshes the tree
+		this.topicsHierarchy.setRoot(this.topicRoot);
+		this.topicsHierarchy.refresh();
+	}
+
 	/**
 	 * Refresh top posters.
 	 */

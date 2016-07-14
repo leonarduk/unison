@@ -24,9 +24,7 @@ import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
-import javax.swing.tree.TreePath;
 
-import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 
 import javafx.collections.FXCollections;
@@ -51,7 +49,6 @@ import uk.co.sleonard.unison.datahandling.DAO.Location;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.ResultRow;
-import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.input.FullDownloadWorker;
 import uk.co.sleonard.unison.utils.StringUtils;
@@ -89,7 +86,7 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 	// private javax.swing.JButton getBodyButton; Maybe no implemented yet
 	/** The groups hierarchy. */
 	@FXML
-	private TreeView<Object> groupsHierarchy; // XXX VERIFY TYPE
+	private TreeView<Object> groupsHierarchy; // XXX
 	/** The groups scroll pane. */
 	@FXML
 	private ScrollPane groupsScrollPane; // XXX
@@ -154,7 +151,7 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 	private ScrollPane topPostersScrollPane; // XXX
 	/** The topics hierarchy. */
 	@FXML
-	private TreeView<Object> topicsHierarchy; // XXX VERIFY TYPE
+	private TreeView<Object> topicsHierarchy; // XXX
 	/** The topics scroll pane. */
 	@FXML
 	private ScrollPane topicsScrollPane; // XXX
@@ -185,6 +182,8 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 			// this.missingMessagesCheck.setVisible(false);
 
 			this.switchFilter(this.filterToggle.isSelected());
+
+			this.newsgroupTreeRoot = new TreeNode(null, "NewsGroups");
 		} catch (final UNISoNException e) {
 			UNISoNControllerFX.getInstance();
 			UNISoNControllerFX.getGui().showAlert("Error :" + e.getMessage());
@@ -200,10 +199,10 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 	 *            the child object
 	 * @return the tree node
 	 */
-	protected TreeNode addChildNode(final TreeNode root, final Object childObject) {
-		return this.addChildNode(root, childObject, "");
-	}
-
+	/*
+	 * protected TreeNode addChildNode(final TreeNode root, final Object
+	 * childObject) { return this.addChildNode(root, childObject, ""); }
+	 */
 	/**
 	 * Adds the child node.
 	 *
@@ -215,25 +214,19 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 	 *            the name
 	 * @return the tree node
 	 */
-	protected TreeNode addChildNode(final TreeNode root, final Object childObject, final String nameInput) {
-		String name = nameInput;
-		if (childObject instanceof Set<?>) {
-			if (((Set<?>) childObject).size() == 0) {
-				// if no entries then don't add it
-				return null;
-			}
-		} else if (childObject instanceof String) {
-			name += " : " + childObject;
-		} else {
-			name += UNISoNControllerFX.getInstance().getHelper().getText(childObject);
-		}
-
-		final TreeNode child = new TreeNode(childObject, name);
-		root.add(child);
-
-		return child;
-	}
-
+	/*
+	 * protected TreeNode addChildNode(final TreeNode root, final Object
+	 * childObject, final String nameInput) { String name = nameInput; if
+	 * (childObject instanceof Set<?>) { if (((Set<?>) childObject).size() == 0)
+	 * { // if no entries then don't add it return null; } } else if
+	 * (childObject instanceof String) { name += " : " + childObject; } else {
+	 * name +=
+	 * UNISoNControllerFX.getInstance().getHelper().getText(childObject); }
+	 * 
+	 * final TreeNode child = new TreeNode(childObject, name); root.add(child);
+	 * 
+	 * return child; }
+	 */
 	/*
 	 * (non-Javadoc)
 	 *
@@ -259,59 +252,48 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 	 *            the fill in missing
 	 * @return the sets the
 	 */
-	private Set<Message> createMessageHierarchy(final Set<Message> set, final TreeNode root, final Object matchId,
-			final boolean fillInMissing) {
-		final Set<TreeNode> matches = new HashSet<>();
-		final Set<Message> copy = new HashSet<>(set);
-
-		for (final Message next : set) {
-			// compare to the last refered message, ie. the one they replied to
-			String previousId = "ROOT";
-			try {
-				final List<String> msgList = StringUtils.convertStringToList(next.getReferencedMessages(), " ");
-
-				if (msgList.size() > 0) {
-					final String lastMessageId = msgList.get(0);
-					if (fillInMissing) {
-						previousId = lastMessageId;
-
-					}
-					// else ignore it and add to root
-				}
-			} catch (final ObjectNotFoundException e) {
-				e.printStackTrace();
-			}
-
-			// if it matches then it refers to previous so add as a child to
-			// previous
-			if (previousId.equals(matchId)) {
-				final TreeNode child = this.addChildNode(root, next);
-				matches.add(child);
-				copy.remove(next);
-			}
-		}
-		Set<Message> remainder = new HashSet<>(copy);
-		for (final TreeNode next : matches) {
-			remainder = this.createMessageHierarchy(remainder, next,
-					((Message) next.getUserObject()).getUsenetMessageID(), fillInMissing);
-		}
-		return copy;
-	}
-
+	/*
+	 * private Set<Message> createMessageHierarchy(final Set<Message> set, final
+	 * TreeNode root, final Object matchId, final boolean fillInMissing) { final
+	 * Set<TreeNode> matches = new HashSet<>(); final Set<Message> copy = new
+	 * HashSet<>(set);
+	 * 
+	 * for (final Message next : set) { // compare to the last refered message,
+	 * ie. the one they replied to String previousId = "ROOT"; try { final
+	 * List<String> msgList =
+	 * StringUtils.convertStringToList(next.getReferencedMessages(), " ");
+	 * 
+	 * if (msgList.size() > 0) { final String lastMessageId = msgList.get(0); if
+	 * (fillInMissing) { previousId = lastMessageId;
+	 * 
+	 * } // else ignore it and add to root } } catch (final
+	 * ObjectNotFoundException e) { e.printStackTrace(); }
+	 * 
+	 * // if it matches then it refers to previous so add as a child to //
+	 * previous if (previousId.equals(matchId)) { final TreeNode child =
+	 * this.addChildNode(root, next); matches.add(child); copy.remove(next); } }
+	 * Set<Message> remainder = new HashSet<>(copy); for (final TreeNode next :
+	 * matches) { remainder = this.createMessageHierarchy(remainder, next,
+	 * ((Message) next.getUserObject()).getUsenetMessageID(), fillInMissing); }
+	 * return copy; }
+	 */
 	/**
 	 * Crosspost combo box action performed.
 	 *
 	 * @param evt
 	 *            the evt
 	 */
-	private void crosspostComboBoxActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_crosspostComboBoxActionPerformed
-		final UNISoNControllerFX controller = UNISoNControllerFX.getInstance();
-		final NewsGroup selectedGroup = this.crosspostComboBox.getSelectionModel().getSelectedItem();
-		controller.getFilter().setSelectedNewsgroup(selectedGroup);
-		this.refreshTopicHierarchy();
-		// controller.showAlert("You chose " + selectedGroup);
-	}// GEN-LAST:event_crosspostComboBoxActionPerformed
-
+	/*
+	 * private void crosspostComboBoxActionPerformed(final
+	 * java.awt.event.ActionEvent evt) {//
+	 * GEN-FIRST:event_crosspostComboBoxActionPerformed final UNISoNControllerFX
+	 * controller = UNISoNControllerFX.getInstance(); final NewsGroup
+	 * selectedGroup =
+	 * this.crosspostComboBox.getSelectionModel().getSelectedItem();
+	 * controller.getFilter().setSelectedNewsgroup(selectedGroup);
+	 * this.refreshTopicHierarchy(); // controller.showAlert("You chose " +
+	 * selectedGroup); }// GEN-LAST:event_crosspostComboBoxActionPerformed
+	 */
 	/**
 	 * Expand node.
 	 *
@@ -320,16 +302,16 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 	 * @param fillInMissing
 	 *            the fill in missing
 	 */
-	protected void expandNode(final TreeNode root, final boolean fillInMissing) {
 
-		final Object userObject = root.getUserObject();
-		if (userObject instanceof Topic) {
-			final Topic topic = (Topic) userObject;
-			this.createMessageHierarchy(UNISoNControllerFX.getInstance().getDatabase().getMessages(topic, this.session),
-					root, "ROOT", fillInMissing);
-		}
-	}
-
+	/*
+	 * protected void expandNode(final TreeNode root, final boolean
+	 * fillInMissing) {
+	 * 
+	 * final Object userObject = root.getUserObject(); if (userObject instanceof
+	 * Topic) { final Topic topic = (Topic) userObject;
+	 * this.createMessageHierarchy(UNISoNControllerFX.getInstance().getDatabase(
+	 * ).getMessages(topic, this.session), root, "ROOT", fillInMissing); } }
+	 */
 	/**
 	 * Filter toggle action performed.
 	 *
@@ -373,20 +355,23 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 	 * @param evt
 	 *            the evt
 	 */
-	private void groupsHierarchyValueChanged(final javax.swing.event.TreeSelectionEvent evt) {// GEN-FIRST:event_groupsHierarchyValueChanged
-		final TreePath tp = evt.getPath();
-		final TreeNode root = (TreeNode) tp.getLastPathComponent();
-
-		// as root is not a newsgroup
-		if (root.getUserObject() instanceof NewsGroup) {
-			UNISoNControllerFX.getInstance().getFilter().setSelectedNewsgroup((NewsGroup) root.getUserObject());
-		} else {
-			UNISoNControllerFX.getInstance().getFilter().setSelectedNewsgroup((String) root.getUserObject());
-		}
-
-		this.notifySelectedNewsGroupObservers();
-	}// GEN-LAST:event_groupsHierarchyValueChanged
-
+	/*
+	 * private void groupsHierarchyValueChanged(final
+	 * javax.swing.event.TreeSelectionEvent evt) {//
+	 * GEN-FIRST:event_groupsHierarchyValueChanged final TreePath tp =
+	 * evt.getPath(); final TreeNode root = (TreeNode)
+	 * tp.getLastPathComponent();
+	 * 
+	 * // as root is not a newsgroup if (root.getUserObject() instanceof
+	 * NewsGroup) {
+	 * UNISoNControllerFX.getInstance().getFilter().setSelectedNewsgroup((
+	 * NewsGroup) root.getUserObject()); } else {
+	 * UNISoNControllerFX.getInstance().getFilter().setSelectedNewsgroup((
+	 * String) root.getUserObject()); }
+	 * 
+	 * this.notifySelectedNewsGroupObservers(); }//
+	 * GEN-LAST:event_groupsHierarchyValueChanged
+	 */
 	/**
 	 * Headers button action performed.
 	 *
@@ -426,10 +411,10 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 	/**
 	 * Notify selected news group observers.
 	 */
-	public void notifySelectedNewsGroupObservers() {
-		this.refreshTopicHierarchy();
-	}
-
+	/*
+	 * public void notifySelectedNewsGroupObservers() {
+	 * this.refreshTopicHierarchy(); }
+	 */
 	/**
 	 * Refresh button action performed.
 	 *
@@ -447,13 +432,13 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 	public void refreshGUIData() {
 		// this.refreshTopPostersTable();
 
-		this.refreshMessagePane();
-		this.refreshTopicHierarchy();
+		// this.refreshMessagePane(); ACTIVATE AGAIN LATER
+		// this.refreshTopicHierarchy(); ACTIVATE AGAIN LATER
 		this.refreshNewsGroupHierarchy();
 
 		// this.refreshTopCountries(); ACTIVATE AGAIN LATER
-		// this.refreshTopPosters();
-		// this.refreshTopGroups();
+		// this.refreshTopPosters(); ACTIVATE AGAIN LATER
+		// this.refreshTopGroups(); ACTIVATE AGAIN LATER
 	}
 
 	/**
@@ -498,8 +483,8 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 					new Vector<>(message.getNewsgroups()));
 			ObservableList<NewsGroup> aList = FXCollections
 					.observableList(new ArrayList<NewsGroup>(message.getNewsgroups()));
-			this.crosspostComboBox.setItems(aList); // TODO ADAPT
-			// TO JAVAFX TESTING
+			this.crosspostComboBox.setItems(aList); // TODO ADAPT TO JAVAFX
+													// TESTING
 			try {
 				this.bodyPane.setText(StringUtils.decompress(message.getMessageBody()));
 			} catch (final IOException e) {
@@ -512,7 +497,7 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 	 * Refresh news group hierarchy.
 	 */
 	protected void refreshNewsGroupHierarchy() {
-		this.newsgroupTreeRoot.removeAllChildren();
+		this.newsgroupTreeRoot.getChildren().clear(); // this.newsgroupTreeRoot.removeAllChildren();
 		// FIXME split out from name - ignore db stuff
 		final UNISoNControllerFX controller = UNISoNControllerFX.getInstance();
 		final HashMap<String, TreeNode> nodeMap = new HashMap<>();
@@ -540,14 +525,18 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 				}
 
 				if (null == node) {
-					node = new TreeNode(data, namePart);
-					parent.add(node);
-					node.setParent(parent);
+					if (data instanceof NewsGroup) {
+						node = new TreeNode(((NewsGroup) data).getName(), namePart);
+					} else {
+						node = new TreeNode(data, namePart);
+					}
+					parent.getChildren().add(node);
+					node.getParent().setValue(parent);
 					nodeMap.put(pathSoFar, node);
 				} else {
 					// If node created by earlier newsgroup
-					if (node.getUserObject() instanceof String) {
-						node.setUserObject(data);
+					if (node.getValue() instanceof String) {
+						node.setValue(data);
 					}
 				}
 				// ready for next iteration
@@ -586,7 +575,7 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 		// this.addChildNode(this.newsgroupTreeRoot, group);
 		// }
 		// This actually refreshes the tree
-
+		this.groupsHierarchy.setRoot(this.newsgroupTreeRoot);
 		this.groupsHierarchy.refresh();
 	}
 
@@ -613,34 +602,30 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 	/**
 	 * Refresh topic hierarchy.
 	 */
-	private void refreshTopicHierarchy() {
-		// TODO reinstate that topics reflect the highlighted newsgroup
-
-		this.topicRoot.removeAllChildren();
-
-		final UNISoNControllerFX controller = UNISoNControllerFX.getInstance();
-		final NewsGroup selectedNewsgroup = controller.getFilter().getSelectedNewsgroup();
-		if (null != selectedNewsgroup) {
-			this.topicRoot.setName(selectedNewsgroup.getFullName());
-			final Set<Topic> topics = selectedNewsgroup.getTopics();
-			final Set<Topic> topicsFilter = controller.getFilter().getTopicsFilter();
-			for (final Topic topic : topics) {
-				if ((null == topicsFilter) || topicsFilter.contains(topic)) {
-					final int lastIndex = topic.getSubject().length();
-					this.addChildNode(this.topicRoot, topic, topic.getSubject().substring(0, lastIndex));
-				}
-			}
-
-		} else {
-			this.topicRoot.setName("No group selected");
-		}
-
-		// This actually refreshes the tree
-		// ((DefaultTreeModel) this.topicsHierarchy.getModel()).reload(); TODO
-		// ADAPT TO JAVAFX
-		this.topicsHierarchy.refresh();
-	}
-
+	/*
+	 * private void refreshTopicHierarchy() { // TODO reinstate that topics
+	 * reflect the highlighted newsgroup
+	 * 
+	 * this.topicRoot.removeAllChildren();
+	 * 
+	 * final UNISoNControllerFX controller = UNISoNControllerFX.getInstance();
+	 * final NewsGroup selectedNewsgroup =
+	 * controller.getFilter().getSelectedNewsgroup(); if (null !=
+	 * selectedNewsgroup) {
+	 * this.topicRoot.setName(selectedNewsgroup.getFullName()); final Set<Topic>
+	 * topics = selectedNewsgroup.getTopics(); final Set<Topic> topicsFilter =
+	 * controller.getFilter().getTopicsFilter(); for (final Topic topic :
+	 * topics) { if ((null == topicsFilter) || topicsFilter.contains(topic)) {
+	 * final int lastIndex = topic.getSubject().length();
+	 * this.addChildNode(this.topicRoot, topic, topic.getSubject().substring(0,
+	 * lastIndex)); } }
+	 * 
+	 * } else { this.topicRoot.setName("No group selected"); }
+	 * 
+	 * // This actually refreshes the tree // ((DefaultTreeModel)
+	 * this.topicsHierarchy.getModel()).reload(); TODO // ADAPT TO JAVAFX
+	 * this.topicsHierarchy.refresh(); }
+	 */
 	/**
 	 * Refresh top posters.
 	 */
@@ -722,22 +707,21 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 	 * @param evt
 	 *            the evt
 	 */
-	private void topicsHierarchyValueChanged(final javax.swing.event.TreeSelectionEvent evt) {// GEN-FIRST:event_topicsHierarchyValueChanged
-		final TreePath tp = evt.getPath();
-		final TreeNode root = (TreeNode) tp.getLastPathComponent();
-
-		final Object datanode = root.getUserObject();
-		if (datanode instanceof Message) {
-			final Message msg = (Message) datanode;
-			UNISoNControllerFX.getInstance().getFilter().setSelectedMessage(msg);
-			this.notifySelectedMessageObservers();
-		} else {
-			// this.expandNode(root, this.missingMessagesCheck.isSelected());
-			// TODO VERIFY LATER
-		}
-		this.notifySelectedMessageObservers();
-	}// GEN-LAST:event_topicsHierarchyValueChanged
-
+	/*
+	 * private void topicsHierarchyValueChanged(final
+	 * javax.swing.event.TreeSelectionEvent evt) {//
+	 * GEN-FIRST:event_topicsHierarchyValueChanged final TreePath tp =
+	 * evt.getPath(); final TreeNode root = (TreeNode)
+	 * tp.getLastPathComponent();
+	 * 
+	 * final Object datanode = root.getUserObject(); if (datanode instanceof
+	 * Message) { final Message msg = (Message) datanode;
+	 * UNISoNControllerFX.getInstance().getFilter().setSelectedMessage(msg);
+	 * this.notifySelectedMessageObservers(); } else { // this.expandNode(root,
+	 * this.missingMessagesCheck.isSelected()); // TODO VERIFY LATER }
+	 * this.notifySelectedMessageObservers(); }//
+	 * GEN-LAST:event_topicsHierarchyValueChanged
+	 */
 	/*
 	 * (non-Javadoc)
 	 *

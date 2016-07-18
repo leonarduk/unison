@@ -52,8 +52,8 @@ public class ExportToCSV {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	public void exportTable(final String fileName, final JTable table,
-	        final Vector<String> fieldNames) throws UNISoNException {
+	public void exportTable(final String fileName, final JTable table, final Vector<String> fieldNames)
+			throws UNISoNException {
 		try {
 			final File file = new File(fileName);
 			if (file != null) {
@@ -62,9 +62,8 @@ public class ExportToCSV {
 				if (file.exists()) {
 					file.delete();
 				}
-				try (final BufferedWriter bufferedWriter = new BufferedWriter(
-				        new FileWriter(file, true));
-				        final PrintWriter fileWriter = new PrintWriter(bufferedWriter);) {
+				try (final BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file, true));
+						final PrintWriter fileWriter = new PrintWriter(bufferedWriter);) {
 					String data;
 					for (int j = 0; j < table.getColumnCount(); ++j) {
 
@@ -82,18 +81,16 @@ public class ExportToCSV {
 						fileWriter.println("");
 					}
 					fileWriter.close();
-				}
-				catch (final Exception e) {
+				} catch (final Exception e) {
 					JOptionPane.showMessageDialog(null, "Error " + e);
 				}
 			}
 
-		}
-		catch (final Exception e) {
+		} catch (final Exception e) {
 			throw new UNISoNException("Failed to export to CSV", e);
 		}
 	}// export
-	 // Table
+		// Table
 
 	/**
 	 * Export table to csv.
@@ -106,10 +103,8 @@ public class ExportToCSV {
 	 *             the UNI so n exception
 	 */
 	@SuppressWarnings("deprecation")
-	public void exportTableToCSV(final JTable table, final Vector<String> fieldNames)
-	        throws UNISoNException {
-		final FileDialog file = new FileDialog(new JFrame(), "Save CSV Network File",
-		        FileDialog.SAVE);
+	public void exportTableToCSV(final JTable table, final Vector<String> fieldNames) throws UNISoNException {
+		final FileDialog file = new FileDialog(new JFrame(), "Save CSV Network File", FileDialog.SAVE);
 		final String CSV_FILE_SUFFIX = ".csv";
 		final String initialValue = "*" + CSV_FILE_SUFFIX;
 		file.setFile(initialValue); // set initial filename filter

@@ -13,7 +13,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.hsqldb.util.DatabaseManagerSwing;
 
-import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNControllerFX;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
@@ -50,19 +50,16 @@ public class UNISoNCLI implements UNISoNLogger {
 				try {
 					final String host = "";
 					main.handleCommand(command, arg, host);
-				}
-				catch (final UNISoNException e) {
+				} catch (final UNISoNException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}
-			else {
+			} else {
 				UNISoNCLI.logger.debug("arg: " + arg);
 			}
 			try {
 				command = Command.valueOf(arg.toUpperCase());
-			}
-			catch (final IllegalArgumentException e) {
+			} catch (final IllegalArgumentException e) {
 				// ignore as this just means its not in the enum list
 			}
 		}
@@ -99,10 +96,8 @@ public class UNISoNCLI implements UNISoNLogger {
 	 *             the UNI so n exception
 	 */
 	private void downloadAll(final String searchString, final String host) throws UNISoNException {
-		final Set<NNTPNewsGroup> listNewsgroups = UNISoNController.getInstance()
-		        .listNewsgroups(searchString, host);
-		UNISoNController.getInstance().quickDownload(listNewsgroups, null, null, this,
-		        DownloadMode.ALL);
+		final Set<NNTPNewsGroup> listNewsgroups = UNISoNControllerFX.getInstance().listNewsgroups(searchString, host);
+		UNISoNControllerFX.getInstance().quickDownload(listNewsgroups, null, null, this, DownloadMode.ALL);
 	}
 
 	/**
@@ -117,36 +112,34 @@ public class UNISoNCLI implements UNISoNLogger {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	private void handleCommand(final Command command, final String arg, final String host)
-	        throws UNISoNException {
+	private void handleCommand(final Command command, final String arg, final String host) throws UNISoNException {
 		final Date toDate = null;
 		final Date fromDate = null;
 		switch (command) {
-			case DOWNLOAD:
-				this.startDownload(arg, fromDate, toDate);
-				break;
-			case FIND:
-				this.listNewsgroups(arg, host);
-				break;
-			case FINDDOWNLOAD:
-				try {
-					this.downloadAll(arg, host);
-				}
-				catch (final UNISoNException e) {
-					e.printStackTrace();
-				}
-				break;
-			case QUICKDOWNLOAD:
-				this.quickDownload(arg, fromDate, toDate, host);
-				break;
-			default:
-				break;
+		case DOWNLOAD:
+			this.startDownload(arg, fromDate, toDate);
+			break;
+		case FIND:
+			this.listNewsgroups(arg, host);
+			break;
+		case FINDDOWNLOAD:
+			try {
+				this.downloadAll(arg, host);
+			} catch (final UNISoNException e) {
+				e.printStackTrace();
+			}
+			break;
+		case QUICKDOWNLOAD:
+			this.quickDownload(arg, fromDate, toDate, host);
+			break;
+		default:
+			break;
 		}
 	}
 
 	/**
-	 * This method finds the newsgroups that match a search expression (* for wild character) and
-	 * saves them to the database.
+	 * This method finds the newsgroups that match a search expression (* for
+	 * wild character) and saves them to the database.
 	 *
 	 * @param searchString
 	 *            the search string
@@ -155,11 +148,9 @@ public class UNISoNCLI implements UNISoNLogger {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	private void listNewsgroups(final String searchString, final String host)
-	        throws UNISoNException {
-		final Set<NNTPNewsGroup> listNewsgroups = UNISoNController.getInstance()
-		        .listNewsgroups(searchString, host);
-		UNISoNController.getInstance().storeNewsgroups(listNewsgroups);
+	private void listNewsgroups(final String searchString, final String host) throws UNISoNException {
+		final Set<NNTPNewsGroup> listNewsgroups = UNISoNControllerFX.getInstance().listNewsgroups(searchString, host);
+		UNISoNControllerFX.getInstance().storeNewsgroups(listNewsgroups);
 
 	}
 
@@ -187,19 +178,16 @@ public class UNISoNCLI implements UNISoNLogger {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	private void quickDownload(final String arg, final Date toDate, final Date fromDate,
-	        final String host) throws UNISoNException {
-		UNISoNController.create();
-		final Set<NNTPNewsGroup> listNewsgroups = UNISoNController.getInstance().listNewsgroups(arg,
-		        host);
+	private void quickDownload(final String arg, final Date toDate, final Date fromDate, final String host)
+			throws UNISoNException {
+		// UNISoNControllerFX.create();
+		final Set<NNTPNewsGroup> listNewsgroups = UNISoNControllerFX.getInstance().listNewsgroups(arg, host);
 		// HibernateHelper.generateSchema();
 
 		try {
-			UNISoNController.create();
-			UNISoNController.getInstance().quickDownload(listNewsgroups, fromDate, toDate, this,
-			        DownloadMode.BASIC);
-		}
-		catch (final UNISoNException e) {
+			// UNISoNControllerFX.create();
+			UNISoNControllerFX.getInstance().quickDownload(listNewsgroups, fromDate, toDate, this, DownloadMode.BASIC);
+		} catch (final UNISoNException e) {
 			UNISoNCLI.logger.fatal("Error downloading messages", e);
 		}
 		DatabaseManagerSwing.main(HibernateHelper.GUI_ARGS);
@@ -232,9 +220,12 @@ public class UNISoNCLI implements UNISoNLogger {
 	enum Command {
 
 		/** The download. */
-		DOWNLOAD, /** The find. */
-		FIND, /** The finddownload. */
-		FINDDOWNLOAD, /** The quickdownload. */
+		DOWNLOAD,
+		/** The find. */
+		FIND,
+		/** The finddownload. */
+		FINDDOWNLOAD,
+		/** The quickdownload. */
 		QUICKDOWNLOAD
 	}
 }

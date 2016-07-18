@@ -11,29 +11,29 @@
 <?import javafx.scene.control.TreeTableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="391.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uk.co.sleonard.unison.UNISoNControllerFX">
+<AnchorPane prefHeight="391.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uk.co.sleonard.unison.gui.PajekPanelFX">
    <children>
-      <RadioButton layoutX="23.0" layoutY="15.0" mnemonicParsing="false" text="Thread creator vs Current Poster">
+      <RadioButton fx:id="creatorRadio" layoutX="23.0" layoutY="15.0" mnemonicParsing="false" text="Thread creator vs Current Poster">
          <toggleGroup>
             <ToggleGroup fx:id="option" />
          </toggleGroup>
          <tooltip>
             <Tooltip text="&quot;This takes the details of the message's poster along with that of the person who started the thread." />
          </tooltip></RadioButton>
-      <RadioButton layoutX="23.0" layoutY="44.0" mnemonicParsing="false" text="Previous poster vs current" toggleGroup="$option">
+      <RadioButton fx:id="previousRadio" layoutX="23.0" layoutY="44.0" mnemonicParsing="false" text="Previous poster vs current" toggleGroup="$option">
          <tooltip>
             <Tooltip text="This takes the current poster and that of the last message. i.e. the one they actually replied to." />
          </tooltip></RadioButton>
-      <RadioButton layoutX="23.0" layoutY="72.0" mnemonicParsing="false" text="All thread posters to current" toggleGroup="$option">
+      <RadioButton fx:id="allRadio" layoutX="23.0" layoutY="72.0" mnemonicParsing="false" text="All thread posters to current" toggleGroup="$option">
          <tooltip>
             <Tooltip text="This uses all the authors in the thread up to the point of this message." />
          </tooltip></RadioButton>
-      <Button layoutX="274.0" layoutY="11.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="114.0" text="Refresh" />
-      <Button layoutX="395.0" layoutY="11.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="114.0" text="Save to Pajek">
+      <Button fx:id="previewButton" layoutX="274.0" layoutY="11.0" mnemonicParsing="false" onAction="#previewButtonAction" prefHeight="25.0" prefWidth="114.0" text="Refresh" />
+      <Button fx:id="saveButton" layoutX="395.0" layoutY="11.0" mnemonicParsing="false" onAction="#saveButtonFile" prefHeight="25.0" prefWidth="114.0" text="Save to Pajek">
          <tooltip>
             <Tooltip text="Save to Pajek Network file (as in Pajek File Preview tab)" />
          </tooltip></Button>
-      <Button layoutX="395.0" layoutY="44.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="114.0" text="Save to CSV">
+      <Button fx:id="csvButton" layoutX="395.0" layoutY="44.0" mnemonicParsing="false" onAction="#csvButtonFile" prefHeight="25.0" prefWidth="114.0" text="Save to CSV">
          <tooltip>
             <Tooltip text="Save to Comma-separated  file (as in Matrixtab).  This can be read into Excel." />
          </tooltip></Button>
@@ -46,7 +46,7 @@
           </Tab>
           <Tab text="Matrix">
                <content>
-                  <TreeTableView prefHeight="200.0" prefWidth="200.0">
+                  <TreeTableView fx:id="resultsMatrixTable" prefHeight="200.0" prefWidth="200.0">
                     <columns>
                       <TreeTableColumn prefWidth="75.0" text="Subject" />
                       <TreeTableColumn prefWidth="75.0" text="Date" />
@@ -58,7 +58,7 @@
           </Tab>
             <Tab text="Pajek File Preview">
                <content>
-                  <TextArea prefHeight="200.0" prefWidth="200.0" />
+                  <TextArea fx:id="filePreviewArea" prefHeight="200.0" prefWidth="200.0" />
                </content>
             </Tab>
         </tabs>

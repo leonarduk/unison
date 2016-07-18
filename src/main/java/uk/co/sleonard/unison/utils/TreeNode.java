@@ -37,14 +37,10 @@ public class TreeNode extends TreeItem<Object> {
 	 *            the new name
 	 */
 	public void setName(final String name) {
+		this.setValue(name);
 		this.nodeName = name;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see javax.swing.tree.DefaultMutableTreeNode#toString()
-	 */
 	@Override
 	public String toString() {
 		return this.nodeName;

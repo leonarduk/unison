@@ -95,7 +95,8 @@ public class UNISoNControllerFX {
 	private final NewsGroupFilter filter;
 
 	public UNISoNControllerFX() throws UNISoNException {
-		UNISoNControllerFX.gui = new UNISoNGUIFX();	// Create a instance of UNISoNGui
+		UNISoNControllerFX.gui = new UNISoNGUIFX(); // Create a instance of
+													// UNISoNGui
 		this.messageQueue = new LinkedBlockingQueue<>();
 		this.headerDownloader = new HeaderDownloadWorker();
 		this.headerDownloader.initialise();
@@ -106,8 +107,7 @@ public class UNISoNControllerFX {
 			this.filter = new NewsGroupFilter(hibernateSession, this.helper);
 			this.analysis = new UNISoNAnalysis(this.filter, hibernateSession, this.helper);
 			this.database = new UNISoNDatabase(this.filter, hibernateSession, this.helper);
-		}
-		catch (final UNISoNException e) {
+		} catch (final UNISoNException e) {
 			UNISoNControllerFX.getGui().showAlert("Error:" + e.getMessage());
 			throw e;
 		}
@@ -121,8 +121,8 @@ public class UNISoNControllerFX {
 	}
 
 	/**
-	 * Called by UNISoNTabbedFrameFX to set a instance of UNISoNControllerFX into instance variable
-	 * of this class.
+	 * Called by UNISoNTabbedFrameFX to set a instance of UNISoNControllerFX
+	 * into instance variable of this class.
 	 */
 	public void setInstance() {
 		UNISoNControllerFX.instance = this.unisonTabbedFrameFX.getUnisonController();
@@ -139,8 +139,7 @@ public class UNISoNControllerFX {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	public Set<NNTPNewsGroup> listNewsgroups(final String searchString, final String host)
-	        throws UNISoNException {
+	public Set<NNTPNewsGroup> listNewsgroups(final String searchString, final String host) throws UNISoNException {
 
 		this.nntpHost = host;
 		return this.nntpReader.client.listNNTPNewsgroups(searchString, host);
@@ -162,23 +161,19 @@ public class UNISoNControllerFX {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	public void quickDownload(final Set<NNTPNewsGroup> groups, final Date fromDate1,
-	        final Date toDate1, final UNISoNLogger log, final DownloadMode mode)
-	        throws UNISoNException {
+	public void quickDownload(final Set<NNTPNewsGroup> groups, final Date fromDate1, final Date toDate1,
+			final UNISoNLogger log, final DownloadMode mode) throws UNISoNException {
 
 		for (final NNTPNewsGroup group : groups) {
 			try {
 				this.nntpReader.client.reconnect();
 				this.nntpReader.client.selectNewsgroup(group.getNewsgroup());
 				this.nntpReader.setMessageCount(group.getArticleCount());
-				this.headerDownloader.initialise(this.nntpReader, group.getFirstArticle(),
-				        group.getLastArticle(), this.nntpHost, group.getNewsgroup(), log, mode,
-				        fromDate1, toDate1);
-			}
-			catch (final IOException e) {
+				this.headerDownloader.initialise(this.nntpReader, group.getFirstArticle(), group.getLastArticle(),
+						this.nntpHost, group.getNewsgroup(), log, mode, fromDate1, toDate1);
+			} catch (final IOException e) {
 				e.printStackTrace();
-				throw new UNISoNException(
-				        "Error downloading messages. Check your internet connection: ", e);
+				throw new UNISoNException("Error downloading messages. Check your internet connection: ", e);
 			}
 		}
 	}
@@ -197,10 +192,11 @@ public class UNISoNControllerFX {
 	 * Change status progress
 	 * 
 	 * @param progress
-	 *            The actual progress of the ProgressIndicator. A negative value for progress
-	 *            indicates that the progress is indeterminate. A positive value between 0 and 1
-	 *            indicates the percentage of progress where 0 is 0% and 1 is 100%. Any value
-	 *            greater than 1 is interpreted as 100%.
+	 *            The actual progress of the ProgressIndicator. A negative value
+	 *            for progress indicates that the progress is indeterminate. A
+	 *            positive value between 0 and 1 indicates the percentage of
+	 *            progress where 0 is 0% and 1 is 100%. Any value greater than 1
+	 *            is interpreted as 100%.
 	 */
 	public void setStatusProgress(Double progress) {
 		this.statusProgress.setProgress(progress);
@@ -292,13 +288,10 @@ public class UNISoNControllerFX {
 			this.nntpReader.client.connectToNewsGroup(host, newsgroup);
 			this.setConnectedState();
 
-			UNISoNControllerFX.getGui()
-			        .showStatus("MESSAGES:" + this.nntpReader.getNumberOfMessages());
-		}
-		catch (final java.net.UnknownHostException e) {
+			UNISoNControllerFX.getGui().showStatus("MESSAGES:" + this.nntpReader.getNumberOfMessages());
+		} catch (final java.net.UnknownHostException e) {
 			this.showErrorMessage(newsgroup + " not found on " + host);
-		}
-		catch (final Exception e) {
+		} catch (final Exception e) {
 			this.showErrorMessage("ERROR: " + e);
 		}
 	}
@@ -316,7 +309,7 @@ public class UNISoNControllerFX {
 	 *            the cancel button state
 	 */
 	private void setButtonState(final boolean connectButtonState, final boolean downloadButtonState,
-	        final boolean pauseButtonState, final boolean cancelButtonState) {
+			final boolean pauseButtonState, final boolean cancelButtonState) {
 		// The command line version does not do this
 		// if (null != this.frame) {
 		// this.frame.setButtonState(connectButtonState, downloadButtonState,
@@ -339,8 +332,8 @@ public class UNISoNControllerFX {
 	}
 
 	/**
-	 * Once the header download worker completes it will call this. This method will tell the
-	 * download panel to update itself.
+	 * Once the header download worker completes it will call this. This method
+	 * will tell the download panel to update itself.
 	 */
 	public void setHeaderDownloaderFinished() {
 		this.headerDownloader.notifyObservers();
@@ -369,7 +362,7 @@ public class UNISoNControllerFX {
 	}
 
 	public DownloadNewsPanelFX getDownloadNewsPanelFX() {
-		return downloadNewsPanelFX;
+		return this.downloadNewsPanelFX;
 	}
 
 	public void setDownloadNewsPanelFX(DownloadNewsPanelFX downloadNewsPanelFX) {

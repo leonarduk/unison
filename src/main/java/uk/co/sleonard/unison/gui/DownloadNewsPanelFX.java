@@ -80,7 +80,7 @@ public class DownloadNewsPanelFX implements UNISoNLogger, Observer {
 	/** The to date label. */
 	@FXML
 	private Label toDateLabel;
-	/** -------------------- Components Variables ------------------ */
+	/** END----------------- Components Variables ---------------END */
 
 	private UNISoNControllerFX controller;
 
@@ -97,6 +97,13 @@ public class DownloadNewsPanelFX implements UNISoNLogger, Observer {
 		UNISoNTabbedFrameFX.main(args);
 	}
 
+	/**
+	 * The initialize() method is called (if it is present) after the loading of
+	 * the scene graph is complete (so all the GUI objects will have been
+	 * instantiated) but before control has returned to your application's
+	 * invoking code.
+	 * 
+	 */
 	@FXML
 	private void initialize() {
 		this.controller = UNISoNControllerFX.getInstance();
@@ -109,6 +116,8 @@ public class DownloadNewsPanelFX implements UNISoNLogger, Observer {
 		List<String> listServers = Arrays.asList(StringUtils.loadServerList());
 		ObservableList<String> list = FXCollections.observableList(listServers);
 		this.hostCombo.setItems(list);
+		// this.controller.getDatabase().addObserver(this);
+		// VERIFY IF IS NECESSARY
 	}
 
 	@FXML
@@ -288,8 +297,6 @@ public class DownloadNewsPanelFX implements UNISoNLogger, Observer {
 			if (!headerDownloader.isDownloading()) {
 				this.downloadEnabled(true);
 			}
-			// } else if (observable instanceof UNISoNController) {
-			// UNISoNController controller = (UNISoNController) observable;
 		}
 	}
 }

@@ -35,12 +35,12 @@ public class SplashScreenFX implements Observer {
 
 	public void load() {
 		setProgress(0.2);
-		Observer o = this;	// Reference to SplashScreenFX used inside TASK.
+		Observer o = this; // Reference to SplashScreenFX used inside TASK.
 		Task<Void> task = new Task<Void>() {
 			@Override
 			protected Void call() {
-				main.initRootLayout();
-				UNISoNControllerFX controller = main.getUnisonController();
+				SplashScreenFX.this.main.initRootLayout();
+				UNISoNControllerFX controller = SplashScreenFX.this.main.getUnisonController();
 				final UNISoNDatabase database = controller.getDatabase();
 				database.addObserver(o);
 				return null;
@@ -50,28 +50,24 @@ public class SplashScreenFX implements Observer {
 			protected void succeeded() {
 				super.succeeded();
 				Platform.runLater(new Runnable() {
-			        @Override
-			        public void run() {
-				        UNISoNControllerFX controller = main.getUnisonController();
-				        final UNISoNDatabase database = controller.getDatabase();
-				        database.refreshDataFromDatabase();
-
-				        setProgress(1.0);
-				        main.getPrimStage().close();
-				        main.showRootLayout();
-			        }
-		        });
+					@Override
+					public void run() {
+						setProgress(0.8);
+						SplashScreenFX.this.main.getPrimStage().close();
+						SplashScreenFX.this.main.showRootLayout();
+					}
+				});
 			}
 		};
 		new Thread(task).start();
 	}
 
 	public void setProgress(Double value) {
-		progressBar.setProgress(value);
+		this.progressBar.setProgress(value);
 	}
 
 	public Double getProgress() {
-		return progressBar.getProgress();
+		return this.progressBar.getProgress();
 	}
 
 	public void setMainApp(UNISoNTabbedFrameFX main) {

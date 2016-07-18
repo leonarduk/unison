@@ -15,7 +15,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNControllerFX;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest;
@@ -52,11 +52,10 @@ public class FullDownloadWorkerTest {
 	@Test
 	public void testAddDownloadRequest() {
 		try {
-			FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
-			        DownloadMode.ALL, Mockito.mock(UNISoNLogger.class));
+			FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>", DownloadMode.ALL,
+					Mockito.mock(UNISoNLogger.class));
 			Assert.assertTrue(FullDownloadWorker.queueSize() >= 1);
-		}
-		catch (final UNISoNException e) {
+		} catch (final UNISoNException e) {
 			Assert.fail("ERROR: " + e.getMessage());
 		}
 	}
@@ -69,11 +68,9 @@ public class FullDownloadWorkerTest {
 	public void testConstruct() {
 		FullDownloadWorker actual;
 		try {
-			actual = new FullDownloadWorker(StringUtils.loadServerList()[0],
-			        Mockito.mock(LinkedBlockingQueue.class));
+			actual = new FullDownloadWorker(StringUtils.loadServerList()[0], Mockito.mock(LinkedBlockingQueue.class));
 			Assert.assertNotNull(actual);
-		}
-		catch (final UNISoNException e) {
+		} catch (final UNISoNException e) {
 			Assert.fail("ERROR: " + e.getMessage());
 		}
 	}
@@ -83,13 +80,12 @@ public class FullDownloadWorkerTest {
 	 */
 	@Test
 	public void testDownloadArticle() {
-		final DownloadRequest request = new DownloadRequest(
-		        "<n9rgdm$g9b$3@news4.open-news-network.org>", DownloadMode.ALL);
+		final DownloadRequest request = new DownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
+				DownloadMode.ALL);
 		try {
 			final NewsArticle actual = this.worker.downloadArticle(request);
 			Assert.assertNotNull(actual);
-		}
-		catch (final UNISoNException e) {
+		} catch (final UNISoNException e) {
 			Assert.fail("ERROR: " + e.getMessage());
 		}
 
@@ -127,22 +123,19 @@ public class FullDownloadWorkerTest {
 		final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<NewsArticle>();
 		FullDownloadWorker worker = null;
 		try {
-			worker = new FullDownloadWorker(UNISoNController.getInstance().getNntpHost(), queue);
-		}
-		catch (final UNISoNException e1) {
+			worker = new FullDownloadWorker(UNISoNControllerFX.getInstance().getNntpHost(), queue);
+		} catch (final UNISoNException e1) {
 			e1.printStackTrace();
 		}
 		final DownloadRequest request = new DownloadRequest("<Baf4g.374$Lj1.115@fe10.lga>",
 
-		DownloadMode.ALL);
+				DownloadMode.ALL);
 		try {
 			final NewsArticle article = worker.downloadFullMessage(request);
 			System.out.println("Downloaded: " + article);
-		}
-		catch (final IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
-		}
-		catch (final UNISoNException e) {
+		} catch (final UNISoNException e) {
 			e.printStackTrace();
 		}
 	}

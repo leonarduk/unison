@@ -16,15 +16,15 @@ import uk.co.sleonard.unison.UNISoNControllerFX;
 /**
  * The class UNISoNTabbedFrameFX
  * 
- * The class UNISoNTabbedFrameFX is responsible by union of three Stages: DownloadNewsPanel,
- * MessageStoreViewer and PajekPanel.
+ * The class UNISoNTabbedFrameFX is responsible by union of three Stages:
+ * DownloadNewsPanel, MessageStoreViewer and PajekPanel.
  * 
  * Order: 1st Show splash screen is called. <br/>
- * 2nd Splash screen call load() to call initRootLayout and initialize UNISoNController and use
- * setInstance to get unisonController instance and set inside UNISoNControllerFX static variable.
- * <br/>
- * 3rd Method load() inside Splash screen call showRootLayout to show rootLayout and other screens
- * (I need improve this architecture). <br/>
+ * 2nd Splash screen call load() to call initRootLayout and initialize
+ * UNISoNController and use setInstance to get unisonController instance and set
+ * inside UNISoNControllerFX static variable. <br/>
+ * 3rd Method load() inside Splash screen call showRootLayout to show rootLayout
+ * and other screens (I need improve this architecture). <br/>
  * 
  * @author Stephen <github@leonarduk.com> and adapted to JavaFX by Elton
  *         <elton_12_nunes@hotmail.com>
@@ -44,8 +44,7 @@ public class UNISoNTabbedFrameFX extends Application {
 		this.primaryStage.setTitle("Loading...");
 		try {
 			showSplashScreen();
-		}
-		catch (IOException e1) {
+		} catch (IOException e1) {
 			System.err.println("ERROR - " + e1.getMessage());
 			e1.printStackTrace();
 		}
@@ -77,13 +76,12 @@ public class UNISoNTabbedFrameFX extends Application {
 			ClassLoader classLoader = getClass().getClassLoader();
 			loader.setLocation(classLoader.getResource("fxml/RootLayout.fxml"));
 			this.rootLayout = (BorderPane) loader.load();
-			this.tabs = (TabPane) rootLayout.getChildren().get(2);
+			this.tabs = (TabPane) this.rootLayout.getChildren().get(2);
 
 			this.unisonController = (UNISoNControllerFX) loader.getController();
 			this.unisonController.setUnisonTabbedFrameFX(this);
 			this.unisonController.setInstance();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
@@ -91,7 +89,7 @@ public class UNISoNTabbedFrameFX extends Application {
 
 	public void showRootLayout() {
 		// Show scene
-		Scene scene = new Scene(rootLayout);
+		Scene scene = new Scene(this.rootLayout);
 		this.primaryStage = new Stage();
 		this.primaryStage.setScene(scene);
 		this.primaryStage.setTitle("UNISoN");
@@ -116,10 +114,8 @@ public class UNISoNTabbedFrameFX extends Application {
 
 			this.unisonController.setUnisonTabbedFrameFX(this);
 			this.unisonController.setDownloadNewsPanelFX(loader.getController());
-			this.unisonController.getDatabase().addObserver(loader.getController());
 
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -133,9 +129,7 @@ public class UNISoNTabbedFrameFX extends Application {
 			loader.setLocation(classLoader.getResource("fxml/MessageStoreViewerLayout.fxml"));
 			AnchorPane messageStoreViewer = (AnchorPane) loader.load();
 			this.tabs.getTabs().get(1).setContent(messageStoreViewer);
-			this.unisonController.getDatabase().addObserver(loader.getController());
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -149,10 +143,9 @@ public class UNISoNTabbedFrameFX extends Application {
 			loader.setLocation(classLoader.getResource("fxml/PajekPanelLayout.fxml"));
 			AnchorPane messageStoreViewer = (AnchorPane) loader.load();
 			this.tabs.getTabs().get(2).setContent(messageStoreViewer);
-			// this.unisonController.getDatabase().addObserver(loader.getController()); TODO
-			// UNCOMMENT AFTER CREATE THE CONTROLLER (PAJEK PANEL)
-		}
-		catch (IOException e) {
+			PajekPanelFX controller = loader.getController();
+			controller.setStage(this.primaryStage);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -169,8 +162,7 @@ public class UNISoNTabbedFrameFX extends Application {
 			this.aboutDialogStage = new Stage();
 			this.aboutDialogStage.setScene(aboutScene);
 			this.aboutDialogStage.setTitle("About UNISoN");
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -181,7 +173,7 @@ public class UNISoNTabbedFrameFX extends Application {
 	}
 
 	public Stage getPrimStage() {
-		return primaryStage;
+		return this.primaryStage;
 	}
 
 	public UNISoNControllerFX getUnisonController() {

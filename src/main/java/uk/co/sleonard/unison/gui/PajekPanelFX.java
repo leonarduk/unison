@@ -7,6 +7,9 @@
 package uk.co.sleonard.unison.gui;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -16,11 +19,16 @@ import java.util.Vector;
 
 import org.hibernate.Session;
 
+import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TreeTableView;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import uk.co.sleonard.unison.UNISoNControllerFX;
@@ -89,9 +97,13 @@ public class PajekPanelFX implements Observer {
 	@FXML
 	private Button previewButton;
 
+	/** The graph scroll pane. */
+	@FXML
+	private ScrollPane graphScrollPane;
+
 	/** The results matrix table. */
 	@FXML
-	private TreeTableView<Object> resultsMatrixTable;
+	private TableView<Object> resultsMatrixTable;
 
 	/** The save button. */
 	@FXML
@@ -108,9 +120,12 @@ public class PajekPanelFX implements Observer {
 	 */
 	@FXML
 	public void initialize() {
-		// TODO Change to cells
-		// this.pajekHeader = new Vector<>(Arrays.asList(new String[] {
-		// "Subject", "Date", "FROM", "TO" }));
+		TableColumn columnSubject = new TableColumn<>("Subject");
+		TableColumn columnDate = new TableColumn<>("Date");
+		TableColumn columnFrom = new TableColumn<>("FROM");
+		TableColumn columnTo = new TableColumn<>("TO");
+		this.resultsMatrixTable.getColumns().addAll(columnSubject, columnDate, columnFrom, columnTo);
+
 		try {
 
 			this.session = UNISoNControllerFX.getInstance().getHelper().getHibernateSession();
@@ -118,10 +133,10 @@ public class PajekPanelFX implements Observer {
 			// TODO create file to put the no messages on vector
 			// TODO create file to put the location as cluster (use country)
 
-			this.resultsMatrixTable.setDisable(true);
+			// this.resultsMatrixTable.setDisable(true); TODO Maybe reactivate
 			this.getFilePreviewArea().setEditable(false);
 			this.previousRadio.setSelected(true);
-			// this.refreshPajekMatrixTable();
+			this.refreshPajekMatrixTable();
 		} catch (final UNISoNException e) {
 			UNISoNControllerFX.getInstance();
 			UNISoNControllerFX.getGui().showAlert("Error: " + e.getMessage());
@@ -274,31 +289,43 @@ public class PajekPanelFX implements Observer {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	/*
-	 * private void refreshPajekMatrixTable() throws UNISoNException { final
-	 * DefaultTableModel model = (DefaultTableModel)
-	 * this.resultsMatrixTable.getModel();
-	 * model.setDataVector(this.getLatestPajekMatrixVector(), this.pajekHeader);
-	 * 
-	 * // filePreviewArea this.pajekFile = new PajekNetworkFile();
-	 * this.pajekFile.createDirectedLinks(((DefaultTableModel)
-	 * this.resultsMatrixTable.getModel()).getDataVector()); //
-	 * this.graphScrollPane.removeAll();
-	 * 
-	 * final GraphPreviewPanel previewPanel = this.pajekFile.getPreviewPanel();
-	 * // this.graphScrollPane.add(previewPanel); previewPanel.repaint(); //
-	 * this.graphScrollPane.setSize(this.graphScrollPane.getMaximumSize());
-	 * 
-	 * // clear down for next set of data this.getFilePreviewArea().setText("");
-	 * final OutputStream output = new OutputStream() {
-	 * 
-	 * @Override public void write(final int b) throws IOException { final char
-	 * letter = (char) b; PajekPanelFX.this.getFilePreviewArea().append("" +
-	 * letter); }
-	 * 
-	 * }; final PrintStream stream = new PrintStream(output, true);
-	 * this.pajekFile.writeData(stream); previewPanel.repaint(); }
-	 */
+	private void refreshPajekMatrixTable() throws UNISoNException {
+		final ObservableList<Object> model = this.resultsMatrixTable.getItems();
+		model.add(this.getLatestPajekMatrixVector());
+
+		// filePreviewArea
+		this.pajekFile = new PajekNetworkFile();
+		// this.pajekFile.createDirectedLinks(new Vector<>(model));
+		// this.graphScrollPane.removeAll(); VERIFY TODO
+
+		final GraphPreviewPanel previewPanel = this.pajekFile.getPreviewPanel();
+
+		// SwingNode test
+		SwingNode swingNode = new SwingNode();
+		swingNode.setContent(previewPanel);
+		Pane pane = new Pane();
+		pane.getChildren().add(swingNode);
+
+		this.graphScrollPane.setContent(pane);
+		previewPanel.repaint();
+		// this.graphScrollPane.setSize(200.0, 200.0);
+
+		// clear down for next set of data
+		this.getFilePreviewArea().setText("");
+		final OutputStream output = new OutputStream() {
+
+			@Override
+			public void write(final int b) throws IOException {
+				final char letter = (char) b;
+				PajekPanelFX.this.getFilePreviewArea().getText().concat("" + letter);
+			}
+
+		};
+		final PrintStream stream = new PrintStream(output, true);
+		this.pajekFile.writeData(stream);
+		previewPanel.repaint();
+	}
+
 	/**
 	 * Save button action performed.
 	 */
@@ -355,10 +382,11 @@ public class PajekPanelFX implements Observer {
 	public void update(final Observable observable, final Object arg1) {
 		if (observable instanceof UNISoNDatabase) {
 			// UNISoNController controller = (UNISoNController) observable;
-			/*
-			 * try { this.refreshPajekMatrixTable(); } catch (final
-			 * UNISoNException e) { e.printStackTrace(); }
-			 */
+			try {
+				this.refreshPajekMatrixTable();
+			} catch (final UNISoNException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

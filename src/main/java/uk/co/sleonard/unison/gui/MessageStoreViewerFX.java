@@ -242,7 +242,9 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 			if (item instanceof NewsGroup) {
 				UNISoNControllerFX.getInstance().getFilter().setSelectedNewsgroup((NewsGroup) item);
 			} else {
-				UNISoNControllerFX.getInstance().getFilter().setSelectedNewsgroup((String) item);
+				if (item instanceof String) {
+					UNISoNControllerFX.getInstance().getFilter().setSelectedNewsgroup((String) item);
+				}
 			}
 
 			this.notifySelectedNewsGroupObservers();
@@ -266,7 +268,13 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 				UNISoNControllerFX.getInstance().getFilter().setSelectedMessage(msg);
 				this.notifySelectedMessageObservers();
 			} else {
-				this.expandNode((TreeNode) (TreeItem) this.topicsHierarchy.getSelectionModel().getSelectedItem());
+				TreeNode selectedItem = (TreeNode) (TreeItem) this.topicsHierarchy.getSelectionModel()
+						.getSelectedItem();
+				if (selectedItem.getChildren().size() == 0) { // Grant no
+																// children
+																// duplicate.
+					this.expandNode(selectedItem);
+				}
 			}
 			this.notifySelectedMessageObservers();
 		}

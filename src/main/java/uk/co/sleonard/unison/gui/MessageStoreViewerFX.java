@@ -613,7 +613,7 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 		// }
 		// This actually refreshes the tree
 		this.groupsHierarchy.setRoot(this.newsgroupTreeRoot);
-		this.groupsHierarchy.refresh();
+//		this.groupsHierarchy.refresh();
 	}
 
 	/**
@@ -663,7 +663,7 @@ public class MessageStoreViewerFX implements Observer, UNISoNLogger {
 
 		// This actually refreshes the tree
 		this.topicsHierarchy.setRoot(this.topicRoot);
-		this.topicsHierarchy.refresh();
+//		this.topicsHierarchy.refresh();
 	}
 
 	/**

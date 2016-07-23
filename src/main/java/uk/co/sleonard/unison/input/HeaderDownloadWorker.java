@@ -19,10 +19,6 @@ import org.apache.commons.net.nntp.Article;
 import org.apache.commons.net.nntp.NNTPClient;
 import org.apache.log4j.Logger;
 
-<<<<<<< HEAD
-=======
-import uk.co.sleonard.unison.UNISoNControllerFX;
->>>>>>> ee6cdbcb2a1e8d940a2e093d7142782f4264409c
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
@@ -108,11 +104,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 		while (this.running) {
 			if (this.downloading) {
 				try {
-<<<<<<< HEAD
 					this.storeArticleInfo(this.queue);
-=======
-					this.storeArticleInfo(UNISoNControllerFX.getInstance().getQueue());
->>>>>>> ee6cdbcb2a1e8d940a2e093d7142782f4264409c
 				}
 				catch (final UNISoNException e) {
 					this.getLog().alert("ERROR:" + e);
@@ -127,11 +119,9 @@ public class HeaderDownloadWorker extends SwingWorker {
 		return "Completed";
 	}
 
-<<<<<<< HEAD
-=======
 	public NewsArticle convertMessageToNewsArticle(final int articleNumber, final String subject,
 	        final String from, final Date date, final String articleId, final String references)
-	        throws UNISoNException {
+	                throws UNISoNException {
 		final String postingHost = null;
 		final String content = null;
 
@@ -141,7 +131,6 @@ public class HeaderDownloadWorker extends SwingWorker {
 		return article;
 	}
 
->>>>>>> ee6cdbcb2a1e8d940a2e093d7142782f4264409c
 	/*
 	 * (non-Javadoc)
 	 *

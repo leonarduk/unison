@@ -15,18 +15,13 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
 import javafx.application.Platform;
-import javafx.application.Platform;
-import javafx.fxml.FXML;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
-<<<<<<< HEAD
-import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
-=======
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
->>>>>>> ee6cdbcb2a1e8d940a2e093d7142782f4264409c
+import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.gui.DownloadNewsPanelFX;
 import uk.co.sleonard.unison.gui.UNISoNGUIFX;
@@ -39,7 +34,7 @@ import uk.co.sleonard.unison.utils.DownloaderImpl;
 
 /**
  * The class UNISoNController
- * 
+ *
  * @author Elton Nunes <elton_12_nunes@hotmail.com>
  * @since 25-jun-2016
  *
@@ -120,6 +115,10 @@ public class UNISoNControllerFX {
 		return UNISoNControllerFX.instance;
 	}
 
+	public static void setGui(final UNISoNGUIFX gui) {
+		UNISoNControllerFX.gui = gui;
+	}
+
 	public UNISoNControllerFX() throws UNISoNException {
 		UNISoNControllerFX.gui = new UNISoNGUIFX();	// Create a instance of UNISoNGui
 		this.messageQueue = new LinkedBlockingQueue<>();
@@ -141,100 +140,6 @@ public class UNISoNControllerFX {
 		this.nntpReader = new NewsGroupReader(this);
 	}
 
-<<<<<<< HEAD
-=======
-	@FXML
-	private void initialize() {
-
-	}
-
-	/**
-	 * Called by UNISoNTabbedFrameFX to set a instance of UNISoNControllerFX into instance variable
-	 * of this class.
-	 */
-	public void setInstance() {
-		UNISoNControllerFX.instance = this.unisonTabbedFrameFX.getUnisonController();
-	}
-
-	/**
-	 * List newsgroups.
-	 *
-	 * @param searchString
-	 *            the search string
-	 * @param host
-	 *            the host
-	 * @return the sets the
-	 * @throws UNISoNException
-	 *             the UNI so n exception
-	 */
-	public Set<NNTPNewsGroup> listNewsgroups(final String searchString, final String host)
-	        throws UNISoNException {
-
-		this.nntpHost = host;
-		return this.nntpReader.client.listNNTPNewsgroups(searchString, host);
-	}
-
-	/**
-	 * Quick download.
-	 *
-	 * @param groups
-	 *            the groups
-	 * @param fromDate1
-	 *            the from date
-	 * @param toDate1
-	 *            the to date
-	 * @param log
-	 *            the log
-	 * @param mode
-	 *            the mode
-	 * @throws UNISoNException
-	 *             the UNI so n exception
-	 */
-	public void quickDownload(final Set<NNTPNewsGroup> groups, final Date fromDate1,
-	        final Date toDate1, final UNISoNLogger log, final DownloadMode mode)
-	        throws UNISoNException {
-
-		for (final NNTPNewsGroup group : groups) {
-			try {
-				this.nntpReader.client.reconnect();
-				this.nntpReader.client.selectNewsgroup(group.getNewsgroup());
-				this.nntpReader.setMessageCount(group.getArticleCount());
-				this.headerDownloader.initialise(this.nntpReader, group.getFirstArticle(),
-				        group.getLastArticle(), this.nntpHost, group.getNewsgroup(), log, mode,
-				        fromDate1, toDate1);
-			}
-			catch (final IOException e) {
-				e.printStackTrace();
-				throw new UNISoNException(
-				        "Error downloading messages. Check your internet connection: ", e);
-			}
-		}
-	}
-
-	/**
-	 * Change status label
-	 * 
-	 * @param text
-	 *            Text will be appear on status.
-	 */
-	public void setStatusLabel(String text) {
-		this.statusLabel.setText(text);
-	}
-
-	/**
-	 * Change status progress
-	 * 
-	 * @param progress
-	 *            The actual progress of the ProgressIndicator. A negative value for progress
-	 *            indicates that the progress is indeterminate. A positive value between 0 and 1
-	 *            indicates the percentage of progress where 0 is 0% and 1 is 100%. Any value
-	 *            greater than 1 is interpreted as 100%.
-	 */
-	public void setStatusProgress(Double progress) {
-		this.statusProgress.setProgress(progress);
-	}
-
->>>>>>> ee6cdbcb2a1e8d940a2e093d7142782f4264409c
 	/**
 	 * Cancel download.
 	 */
@@ -243,63 +148,12 @@ public class UNISoNControllerFX {
 	}
 
 	/**
-	 * Stop download.
+	 * Close application
 	 */
-	public void stopDownload() {
-		DataHibernatorWorker.stopDownload();
-		this.setIdleState();
-	}
-
-	/**
-	 * Store newsgroups.
-	 *
-	 * @param newsgroups
-	 *            the newsgroups
-	 */
-	public void storeNewsgroups(final Set<NNTPNewsGroup> newsgroups) {
-		this.getHelper().storeNewsgroups(newsgroups, this.getSession());
-	}
-
-	/**
-	 * Switch filtered.
-	 *
-	 * @param on
-	 *            the on
-	 */
-	public void switchFiltered(final boolean on) {
-		this.getFilter().setFiltered(on);
-		this.getDatabase().refreshDataFromDatabase();
-	}
-
-	/**
-	 * Sets the idle state.
-	 */
-	public void setIdleState() {
-		this.setButtonState(true, false, false, false);
-	}
-
-	/**
-	 * Sets the connected state.
-	 */
-	public void setConnectedState() {
-		this.setButtonState(false, true, false, true);
-	}
-
-	/**
-	 * Sets the connecting state.
-	 */
-	public void setConnectingState() {
-		this.setButtonState(false, false, false, true);
-	}
-
-	/**
-	 * Sets the downloading state.
-	 *
-	 * @param progress
-	 *            the new downloading state
-	 */
-	public void setDownloadingState(final int progress) {
-		this.setButtonState(false, false, true, true);
+	@FXML
+	private void closeApplication() {
+		Platform.exit();
+		System.exit(1);
 	}
 
 	/**
@@ -332,6 +186,145 @@ public class UNISoNControllerFX {
 		}
 	}
 
+	public UNISoNAnalysis getAnalysis() {
+		return this.analysis;
+	}
+
+	public UNISoNDatabase getDatabase() {
+		return this.database;
+	}
+
+	public DownloadNewsPanelFX getDownloadNewsPanelFX() {
+		return this.downloadNewsPanelFX;
+	}
+
+	/**
+	 * Gets the download panel.
+	 *
+	 * @return the download panel
+	 */
+	public UNISoNLogger getDownloadPanel() {
+		return this.downloadPanel;
+	}
+
+	public NewsGroupFilter getFilter() {
+		return this.filter;
+	}
+
+	/**
+	 * Gets the header downloader.
+	 *
+	 * @return the header downloader
+	 */
+	public HeaderDownloadWorker getHeaderDownloader() {
+		return this.headerDownloader;
+	}
+
+	public HibernateHelper getHelper() {
+		return this.helper;
+	}
+
+	/**
+	 * Gets the matrix type.
+	 *
+	 * @return the matrix type
+	 */
+	public MatrixType getMatrixType() {
+		return this.matrixType;
+	}
+
+	/**
+	 * Gets the single instance of UNISoNController. >>>>>>>
+	 * ee6cdbcb2a1e8d940a2e093d7142782f4264409c
+	 *
+	 * @return the nntp host
+	 */
+	public String getNntpHost() {
+		return this.nntpHost;
+	}
+
+	/**
+	 * Gets the nntp reader.
+	 *
+	 * @return the nntp reader
+	 */
+	public NewsGroupReader getNntpReader() {
+		return this.nntpReader;
+	}
+
+	/**
+	 * Gets the queue.
+	 *
+	 * @return the queue
+	 */
+	public LinkedBlockingQueue<NewsArticle> getQueue() {
+		DataHibernatorWorker.startHibernators();
+		return this.messageQueue;
+	}
+
+	public Session getSession() {
+		return this.session;
+	}
+
+	@FXML
+	private void initialize() {
+
+	}
+
+	/**
+	 * Gets the nntp host. ee6cdbcb2a1e8d940a2e093d7142782f4264409c
+	 *
+	 * @param searchString
+	 *            the search string
+	 * @param host
+	 *            the host
+	 * @return the sets the
+	 * @throws UNISoNException
+	 *             the UNI so n exception
+	 */
+	public Set<NewsGroup> listNewsgroups(final String searchString, final String host)
+	        throws UNISoNException {
+
+		this.nntpHost = host;
+		return this.nntpReader.client.listNewsGroups(searchString, host);
+	}
+
+	/**
+	 * Quick download.
+	 *
+	 * @param groups
+	 *            the groups
+	 * @param fromDate1
+	 *            the from date
+	 * @param toDate1
+	 *            the to date
+	 * @param log
+	 *            the log
+	 * @param mode
+	 *            the mode
+	 * @throws UNISoNException
+	 *             the UNI so n exception
+	 */
+	public void quickDownload(final Set<NewsGroup> groups, final Date fromDate1, final Date toDate1,
+	        final UNISoNLogger log, final DownloadMode mode) throws UNISoNException {
+
+		for (final NewsGroup group : groups) {
+			try {
+				this.nntpReader.client.reconnect();
+				this.nntpReader.client.selectNewsgroup(group.getName());
+				this.nntpReader.setMessageCount(group.getArticleCount());
+				this.headerDownloader.initialise(this.nntpReader, group.getFirstMessage(),
+				        group.getLastMessage(), this.nntpHost, group.getName(), log, mode,
+				        fromDate1, toDate1);
+			}
+			catch (final IOException e) {
+				e.printStackTrace();
+				throw new UNISoNException(
+				        "Error downloading messages. Check your internet connection: ", e);
+			}
+		}
+	}
+
 	/**
 	 * Sets the button state.
 	 *
@@ -354,21 +347,45 @@ public class UNISoNControllerFX {
 	}
 
 	/**
-	 * Close application
+	 * Sets the connected state.
 	 */
-	@FXML
-	private void closeApplication() {
-		Platform.exit();
-		System.exit(1);
+	public void setConnectedState() {
+		this.setButtonState(false, true, false, true);
 	}
 
-<<<<<<< HEAD
-	public UNISoNDatabase getDatabase() {
-		return this.database;
-=======
-	private void showErrorMessage(final String messageText) {
-		// this.frame.showErrorMessage(message);
-		UNISoNControllerFX.logger.warn(messageText);
+	/**
+	 * Sets the connecting state.
+	 */
+	public void setConnectingState() {
+		this.setButtonState(false, false, false, true);
+	}
+
+	/**
+	 * Sets the downloading state.
+	 *
+	 * @param progress
+	 *            the new downloading state
+	 */
+	public void setDownloadingState(final int progress) {
+		this.setButtonState(false, false, true, true);
+	}
+
+	public void setDownloadNewsPanelFX(final DownloadNewsPanelFX downloadNewsPanelFX) {
+		this.downloadNewsPanelFX = downloadNewsPanelFX;
+	}
+
+	/**
+	 * List newsgroups.
+	 *
+	 * public static UNISoNGUIFX getGui() { return UNISoNControllerFX.gui; }
+	 *
+	 * /** Sets the download panel.
+	 *
+	 * @param downloadPanel
+	 *            the new download panel
+	 */
+	public void setDownloadPanel(final UNISoNLogger downloadPanel) {
+		this.downloadPanel = downloadPanel;
 	}
 
 	/**
@@ -380,133 +397,10 @@ public class UNISoNControllerFX {
 	}
 
 	/**
-	 * Sets the matrix type.
-	 *
-	 * @param type
-	 *            the new matrix type
+	 * Sets the idle state.
 	 */
-	public void setMatrixType(final MatrixType type) {
-		this.matrixType = type;
-	}
-
-	/**
-	 * Show about dialog, Called by MenuItem About
-	 */
-	@FXML
-	private void showAboutDialog() {
-		this.unisonTabbedFrameFX.showAboutDialog();
-	}
-
-	public void setUnisonTabbedFrameFX(UNISoNTabbedFrameFX unisonTabbedFrameFX) {
-		this.unisonTabbedFrameFX = unisonTabbedFrameFX;
->>>>>>> ee6cdbcb2a1e8d940a2e093d7142782f4264409c
-	}
-
-	public DownloadNewsPanelFX getDownloadNewsPanelFX() {
-		return this.downloadNewsPanelFX;
-	}
-
-	public NewsGroupFilter getFilter() {
-		return this.filter;
-	}
-
-	/**
-	 * Gets the header downloader.
-	 *
-	 * @return the header downloader
-	 */
-	public HeaderDownloadWorker getHeaderDownloader() {
-		return this.headerDownloader;
-	}
-
-	public HibernateHelper getHelper() {
-		return this.helper;
-	}
-
-	/**
-<<<<<<< HEAD
-	 * Gets the nntp host.
-=======
-	 * Gets the matrix type.
-	 *
-	 * @return the matrix type
-	 */
-	public MatrixType getMatrixType() {
-		return this.matrixType;
-	}
-
-	/**
-	 * Gets the queue.
-	 *
-	 * @return the queue
-	 */
-	public LinkedBlockingQueue<NewsArticle> getQueue() {
-		DataHibernatorWorker.startHibernators();
-		return this.messageQueue;
-	}
-
-	/**
-	 * Gets the single instance of UNISoNController.
->>>>>>> ee6cdbcb2a1e8d940a2e093d7142782f4264409c
-	 *
-	 * @return the nntp host
-	 */
-	public String getNntpHost() {
-		return this.nntpHost;
-	}
-
-<<<<<<< HEAD
-	@FXML
-	private void initialize() {
-
-	}
-
-	/**
-	 * List newsgroups.
-=======
-	public Session getSession() {
-		return this.session;
-	}
-
-	public static UNISoNGUIFX getGui() {
-		return UNISoNControllerFX.gui;
-	}
-
-	/**
-	 * Sets the download panel.
-	 *
-	 * @param downloadPanel
-	 *            the new download panel
-	 */
-	public void setDownloadPanel(final UNISoNLogger downloadPanel) {
-		this.downloadPanel = downloadPanel;
-	}
-
-	public static void setGui(final UNISoNGUIFX gui) {
-		UNISoNControllerFX.gui = gui;
-	}
-
-	/**
-	 * Gets the nntp host.
->>>>>>> ee6cdbcb2a1e8d940a2e093d7142782f4264409c
-	 *
-	 * @param searchString
-	 *            the search string
-	 * @param host
-	 *            the host
-	 * @return the sets the
-	 * @throws UNISoNException
-	 *             the UNI so n exception
-	 */
-	public Set<NewsGroup> listNewsgroups(final String searchString, final String host)
-	        throws UNISoNException {
-
-		this.nntpHost = host;
-		return this.nntpReader.client.listNewsGroups(searchString, host);
-	}
-
-	public void setDownloadNewsPanelFX(final DownloadNewsPanelFX downloadNewsPanelFX) {
-		this.downloadNewsPanelFX = downloadNewsPanelFX;
+	public void setIdleState() {
+		this.setButtonState(true, false, false, false);
 	}
 
 	/**
@@ -517,18 +411,14 @@ public class UNISoNControllerFX {
 		UNISoNControllerFX.instance = this.unisonTabbedFrameFX.getUnisonController();
 	}
 
-	public void setMatrixType(final MatrixType replyToAll) {
-		// TODO Auto-generated method stub
-
-	}
-
 	/**
-	 * Gets the nntp reader.
+	 * Sets the matrix type.
 	 *
-	 * @return the nntp reader
+	 * @param type
+	 *            the new matrix type
 	 */
-	public NewsGroupReader getNntpReader() {
-		return this.nntpReader;
+	public void setMatrixType(final MatrixType type) {
+		this.matrixType = type;
 	}
 
 	/**
@@ -555,7 +445,6 @@ public class UNISoNControllerFX {
 		this.statusLabel.setText(text);
 	}
 
-<<<<<<< HEAD
 	/**
 	 * Change status progress
 	 *
@@ -579,23 +468,40 @@ public class UNISoNControllerFX {
 	@FXML
 	private void showAboutDialog() {
 		this.unisonTabbedFrameFX.showAboutDialog();
-=======
-	public UNISoNAnalysis getAnalysis() {
-		return this.analysis;
 	}
 
-	public UNISoNDatabase getDatabase() {
-		return this.database;
->>>>>>> ee6cdbcb2a1e8d940a2e093d7142782f4264409c
+	private void showErrorMessage(final String messageText) {
+		// this.frame.showErrorMessage(message);
+		UNISoNControllerFX.logger.warn(messageText);
 	}
 
 	/**
-	 * Gets the download panel.
-	 *
-	 * @return the download panel
+	 * Stop download.
 	 */
-	public UNISoNLogger getDownloadPanel() {
-		return this.downloadPanel;
+	public void stopDownload() {
+		DataHibernatorWorker.stopDownload();
+		this.setIdleState();
+	}
+
+	/**
+	 * Store newsgroups.
+	 *
+	 * @param newsgroups
+	 *            the newsgroups
+	 */
+	public void storeNewsgroups(final Set<NewsGroup> newsgroups) {
+		this.getHelper().storeNewsgroups(newsgroups, this.getSession());
+	}
+
+	/**
+	 * Switch filtered.
+	 *
+	 * @param on
+	 *            the on
+	 */
+	public void switchFiltered(final boolean on) {
+		this.getFilter().setFiltered(on);
+		this.getDatabase().refreshDataFromDatabase();
 	}
 
 }

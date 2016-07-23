@@ -1,6 +1,6 @@
 /**
  * FullDownloadWorkerTest
- * 
+ *
  * @author ${author}
  * @since 30-May-2016
  */
@@ -15,7 +15,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNControllerFX;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest;
@@ -127,7 +127,7 @@ public class FullDownloadWorkerTest {
 		final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<NewsArticle>();
 		FullDownloadWorker worker = null;
 		try {
-			worker = new FullDownloadWorker(UNISoNController.getInstance().getNntpHost(), queue);
+			worker = new FullDownloadWorker(UNISoNControllerFX.getInstance().getNntpHost(), queue);
 		}
 		catch (final UNISoNException e1) {
 			e1.printStackTrace();

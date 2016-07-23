@@ -10,12 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 
+/**
+ * The class UNISoNGUIFX
+ *
+ * @author Elton <elton_12_nunes@hotmail.com>
+ * @since 25-Jun-2016
+ */
 public class UNISoNGUIFX {
 	/**
 	 * Ask question.
@@ -36,7 +41,7 @@ public class UNISoNGUIFX {
 		alert.setTitle(title);
 		alert.setHeaderText(null);
 		alert.setContentText(question);
-		
+
 		List<ButtonType> buttons = new ArrayList<>();
 		for (String name : options) {
 			ButtonType button = new ButtonType(name);
@@ -48,7 +53,7 @@ public class UNISoNGUIFX {
 		Optional<ButtonType> result = alert.showAndWait();
 
 		for (int i = 0; i < buttons.size(); i++) {
-			if (result.get() == buttons.get(i)){
+			if (result.get() == buttons.get(i)) {
 				return i;
 			}
 		}
@@ -69,5 +74,14 @@ public class UNISoNGUIFX {
 		alert.showAndWait();
 	}
 
+	/**
+	 * Show status.
+	 *
+	 * @param message1
+	 *            the message
+	 */
+	public void showStatus(final String message1) {
+		this.showAlert(message1);
+	}
 
 }

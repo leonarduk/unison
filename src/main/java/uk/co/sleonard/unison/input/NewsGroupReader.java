@@ -8,7 +8,6 @@ package uk.co.sleonard.unison.input;
 
 import org.apache.log4j.Logger;
 
-import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNControllerFX;
 import uk.co.sleonard.unison.UNISoNLogger;
 
@@ -34,16 +33,6 @@ public class NewsGroupReader implements UNISoNLogger {
 
 	/** The msgs stored. */
 	int msgsStored = 0;
-
-	/**
-	 * Instantiates a new news group reader.
-	 *
-	 * @param controller
-	 *            the controller
-	 */
-	public NewsGroupReader(final UNISoNController controller) {
-		this.client = new NewsClientImpl();
-	}
 
 	/**
 	 * Instantiates a new news group reader.
@@ -170,7 +159,7 @@ public class NewsGroupReader implements UNISoNLogger {
 
 		if (this.getMessageCount() > 0) {
 			final int progress = (i * 100) / this.getMessageCount();
-			UNISoNController.getInstance().setDownloadingState(progress);
+			UNISoNControllerFX.getInstance().setDownloadingState(progress);
 		}
 
 	}

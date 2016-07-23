@@ -15,7 +15,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
-import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNControllerFX;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
@@ -64,8 +64,8 @@ public class DataHibernatorWorker extends SwingWorker {
 	 */
 	public synchronized static void startHibernators() {
 		while (DataHibernatorWorker.workers.size() < DataHibernatorWorker.numberofHibernators) {
-			DataHibernatorWorker.workers
-			        .add(new DataHibernatorWorker(UNISoNController.getInstance().getNntpReader()));
+			DataHibernatorWorker.workers.add(
+			        new DataHibernatorWorker(UNISoNControllerFX.getInstance().getNntpReader()));
 		}
 	}
 
@@ -93,7 +93,7 @@ public class DataHibernatorWorker extends SwingWorker {
 	 */
 	public DataHibernatorWorker(final NewsGroupReader reader) {
 		super("DataHibernatorWorker");
-		this.helper = UNISoNController.getInstance().helper();
+		this.helper = UNISoNControllerFX.getInstance().getHelper();
 
 		this.reader = reader;
 		DataHibernatorWorker.logger
@@ -108,13 +108,14 @@ public class DataHibernatorWorker extends SwingWorker {
 	 */
 	@Override
 	public Object construct() {
-		final LinkedBlockingQueue<NewsArticle> queue = UNISoNController.getInstance().getQueue();
+		final LinkedBlockingQueue<NewsArticle> queue = UNISoNControllerFX.getInstance().getQueue();
 		DataHibernatorWorker.logger
 		        .debug("construct : " + this.saveToDatabase + " queue " + queue.size());
 
 		try {
 			// HAve one session per worker rather than per message
-			final Session session = UNISoNController.getInstance().helper().getHibernateSession();
+			final Session session = UNISoNControllerFX.getInstance().getHelper()
+			        .getHibernateSession();
 			while (this.saveToDatabase) {
 				this.pollQueue(queue, session);
 				// wait a second
@@ -129,7 +130,7 @@ public class DataHibernatorWorker extends SwingWorker {
 				DataHibernatorWorker.log.alert("Download complete");
 			}
 		}
-		catch (@SuppressWarnings("unused") final InterruptedException e) {
+		catch (final InterruptedException e) {
 			return "Interrupted";
 		}
 		catch (final UNISoNException e) {

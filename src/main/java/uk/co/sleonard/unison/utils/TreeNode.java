@@ -1,6 +1,6 @@
 package uk.co.sleonard.unison.utils;
 
-import javax.swing.tree.DefaultMutableTreeNode;
+import javafx.scene.control.TreeItem;
 
 /**
  * The Class TreeNode.
@@ -9,13 +9,13 @@ import javax.swing.tree.DefaultMutableTreeNode;
  * @since v1.0.0
  *
  */
-public class TreeNode extends DefaultMutableTreeNode {
+public class TreeNode extends TreeItem<Object> {
 
 	/** The Constant serialVersionUID. */
-	private static final long	serialVersionUID	= -8471464838090837440L;
+	private static final long serialVersionUID = -8471464838090837440L;
 
 	/** The node name. */
-	private String				nodeName;
+	private String nodeName;
 
 	/**
 	 * Instantiates a new tree node.

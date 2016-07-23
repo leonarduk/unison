@@ -13,7 +13,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.hsqldb.util.DatabaseManagerSwing;
 
-import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNControllerFX;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
@@ -100,9 +100,9 @@ public class UNISoNCLI implements UNISoNLogger {
 	 *             the UNI so n exception
 	 */
 	private void downloadAll(final String searchString, final String host) throws UNISoNException {
-		final Set<NewsGroup> listNewsgroups = UNISoNController.getInstance()
+		final Set<NewsGroup> listNewsgroups = UNISoNControllerFX.getInstance()
 		        .listNewsgroups(searchString, host);
-		UNISoNController.getInstance().quickDownload(listNewsgroups, null, null, this,
+		UNISoNControllerFX.getInstance().quickDownload(listNewsgroups, null, null, this,
 		        DownloadMode.ALL);
 	}
 
@@ -158,9 +158,9 @@ public class UNISoNCLI implements UNISoNLogger {
 	 */
 	private void listNewsgroups(final String searchString, final String host)
 	        throws UNISoNException {
-		final Set<NewsGroup> listNewsgroups = UNISoNController.getInstance()
+		final Set<NewsGroup> listNewsgroups = UNISoNControllerFX.getInstance()
 		        .listNewsgroups(searchString, host);
-		UNISoNController.getInstance().storeNewsgroups(listNewsgroups);
+		UNISoNControllerFX.getInstance().storeNewsgroups(listNewsgroups);
 
 	}
 
@@ -190,14 +190,12 @@ public class UNISoNCLI implements UNISoNLogger {
 	 */
 	private void quickDownload(final String arg, final Date toDate, final Date fromDate,
 	        final String host) throws UNISoNException {
-		UNISoNController.create();
-		final Set<NewsGroup> listNewsgroups = UNISoNController.getInstance().listNewsgroups(arg,
+		final Set<NewsGroup> listNewsgroups = UNISoNControllerFX.getInstance().listNewsgroups(arg,
 		        host);
 		// HibernateHelper.generateSchema();
 
 		try {
-			UNISoNController.create();
-			UNISoNController.getInstance().quickDownload(listNewsgroups, fromDate, toDate, this,
+			UNISoNControllerFX.getInstance().quickDownload(listNewsgroups, fromDate, toDate, this,
 			        DownloadMode.BASIC);
 		}
 		catch (final UNISoNException e) {
@@ -219,7 +217,7 @@ public class UNISoNCLI implements UNISoNLogger {
 	 */
 	public void startDownload(final String newsgroup, final Date toDate, final Date fromDate) {
 		// try {
-		// UNISoNController.getInstance().downloadMessages(newsgroup,
+		// UNISoNControllerFX.getInstance().downloadMessages(newsgroup,
 		// fromDate, toDate);
 		//
 		// } catch (UNISoNException e) {

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0" prefWidth="280.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="19.0" layoutY="14.0" text="UNISoN">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="146.0" layoutY="24.0" text="V0.0     June 2016">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="19.0" layoutY="55.0" text="UseNet Incorporates Social Networks">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="20.0" layoutY="82.0" text="An application to download Usenet messages">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="21.0" layoutY="101.0" text="for Social Network Analysis">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="63.0" layoutY="126.0" prefHeight="17.0" prefWidth="167.0" text="http://unison.sleonard.co.uk" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="20.0" layoutY="155.0" text="Developed as part of an MSc at City University" />
+      <Label layoutX="21.0" layoutY="174.0" text="Stephen Leonard" />
+      <Label layoutX="22.0" layoutY="194.0" text="unison@sleonard.co.uk" />
+   </children>
+</Pane>

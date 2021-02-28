@@ -31,7 +31,7 @@
 		<asm-attrs.version>1.5.3</asm-attrs.version>
 		<cglib.version>2.1_3</cglib.version>
 		<colt.version>1.2.0</colt.version>
-		<commons-collections.version>3.2</commons-collections.version>
+		<commons-collections.version>3.2.2</commons-collections.version>
 		<commons-lang.version>2.1</commons-lang.version>
 		<commons-logging.version>1.0.4</commons-logging.version>
 		<db-ojb.version>1.0.4-patch9</db-ojb.version>

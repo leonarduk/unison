@@ -3,13 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uk.co.sleonard</groupId>
 	<artifactId>unison</artifactId>
-	<version>1.2.4</version>
+	<version>1.2.5-SNAPSHOT</version>
 	<name>unison</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<log4j.version>1.2.17</log4j.version>
 		<slf4j-log4j12.version>1.5.6</slf4j-log4j12.version>
+		<junit.version>4.13.1</junit.version>
 		<java.version>11</java.version>
 		<powermock.version>1.6.5</powermock.version>
 		<mockito.version>1.10.19</mockito.version>
@@ -30,7 +31,7 @@
 		<asm-attrs.version>1.5.3</asm-attrs.version>
 		<cglib.version>2.1_3</cglib.version>
 		<colt.version>1.2.0</colt.version>
-		<commons-collections.version>3.2</commons-collections.version>
+		<commons-collections.version>3.2.2</commons-collections.version>
 		<commons-lang.version>2.1</commons-lang.version>
 		<commons-logging.version>1.0.4</commons-logging.version>
 		<db-ojb.version>1.0.4-patch9</db-ojb.version>
@@ -43,7 +44,6 @@
 		<jta.version>1.1</jta.version>
 		<jtidy.version>r8-20060801</jtidy.version>
 		<jung.version>1.7.6</jung.version>
-		<junit.version>4.12</junit.version>
 		<oscache.version>2.4.1</oscache.version>
 		<swing-layout.version>1.0.3</swing-layout.version>
 		<mail.version>1.4.7</mail.version>

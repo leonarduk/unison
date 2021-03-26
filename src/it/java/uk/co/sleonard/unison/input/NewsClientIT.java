@@ -14,6 +14,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import uk.co.sleonard.unison.UNISoNException;
@@ -70,6 +71,7 @@ public class NewsClientIT {
 	 * @throws SocketException
 	 *
 	 */
+	@Ignore
 	@Test
 	public void testConnectForServersProperties() throws SocketException, IOException {
 		final NewsClient client = new NewsClientImpl();

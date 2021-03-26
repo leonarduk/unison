@@ -115,7 +115,7 @@ public class PajekNetworkFile {
 	 *            the table data
 	 * @return the list
 	 */
-	public List<Relationship> createDirectedLinks(final Vector<Vector<String>> tableData) {
+	public List<Relationship> createDirectedLinks(final Vector<Vector> tableData) {
 		this.directedLinks = this.createLinks(tableData, this.directedLinks);
 
 		return this.directedLinks;
@@ -131,9 +131,9 @@ public class PajekNetworkFile {
 	 * @return the list
 	 */
 	private List<uk.co.sleonard.unison.output.Relationship> createLinks(
-	        final Vector<Vector<String>> nodePairs,
-	        final List<uk.co.sleonard.unison.output.Relationship> links) {
-		final Iterator<Vector<String>> iter = nodePairs.iterator();
+	        final Vector<Vector> nodePairs,
+	        final List<Relationship> links) {
+		final Iterator<Vector> iter = nodePairs.iterator();
 		while (iter.hasNext()) {
 			final Vector<String> row = iter.next();
 			final String key = row.get(2);

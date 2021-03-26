@@ -10,14 +10,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<log4j.version>1.2.17</log4j.version>
 		<slf4j-log4j12.version>1.5.6</slf4j-log4j12.version>
-		<junit.version>4.11</junit.version>
-		<java.version>1.8</java.version>
+		<java.version>11</java.version>
 		<powermock.version>1.6.5</powermock.version>
 		<mockito.version>1.10.19</mockito.version>
 		<javax.mail.version>1.4</javax.mail.version>
 		<maven-assembly-plugin.version>2.2-beta-4
 		</maven-assembly-plugin.version>
-		<jacoco.version>0.7.6.201602180812</jacoco.version>
+		<jacoco.version>0.8.6</jacoco.version>
 		<jms.version>1.1</jms.version>
 		<javassist.version>3.18.1-GA</javassist.version>
 		<commons-net>3.5</commons-net>

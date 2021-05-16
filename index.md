@@ -10,7 +10,7 @@ Steve Leonard
 2012 July - I have put a PDF of my report I wrote for this project on [scribd.com](http://www.scribd.com/doc/100017519)
 
 
-[https://github.com/leonarduk/unison/blob/master/images/pajekPreview-WINDOWS.jpg|Download]
+[pajekPreview-WINDOWS.jpg]
 
-[https://github.com/leonarduk/unison/blob/master/images/viewSaved-WINDOWS.jpg|Network Preview]
+[viewSaved-WINDOWS.jpg]
 

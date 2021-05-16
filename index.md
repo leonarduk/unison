@@ -9,8 +9,7 @@ Steve Leonard
 
 2012 July - I have put a PDF of my report I wrote for this project on [scribd.com](http://www.scribd.com/doc/100017519)
 
-
-[pajekPreview-WINDOWS.jpg]
+![alt text](pajekPreview-WINDOWS.jpg "Logo Title Text 1")
 
 [viewSaved-WINDOWS.jpg]
 

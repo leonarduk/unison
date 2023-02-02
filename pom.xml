@@ -36,7 +36,7 @@
 		<commons-logging.version>1.0.4</commons-logging.version>
 		<db-ojb.version>1.0.4-patch9</db-ojb.version>
 		<dom4f.version>1.5.2</dom4f.version>
-		<ehcache.version>1.2</ehcache.version>
+		<ehcache.version>1.8.0</ehcache.version>
 		<hibernate-core.version>5.4.24.Final</hibernate-core.version>
 		<hibernate-tools.version>3.2.3.GA</hibernate-tools.version>
 		<hsqldb.version>1.8.0.1</hsqldb.version>

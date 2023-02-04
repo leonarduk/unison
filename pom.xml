@@ -39,7 +39,7 @@
 		<ehcache.version>1.8.0</ehcache.version>
 		<hibernate-core.version>5.4.24.Final</hibernate-core.version>
 		<hibernate-tools.version>3.2.3.GA</hibernate-tools.version>
-		<hsqldb.version>1.8.0.1</hsqldb.version>
+		<hsqldb.version>1.8.0.10</hsqldb.version>
 		<jdom.version>b10</jdom.version>
 		<jta.version>1.1</jta.version>
 		<jtidy.version>r8-20060801</jtidy.version>

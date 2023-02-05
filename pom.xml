@@ -29,7 +29,7 @@
 		<antlr.version>2.7.6</antlr.version>
 		<asm.version>1.5.3</asm.version>
 		<asm-attrs.version>1.5.3</asm-attrs.version>
-		<cglib.version>2.1_3</cglib.version>
+		<cglib.version>2.2.2</cglib.version>
 		<colt.version>1.2.0</colt.version>
 		<commons-collections.version>3.2.2</commons-collections.version>
 		<commons-lang.version>2.6</commons-lang.version>

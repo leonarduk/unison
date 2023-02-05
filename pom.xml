@@ -29,17 +29,17 @@
 		<antlr.version>2.7.6</antlr.version>
 		<asm.version>1.5.3</asm.version>
 		<asm-attrs.version>1.5.3</asm-attrs.version>
-		<cglib.version>2.1_3</cglib.version>
+		<cglib.version>2.2.2</cglib.version>
 		<colt.version>1.2.0</colt.version>
 		<commons-collections.version>3.2.2</commons-collections.version>
-		<commons-lang.version>2.1</commons-lang.version>
+		<commons-lang.version>2.6</commons-lang.version>
 		<commons-logging.version>1.2</commons-logging.version>
 		<db-ojb.version>1.0.4-patch9</db-ojb.version>
 		<dom4f.version>1.5.2</dom4f.version>
 		<ehcache.version>1.8.0</ehcache.version>
 		<hibernate-core.version>5.4.24.Final</hibernate-core.version>
 		<hibernate-tools.version>3.2.3.GA</hibernate-tools.version>
-		<hsqldb.version>1.8.0.1</hsqldb.version>
+		<hsqldb.version>1.8.0.10</hsqldb.version>
 		<jdom.version>b10</jdom.version>
 		<jta.version>1.1</jta.version>
 		<jtidy.version>r8-20060801</jtidy.version>
@@ -431,7 +431,7 @@
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
-			<version>2.8.9</version>
+			<version>2.10.1</version>
 		</dependency>
 	</dependencies>
 	<reporting>

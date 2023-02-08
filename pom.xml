@@ -47,7 +47,7 @@
 		<oscache.version>2.4.1</oscache.version>
 		<swing-layout.version>1.0.3</swing-layout.version>
 		<mail.version>1.4.7</mail.version>
-		<dom4j.version>1.5.2</dom4j.version>
+		<dom4j.version>1.6.1</dom4j.version>
 	</properties>
 
 	<build>

@@ -26,7 +26,7 @@
 		<oro.version>2.0.8</oro.version>
 		<javax-activation.version>1.1.1</javax-activation.version>
 		<googlecode-json.version>1.1</googlecode-json.version>
-		<antlr.version>2.7.6</antlr.version>
+		<antlr.version>2.7.7</antlr.version>
 		<asm.version>1.5.3</asm.version>
 		<asm-attrs.version>1.5.3</asm-attrs.version>
 		<cglib.version>2.2.2</cglib.version>

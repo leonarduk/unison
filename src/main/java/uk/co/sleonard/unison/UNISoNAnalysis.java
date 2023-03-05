@@ -114,13 +114,6 @@ public class UNISoNAnalysis {
 		return results;
 	}
 
-	/**
-	 * Gets the top groups vector.
-	 *
-	 * @return the top groups vector
-	 * @throws HibernateException
-	 *             the hibernate exception
-	 */
 	public Vector<Vector<Object>> getTopGroupsVector() throws HibernateException {
 
 		final String sql = "SELECT count(*) as posts, newsgroup_id FROM newsgroup_message "

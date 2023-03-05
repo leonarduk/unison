@@ -17,10 +17,6 @@ import org.junit.Test;
  */
 @SuppressWarnings("serial")
 class TestUsenetUser extends UsenetUser {
-	@Override
-	public UsenetUser setEmail(final String email) {
-		return super.setEmail(email);
-	}
 }
 
 /**

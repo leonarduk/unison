@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uk.co.sleonard</groupId>
 	<artifactId>unison</artifactId>
-	<version>1.2.5-SNAPSHOT</version>
+	<version>1.3.0-SNAPSHOT</version>
 	<name>unison</name>
 
 	<properties>
@@ -11,7 +11,7 @@
 		<log4j.version>1.2.17</log4j.version>
 		<slf4j-log4j12.version>1.7.36</slf4j-log4j12.version>
 		<junit.version>4.13.2</junit.version>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<powermock.version>1.6.5</powermock.version>
 		<mockito.version>1.10.19</mockito.version>
 		<javax.mail.version>1.4</javax.mail.version>
@@ -36,8 +36,8 @@
 		<commons-logging.version>1.2</commons-logging.version>
 		<db-ojb.version>1.0.4-patch9</db-ojb.version>
 		<dom4f.version>1.5.2</dom4f.version>
-		<ehcache.version>1.8.0</ehcache.version>
-		<hibernate-core.version>5.4.24.Final</hibernate-core.version>
+		<ehcache.version>3.10.8</ehcache.version>
+		<hibernate-core.version>3.3.2.GA</hibernate-core.version>
 		<hibernate-tools.version>3.2.3.GA</hibernate-tools.version>
 		<hsqldb.version>1.8.0.10</hsqldb.version>
 		<jdom.version>b9</jdom.version>
@@ -66,7 +66,6 @@
 							</mainClass>
 						</manifest>
 					</archive>
-					<skipTests>${skipTests}</skipTests>
 				</configuration>
 				<executions>
 					<execution>
@@ -325,10 +324,24 @@
 			<version>${dom4j.version}</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.ehcache/ehcache -->
 		<dependency>
-			<groupId>net.sf.ehcache</groupId>
+			<groupId>org.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
 			<version>${ehcache.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.glassfish.jaxb</groupId>
+					<artifactId>jaxb-runtime</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime -->
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+			<version>4.0.2</version>
 		</dependency>
 
 		<dependency>
@@ -432,6 +445,12 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.10.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>RELEASE</version>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 	<reporting>

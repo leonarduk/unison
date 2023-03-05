@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.swing.ListModel;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,8 +20,8 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
 import uk.co.sleonard.unison.utils.StringUtils;
 
+@Slf4j
 public class UNISoNControllerIT {
-	private static Logger		logger	= Logger.getLogger(UNISoNControllerIT.class);
 	private UNISoNController	controller;
 
 	@Before
@@ -44,7 +45,7 @@ public class UNISoNControllerIT {
 		final Set<NewsGroup> groups = this.controller.listNewsgroups("",
 		        StringUtils.loadServerList()[0], this.controller.getNntpReader().getClient());
 		Assert.assertTrue(groups.size() > 0);
-		UNISoNControllerIT.logger.info("Found " + groups.size());
+		log.info("Found " + groups.size());
 
 	}
 

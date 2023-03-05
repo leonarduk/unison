@@ -241,7 +241,7 @@ public class NewsGroupTest {
 		final NewsGroup actual = new NewsGroup();
 		actual.setFullName("fullname");
 		actual.setLastMessage(10);
-		actual.setArticleCount(10);
+		actual.setEstimatedArticleCount(10);
 		Assert.assertEquals(expected, actual.toString());
 	}
 

@@ -9,6 +9,7 @@ package uk.co.sleonard.unison.input;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -18,8 +19,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
-
-import com.ibm.icu.util.Calendar;
 
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;

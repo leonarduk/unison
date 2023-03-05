@@ -209,17 +209,6 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 		return this.addChildNode(root, childObject, "");
 	}
 
-	/**
-	 * Adds the child node.
-	 *
-	 * @param root
-	 *            the root
-	 * @param childObject
-	 *            the child object
-	 * @param name
-	 *            the name
-	 * @return the tree node
-	 */
 	private TreeNode addChildNode(final TreeNode root, final Object childObject,
 	        final String nameInput) {
 		String name = nameInput;
@@ -1036,7 +1025,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 				final Set<String> countries = new HashSet<>();
 				for (final Object country : selectedCountries) {
 					final GUIItem<ResultRow> row = (GUIItem<ResultRow>) country;
-					final String selectedcountry = (String) row.getItem().getKey();
+					final String selectedcountry = (String) row.getObject().getKey();
 					countries.add(selectedcountry);
 				}
 				controller.getFilter().setSelectedCountries(countries);
@@ -1046,7 +1035,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 				final Vector<NewsGroup> groups = new Vector<>();
 				for (final Object group : selectedNewsgroups) {
 					final GUIItem<ResultRow> row = (GUIItem<ResultRow>) group;
-					final NewsGroup selectedgroup = (NewsGroup) row.getItem().getKey();
+					final NewsGroup selectedgroup = (NewsGroup) row.getObject().getKey();
 					groups.add(selectedgroup);
 				}
 				controller.getFilter().setSelectedNewsgroups(groups);
@@ -1056,7 +1045,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 				final Vector<UsenetUser> posters = new Vector<>();
 				for (final Object poster : selectedPosters) {
 					final GUIItem<ResultRow> row = (GUIItem<ResultRow>) poster;
-					final UsenetUser selectedUser = (UsenetUser) row.getItem().getKey();
+					final UsenetUser selectedUser = (UsenetUser) row.getObject().getKey();
 					posters.add(selectedUser);
 				}
 				controller.getFilter().setSelectedPosters(posters);

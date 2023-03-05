@@ -20,10 +20,6 @@ import org.junit.Test;
  */
 @SuppressWarnings("serial")
 class TestTopic extends Topic {
-	@Override
-	public Topic setSubject(final String subject) {
-		return super.setSubject(subject);
-	}
 }
 
 /**

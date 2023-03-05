@@ -429,7 +429,7 @@ public class FullDownloadWorker extends SwingWorker {
 		final NewsArticle article = this.downloadArticle(request);
 		if (null != article) {
 			FullDownloadWorker.log.log("Got:" + article.getSubject() + " " + article.getFrom() + " "
-			        + article.getArticleId() + " to q: " + queue.size() + "[" + new Date());
+			        + article.getArticleID() + " to q: " + queue.size() + "[" + new Date());
 
 			queue.add(article);
 			return true;

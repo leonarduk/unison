@@ -11,6 +11,9 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.utils.StringUtils;
 
@@ -21,6 +24,9 @@ import uk.co.sleonard.unison.utils.StringUtils;
  * @since v1.0.0
  *
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class NewsArticle {
 
 	/** The article id. */
@@ -51,11 +57,6 @@ public class NewsArticle {
 	/** The subject. */
 	private String subject;
 
-	/**
-	 * Instantiates a new news article.
-	 */
-	public NewsArticle() {
-	}
 
 	NewsArticle(final String articleId2, final int articleNumber2, final Date date2,
 	        final String from2, final String subject2, final String references2,
@@ -102,59 +103,6 @@ public class NewsArticle {
 		this.setPostingHost(postingHost);
 	}
 
-	/**
-	 * Gets the article id.
-	 *
-	 * @return the article id
-	 */
-	public String getArticleId() {
-		return this.articleID;
-	}
-
-	/**
-	 * Gets the article number.
-	 *
-	 * @return the article number
-	 */
-	int getArticleNumber() {
-		return this.articleNumber;
-	}
-
-	/**
-	 * Gets the content.
-	 *
-	 * @return the content
-	 */
-	public String getContent() {
-		return this.content;
-	}
-
-	/**
-	 * Gets the date.
-	 *
-	 * @return the date
-	 */
-	public Date getDate() {
-		return this.date;
-	}
-
-	/**
-	 * Gets the from.
-	 *
-	 * @return the from
-	 */
-	public String getFrom() {
-		return this.from;
-	}
-
-	/**
-	 * Gets the newsgroups.
-	 *
-	 * @return the newsgroups
-	 */
-	private String getNewsgroups() {
-		return this.newsgroups;
-	}
 
 	/**
 	 * Gets the newsgroups list.
@@ -184,23 +132,6 @@ public class NewsArticle {
 		// return crosspostGroups;
 	}
 
-	/**
-	 * Gets the posting host.
-	 *
-	 * @return the posting host
-	 */
-	public String getPostingHost() {
-		return this.postingHost;
-	}
-
-	/**
-	 * Gets the references.
-	 *
-	 * @return the references
-	 */
-	public String getReferences() {
-		return this.references;
-	}
 
 	/**
 	 * Gets the references list.
@@ -211,14 +142,6 @@ public class NewsArticle {
 		return StringUtils.convertStringToList(this.getReferences(), " ");
 	}
 
-	/**
-	 * Gets the subject.
-	 *
-	 * @return the subject
-	 */
-	public String getSubject() {
-		return this.subject;
-	}
 
 	/**
 	 * If downloaded using XOVER, then crosspost details, posting host (ussed for location) and
@@ -243,25 +166,6 @@ public class NewsArticle {
 		}
 	}
 
-	/**
-	 * Sets the article number.
-	 *
-	 * @param articleNumber
-	 *            the new article number
-	 */
-	public void setArticleNumber(final int articleNumber) {
-		this.articleNumber = articleNumber;
-	}
-
-	/**
-	 * Sets the content.
-	 *
-	 * @param content
-	 *            the new content
-	 */
-	public void setContent(final String content) {
-		this.content = content;
-	}
 
 	/**
 	 * Sets the date.
@@ -308,57 +212,11 @@ public class NewsArticle {
 			throw new NullPointerException("Cannot create article without from field");
 		}
 	}
-
-	/**
-	 * Sets the newsgroups.
-	 *
-	 * @param newsgroups
-	 *            the new newsgroups
-	 */
-	private void setNewsgroups(final String newsgroups) {
-		this.newsgroups = newsgroups;
-	}
-
-	/**
-	 * Sets the posting host.
-	 *
-	 * @param postingHost
-	 *            the new posting host
-	 */
-	public void setPostingHost(final String postingHost) {
-		this.postingHost = postingHost;
-	}
-
-	/**
-	 * Sets the references.
-	 *
-	 * @param references
-	 *            the new references
-	 */
-	public void setReferences(final String references) {
-		this.references = references;
-	}
-
-	/**
-	 * Sets the subject.
-	 *
-	 * @param subject
-	 *            the new subject
-	 */
-	public void setSubject(final String subject) {
-		this.subject = subject;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		final StringBuffer buf = new StringBuffer();
 
-		buf.append("ID: " + this.getArticleId());
+		buf.append("ID: " + this.getArticleID());
 		buf.append("\nPostingHost: " + this.getPostingHost());
 		buf.append("\nNumber: " + this.getArticleNumber());
 		buf.append("\nFrom: " + this.getFrom());

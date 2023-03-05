@@ -49,11 +49,11 @@ public class NewsgroupInfoFactory {
 	public static NewsgroupInfo newsgroupInfo(final long count, final long first, final long last,
 	        final String newsgroup, final int permission) {
 		final NewsgroupInfo newsgroupInfo = new NewsgroupInfo();
-		newsgroupInfo._setArticleCount(count);
-		newsgroupInfo._setFirstArticle(first);
-		newsgroupInfo._setLastArticle(last);
-		newsgroupInfo._setNewsgroup(newsgroup);
-		newsgroupInfo._setPostingPermission(permission);
+		newsgroupInfo.setArticleCount(count);
+		newsgroupInfo.setFirstArticle(first);
+		newsgroupInfo.setLastArticle(last);
+		newsgroupInfo.setNewsgroup(newsgroup);
+		newsgroupInfo.setPostingPermission(permission);
 		return newsgroupInfo;
 	}
 }

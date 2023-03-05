@@ -7,12 +7,12 @@
 package uk.co.sleonard.unison.input;
 
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.ibm.icu.util.Calendar;
 
 import uk.co.sleonard.unison.UNISoNException;
 
@@ -32,9 +32,9 @@ public class NewsArticleTest {
 	public void testGetArticleId() {
 		final String expected = "articleId";
 		final NewsArticle actual = new NewsArticle();
-		Assert.assertNull(actual.getArticleId());
+		Assert.assertNull(actual.getArticleID());
 		actual.setArticleId(expected);
-		Assert.assertEquals(expected, actual.getArticleId());
+		Assert.assertEquals(expected, actual.getArticleID());
 	}
 
 	/**

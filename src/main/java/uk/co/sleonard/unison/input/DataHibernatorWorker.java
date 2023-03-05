@@ -162,7 +162,7 @@ public class DataHibernatorWorker extends SwingWorker {
 			final NewsArticle article = this.pollForMessage(queue);
 			if (null != article) {
 				DataHibernatorWorker.logger
-				        .debug("Hibernating " + article.getArticleId() + " " + queue.size());
+				        .debug("Hibernating " + article.getArticleID() + " " + queue.size());
 
 				if (this.helper.hibernateData(article, session)) {
 					this.reader.incrementMessagesStored();

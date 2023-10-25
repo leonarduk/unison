@@ -20,7 +20,7 @@
 		<jacoco.version>0.8.10</jacoco.version>
 		<jms.version>1.1</jms.version>
 		<javassist.version>3.29.2-GA</javassist.version>
-		<commons-net>3.9.0</commons-net>
+		<commons-net>3.10.0</commons-net>
 		<freemarker.version>2.3.32</freemarker.version>
 		<httpunit.version>1.7</httpunit.version>
 		<oro.version>2.0.8</oro.version>

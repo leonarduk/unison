@@ -33,7 +33,7 @@
 		<colt.version>1.2.0</colt.version>
 		<commons-collections.version>3.2.2</commons-collections.version>
 		<commons-lang.version>2.6</commons-lang.version>
-		<commons-logging.version>1.3.0</commons-logging.version>
+		<commons-logging.version>1.3.1</commons-logging.version>
 		<db-ojb.version>1.0.4-patch9</db-ojb.version>
 		<dom4f.version>1.5.2</dom4f.version>
 		<ehcache.version>3.10.8</ehcache.version>

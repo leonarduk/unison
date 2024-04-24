@@ -17,7 +17,7 @@
 		<javax.mail.version>1.4</javax.mail.version>
 		<maven-assembly-plugin.version>2.2-beta-4
 		</maven-assembly-plugin.version>
-		<jacoco.version>0.8.11</jacoco.version>
+		<jacoco.version>0.8.12</jacoco.version>
 		<jms.version>1.1</jms.version>
 		<javassist.version>3.30.2-GA</javassist.version>
 		<commons-net>3.10.0</commons-net>

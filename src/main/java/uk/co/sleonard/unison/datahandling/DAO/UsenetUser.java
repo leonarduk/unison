@@ -10,6 +10,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * Represents a poster to a news group.
@@ -21,17 +32,34 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
+@Entity
+@Table(name = "USENETUSER")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@NamedQuery(name = "uk.co.sleonard.unison.datahandling.DAO.UsenetUser.findByKey",
+        query = "from uk.co.sleonard.unison.datahandling.DAO.UsenetUser as g where g.email = :key")
 public class UsenetUser implements java.io.Serializable {
 
     private static final long serialVersionUID = 6240031352036083751L;
 
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "email", nullable = false)
     private String email;
+
+    @Column(name = "ipaddress", nullable = false)
     private String ipaddress;
+
+    @ManyToOne
+    @JoinColumn(name = "LOCATION_ID")
     private Location location;
 
+    @Column(name = "gender")
     private String gender;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "USENETUSER_ID")
     private int id;
 
     public UsenetUser(final String name, final String email, final String ipaddress,

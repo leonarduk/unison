@@ -33,14 +33,13 @@
 			resource="uk/co/sleonard/unison/datahandling/DAO/Topic.hbm.xml" />
 			<mapping
 			resource="uk/co/sleonard/unison/datahandling/DAO/NewsGroup.hbm.xml" />
-			<mapping
-			resource="uk/co/sleonard/unison/datahandling/DAO/Message.hbm.xml" />
-			<mapping
-			resource="uk/co/sleonard/unison/datahandling/DAO/UsenetUser.hbm.xml" />
-			<mapping
-			resource="uk/co/sleonard/unison/datahandling/DAO/Location.hbm.xml" />
-			<mapping
-			resource="uk/co/sleonard/unison/datahandling/DAO/IpAddress.hbm.xml" />
+                        <mapping
+                        resource="uk/co/sleonard/unison/datahandling/DAO/Message.hbm.xml" />
+                        <mapping class="uk.co.sleonard.unison.datahandling.DAO.UsenetUser" />
+                        <mapping
+                        resource="uk/co/sleonard/unison/datahandling/DAO/Location.hbm.xml" />
+                        <mapping
+                        resource="uk/co/sleonard/unison/datahandling/DAO/IpAddress.hbm.xml" />
 
 	</session-factory>
 </hibernate-configuration>

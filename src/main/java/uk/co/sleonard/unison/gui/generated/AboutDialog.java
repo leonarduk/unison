@@ -110,11 +110,11 @@ class AboutDialog extends javax.swing.JDialog {
 
 		this.jLabel4.setText("Stephen Leonard  ");
 
-		this.jLabel6.setText("unison@sleonard.co.uk");
+                this.jLabel6.setText("unison@leonarduk.com");
 
 		this.jLabel8.setText("V1.0   January 2008");
 
-		this.jLabel9.setText("http://unison.sleonard.co.uk");
+                this.jLabel9.setText("http://unison.leonarduk.com");
 
 		final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this.getContentPane());
 		this.getContentPane().setLayout(layout);

@@ -40,7 +40,7 @@ import uk.co.sleonard.unison.UNISoNException;
 /**
  * The Class StringUtils. </br>
  * </br>
- * TODO Add this reference for the compression FRom
+ * Compression algorithm adapted from a discussion on the Sun Java forums:
  * http://forum.java.sun.com/thread.jspa?threadID=250124&messageID=926638
  *
  * @author Stephen <github@leonarduk.com>

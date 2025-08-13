@@ -965,32 +965,43 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 	 * Refresh topic hierarchy.
 	 */
 	private void refreshTopicHierarchy() {
-		// TODO reinstate that topics reflect the highlighted newsgroup
+                // Ensure that only topics for the currently selected newsgroup are displayed
 
-		this.topicRoot.removeAllChildren();
+                this.topicRoot.removeAllChildren();
 
-		final UNISoNController controller = UNISoNController.getInstance();
-		final NewsGroup selectedNewsgroup = controller.getFilter().getSelectedNewsgroup();
-		if (null != selectedNewsgroup) {
-			this.topicRoot.setName(selectedNewsgroup.getFullName());
-			final Set<Topic> topics = selectedNewsgroup.getTopics();
-			final Set<Topic> topicsFilter = controller.getFilter().getTopicsFilter();
-			for (final Topic topic : topics) {
-				if ((null == topicsFilter) || topicsFilter.contains(topic)) {
-					final int lastIndex = topic.getSubject().length();
-					this.addChildNode(this.topicRoot, topic,
-					        topic.getSubject().substring(0, lastIndex));
-				}
-			}
+                final UNISoNController controller = UNISoNController.getInstance();
+                final NewsGroup selectedNewsgroup = controller.getFilter().getSelectedNewsgroup();
+                if (null != selectedNewsgroup) {
+                        this.topicRoot.setName(selectedNewsgroup.getFullName());
 
-		}
-		else {
-			this.topicRoot.setName("No group selected");
-		}
+                        final Set<Topic> topicsFilter = controller.getFilter().getTopicsFilter();
+                        final Set<Topic> candidateTopics = new HashSet<>();
 
-		// This actually refreshes the tree
-		((DefaultTreeModel) this.topicsHierarchy.getModel()).reload();
-	}
+                        if ((null == topicsFilter) || topicsFilter.isEmpty()) {
+                                candidateTopics.addAll(selectedNewsgroup.getTopics());
+                        }
+                        else {
+                                for (final Topic topic : topicsFilter) {
+                                        if (topic.getNewsgroups().contains(selectedNewsgroup)) {
+                                                candidateTopics.add(topic);
+                                        }
+                                }
+                        }
+
+                        for (final Topic topic : candidateTopics) {
+                                final int lastIndex = topic.getSubject().length();
+                                this.addChildNode(this.topicRoot, topic,
+                                        topic.getSubject().substring(0, lastIndex));
+                        }
+
+                }
+                else {
+                        this.topicRoot.setName("No group selected");
+                }
+
+                // This actually refreshes the tree
+                ((DefaultTreeModel) this.topicsHierarchy.getModel()).reload();
+        }
 
 	/**
 	 * Refresh top posters.
@@ -1085,9 +1096,16 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 	 * @param evt
 	 *            the evt
 	 */
-	private void topGroupsListValueChanged(final javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_topGroupsListValueChanged
-		// TODO add your handling code here:
-	}// GEN-LAST:event_topGroupsListValueChanged
+        private void topGroupsListValueChanged(final javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_topGroupsListValueChanged
+                if (!evt.getValueIsAdjusting()) {
+                        final GUIItem<ResultRow> selectedItem = this.topGroupsList.getSelectedValue();
+                        if ((null != selectedItem) && (selectedItem.getObject().getKey() instanceof NewsGroup)) {
+                                final NewsGroup group = (NewsGroup) selectedItem.getObject().getKey();
+                                UNISoNController.getInstance().getFilter().setSelectedNewsgroup(group);
+                                this.notifySelectedNewsGroupObservers();
+                        }
+                }
+        }// GEN-LAST:event_topGroupsListValueChanged
 
 	/**
 	 * Topics hierarchy value changed.

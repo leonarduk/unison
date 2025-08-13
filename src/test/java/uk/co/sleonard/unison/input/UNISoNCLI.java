@@ -8,11 +8,13 @@ package uk.co.sleonard.unison.input;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Set;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hsqldb.util.DatabaseManagerSwing;
 import org.junit.Assert;
+import org.junit.Ignore;
 
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
@@ -29,6 +31,7 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
  *
  */
 @Slf4j
+@Ignore("Command line entry point - not a unit test")
 public class UNISoNCLI implements UNISoNLogger {
 
 	/**
@@ -37,46 +40,53 @@ public class UNISoNCLI implements UNISoNLogger {
 	 * @param args
 	 *            the arguments
 	 */
-	public static void main(String[] args) {
+        public static void main(String[] args) {
 
-		final UNISoNCLI main = new UNISoNCLI();
-
-		Command command = null;
-		args = new String[] { "QUICKDOWNLOAD", "*ubuntu*" };
-
-		for (final String arg : args) {
-			if (null != command) {
-                                log.info("Run " + command + " with " + arg);
-				try {
-					final String host = "";
-					main.handleCommand(command, arg, host);
-				}
-				catch (final UNISoNException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			else {
-                                log.debug("arg: " + arg);
-			}
-			try {
-				command = Command.valueOf(arg.toUpperCase());
-			}
-			catch (final IllegalArgumentException e) {
-				// ignore as this just means its not in the enum list
-			}
-		}
-		if (null == command) {
+                final UNISoNCLI main = new UNISoNCLI();
+                final Optional<ParsedArgs> parsed = parseArgs(args);
+                if (parsed.isEmpty()) {
                         log.error("No valid command found in args: {}", Arrays.asList(args));
-			System.exit(1);
-		}
-	};
+                        return;
+                }
+
+                final String host = "";
+                final ParsedArgs p = parsed.get();
+                try {
+                        main.handleCommand(p.command, p.argument, host);
+                }
+                catch (final UNISoNException e) {
+                        log.error("Error executing command", e);
+                }
+        }
 
 	/**
 	 * Instantiates a new UNI so ncli.
 	 */
-	public UNISoNCLI() {
-	}
+        public UNISoNCLI() {
+        }
+
+        static class ParsedArgs {
+                final Command command;
+                final String argument;
+
+                ParsedArgs(final Command command, final String argument) {
+                        this.command = command;
+                        this.argument = argument;
+                }
+        }
+
+        static Optional<ParsedArgs> parseArgs(final String[] args) {
+                if (args == null || args.length < 2) {
+                        return Optional.empty();
+                }
+                try {
+                        final Command command = Command.valueOf(args[0].toUpperCase());
+                        return Optional.of(new ParsedArgs(command, args[1]));
+                }
+                catch (final IllegalArgumentException e) {
+                        return Optional.empty();
+                }
+        }
 
 	/*
 	 * (non-Javadoc)

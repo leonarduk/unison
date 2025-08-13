@@ -28,7 +28,7 @@
                 <jung.version>1.7.6</jung.version>
                 <ehcache.version>3.10.8</ehcache.version>
                 <swing-layout.version>1.0.4</swing-layout.version>
-                <jakarta.mail.version>2.0.1</jakarta.mail.version>
+                <jakarta.mail.version>2.1.3</jakarta.mail.version>
         </properties>
 
 	<build>
@@ -281,18 +281,6 @@
                         <version>${swing-layout.version}</version>
                 </dependency>
 
-		<!-- gnumail lib not found. Then we checked that the package used is (javax.mail). 
-			So, we have added its dependency -->
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>${mail.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.swinglabs</groupId>
-			<artifactId>swing-layout</artifactId>
-			<version>${swing-layout.version}</version>
-		</dependency>
 
                 <!-- gnumail lib not found. Then we checked that the package used is (jakarta.mail).
                         So, we have added its dependency -->

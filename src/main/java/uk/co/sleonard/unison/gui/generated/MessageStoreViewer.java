@@ -985,9 +985,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
                                 }
                         }
                         for (final Topic topic : topics) {
-                                final int lastIndex = topic.getSubject().length();
-                                this.addChildNode(this.topicRoot, topic,
-                                        topic.getSubject().substring(0, lastIndex));
+                                this.addChildNode(this.topicRoot, topic, topic.getSubject());
                         }
 
                 }

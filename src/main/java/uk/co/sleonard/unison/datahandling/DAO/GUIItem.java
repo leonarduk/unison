@@ -8,7 +8,6 @@ package uk.co.sleonard.unison.datahandling.DAO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.apache.log4j.Logger;
 
 /**
  * The Class GUIItem.

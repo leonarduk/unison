@@ -23,9 +23,9 @@ import java.util.Vector;
 import javax.naming.NamingException;
 import javax.swing.JOptionPane;
 
-import org.apache.log4j.Category;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import org.slf4j.LoggerFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.MappingException;
 import org.hibernate.NonUniqueResultException;
@@ -505,10 +505,12 @@ public class HibernateHelper {
 
                 // FIXME - couldn't stop the NoInitialContext warning so this
                 // hack will stop it being displayed
-                final org.apache.log4j.Level level = Category.getRoot().getLevel();
-                Category.getRoot().setLevel(Level.FATAL);
+                final Logger root = (Logger) LoggerFactory
+                        .getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+                final Level level = root.getLevel();
+                root.setLevel(Level.ERROR);
                 HibernateHelper.sessionFactory = config.buildSessionFactory();
-                Category.getRoot().setLevel(level);
+                root.setLevel(level);
 
             }
             catch (final Throwable e) {

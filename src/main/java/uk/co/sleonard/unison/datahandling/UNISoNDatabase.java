@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 
 import uk.co.sleonard.unison.NewsGroupFilter;
@@ -20,8 +20,8 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 
+@Slf4j
 public class UNISoNDatabase extends Observable {
-	private static Logger			logger	= Logger.getLogger(UNISoNDatabase.class);
 	private final Session			session;
 	private final NewsGroupFilter	filter;
 	private final HibernateHelper	helper;
@@ -77,7 +77,7 @@ public class UNISoNDatabase extends Observable {
 	 * Refresh data from database.
 	 */
 	public void refreshDataFromDatabase() {
-		UNISoNDatabase.logger.debug("refreshDataFromDatabase");
+		log.debug("refreshDataFromDatabase");
 
 		this.filter.setMessagesFilter(this.dataQuery.getMessages(this.filter.getSelectedMessages(),
 		        this.filter.getSelectedPosters(), this.session, this.filter.getFromDate(),
@@ -94,7 +94,7 @@ public class UNISoNDatabase extends Observable {
 				}
 			}
 			catch (final org.hibernate.UnresolvableObjectException e) {
-				UNISoNDatabase.logger.warn(e);
+                                log.warn("", e);
 			}
 			try {
 				poster = message1.getPoster();
@@ -103,7 +103,7 @@ public class UNISoNDatabase extends Observable {
 				}
 			}
 			catch (final org.hibernate.UnresolvableObjectException e) {
-				UNISoNDatabase.logger.warn(e);
+                                log.warn("", e);
 			}
 
 			if (!this.filter.getUsenetUsersFilter().contains(poster)) {
@@ -132,7 +132,7 @@ public class UNISoNDatabase extends Observable {
 					}
 				}
 				catch (final org.hibernate.UnresolvableObjectException e) {
-					UNISoNDatabase.logger.warn(e);
+                                        log.warn("", e);
 				}
 
 				if (!this.filter.getNewsgroupFilter().contains(group)) {

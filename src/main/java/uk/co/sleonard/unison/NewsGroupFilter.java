@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Session;
 
 import uk.co.sleonard.unison.datahandling.HibernateHelper;

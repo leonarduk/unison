@@ -17,7 +17,7 @@ import org.apache.commons.net.nntp.NewsgroupInfo;
 import org.apache.commons.net.nntp.NewsgroupInfoFactory;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import uk.co.sleonard.unison.UNISoNException;
@@ -37,7 +37,7 @@ public class NewsClientTest {
 	@Test(expected = UNISoNException.class)
 	public final void testConnectConnectException() throws IOException, UNISoNException {
 		final String server = "";
-		Mockito.when(this.mock.authenticate(Matchers.anyString(), Matchers.anyString()))
+                Mockito.when(this.mock.authenticate(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
 		        .thenThrow(new ConnectException());
 		this.client.connect(server, 1, "user", "pwd");
 	}
@@ -45,7 +45,7 @@ public class NewsClientTest {
 	@Test(expected = UNISoNException.class)
 	public final void testConnectException() throws IOException, UNISoNException {
 		final String server = "";
-		Mockito.when(this.mock.authenticate(Matchers.anyString(), Matchers.anyString()))
+                Mockito.when(this.mock.authenticate(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
 		        .thenThrow(new IOException());
 		this.client.connect(server, 1, "user", "pwd");
 	}
@@ -69,7 +69,7 @@ public class NewsClientTest {
 	@Test(expected = UNISoNException.class)
 	public final void testConnectUnknownHostException() throws IOException, UNISoNException {
 		final String server = "";
-		Mockito.when(this.mock.authenticate(Matchers.anyString(), Matchers.anyString()))
+                Mockito.when(this.mock.authenticate(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
 		        .thenThrow(new UnknownHostException());
 		this.client.connect(server, 1, "user", "pwd");
 	}
@@ -103,7 +103,7 @@ public class NewsClientTest {
 		final String wildcard = "";
 		final String nntpserver = "";
 		final NewsgroupInfo[] groups = { NewsgroupInfoFactory.newsgroupInfo(1, 1, 1, "alt") };
-		Mockito.when(this.mock.listNewsgroups(Matchers.anyString())).thenThrow(new IOException());
+                Mockito.when(this.mock.listNewsgroups(ArgumentMatchers.anyString())).thenThrow(new IOException());
 		this.client.listNewsGroups(wildcard, nntpserver);
 	}
 
@@ -112,7 +112,7 @@ public class NewsClientTest {
 		final String wildcard = "";
 		final String nntpserver = "";
 		final NewsgroupInfo[] groups = { NewsgroupInfoFactory.newsgroupInfo(1, 1, 1, "alt") };
-		Mockito.when(this.mock.listNewsgroups(Matchers.anyString())).thenReturn(groups);
+                Mockito.when(this.mock.listNewsgroups(ArgumentMatchers.anyString())).thenReturn(groups);
 		this.client.listNewsGroups(wildcard, nntpserver);
 	}
 
@@ -121,7 +121,7 @@ public class NewsClientTest {
 		final String wildcard = "";
 		final String nntpserver = "";
 		final NewsgroupInfo[] groups = { NewsgroupInfoFactory.newsgroupInfo(1, 1, 2, "alt") };
-		Mockito.when(this.mock.listNewsgroups(Matchers.anyString())).thenReturn(groups);
+                Mockito.when(this.mock.listNewsgroups(ArgumentMatchers.anyString())).thenReturn(groups);
 		this.client.listNewsGroups(wildcard, nntpserver);
 	}
 
@@ -130,7 +130,7 @@ public class NewsClientTest {
 		final String wildcard = "";
 		final String nntpserver = "";
 		final NewsgroupInfo[] groups = { NewsgroupInfoFactory.newsgroupInfo(0, 0, 0, "alt") };
-		Mockito.when(this.mock.listNewsgroups(Matchers.anyString())).thenReturn(groups);
+                Mockito.when(this.mock.listNewsgroups(ArgumentMatchers.anyString())).thenReturn(groups);
 		this.client.listNewsGroups(wildcard, nntpserver);
 	}
 
@@ -147,8 +147,8 @@ public class NewsClientTest {
 	@Test(expected = UNISoNException.class)
 	public final void testReconnectException()
 	        throws UNISoNException, SocketException, IOException {
-		Mockito.doThrow(new IOException("sds")).when(this.mock).connect(Matchers.anyString(),
-		        Matchers.anyInt());
+                Mockito.doThrow(new IOException("sds")).when(this.mock).connect(ArgumentMatchers.anyString(),
+                        ArgumentMatchers.anyInt());
 		this.client.reconnect();
 	}
 

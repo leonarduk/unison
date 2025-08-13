@@ -16,7 +16,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import uk.co.sleonard.unison.UNISoNException;
@@ -156,7 +156,7 @@ public class FullDownloadWorkerTest {
 	@Test
 	public void testDownloadArticle() throws IOException {
 		final Reader value = Mockito.mock(Reader.class);
-		Mockito.when(this.newsClient.retrieveArticle(Matchers.anyString())).thenReturn(value);
+                Mockito.when(this.newsClient.retrieveArticle(ArgumentMatchers.anyString())).thenReturn(value);
 		final DownloadRequest request = new DownloadRequest(
 		        "<n9rgdm$g9b$3@news4.open-news-network.org>", DownloadMode.ALL);
 		try {
@@ -171,8 +171,8 @@ public class FullDownloadWorkerTest {
 
 	@Test
 	public void testFailToConnect() throws Exception {
-		Mockito.doThrow(new IOException("Failed to connect")).when(this.newsClient)
-		        .connect(Matchers.anyString());
+                Mockito.doThrow(new IOException("Failed to connect")).when(this.newsClient)
+                        .connect(ArgumentMatchers.anyString());
 	}
 
 	/**

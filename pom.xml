@@ -343,7 +343,7 @@
                         <version>2.10.1</version>
                 </dependency>
 
-                <dependency>
+    <dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.18.30</version>

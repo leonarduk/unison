@@ -88,11 +88,9 @@ class PajekPanel extends javax.swing.JPanel implements Observer {
 	/** The graph scroll pane. */
 	private javax.swing.JScrollPane graphScrollPane;
 
-	/** The inc missing check. */
-	private javax.swing.JCheckBox incMissingCheck;
 
-	/** The matrix scroll pane. */
-	private javax.swing.JScrollPane matrixScrollPane;
+        /** The matrix scroll pane. */
+        private javax.swing.JScrollPane matrixScrollPane;
 
 	/** The matrix type group. */
 	private javax.swing.ButtonGroup matrixTypeGroup;
@@ -151,16 +149,10 @@ class PajekPanel extends javax.swing.JPanel implements Observer {
 			this.frame = frame;
 			this.controller = UNISoNController.getInstance();
 			this.session = this.controller.helper().getHibernateSession();
-			this.initComponents();
+                        this.initComponents();
 
-			// FIXME disable non-working parts
-			this.incMissingCheck.setVisible(false);
-
-			// TODO create file to put the no messages on vector
-			// TODO create file to put the location as cluster (use country)
-
-			this.resultsMatrixTable.setEnabled(false);
-			this.getFilePreviewArea().setEditable(false);
+                        this.resultsMatrixTable.setEnabled(false);
+                        this.getFilePreviewArea().setEditable(false);
 			this.previousRadio.setSelected(true);
 			this.refreshPajekMatrixTable();
 		}
@@ -317,25 +309,6 @@ class PajekPanel extends javax.swing.JPanel implements Observer {
 		return message;
 	}
 
-	/**
-	 * Inc missing check ancestor added.
-	 *
-	 * @param evt
-	 *            the evt
-	 */
-	void incMissingCheckAncestorAdded(final javax.swing.event.AncestorEvent evt) {// GEN-FIRST:event_incMissingCheckAncestorAdded
-		// TODO add your handling code here:
-	}// GEN-LAST:event_incMissingCheckAncestorAdded
-
-	/**
-	 * Inc missing check ancestor moved.
-	 *
-	 * @param evt
-	 *            the evt
-	 */
-	void incMissingCheckAncestorMoved(final javax.swing.event.AncestorEvent evt) {// GEN-FIRST:event_incMissingCheckAncestorMoved
-		// TODO add your handling code here:
-	}// GEN-LAST:event_incMissingCheckAncestorMoved
 
 	/**
 	 * This method is called from within the constructor to initialize the form. WARNING: Do NOT
@@ -350,8 +323,7 @@ class PajekPanel extends javax.swing.JPanel implements Observer {
 	// ">//GEN-BEGIN:initComponents
 	private void initComponents() {
 		this.matrixTypeGroup = new javax.swing.ButtonGroup();
-		this.incMissingCheck = new javax.swing.JCheckBox();
-		this.creatorRadio = new javax.swing.JRadioButton();
+                this.creatorRadio = new javax.swing.JRadioButton();
 		this.previousRadio = new javax.swing.JRadioButton();
 		this.allRadio = new javax.swing.JRadioButton();
 		this.previewButton = new javax.swing.JButton();
@@ -364,30 +336,7 @@ class PajekPanel extends javax.swing.JPanel implements Observer {
 		this.setFilePreviewArea(new javax.swing.JTextArea());
 		this.csvButton = new javax.swing.JButton();
 
-		this.incMissingCheck.setText("Include Missing Messages");
-		this.incMissingCheck.setToolTipText(
-		        "Not all referenced messages can be downloaded. This will show placeholders for them.");
-		this.incMissingCheck.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-		this.incMissingCheck.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-		this.incMissingCheck.setMargin(new java.awt.Insets(0, 0, 0, 0));
-		this.incMissingCheck.addAncestorListener(new javax.swing.event.AncestorListener() {
-			@Override
-			public void ancestorAdded(final javax.swing.event.AncestorEvent evt) {
-				PajekPanel.this.incMissingCheckAncestorAdded(evt);
-			}
-
-			@Override
-			public void ancestorMoved(final javax.swing.event.AncestorEvent evt) {
-				PajekPanel.this.incMissingCheckAncestorMoved(evt);
-			}
-
-			@Override
-			public void ancestorRemoved(final javax.swing.event.AncestorEvent evt) {
-				//
-			}
-		});
-
-		this.matrixTypeGroup.add(this.creatorRadio);
+                this.matrixTypeGroup.add(this.creatorRadio);
 		this.creatorRadio.setText("Thread creator vs Current Poster");
 		this.creatorRadio.setToolTipText(
 		        "Thsi takes the details of the message's poster along with that of the person who started the thread.");
@@ -447,16 +396,15 @@ class PajekPanel extends javax.swing.JPanel implements Observer {
 		        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 		        .addGroup(layout.createSequentialGroup().addGroup(layout
 		                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-		                .addComponent(this.incMissingCheck)
-		                .addGroup(layout
-		                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
-		                                false)
-		                        .addComponent(this.creatorRadio,
-		                                javax.swing.GroupLayout.DEFAULT_SIZE,
-		                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-		                        .addComponent(this.allRadio, javax.swing.GroupLayout.DEFAULT_SIZE,
-		                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-		                        .addComponent(this.previousRadio)))
+                                .addGroup(layout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
+                                                false)
+                                        .addComponent(this.creatorRadio,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(this.allRadio, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(this.previousRadio)))
 		                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 		                .addComponent(this.previewButton)
 		                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -483,17 +431,14 @@ class PajekPanel extends javax.swing.JPanel implements Observer {
 		                                .addPreferredGap(
 		                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 		                                .addComponent(this.csvButton))
-		                        .addGroup(layout.createSequentialGroup()
-		                                .addComponent(this.incMissingCheck)
-		                                .addPreferredGap(
-		                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-		                                .addComponent(this.creatorRadio)
-		                                .addPreferredGap(
-		                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-		                                .addComponent(this.previousRadio)
-		                                .addPreferredGap(
-		                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-		                                .addComponent(this.allRadio)))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(this.creatorRadio)
+                                                .addPreferredGap(
+                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(this.previousRadio)
+                                                .addPreferredGap(
+                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(this.allRadio)))
 		                        .addGap(18, 18, 18).addComponent(this.pajekTabPane,
 		                                javax.swing.GroupLayout.DEFAULT_SIZE, 339,
 		                                Short.MAX_VALUE)));

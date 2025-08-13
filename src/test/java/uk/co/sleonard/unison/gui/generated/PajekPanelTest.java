@@ -1,10 +1,6 @@
 package uk.co.sleonard.unison.gui.generated;
 
 import static org.junit.Assert.assertFalse;
-
-import java.lang.reflect.Field;
-
-import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.event.ActionEvent;
@@ -44,7 +40,7 @@ public class PajekPanelTest {
         }
         assertFalse("incMissingCheck field should have been removed", found);
     }
-}
+
     @Test
     public void csvButtonLogsAndAlertsOnException() throws Exception {
         PajekPanel panel = Mockito.mock(PajekPanel.class,
@@ -79,11 +75,9 @@ public class PajekPanelTest {
                         && event.getMessage().contains("Error exporting CSV")));
     }
 
-    private static void setField(final Object target, final String name, final Object value)
-            throws Exception {
+    private static void setField(final Object target, final String name, final Object value) throws Exception {
         Field field = PajekPanel.class.getDeclaredField(name);
         field.setAccessible(true);
         field.set(target, value);
     }
 }
-

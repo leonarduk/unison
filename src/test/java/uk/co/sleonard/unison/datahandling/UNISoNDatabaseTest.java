@@ -7,6 +7,8 @@
 package uk.co.sleonard.unison.datahandling;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 
 import org.hibernate.Session;
@@ -26,18 +28,24 @@ public class UNISoNDatabaseTest {
 	private UNISoNDatabase	database;
 	private NewsGroupFilter	filter2;
 	private Session			session2;
+        private DataQuery               dataQuery;
 	private HibernateHelper	helper2;
 	private int				i;
 
 	@Before
 	public void setUp() throws Exception {
 		this.filter2 = Mockito.mock(NewsGroupFilter.class);
-		final Vector<Message> mesgs = new Vector<>();
-		Mockito.when(this.filter2.getMessagesFilter()).thenReturn(mesgs);
-		this.helper2 = Mockito.mock(HibernateHelper.class);
-		final DataQuery dataquery = Mockito.mock(DataQuery.class);
-		this.database = new UNISoNDatabase(this.filter2, this.session2, this.helper2, dataquery);
-		this.i = 0;
+                final Vector<Message> mesgs = new Vector<>();
+                Mockito.when(this.filter2.getMessagesFilter()).thenReturn(mesgs);
+                Mockito.when(this.filter2.getUsenetUsersFilter()).thenReturn(new Vector<>());
+                Mockito.when(this.filter2.getCountriesFilter()).thenReturn(new HashSet<>());
+                Mockito.when(this.filter2.getTopicsFilter()).thenReturn(new HashSet<>());
+                Mockito.when(this.filter2.getNewsgroupFilter()).thenReturn(new HashSet<>());
+                Mockito.when(this.filter2.getTopsNewsgroups()).thenReturn(new HashSet<>());
+                this.helper2 = Mockito.mock(HibernateHelper.class);
+                this.dataQuery = Mockito.mock(DataQuery.class);
+                this.database = new UNISoNDatabase(this.filter2, this.session2, this.helper2, this.dataQuery);
+                this.i = 0;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -52,7 +60,9 @@ public class UNISoNDatabaseTest {
 		messages.add(msg);
                 Mockito.when(this.helper2.runQuery(ArgumentMatchers.anyString(), ArgumentMatchers.any(Session.class),
                         ArgumentMatchers.any(Class.class))).thenReturn(messages);
-		this.database.getMessages(topic, this.session2);
+                final Set<Message> result = this.database.getMessages(topic, this.session2);
+                Assert.assertEquals(1, result.size());
+                Assert.assertTrue(result.contains(msg));
 	}
 
 	@Test
@@ -67,7 +77,11 @@ public class UNISoNDatabaseTest {
 
 	@Test
 	public final void testRefreshDataFromDatabase() {
-		this.database.refreshDataFromDatabase();
-	}
+                this.database.refreshDataFromDatabase();
+                Mockito.verify(this.dataQuery).getMessages(ArgumentMatchers.any(), ArgumentMatchers.any(),
+                        ArgumentMatchers.eq(this.session2), ArgumentMatchers.any(), ArgumentMatchers.any(),
+                        ArgumentMatchers.anyBoolean(), ArgumentMatchers.any(), ArgumentMatchers.any());
+                Mockito.verify(this.filter2).clear();
+        }
 
 }

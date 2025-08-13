@@ -8,13 +8,13 @@ package uk.co.sleonard.unison.input;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
@@ -152,22 +152,25 @@ public class FullDownloadWorkerTest {
 	 *
 	 * @throws IOException
 	 */
-	@Ignore                 // hangs
-	@Test
-	public void testDownloadArticle() throws IOException {
-		final Reader value = Mockito.mock(Reader.class);
+        @Test(timeout = 1000)
+        public void testDownloadArticle() throws IOException {
+                final String message = "Message-ID: <id123>\n" + "From: test@test.com\n"
+                                + "Subject: Test subject\n" + "Date: Sun, 18 Jan 2015 23:40:56 +0000\n"
+                                + "Newsgroups: alt.test\n" + "X-Received-Date: Sun, 18 Jan 2015 23:40:56 +0000\n"
+                                + "Test body";
+                final Reader value = new StringReader(message);
                 Mockito.when(this.newsClient.retrieveArticle(ArgumentMatchers.anyString())).thenReturn(value);
-		final DownloadRequest request = new DownloadRequest(
-		        "<n9rgdm$g9b$3@news4.open-news-network.org>", DownloadMode.ALL);
-		try {
-			final NewsArticle actual = this.worker.downloadArticle(request);
-			Assert.assertNotNull(actual);
-		}
-		catch (final UNISoNException e) {
-			Assert.fail("ERROR: " + e.getMessage());
-		}
+                final DownloadRequest request = new DownloadRequest("<id123>", DownloadMode.ALL);
+                try {
+                        final NewsArticle actual = this.worker.downloadArticle(request);
+                        Assert.assertNotNull(actual);
+                        Assert.assertEquals("Test subject", actual.getSubject());
+                }
+                catch (final UNISoNException e) {
+                        Assert.fail("ERROR: " + e.getMessage());
+                }
 
-	}
+        }
 
 	@Test
 	public void testFailToConnect() throws Exception {

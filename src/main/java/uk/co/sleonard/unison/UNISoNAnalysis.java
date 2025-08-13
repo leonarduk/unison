@@ -16,7 +16,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -29,9 +29,11 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.ResultRow;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 
+
+
+
+@Slf4j
 public class UNISoNAnalysis {
-	/** The logger. */
-	private static Logger			logger	= Logger.getLogger(UNISoNAnalysis.class);
 	private final NewsGroupFilter	filter;
 	private final Session			session;
 	private final HibernateHelper	helper;
@@ -139,7 +141,7 @@ public class UNISoNAnalysis {
 				row.add(array[0].toString());
 			}
 			else {
-				UNISoNAnalysis.logger.warn("Poster " + userID + " not found");
+				log.warn("Poster " + userID + " not found");
 			}
 			tableData.add(row);
 		}

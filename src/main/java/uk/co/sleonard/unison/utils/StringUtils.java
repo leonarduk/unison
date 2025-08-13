@@ -32,7 +32,8 @@ import java.util.zip.ZipOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.co.sleonard.unison.UNISoNException;
 
@@ -49,7 +50,7 @@ import uk.co.sleonard.unison.UNISoNException;
 public class StringUtils {
 
         /** Logger for this class. */
-        private static final Logger LOG = Logger.getLogger(StringUtils.class);
+        private static final Logger LOG = LoggerFactory.getLogger(StringUtils.class);
 
         static final String[] DATE_SEPARATORS = { "/", "-", ".", "," };
 

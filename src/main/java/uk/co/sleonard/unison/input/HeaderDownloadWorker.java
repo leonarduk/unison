@@ -17,7 +17,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.commons.net.nntp.Article;
 import org.apache.commons.net.nntp.NNTPClient;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
@@ -34,8 +35,8 @@ import uk.co.sleonard.unison.utils.StringUtils;
  */
 public class HeaderDownloadWorker extends SwingWorker {
 
-	/** The logger. */
-	private static Logger logger = Logger.getLogger(HeaderDownloadWorker.class);
+        /** The logger. */
+        private static final Logger LOGGER = LoggerFactory.getLogger(HeaderDownloadWorker.class);
 
 	/** The end index. */
 	private int endIndex;
@@ -232,19 +233,19 @@ public class HeaderDownloadWorker extends SwingWorker {
 		this.fromDate = from;
 		this.toDate = to;
 
-		HeaderDownloadWorker.logger.info(" Server: " + server + " Newsgroup: " + newsgroup1);
+                LOGGER.info(" Server: " + server + " Newsgroup: " + newsgroup1);
 		try {
 			reader.client.connect(server);
 			reader.client.selectNewsgroup(newsgroup1);
 		}
 		catch (final Exception e) {
-			HeaderDownloadWorker.logger.warn(e.getMessage(), e);
+                        LOGGER.warn(e.getMessage(), e);
 			throw new UNISoNException("Failed to initialise downloader", e);
 		}
 
 		this.downloading = true;
-		HeaderDownloadWorker.logger.info("Creating " + this.getClass() + " " + newsgroup1 + "["
-		        + reader.getMessageCount() + "]");
+                LOGGER.info("Creating " + this.getClass() + " " + newsgroup1 + "["
+                        + reader.getMessageCount() + "]");
 	}
 
 	/**

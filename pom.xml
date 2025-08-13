@@ -8,8 +8,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<log4j.version>1.2.17</log4j.version>
-		<slf4j-log4j12.version>1.7.36</slf4j-log4j12.version>
+                <slf4j.version>2.0.9</slf4j.version>
+                <logback.version>1.4.14</logback.version>
 		<junit.version>4.13.2</junit.version>
 		<java.version>17</java.version>
 		<powermock.version>1.6.5</powermock.version>
@@ -212,32 +212,30 @@
 			<version>${jms.version}</version>
 		</dependency>
 
-		<!-- Caused by: java.lang.ClassNotFoundException: org.slf4j.impl.StaticLoggerBinder -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>${slf4j-log4j12.version}</version>
-		</dependency>
+                <dependency>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                        <version>${slf4j.version}</version>
+                </dependency>
 
-		<!-- Caused by: java.lang.ClassNotFoundException: javassist.util.proxy.MethodFilter -->
+                <dependency>
+                        <groupId>ch.qos.logback</groupId>
+                        <artifactId>logback-classic</artifactId>
+                        <version>${logback.version}</version>
+                </dependency>
+
+                <!-- Caused by: java.lang.ClassNotFoundException: javassist.util.proxy.MethodFilter -->
 		<dependency>
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
 			<version>${javassist.version}</version>
 		</dependency>
 
-		<!-- 1.2.9 to 1.2.12 -->
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-net</groupId>
-			<artifactId>commons-net</artifactId>
-			<version>${commons-net}</version>
-		</dependency>
+                <dependency>
+                        <groupId>commons-net</groupId>
+                        <artifactId>commons-net</artifactId>
+                        <version>${commons-net}</version>
+                </dependency>
 
 		<dependency>
 			<groupId>org.freemarker</groupId>

@@ -23,7 +23,7 @@ public class UsenetUserHelperTest {
 	 * Test parse field from EmailAddress.
 	 */
 	@Test
-	public void testParseFromField() throws Exception {
+        public void testParseFromField() throws Exception {
 		EmailAddress expected = new EmailAddress("Elton", "elton_12_nunes@hotmail.com",
 		        "localhost");
 		EmailAddress expected2 = new EmailAddress("Elton", "elton_12_nunes@hotmail.com", "UNKNOWN");
@@ -42,7 +42,15 @@ public class UsenetUserHelperTest {
 		assertEquals(expected3, actualList.get(7));
 		assertEquals(expected4, actualList.get(8));
 
-	}
+        }
+
+        /**
+         * Ensure exception is thrown when neither name nor email is provided.
+         */
+        @Test(expected = IllegalArgumentException.class)
+        public void testParseFromFieldWithoutNameOrEmail() {
+                UsenetUserHelper.parseFromField("", "localhost");
+        }
 
 	/**
 	 * Method used by testParseFromField.

@@ -21,54 +21,59 @@ import uk.co.sleonard.unison.input.NewsArticle;
 @Slf4j
 class UsenetUserHelper {
 
-	/**
-	 * Augment data and create user.
-	 *
-	 * @param name
-	 *            the name
-	 * @param email
-	 *            the email
-	 * @param gender
-	 *            the gender
-	 * @param ipAddress
-	 *            the ip address
-	 * @return the email address
-	 */
-	private static EmailAddress augmentDataAndCreateUser(final String nameInput,
-	        final String emailInput, final String gender, final String ipAddressInput) {
-		EmailAddress emailAddress = null;
-		String name = nameInput;
-		String email = emailInput;
-		String ipAddress = ipAddressInput;
-		if ((null == ipAddress) || ipAddress.equals("")) {
-			ipAddress = "UNKNOWN";
-		}
+        /**
+         * Augment data and create user.
+         *
+         * @param name
+         *            the name
+         * @param email
+         *            the email
+         * @param gender
+         *            the gender
+         * @param ipAddress
+         *            the ip address
+         * @return the email address
+         * @throws IllegalArgumentException
+         *             if both {@code name} and {@code email} are {@code null} or empty
+         */
+        private static EmailAddress augmentDataAndCreateUser(final String nameInput,
+                final String emailInput, final String gender, final String ipAddressInput) {
+                EmailAddress emailAddress = null;
+                String name = nameInput;
+                String email = emailInput;
+                String ipAddress = ipAddressInput;
+                if ((null == ipAddress) || ipAddress.equals("")) {
+                        ipAddress = "UNKNOWN";
+                }
 
-		// TODO throw exception here instead?
-		// can only create if have either name or email
-		if ((null != email) || (null != name)) {
-			// create name from email if missing
-			if ((null == name) || name.equals("")) {
-				// if just email address
-				final int atIndex = email.indexOf("@");
-				if (atIndex > -1) {
-					name = email.substring(0, atIndex).trim();
-				}
-				else {
-					name = email.trim();
-					email = null;
-				}
-			}
-			// create email from name and ipAddress if missing
-			if ((null == email) || email.equals("")) {
-				email = name + "@" + ipAddress;
-			}
+                if (((name == null) || name.isEmpty()) && ((email == null) || email.isEmpty())) {
+                        throw new IllegalArgumentException("Both name and email cannot be null or empty");
+                }
 
-			emailAddress = new EmailAddress(name, email, ipAddress);
-		}
-		return emailAddress;
+                // can only create if have either name or email
+                if ((null != email) || (null != name)) {
+                        // create name from email if missing
+                        if ((null == name) || name.equals("")) {
+                                // if just email address
+                                final int atIndex = email.indexOf("@");
+                                if (atIndex > -1) {
+                                        name = email.substring(0, atIndex).trim();
+                                }
+                                else {
+                                        name = email.trim();
+                                        email = null;
+                                }
+                        }
+                        // create email from name and ipAddress if missing
+                        if ((null == email) || email.equals("")) {
+                                email = name + "@" + ipAddress;
+                        }
 
-	}
+                        emailAddress = new EmailAddress(name, email, ipAddress);
+                }
+                return emailAddress;
+
+        }
 
 	/**
 	 * Creates the user by removing brackets.

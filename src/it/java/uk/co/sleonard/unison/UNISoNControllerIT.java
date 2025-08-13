@@ -30,8 +30,10 @@ public class UNISoNControllerIT {
 
 	@Test
 	public final void testGetAvailableGroupsModel() throws UNISoNException {
-		final Set<NewsGroup> groups = this.controller.listNewsgroups("",
-		        StringUtils.loadServerList()[0], this.controller.getNntpReader().getClient());
+                final String[] servers = StringUtils.loadServerList();
+                Assert.assertTrue("No servers configured", servers.length > 0);
+                final Set<NewsGroup> groups = this.controller.listNewsgroups("", servers[0],
+                        this.controller.getNntpReader().getClient());
 		final ListModel<NewsGroup> model = this.controller.getAvailableGroupsModel(groups);
 		final NewsGroup firstGroup = model.getElementAt(0);
 		Assert.assertNotNull(firstGroup);
@@ -41,8 +43,10 @@ public class UNISoNControllerIT {
 
 	@Test
 	public final void testListnewsgroups() throws UNISoNException {
-		final Set<NewsGroup> groups = this.controller.listNewsgroups("",
-		        StringUtils.loadServerList()[0], this.controller.getNntpReader().getClient());
+                final String[] servers = StringUtils.loadServerList();
+                Assert.assertTrue("No servers configured", servers.length > 0);
+                final Set<NewsGroup> groups = this.controller.listNewsgroups("", servers[0],
+                        this.controller.getNntpReader().getClient());
 		Assert.assertTrue(groups.size() > 0);
 		log.info("Found " + groups.size());
 

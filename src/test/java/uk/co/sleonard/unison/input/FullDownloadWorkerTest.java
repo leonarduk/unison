@@ -48,11 +48,12 @@ public class FullDownloadWorkerTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		this.newsClient = Mockito.mock(NewsClient.class);
-		this.outQueue = new LinkedBlockingQueue<>();
-		this.worker = new FullDownloadWorker(StringUtils.loadServerList()[0], this.outQueue,
-		        this.newsClient);
-	}
+                this.newsClient = Mockito.mock(NewsClient.class);
+                this.outQueue = new LinkedBlockingQueue<>();
+                final String[] servers = StringUtils.loadServerList();
+                Assert.assertTrue("No servers configured", servers.length > 0);
+                this.worker = new FullDownloadWorker(servers[0], this.outQueue, this.newsClient);
+        }
 
 	/**
 	 * Test AddDownloadRequest.
@@ -116,8 +117,10 @@ public class FullDownloadWorkerTest {
 	public void testConstruct() {
 		FullDownloadWorker actual;
 		try {
-			actual = new FullDownloadWorker(StringUtils.loadServerList()[0],
-			        new LinkedBlockingQueue(), this.newsClient);
+                        final String[] servers = StringUtils.loadServerList();
+                        Assert.assertTrue("No servers configured", servers.length > 0);
+                        actual = new FullDownloadWorker(servers[0], new LinkedBlockingQueue(),
+                                this.newsClient);
 			Assert.assertNotNull(actual);
 		}
 		catch (final UNISoNException e) {

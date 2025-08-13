@@ -37,7 +37,9 @@ import uk.co.sleonard.unison.utils.StringUtils;
 public class NewsClientIT {
 
 	public static BufferedReader downloadFirstMessage() throws IOException, UNISoNException {
-		return NewsClientIT.downloadFirstMessage(StringUtils.loadServerList()[0]);
+                final String[] servers = StringUtils.loadServerList();
+                Assert.assertTrue("No servers configured", servers.length > 0);
+                return NewsClientIT.downloadFirstMessage(servers[0]);
 	}
 
 	public static BufferedReader downloadFirstMessage(final String server)
@@ -85,8 +87,10 @@ public class NewsClientIT {
 
 	@Test
 	public void testRetrieveArticleInfo() throws Exception {
-		final String server = StringUtils.loadServerList()[0];
-		final BufferedReader reader = NewsClientIT.downloadFirstMessage(server);
+                final String[] servers = StringUtils.loadServerList();
+                Assert.assertTrue("No servers configured", servers.length > 0);
+                final String server = servers[0];
+                final BufferedReader reader = NewsClientIT.downloadFirstMessage(server);
 		try (final BufferedReader bufReader = new BufferedReader(reader);) {
 			final String line = bufReader.readLine();
 			log.info("Message: " + line);

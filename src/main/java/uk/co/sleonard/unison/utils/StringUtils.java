@@ -29,6 +29,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import org.apache.log4j.Logger;
+
 import uk.co.sleonard.unison.UNISoNException;
 
 /**
@@ -43,7 +48,10 @@ import uk.co.sleonard.unison.UNISoNException;
  */
 public class StringUtils {
 
-	static final String[] DATE_SEPARATORS = { "/", "-", ".", "," };
+        /** Logger for this class. */
+        private static final Logger LOG = Logger.getLogger(StringUtils.class);
+
+        static final String[] DATE_SEPARATORS = { "/", "-", ".", "," };
 
 	/**
 	 * Compress.
@@ -186,26 +194,61 @@ public class StringUtils {
 	 * @author Elton <elton_12_nunes@hotmail.com>
 	 * @return Return the server list on Array
 	 */
-	public static String[] loadServerList() {
+        public static String[] loadServerList() {
 
-		final Properties prop = new Properties();
-		final String file = "servers.properties";
+                final String file = "servers.properties";
 
-		try (final InputStream resources = ClassLoader.getSystemResourceAsStream(file);) {
-			if (null == resources) {
-				throw new IOException("can't find " + file);
-			}
-			prop.load(resources);
-			final List<String> list = StringUtils.convertCommasToList(prop.getProperty("servers"));
+                try (final InputStream resources = ClassLoader.getSystemResourceAsStream(file);) {
+                        if (null == resources) {
+                                throw new IOException("can't find " + file);
+                        }
+                        return loadServerList(resources);
+                }
+                catch (final IOException io) {
+                        LOG.error("Unable to load server list", io);
+                        return new String[0];
+                }
+        }
 
-			return list.toArray(new String[list.size()]);
-		}
-		catch (final IOException io) {
-			io.printStackTrace();
-		}
+        /**
+         * Load server list from an input stream.
+         *
+         * @param resources
+         *            the input stream
+         * @return the server list on Array
+         * @throws IOException
+         *             if there is a problem reading from the stream
+         */
+        public static String[] loadServerList(final InputStream resources) throws IOException {
 
-		return new String[] { "empty" };
-	}
+                if (resources == null) {
+                        return new String[0];
+                }
+
+                final Properties prop = new Properties();
+                prop.load(resources);
+                final String servers = prop.getProperty("servers");
+                if (servers == null) {
+                        return new String[0];
+                }
+                final List<String> list = StringUtils.convertCommasToList(servers);
+                return list.toArray(new String[0]);
+        }
+
+        /**
+         * Load server list from a properties file path.
+         *
+         * @param path
+         *            path to the properties file
+         * @return the server list on Array
+         * @throws IOException
+         *             if there is a problem reading the file
+         */
+        public static String[] loadServerList(final Path path) throws IOException {
+                try (InputStream in = Files.newInputStream(path)) {
+                        return loadServerList(in);
+                }
+        }
 
 	/**
 	 * Convert the String with date to Date Object.

@@ -16,7 +16,7 @@
         <mockito.version>5.12.0</mockito.version>
                 <maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
                 <jacoco.version>0.8.12</jacoco.version>
-                <jms.version>1.1.1</jms.version>
+                <jms.version>3.1.0</jms.version>
                 <javassist.version>3.30.2-GA</javassist.version>
                 <commons-net>3.10.0</commons-net>
                 <freemarker.version>2.3.33</freemarker.version>
@@ -176,27 +176,18 @@
 		</plugins>
 	</build>
 
-	<repositories>
-		<!-- Added because javax.jms has not been found on maven repository -->
-		<repository>
-			<id>repository.jboss.org-public</id>
-			<name>JBoss repository</name>
-			<url>https://repository.jboss.org/nexus/content/groups/public</url>
-		</repository>
-	</repositories>
-
-	<dependencies>
+        <dependencies>
 
                 <dependency>
                         <groupId>commons-net</groupId>
                         <artifactId>commons-net</artifactId>
                         <version>${commons-net}</version>
                 </dependency>
-		<dependency>
-			<groupId>javax.jms</groupId>
-			<artifactId>jms</artifactId>
-			<version>${jms.version}</version>
-		</dependency>
+                <dependency>
+                        <groupId>jakarta.jms</groupId>
+                        <artifactId>jakarta.jms-api</artifactId>
+                        <version>${jms.version}</version>
+                </dependency>
 
                 <dependency>
                         <groupId>org.slf4j</groupId>

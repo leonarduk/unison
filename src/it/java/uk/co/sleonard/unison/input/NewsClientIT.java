@@ -12,7 +12,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -32,8 +32,8 @@ import uk.co.sleonard.unison.utils.StringUtils;
  * @version $Date:: $: Date of last commit
  *
  */
+@Slf4j
 public class NewsClientIT {
-	private static Logger logger = Logger.getLogger("NewsClient");
 
 	public static BufferedReader downloadFirstMessage() throws IOException, UNISoNException {
 		return NewsClientIT.downloadFirstMessage(StringUtils.loadServerList()[0]);
@@ -46,7 +46,7 @@ public class NewsClientIT {
 		final Set<NewsGroup> groups = client.listNewsGroups("", server);
 		final NewsGroup group = groups.iterator().next();
 		client.selectNewsgroup(group.getName());
-		NewsClientIT.logger.info("Connect to " + server + ":" + group.getName());
+		log.info("Connect to " + server + ":" + group.getName());
 		final long lowArticleNumber = group.getFirstMessage();
 		final long highArticleNumber = group.getFirstMessage();
 		final BufferedReader reader = client.retrieveArticleInfo(lowArticleNumber,
@@ -77,7 +77,7 @@ public class NewsClientIT {
 		final NewsClient client = new NewsClientImpl();
 		final String[] servers = StringUtils.loadServerList();
 		for (final String hostname : servers) {
-			NewsClientIT.logger.info("Try " + hostname);
+			log.info("Try " + hostname);
 			client.connect(hostname, 119);
 		}
 	}
@@ -88,7 +88,7 @@ public class NewsClientIT {
 		final BufferedReader reader = NewsClientIT.downloadFirstMessage(server);
 		try (final BufferedReader bufReader = new BufferedReader(reader);) {
 			final String line = bufReader.readLine();
-			NewsClientIT.logger.info("Message: " + line);
+			log.info("Message: " + line);
 			Assert.assertNotNull(line);
 			Assert.assertTrue(line.length() > 0);
 			Assert.assertTrue(line.contains(server));

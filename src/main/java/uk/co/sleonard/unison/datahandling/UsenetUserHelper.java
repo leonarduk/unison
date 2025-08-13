@@ -6,7 +6,7 @@
  */
 package uk.co.sleonard.unison.datahandling;
 
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import uk.co.sleonard.unison.datahandling.DAO.EmailAddress;
 import uk.co.sleonard.unison.input.NewsArticle;
@@ -18,10 +18,8 @@ import uk.co.sleonard.unison.input.NewsArticle;
  * @since v1.0.0
  *
  */
+@Slf4j
 class UsenetUserHelper {
-
-	/** The logger. */
-	private static Logger logger = Logger.getLogger("PopulateUsenetUser");
 
 	/**
 	 * Augment data and create user.
@@ -131,7 +129,7 @@ class UsenetUserHelper {
 			}
 		}
 		catch (final Exception e) {
-			UsenetUserHelper.logger
+			log
 			        .warn("Couldn't parse " + emailString + " so using it for name and email", e);
 			emailAddress = new EmailAddress(emailString, emailString, ipAddress);
 
@@ -154,7 +152,7 @@ class UsenetUserHelper {
 	 */
 	static EmailAddress parseFromField(final String emailStringInput, final String ipAddress) {
 		String emailString = emailStringInput;
-		UsenetUserHelper.logger.debug("createUser: " + emailString + " " + ipAddress);
+		log.debug("createUser: " + emailString + " " + ipAddress);
 
 		emailString = emailString.replaceAll("\"", "");
 

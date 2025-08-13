@@ -223,7 +223,6 @@ public class HibernateHelper {
         final UsenetUser poster = this.findOrCreateUsenetUser(article, session, gender);
         if ((null == poster.getLocation()) || !poster.getLocation().equals(location)) {
             poster.setLocation(location);
-            poster.setLocation(location);
             session.saveOrUpdate(poster);
         }
         return poster;

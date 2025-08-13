@@ -20,7 +20,7 @@
                 <javassist.version>3.30.2-GA</javassist.version>
                 <commons-net>3.10.0</commons-net>
                 <freemarker.version>2.3.33</freemarker.version>
-                <commons-lang.version>2.6</commons-lang.version>
+                <commons-lang3.version>3.14.0</commons-lang3.version>
                 <hibernate-core.version>5.6.15.Final</hibernate-core.version>
                 <hibernate-tools.version>5.6.15.Final</hibernate-tools.version>
                 <hsqldb.version>2.7.2</hsqldb.version>

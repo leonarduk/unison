@@ -234,11 +234,11 @@
 			<version>${hibernate-tools.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-			<version>${hsqldb.version}</version>
-		</dependency>
+                <dependency>
+                        <groupId>org.hsqldb</groupId>
+                        <artifactId>hsqldb</artifactId>
+                        <version>${hsqldb.version}</version>
+                </dependency>
 
 		<!-- <dependency> <groupId>gnu.classpath.ext</groupId> <artifactId>inetlib</artifactId> 
 			<version>1.1.1</version> </dependency> -->

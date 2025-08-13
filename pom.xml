@@ -26,7 +26,7 @@
                 <hibernate-tools.version>5.6.18.Final</hibernate-tools.version>
                 <hsqldb.version>2.7.3</hsqldb.version>
                 <jung.version>1.7.6</jung.version>
-                <oscache.version>2.4.1</oscache.version>
+                <ehcache.version>3.10.8</ehcache.version>
                 <swing-layout.version>1.0.4</swing-layout.version>
                 <jakarta.mail.version>2.0.1</jakarta.mail.version>
         </properties>
@@ -269,11 +269,17 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>opensymphony</groupId>
-			<artifactId>oscache</artifactId>
-			<version>${oscache.version}</version>
-		</dependency>
+                <dependency>
+                        <groupId>org.ehcache</groupId>
+                        <artifactId>ehcache</artifactId>
+                        <version>${ehcache.version}</version>
+                </dependency>
+
+                <dependency>
+                        <groupId>org.swinglabs</groupId>
+                        <artifactId>swing-layout</artifactId>
+                        <version>${swing-layout.version}</version>
+                </dependency>
 
 		<!-- gnumail lib not found. Then we checked that the package used is (javax.mail). 
 			So, we have added its dependency -->

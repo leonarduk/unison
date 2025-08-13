@@ -21,6 +21,8 @@
                 <commons-net>3.11.1</commons-net>
                 <freemarker.version>2.3.33</freemarker.version>
                 <commons-lang3.version>3.14.0</commons-lang3.version>
+                <maven-jxr-plugin.version>3.3.1</maven-jxr-plugin.version>
+                <webstart-maven-plugin.version>1.0.0</webstart-maven-plugin.version>
 
                 <hibernate-core.version>5.6.20.Final</hibernate-core.version>
                 <hibernate-tools.version>5.6.20.Final</hibernate-tools.version>
@@ -337,6 +339,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jxr-plugin</artifactId>
+                                <version>${maven-jxr-plugin.version}</version>
 			</plugin>
 		</plugins>
 	</reporting>
@@ -400,6 +403,7 @@
 					<plugin>
 						<groupId>org.codehaus.mojo.webstart</groupId>
 						<artifactId>webstart-maven-plugin</artifactId>
+                                                <version>${webstart-maven-plugin.version}</version>
 						<executions>
 							<execution>
 								<!-- bind to phase, I prefer to call it manualls -->

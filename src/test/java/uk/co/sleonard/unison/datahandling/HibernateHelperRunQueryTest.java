@@ -3,6 +3,7 @@ package uk.co.sleonard.unison.datahandling;
 import static org.junit.Assert.*;
 
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Vector;
 
 import org.hibernate.Session;
@@ -33,9 +34,11 @@ public class HibernateHelperRunQueryTest {
 
     @Test
     public void testRunQueryBindsParameters() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("subject", "Duke Nukem Hall of Shame (update)");
         Vector<Message> results = this.helper.runQuery(
                 "from Message m where m.subject = :subject",
-                Map.of("subject", "Duke Nukem Hall of Shame (update)"),
+                params,
                 this.session,
                 Message.class);
         assertEquals(1, results.size());
@@ -43,9 +46,11 @@ public class HibernateHelperRunQueryTest {
 
     @Test
     public void testRunQueryPreventsSqlInjection() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("subject", "Duke Nukem Hall of Shame (update)' OR '1'='1");
         Vector<Message> results = this.helper.runQuery(
                 "from Message m where m.subject = :subject",
-                Map.of("subject", "Duke Nukem Hall of Shame (update)' OR '1'='1"),
+                params,
                 this.session,
                 Message.class);
         assertTrue(results.isEmpty());

@@ -52,6 +52,9 @@ public class StringUtils {
         /** Logger for this class. */
         private static final Logger LOG = LoggerFactory.getLogger(StringUtils.class);
 
+        /** Default server list used when no properties file is found. */
+        private static final String[] DEFAULT_SERVERS = { "news.karlsruhe.org" };
+
         static final String[] DATE_SEPARATORS = { "/", "-", ".", "," };
 
 	/**
@@ -203,15 +206,17 @@ public class StringUtils {
 
                 final String file = "servers.properties";
 
-                try (final InputStream resources = ClassLoader.getSystemResourceAsStream(file);) {
-                        if (null == resources) {
-                                throw new IOException("can't find " + file);
+                try (final InputStream resources = StringUtils.class.getClassLoader()
+                                .getResourceAsStream(file);) {
+                        if (resources != null) {
+                                return loadServerList(resources);
                         }
-                        return loadServerList(resources);
+                        LOG.warn("Server list file '{}' not found, using default server list", file);
+                        return DEFAULT_SERVERS;
                 }
                 catch (final IOException io) {
                         LOG.error("Unable to load server list", io);
-                        return new String[0];
+                        return DEFAULT_SERVERS;
                 }
         }
 

@@ -27,7 +27,9 @@ public class HeaderDownloadWorkerIT {
 	        throws IOException, UNISoNException {
 		final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
 		try (final Reader reader = NewsClientIT.downloadFirstMessage();) {
-			final String nntpHost = StringUtils.loadServerList()[0];
+                        final String[] servers = StringUtils.loadServerList();
+                        Assert.assertTrue("No servers configured", servers.length > 0);
+                        final String nntpHost = servers[0];
 			final LinkedBlockingQueue<NewsArticle> queue1 = new LinkedBlockingQueue<>();
 			final NewsClient newsClient1 = new NewsClientImpl();
 			final HibernateHelper helper2 = null;

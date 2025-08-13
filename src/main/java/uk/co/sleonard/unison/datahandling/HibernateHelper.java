@@ -177,24 +177,13 @@ public class HibernateHelper {
             }
         }
 
-        /**
-         * public Message(     Date dateCreated,
-         *     byte[] messageBody,
-         *     Set<NewsGroup> newsgroups,
-         *     UsenetUser poster,
-         *     String referencedMessages,
-         *     String subject,
-         *     Topic topic,
-         *     String usenetMessageID )
-         */
         message = new Message(
                 article.getDate(),
-                article.getArticleNumber(),
+                article.getArticleID(),
                 article.getSubject(),
                 poster,
                 topic,
-                "",
-                Set.of(),
+                new HashSet<>(),
                 article.getReferences(),
                 body);
         return message;

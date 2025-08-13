@@ -27,8 +27,8 @@
                 <jung.version>1.7.6</jung.version>
                 <oscache.version>2.4.1</oscache.version>
                 <swing-layout.version>1.0.4</swing-layout.version>
-                <mail.version>1.6.2</mail.version>
-	</properties>
+                <jakarta.mail.version>2.0.1</jakarta.mail.version>
+        </properties>
 
 	<build>
 		<plugins>
@@ -289,13 +289,13 @@
 			<version>${swing-layout.version}</version>
 		</dependency>
 
-		<!-- gnumail lib not found. Then we checked that the package used is (javax.mail). 
-			So, we have added its dependency -->
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>${mail.version}</version>
-		</dependency>
+                <!-- gnumail lib not found. Then we checked that the package used is (jakarta.mail).
+                        So, we have added its dependency -->
+                <dependency>
+                        <groupId>com.sun.mail</groupId>
+                        <artifactId>jakarta.mail</artifactId>
+                        <version>${jakarta.mail.version}</version>
+                </dependency>
 
 		<dependency>
 			<groupId>org.jacoco</groupId>

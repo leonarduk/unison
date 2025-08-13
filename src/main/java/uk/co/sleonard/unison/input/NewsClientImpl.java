@@ -213,11 +213,16 @@ public class NewsClientImpl implements NewsClient {
 		return groupSet;
 	}
 
-	@Override
-	public int quit() throws IOException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+        @Override
+        public int quit() throws IOException {
+                try {
+                        return this.client.quit();
+                }
+                catch (final IOException e) {
+                        NewsClientImpl.logger.error("Error quitting NNTP client", e);
+                        throw e;
+                }
+        }
 
 	/**
 	 * Reconnect.

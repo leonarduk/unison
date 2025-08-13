@@ -183,13 +183,18 @@ class DownloadNewsPanel extends javax.swing.JPanel
 	 * @param evt
 	 *            the evt
 	 */
-	@SuppressWarnings("deprecation")
-	private void downloadButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_downloadButtonActionPerformed
-                this.controller.download(this,
-                        (NewsGroup[]) this.availableNewsgroups.getSelectedValues(),
-                        this.fromDateField.getText(), this.toDateField.getText(), this,
-                        this.getLocationCheck.isSelected(), false);
-	}// GEN-LAST:event_downloadButtonActionPerformed
+        private void downloadButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_downloadButtonActionPerformed
+                final NewsGroup[] selected = this.availableNewsgroups.getSelectedValuesList()
+                        .toArray(new NewsGroup[0]);
+                try {
+                        this.controller.download(this, selected, this.fromDateField.getText(),
+                                this.toDateField.getText(), this, this.getLocationCheck.isSelected(),
+                                false);
+                }
+                catch (final Exception e) {
+                        this.alert("Failed to start download: " + e.getMessage());
+                }
+        }// GEN-LAST:event_downloadButtonActionPerformed
 
 	/**
 	 * Download enabled.

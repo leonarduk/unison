@@ -109,12 +109,34 @@ public class UNISoNControllerTest {
 		this.doDownload(locationSelected, getTextSelected);
 	}
 
-	@Test
-	public final void testDownloadTextNotSelected() {
-		final boolean locationSelected = true;
-		final boolean getTextSelected = false;
-		this.doDownload(locationSelected, getTextSelected);
-	}
+        @Test
+        public final void testDownloadTextNotSelected() {
+                final boolean locationSelected = true;
+                final boolean getTextSelected = false;
+                this.doDownload(locationSelected, getTextSelected);
+        }
+
+        @Test
+        public final void testDownloadWithExtrasNullItems() {
+                final StatusMonitor monitor = Mockito.mock(StatusMonitor.class);
+                final UNISoNLogger logger = new UNISoNCLI();
+                this.controller.download(monitor, null, "2016-06-06", "2016-09-09", logger, true,
+                        false);
+        }
+
+        @Test
+        public final void testDownloadWithExtrasUsesHeadersMode() throws Exception {
+                final StatusMonitor monitor = Mockito.mock(StatusMonitor.class);
+                final UNISoNLogger logger = new UNISoNCLI();
+                final NewsGroup[] items = { new NewsGroup("alt,news", null, new HashSet<>(),
+                        new HashSet<>(), 1, 2, 1, 2, "alt.news", true) };
+                final UNISoNController spy = Mockito.spy(this.controller);
+                Mockito.doNothing().when(spy).quickDownload(Mockito.anySet(), Mockito.any(),
+                        Mockito.any(), Mockito.any(), Mockito.any());
+                spy.download(monitor, items, "2016-06-06", "2016-09-09", logger, true, false);
+                Mockito.verify(spy).quickDownload(Mockito.anySet(), Mockito.any(), Mockito.any(),
+                        Mockito.any(), Mockito.eq(DownloadMode.HEADERS));
+        }
 
 	@Test
 	public final void testQuickDownload() throws UNISoNException {

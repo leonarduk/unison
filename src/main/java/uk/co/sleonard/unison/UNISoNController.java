@@ -127,47 +127,61 @@ public class UNISoNController {
 		this.stopDownload();
 	}
 
-	public void download(final StatusMonitor monitor, final NewsGroup[] items,
-	        final String fromDateString, final String toDateString, final UNISoNLogger logger,
-	        final boolean locationSelected, final boolean getTextSelected) {
-		monitor.downloadEnabled(false);
+        public void download(final StatusMonitor monitor, final NewsGroup[] items,
+                final String fromDateString, final String toDateString, final UNISoNLogger logger,
+                final boolean locationSelected, final boolean getTextSelected) {
+                if ((monitor == null) || (logger == null)) {
+                        return;
+                }
+                monitor.downloadEnabled(false);
 
-		final Set<NewsGroup> groups = new HashSet<>();
-		for (final Object item : items) {
-			groups.add((NewsGroup) item);
-		}
-		if (groups.size() > 0) {
-			try {
-				logger.log("Download : " + groups);
-				final Date fromDate = StringUtils.stringToDate(fromDateString);
-				final Date toDate = StringUtils.stringToDate(toDateString);
+                final Set<NewsGroup> groups = new HashSet<>();
+                if (items != null) {
+                        for (final Object item : items) {
+                                if (item instanceof NewsGroup) {
+                                        groups.add((NewsGroup) item);
+                                }
+                        }
+                }
+                if (groups.size() == 0) {
+                        monitor.downloadEnabled(true);
+                        logger.log("No groups selected for download");
+                        return;
+                }
 
-				DownloadMode mode;
-				if (getTextSelected) {
-					mode = DownloadMode.ALL;
-				}
-				else {
-					if (locationSelected) {
-						mode = DownloadMode.HEADERS;
-					}
-					else {
-						mode = DownloadMode.BASIC;
-					}
-				}
-				this.quickDownload(groups, fromDate, toDate, logger, mode);
-
-				logger.log("Done.");
-			}
-			catch (final UNISoNException e) {
-				logger.alert("Failed to download. Check your internet connection" + e.getMessage());
-				monitor.downloadEnabled(true);
-			}
-			catch (final DateTimeParseException e) {
-				logger.alert("Failed to parse date : " + e.getMessage());
-				monitor.downloadEnabled(true);
-			}
-		}
-	}
+                DownloadMode mode;
+                if (getTextSelected) {
+                        mode = DownloadMode.ALL;
+                }
+                else {
+                        if (locationSelected) {
+                                mode = DownloadMode.HEADERS;
+                                if ((this.getHeaderDownloader() == null) || (this.getNntpReader() == null)) {
+                                        logger.alert("Extras requested but downloader not initialised");
+                                        monitor.downloadEnabled(true);
+                                        return;
+                                }
+                        }
+                        else {
+                                mode = DownloadMode.BASIC;
+                        }
+                }
+                try {
+                        logger.log("Download : " + groups);
+                        final Date fromDate = StringUtils.stringToDate(fromDateString);
+                        final Date toDate = StringUtils.stringToDate(toDateString);
+                        this.quickDownload(groups, fromDate, toDate, logger, mode);
+                        logger.log("Done.");
+                }
+                catch (final UNISoNException e) {
+                        logger.alert("Failed to download. Check your internet connection" + e.getMessage());
+                        monitor.downloadEnabled(true);
+                }
+                catch (final DateTimeParseException e) {
+                        logger.alert("Failed to parse date : " + e.getMessage());
+                        monitor.downloadEnabled(true);
+                }
+        }
 
 	public UNISoNAnalysis getAnalysis() {
 		return this.analysis;

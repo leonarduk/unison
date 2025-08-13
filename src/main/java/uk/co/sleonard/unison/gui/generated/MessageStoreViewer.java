@@ -965,32 +965,39 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 	 * Refresh topic hierarchy.
 	 */
 	private void refreshTopicHierarchy() {
-		// TODO reinstate that topics reflect the highlighted newsgroup
+                this.topicRoot.removeAllChildren();
 
-		this.topicRoot.removeAllChildren();
+                final UNISoNController controller = UNISoNController.getInstance();
+                final NewsGroup selectedNewsgroup = controller.getFilter().getSelectedNewsgroup();
+                if (null != selectedNewsgroup) {
+                        this.topicRoot.setName(selectedNewsgroup.getFullName());
+                        final Set<Topic> topicsFilter = controller.getFilter().getTopicsFilter();
+                        Set<Topic> topics;
+                        if ((topicsFilter == null) || topicsFilter.isEmpty()) {
+                                topics = selectedNewsgroup.getTopics();
+                        }
+                        else {
+                                topics = new HashSet<>();
+                                for (final Topic topic : topicsFilter) {
+                                        if (topic.getNewsgroups().contains(selectedNewsgroup)) {
+                                                topics.add(topic);
+                                        }
+                                }
+                        }
+                        for (final Topic topic : topics) {
+                                final int lastIndex = topic.getSubject().length();
+                                this.addChildNode(this.topicRoot, topic,
+                                        topic.getSubject().substring(0, lastIndex));
+                        }
 
-		final UNISoNController controller = UNISoNController.getInstance();
-		final NewsGroup selectedNewsgroup = controller.getFilter().getSelectedNewsgroup();
-		if (null != selectedNewsgroup) {
-			this.topicRoot.setName(selectedNewsgroup.getFullName());
-			final Set<Topic> topics = selectedNewsgroup.getTopics();
-			final Set<Topic> topicsFilter = controller.getFilter().getTopicsFilter();
-			for (final Topic topic : topics) {
-				if ((null == topicsFilter) || topicsFilter.contains(topic)) {
-					final int lastIndex = topic.getSubject().length();
-					this.addChildNode(this.topicRoot, topic,
-					        topic.getSubject().substring(0, lastIndex));
-				}
-			}
+                }
+                else {
+                        this.topicRoot.setName("No group selected");
+                }
 
-		}
-		else {
-			this.topicRoot.setName("No group selected");
-		}
-
-		// This actually refreshes the tree
-		((DefaultTreeModel) this.topicsHierarchy.getModel()).reload();
-	}
+                // This actually refreshes the tree
+                ((DefaultTreeModel) this.topicsHierarchy.getModel()).reload();
+        }
 
 	/**
 	 * Refresh top posters.

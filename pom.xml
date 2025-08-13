@@ -23,7 +23,7 @@
                 <commons-lang3.version>3.14.0</commons-lang3.version>
                 <hibernate-core.version>5.6.15.Final</hibernate-core.version>
                 <hibernate-tools.version>5.6.15.Final</hibernate-tools.version>
-                <hsqldb.version>2.7.2</hsqldb.version>
+                <hsqldb.version>2.7.3</hsqldb.version>
                 <jung.version>1.7.6</jung.version>
                 <oscache.version>2.4.1</oscache.version>
                 <swing-layout.version>1.0.4</swing-layout.version>

@@ -312,22 +312,22 @@ public class StringUtils {
 				final ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateText, formatter);
 				return Date.from(zonedDateTime.toInstant());
 			}
-			else if (dateText.substring(0, 1).matches("[a-zA-Z]")) {
-				dateText = dateText.substring(4, dateText.length()).trim();
-				// Sun, 18 Jan 2015 23:40:56 +0000
-				// TRIM TO
-				// 18 Jan 2015 23:40:56 +0000
-				final DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
-				final ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateText, formatter);
-				return Date.from(zonedDateTime.toInstant());
-			}
-			else {
-				// 30 Jan 2015 23:37:13 GMT
-				final DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
-				final LocalDate localDate = LocalDate.parse(dateText, formatter);
-				return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-			}
-		}
-	}
+                        else if (dateText.substring(0, 1).matches("[a-zA-Z]")) {
+                                dateText = dateText.substring(4, dateText.length()).trim();
+                                // Sun, 18 Jan 2015 23:40:56 +0000
+                                // TRIM TO
+                                // 18 Jan 2015 23:40:56 +0000
+                                final DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
+                                final ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateText, formatter);
+                                return Date.from(zonedDateTime.toInstant());
+                        }
+                        else {
+                                // 30 Jan 2015 23:37:13 GMT
+                                final DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
+                                final ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateText, formatter);
+                                return Date.from(zonedDateTime.toInstant());
+                        }
+                }
+        }
 
 }

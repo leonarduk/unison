@@ -178,9 +178,31 @@ public class StringUtilsTest {
 	/**
 	 * Test stringToDate with String length 10 throw UNISoNException
 	 */
-	@Test(expected = UNISoNException.class)
-	public void testStringToDateExceptionLength10() throws UNISoNException {
-		StringUtils.stringToDate("xx/xx/xxxx");
-	}
+        @Test(expected = UNISoNException.class)
+        public void testStringToDateExceptionLength10() throws UNISoNException {
+                StringUtils.stringToDate("xx/xx/xxxx");
+        }
+
+        /**
+         * Ensure RFC 1123 date strings with a weekday prefix are parsed.
+         */
+        @Test
+        public void testStringToDateRfc1123WithWeekday() throws UNISoNException {
+                Date actual = StringUtils.stringToDate("Sun, 18 Jan 2015 23:40:56 +0000");
+                assertTrue(actual.toString().contains("18"));
+                assertTrue(actual.toString().contains("Jan"));
+                assertTrue(actual.toString().contains("2015"));
+        }
+
+        /**
+         * Ensure RFC 1123 date strings without a weekday prefix are parsed.
+         */
+        @Test
+        public void testStringToDateRfc1123WithoutWeekday() throws UNISoNException {
+                Date actual = StringUtils.stringToDate("18 Jan 2015 23:40:56 +0000");
+                assertTrue(actual.toString().contains("18"));
+                assertTrue(actual.toString().contains("Jan"));
+                assertTrue(actual.toString().contains("2015"));
+        }
 
 }

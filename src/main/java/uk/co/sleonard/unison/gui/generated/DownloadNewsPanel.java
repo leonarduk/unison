@@ -79,6 +79,9 @@ class DownloadNewsPanel extends javax.swing.JPanel
 	/** The pause button. */
 	private javax.swing.JButton pauseButton;
 
+	/** The progress bar. */
+	private javax.swing.JProgressBar progressBar;
+
 	/** The to date field. */
 	private javax.swing.JTextField	toDateField;
 	/** The to date label. */
@@ -261,6 +264,8 @@ class DownloadNewsPanel extends javax.swing.JPanel
                 this.hostCombo = new javax.swing.JComboBox();
                 this.jScrollPane1 = new javax.swing.JScrollPane();
                 this.availableNewsgroups = new javax.swing.JList<>();
+		this.progressBar = new javax.swing.JProgressBar();
+		this.progressBar.setStringPainted(true);
 
 		this.addMouseListener(new java.awt.event.MouseAdapter() {
 			@Override
@@ -375,7 +380,8 @@ class DownloadNewsPanel extends javax.swing.JPanel
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(this.jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 193,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addContainerGap()));
+                                        .addContainerGap()))
+                                .addComponent(this.progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 
                 layout.linkSize(javax.swing.SwingConstants.HORIZONTAL,
                         new java.awt.Component[] { this.cancelButton, this.downloadButton, this.findButton,
@@ -454,6 +460,8 @@ class DownloadNewsPanel extends javax.swing.JPanel
                                                         .addComponent(this.jScrollPane1,
                                                                 javax.swing.GroupLayout.DEFAULT_SIZE, 220,
                                                                 Short.MAX_VALUE)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(this.progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addContainerGap()));
         }// </editor-fold>//GEN-END:initComponents
 
@@ -466,6 +474,16 @@ class DownloadNewsPanel extends javax.swing.JPanel
 	public void log(final String message) {
 		this.logText.append(message + "\n");
 		this.notesArea.setText(this.logText.toString());
+	}
+
+	/**
+	 * Updates the download progress bar.
+	 *
+	 * @param progress
+	 *            the new progress value
+	 */
+	public void setProgress(final int progress) {
+		this.progressBar.setValue(progress);
 	}
 
 	/**

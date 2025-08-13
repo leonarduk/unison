@@ -25,6 +25,7 @@ import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.gui.UNISoNGUI;
+import uk.co.sleonard.unison.gui.generated.DownloadNewsPanel;
 import uk.co.sleonard.unison.input.DataHibernatorPool;
 import uk.co.sleonard.unison.input.DataHibernatorWorker;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
@@ -369,9 +370,12 @@ public class UNISoNController {
 	 * @param progress
 	 *            the new downloading state
 	 */
-	public void setDownloadingState(final int progress) {
-		this.setButtonState(false, false, true, true);
-	}
+        public void setDownloadingState(final int progress) {
+                this.setButtonState(false, false, true, true);
+                if (this.downloadPanel instanceof DownloadNewsPanel) {
+                        ((DownloadNewsPanel) this.downloadPanel).setProgress(progress);
+                }
+        }
 
 	/**
 	 * Sets the download panel.

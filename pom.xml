@@ -296,11 +296,31 @@
 			<scope>test</scope>
 		</dependency>
 
-                <dependency>
-                        <groupId>com.google.code.gson</groupId>
-                        <artifactId>gson</artifactId>
-                        <version>2.10.1</version>
-                </dependency>
+		<dependency>
+			<groupId>opensymphony</groupId>
+			<artifactId>oscache</artifactId>
+			<version>${oscache.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.swinglabs</groupId>
+			<artifactId>swing-layout</artifactId>
+			<version>${swing-layout.version}</version>
+		</dependency>
+
+		<!-- gnumail lib not found. Then we checked that the package used is (javax.mail). 
+			So, we have added its dependency -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>${mail.version}</version>
+		</dependency>
+
+               <dependency>
+                       <groupId>com.google.code.gson</groupId>
+                       <artifactId>gson</artifactId>
+                       <version>2.10.1</version>
+               </dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>

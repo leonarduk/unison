@@ -54,6 +54,12 @@ import uk.co.sleonard.unison.input.LocationFinderImpl;
 import uk.co.sleonard.unison.input.NewsArticle;
 import uk.co.sleonard.unison.utils.StringUtils;
 
+import org.ehcache.Cache;
+import org.ehcache.CacheManager;
+import org.ehcache.config.builders.CacheConfigurationBuilder;
+import org.ehcache.config.builders.CacheManagerBuilder;
+import org.ehcache.config.builders.ResourcePoolsBuilder;
+
 /**
  * This is one of the most important classes as it helps persist the data to the HSQL database.
  *
@@ -91,6 +97,10 @@ public class HibernateHelper {
 
     private final UNISoNGUI gui;
 
+    private final CacheManager cacheManager;
+
+    private final Cache<String, Message> messagesCache;
+
     /**
      * This opens up a SQL client to access the database directly.
      *
@@ -112,6 +122,10 @@ public class HibernateHelper {
     public HibernateHelper(final UNISoNGUI gui) {
         this.gui = gui;
         this.locationFinder = new LocationFinderImpl();
+        this.cacheManager = CacheManagerBuilder.newCacheManagerBuilder().build(true);
+        this.messagesCache = this.cacheManager.createCache("messagesCache",
+                CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, Message.class,
+                        ResourcePoolsBuilder.heap(1000)));
     }
 
     /**
@@ -243,8 +257,13 @@ public class HibernateHelper {
     }
 
     Message findMessage(final Message aMessage, final Session session) {
-        Message message;
-        message = (Message) this.findByKey(aMessage.getUsenetMessageID(), session, Message.class);
+        Message message = this.messagesCache.get(aMessage.getUsenetMessageID());
+        if (null == message) {
+            message = (Message) this.findByKey(aMessage.getUsenetMessageID(), session, Message.class);
+            if (null != message) {
+                this.messagesCache.put(aMessage.getUsenetMessageID(), message);
+            }
+        }
         return message;
     }
 
@@ -310,11 +329,11 @@ public class HibernateHelper {
                 session.saveOrUpdate(aMessage.getPoster());
                 message = aMessage;
                 session.saveOrUpdate(aMessage);
-                // messagesCache.put(key, message);
+                this.messagesCache.put(aMessage.getUsenetMessageID(), message);
             }
         }
         catch (final ObjectNotFoundException e) {
-            log.warn(message.getPoster().toString(), e);
+            log.warn(aMessage.getPoster().toString(), e);
         }
         return message;
 

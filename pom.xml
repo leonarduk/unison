@@ -16,18 +16,19 @@
         <mockito.version>5.12.0</mockito.version>
                 <maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
                 <jacoco.version>0.8.12</jacoco.version>
-                <jms.version>1.1.1</jms.version>
+                <jms.version>3.1.0</jms.version>
                 <javassist.version>3.30.2-GA</javassist.version>
                 <commons-net>3.10.0</commons-net>
                 <freemarker.version>2.3.33</freemarker.version>
                 <commons-lang3.version>3.14.0</commons-lang3.version>
-                <hibernate-core.version>5.6.15.Final</hibernate-core.version>
-                <hibernate-tools.version>5.6.15.Final</hibernate-tools.version>
-                <hsqldb.version>2.7.2</hsqldb.version>
+
+                <hibernate-core.version>5.6.18.Final</hibernate-core.version>
+                <hibernate-tools.version>5.6.18.Final</hibernate-tools.version>
+                <hsqldb.version>2.7.3</hsqldb.version>
                 <jung.version>1.7.6</jung.version>
                 <ehcache.version>3.10.8</ehcache.version>
                 <swing-layout.version>1.0.4</swing-layout.version>
-                <mail.version>1.6.2</mail.version>
+                <jakarta.mail.version>2.0.1</jakarta.mail.version>
         </properties>
 
 	<build>
@@ -176,27 +177,18 @@
 		</plugins>
 	</build>
 
-	<repositories>
-		<!-- Added because javax.jms has not been found on maven repository -->
-		<repository>
-			<id>repository.jboss.org-public</id>
-			<name>JBoss repository</name>
-			<url>https://repository.jboss.org/nexus/content/groups/public</url>
-		</repository>
-	</repositories>
-
-	<dependencies>
+        <dependencies>
 
                 <dependency>
                         <groupId>commons-net</groupId>
                         <artifactId>commons-net</artifactId>
                         <version>${commons-net}</version>
                 </dependency>
-		<dependency>
-			<groupId>javax.jms</groupId>
-			<artifactId>jms</artifactId>
-			<version>${jms.version}</version>
-		</dependency>
+                <dependency>
+                        <groupId>jakarta.jms</groupId>
+                        <artifactId>jakarta.jms-api</artifactId>
+                        <version>${jms.version}</version>
+                </dependency>
 
                 <dependency>
                         <groupId>org.slf4j</groupId>
@@ -296,6 +288,19 @@
 			<artifactId>mail</artifactId>
 			<version>${mail.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.swinglabs</groupId>
+			<artifactId>swing-layout</artifactId>
+			<version>${swing-layout.version}</version>
+		</dependency>
+
+                <!-- gnumail lib not found. Then we checked that the package used is (jakarta.mail).
+                        So, we have added its dependency -->
+                <dependency>
+                        <groupId>com.sun.mail</groupId>
+                        <artifactId>jakarta.mail</artifactId>
+                        <version>${jakarta.mail.version}</version>
+                </dependency>
 
 		<dependency>
 			<groupId>org.jacoco</groupId>

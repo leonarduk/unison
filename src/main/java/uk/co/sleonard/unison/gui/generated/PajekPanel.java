@@ -23,6 +23,8 @@ import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 
 import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
@@ -46,14 +48,17 @@ import uk.co.sleonard.unison.utils.StringUtils;
  */
 class PajekPanel extends javax.swing.JPanel implements Observer {
 
-	/** The Constant PAJEK_NETWORK_FILE_SUFFIX. */
-	private static final String PAJEK_NETWORK_FILE_SUFFIX = ".net";
+        /** The Constant PAJEK_NETWORK_FILE_SUFFIX. */
+        private static final String PAJEK_NETWORK_FILE_SUFFIX = ".net";
 
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = 84102596787648747L;
+        /** The Constant serialVersionUID. */
+        private static final long serialVersionUID = 84102596787648747L;
 
-	/** The pajek file. */
-	private PajekNetworkFile pajekFile;
+        /** Logger for this class. */
+        private static final Logger LOG = LoggerFactory.getLogger(PajekPanel.class);
+
+        /** The pajek file. */
+        private PajekNetworkFile pajekFile;
 
 	/** The frame. */
 	private JFrame frame;
@@ -197,16 +202,15 @@ class PajekPanel extends javax.swing.JPanel implements Observer {
 	 * @param evt
 	 *            the evt
 	 */
-	private void csvButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_csvButtonActionPerformed
-		try {
-			this.csvExporter.exportTableToCSV(this.resultsMatrixTable, this.pajekHeader);
-		}
-		catch (final UNISoNException e) {
-			// TODO Auto-generated catch block
-
-			e.printStackTrace();
-		}
-	}// GEN-LAST:event_csvButtonActionPerformed
+        private void csvButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_csvButtonActionPerformed
+                try {
+                        this.csvExporter.exportTableToCSV(this.resultsMatrixTable, this.pajekHeader);
+                }
+                catch (final UNISoNException e) {
+                        LOG.error("Error exporting CSV", e);
+                        this.controller.getGui().showAlert("Error: " + e.getMessage());
+                }
+        }// GEN-LAST:event_csvButtonActionPerformed
 
 	public javax.swing.JTextArea getFilePreviewArea() {
 		return this.filePreviewArea;

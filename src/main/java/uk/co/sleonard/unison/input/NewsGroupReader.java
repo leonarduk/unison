@@ -6,7 +6,7 @@
  */
 package uk.co.sleonard.unison.input;
 
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNLogger;
@@ -18,9 +18,8 @@ import uk.co.sleonard.unison.UNISoNLogger;
  * @since v1.0.0
  *
  */
+@Slf4j
 public class NewsGroupReader implements UNISoNLogger {
-	/** The logger. */
-	private static Logger logger = Logger.getLogger("NewsGroupReader");
 
 	/** The client. */
 	NewsClient client;
@@ -51,7 +50,7 @@ public class NewsGroupReader implements UNISoNLogger {
 	 */
 	@Override
 	public void alert(final String message) {
-		NewsGroupReader.logger.warn(message);
+                log.warn(message);
 	}
 
 	public NewsClient getClient() {
@@ -124,7 +123,7 @@ public class NewsGroupReader implements UNISoNLogger {
 	 */
 	@Override
 	public void log(final String message) {
-		NewsGroupReader.logger.info(message);
+            log.info(message);
 	}
 
 	// public void startDownload(String newsgroup, Date toDate, Date fromDate)

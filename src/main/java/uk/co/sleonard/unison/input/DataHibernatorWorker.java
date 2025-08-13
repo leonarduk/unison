@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.hibernate.Session;
 
 import uk.co.sleonard.unison.UNISoNLogger;
@@ -27,8 +28,8 @@ import uk.co.sleonard.unison.datahandling.HibernateHelper;
  */
 public class DataHibernatorWorker extends SwingWorker {
 
-	/** The logger. */
-	private static Logger logger = Logger.getLogger("DataHibernatorWorker");
+        /** The logger. */
+        private static final Logger LOGGER = LoggerFactory.getLogger(DataHibernatorWorker.class);
 
 	/** The number of hibernators. */
 	private static int numberofHibernators = 20;
@@ -102,8 +103,7 @@ public class DataHibernatorWorker extends SwingWorker {
 		this.reader = reader;
 		this.queue = queue;
 		this.session = session2;
-		DataHibernatorWorker.logger
-		        .debug("Creating " + this.getClass() + " " + reader.getNumberOfMessages());
+                LOGGER.debug("Creating " + this.getClass() + " " + reader.getNumberOfMessages());
 		this.start();
 	}
 
@@ -114,8 +114,7 @@ public class DataHibernatorWorker extends SwingWorker {
 	 */
 	@Override
 	public Object construct() {
-		DataHibernatorWorker.logger
-		        .debug("construct : " + this.saveToDatabase + " queue " + this.queue.size());
+                LOGGER.debug("construct : " + this.saveToDatabase + " queue " + this.queue.size());
 
 		try {
 			// HAve one session per worker rather than per message
@@ -161,8 +160,7 @@ public class DataHibernatorWorker extends SwingWorker {
 
 			final NewsArticle article = this.pollForMessage(queue);
 			if (null != article) {
-				DataHibernatorWorker.logger
-				        .debug("Hibernating " + article.getArticleID() + " " + queue.size());
+                                LOGGER.debug("Hibernating " + article.getArticleID() + " " + queue.size());
 
 				if (this.helper.hibernateData(article, session)) {
 					this.reader.incrementMessagesStored();
@@ -179,7 +177,7 @@ public class DataHibernatorWorker extends SwingWorker {
 	 * Stop hibernating data.
 	 */
 	private void stopHibernatingData() {
-		DataHibernatorWorker.logger.warn("StopHibernatingData");
+                LOGGER.warn("StopHibernatingData");
 		this.saveToDatabase = false;
 	}
 }

@@ -11,7 +11,6 @@ import java.util.Set;
 import javax.swing.ListModel;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

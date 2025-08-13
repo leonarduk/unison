@@ -119,6 +119,18 @@ public class HeaderDownloadWorker extends SwingWorker {
 		return "Completed";
 	}
 
+	public NewsArticle convertMessageToNewsArticle(final int articleNumber, final String subject,
+	        final String from, final Date date, final String articleId, final String references)
+	                throws UNISoNException {
+		final String postingHost = null;
+		final String content = null;
+
+		final NewsArticle article = new NewsArticle(articleId, articleNumber, date, from, subject,
+		        references, content, this.newsgroup, postingHost);
+
+		return article;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *

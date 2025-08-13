@@ -1,6 +1,6 @@
 /**
  * NewsGroupReaderTest
- * 
+ *
  * @author ${author}
  * @since 30-May-2016
  */
@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNControllerFX;
 
 /**
  * The Class NewsGroupReaderTest.
@@ -33,7 +33,7 @@ public class NewsGroupReaderTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		final UNISoNController uniController = Mockito.mock(UNISoNController.class);
+		final UNISoNControllerFX uniController = Mockito.mock(UNISoNControllerFX.class);
 		this.newsGroup = new NewsGroupReader(uniController);
 	}
 

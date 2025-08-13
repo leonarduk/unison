@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.hsqldb.util.DatabaseManagerSwing;
 import org.junit.Assert;
 
@@ -28,10 +28,8 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
  * @since v1.0.0
  *
  */
+@Slf4j
 public class UNISoNCLI implements UNISoNLogger {
-
-	/** The logger. */
-	private static Logger logger = Logger.getLogger("UNISoNCLI");
 
 	/**
 	 * The main method.
@@ -48,7 +46,7 @@ public class UNISoNCLI implements UNISoNLogger {
 
 		for (final String arg : args) {
 			if (null != command) {
-				UNISoNCLI.logger.info("Run " + command + " with " + arg);
+                                log.info("Run " + command + " with " + arg);
 				try {
 					final String host = "";
 					main.handleCommand(command, arg, host);
@@ -59,7 +57,7 @@ public class UNISoNCLI implements UNISoNLogger {
 				}
 			}
 			else {
-				UNISoNCLI.logger.debug("arg: " + arg);
+                                log.debug("arg: " + arg);
 			}
 			try {
 				command = Command.valueOf(arg.toUpperCase());
@@ -69,7 +67,7 @@ public class UNISoNCLI implements UNISoNLogger {
 			}
 		}
 		if (null == command) {
-			UNISoNCLI.logger.fatal("No valid command found in args: " + Arrays.asList(args));
+                        log.error("No valid command found in args: {}", Arrays.asList(args));
 			System.exit(1);
 		}
 	};
@@ -87,7 +85,7 @@ public class UNISoNCLI implements UNISoNLogger {
 	 */
 	@Override
 	public void alert(final String message) {
-		UNISoNCLI.logger.warn(message);
+                log.warn(message);
 	}
 
 	/**
@@ -172,7 +170,7 @@ public class UNISoNCLI implements UNISoNLogger {
 	 */
 	@Override
 	public void log(final String message) {
-		UNISoNCLI.logger.info(message);
+            log.info(message);
 	}
 
 	/**
@@ -200,7 +198,7 @@ public class UNISoNCLI implements UNISoNLogger {
 			instance.quickDownload(listNewsgroups, fromDate, toDate, this, DownloadMode.BASIC);
 		}
 		catch (final UNISoNException e) {
-			UNISoNCLI.logger.fatal("Error downloading messages", e);
+                    log.error("Error downloading messages", e);
 		}
 		DatabaseManagerSwing.main(HibernateHelper.GUI_ARGS);
 

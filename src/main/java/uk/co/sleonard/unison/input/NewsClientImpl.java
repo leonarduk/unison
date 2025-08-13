@@ -17,7 +17,7 @@ import java.util.TreeSet;
 
 import org.apache.commons.net.nntp.NNTPClient;
 import org.apache.commons.net.nntp.NewsgroupInfo;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
@@ -29,10 +29,9 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
  * @since v1.0.0
  *
  */
+@Slf4j
 public class NewsClientImpl implements NewsClient {
 
-	/** The logger. */
-	private static Logger	logger	= Logger.getLogger("NewsClient");
 	/** The host. */
 	private String			host;
 
@@ -199,7 +198,7 @@ public class NewsClientImpl implements NewsClient {
 			this.connect(nntpserver);
 
 			final NewsgroupInfo[] groups = this.client.listNewsgroups(wildcard.toLowerCase());
-			NewsClientImpl.logger.info("Number of Groups matching " + wildcard + " on " + nntpserver
+                    log.info("Number of Groups matching " + wildcard + " on " + nntpserver
 			        + ": " + (null != groups ? groups.length : 0));
 			if (null != groups) {
 				for (final NewsgroupInfo element : groups) {
@@ -223,7 +222,7 @@ public class NewsClientImpl implements NewsClient {
                         return this.client.quit();
                 }
                 catch (final IOException e) {
-                        NewsClientImpl.logger.error("Error quitting NNTP client", e);
+                        log.error("Error quitting NNTP client", e);
                         throw e;
                 }
         }

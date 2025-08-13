@@ -5,7 +5,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -91,11 +95,47 @@ public class StringUtilsTest {
 	 * Test loadServerList
 	 */
 	@Test
-	public void testLoadServerList() {
-		String[] actual = StringUtils.loadServerList();
-		assertNotNull(actual);
-		assertTrue(actual.length > 0);
-	}
+        public void testLoadServerList() {
+                String[] actual = StringUtils.loadServerList();
+                assertNotNull(actual);
+                assertTrue(actual.length > 0);
+        }
+
+        /**
+         * Test loadServerList with an input stream.
+         *
+         * @throws IOException
+         *             if something goes wrong
+         */
+        @Test
+        public void testLoadServerListFromStream() throws IOException {
+                try (ByteArrayInputStream in = new ByteArrayInputStream(
+                                "servers=host1,host2".getBytes(StandardCharsets.UTF_8))) {
+                        String[] servers = StringUtils.loadServerList(in);
+                        assertEquals(2, servers.length);
+                        assertEquals("host1", servers[0]);
+                        assertEquals("host2", servers[1]);
+                }
+        }
+
+        /**
+         * Test loadServerList with a path.
+         *
+         * @throws IOException
+         *             if something goes wrong
+         */
+        @Test
+        public void testLoadServerListFromPath() throws IOException {
+                Path temp = Files.createTempFile("servers", ".properties");
+                Files.write(temp, "servers=a,b".getBytes(StandardCharsets.UTF_8));
+                try {
+                        String[] servers = StringUtils.loadServerList(temp);
+                        assertEquals(2, servers.length);
+                }
+                finally {
+                        Files.deleteIfExists(temp);
+                }
+        }
 
 	/**
 	 * Test stringToDate

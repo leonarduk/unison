@@ -169,8 +169,12 @@ public class NewsClientImpl implements NewsClient {
 
 	@Override
 	public boolean isConnected() {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			return (this.client != null) && this.client.isConnected();
+		}
+		catch (final NullPointerException e) {
+			return false;
+		}
 	}
 
 	/**

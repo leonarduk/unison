@@ -169,16 +169,20 @@ public class StringUtils {
 	 *            the delimiter
 	 * @return the string
 	 */
-	public static String join(final String[] strings, final String delimiter) {
-		final StringBuffer buf = new StringBuffer();
+       public static String join(final String[] strings, final String delimiter) {
+               if ((strings == null) || (strings.length == 0)) {
+                       return "";
+               }
+               final StringBuilder buf = new StringBuilder();
+               for (int i = 0; i < strings.length; i++) {
+                       if (i > 0) {
+                               buf.append(delimiter);
+                       }
+                       buf.append(strings[i]);
+               }
 
-		for (int i = 0; i < (strings.length - 1); i++) {
-			buf.append(strings[i] + delimiter);
-		}
-		buf.append(strings[strings.length - 1]);
-
-		return buf.toString();
-	}
+               return buf.toString();
+       }
 
 	/**
 	 * Read the properties file on src/main/resource and process to String Array.

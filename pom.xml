@@ -21,8 +21,8 @@
                 <commons-net>3.10.0</commons-net>
                 <freemarker.version>2.3.33</freemarker.version>
                 <commons-lang3.version>3.14.0</commons-lang3.version>
-                <hibernate-core.version>5.6.15.Final</hibernate-core.version>
-                <hibernate-tools.version>5.6.15.Final</hibernate-tools.version>
+                <hibernate-core.version>5.6.18.Final</hibernate-core.version>
+                <hibernate-tools.version>5.6.18.Final</hibernate-tools.version>
                 <hsqldb.version>2.7.2</hsqldb.version>
                 <jung.version>1.7.6</jung.version>
                 <oscache.version>2.4.1</oscache.version>

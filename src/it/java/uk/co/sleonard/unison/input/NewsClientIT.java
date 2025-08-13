@@ -33,6 +33,7 @@ import uk.co.sleonard.unison.utils.StringUtils;
  *
  */
 @Slf4j
+@Ignore("Requires network access")
 public class NewsClientIT {
 
 	public static BufferedReader downloadFirstMessage() throws IOException, UNISoNException {

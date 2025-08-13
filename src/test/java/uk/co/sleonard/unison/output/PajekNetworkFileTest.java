@@ -59,14 +59,15 @@ public class PajekNetworkFileTest {
 	/**
 	 * test addRelationship.
 	 */
-	@Test
-	public void testAddRelationship() {
-		final List<Relationship> links = new Vector<>();
-		Relationship link = this.file.addRelationship("Alf", "Bob", links);
-		System.out.println("Link1: " + link);
-		link = this.file.addRelationship("Alf", "Bob", links);
-		System.out.println("Link2: " + link);
-	}
+        @Test
+        public void testAddRelationship() {
+                final List<Relationship> links = new Vector<>();
+                Relationship link = this.file.addRelationship("Alf", "Bob", links);
+                Assert.assertEquals(1, link.getValue());
+                link = this.file.addRelationship("Alf", "Bob", links);
+                Assert.assertEquals(2, link.getValue());
+                Assert.assertEquals(1, links.size());
+        }
 
 	/**
 	 * test createDirectedLinks.

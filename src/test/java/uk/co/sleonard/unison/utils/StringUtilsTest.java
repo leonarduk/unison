@@ -92,10 +92,11 @@ public class StringUtilsTest {
 	}
 
 	/**
-	 * Test loadServerList
-	 */
-	@Test
+        * Test loadServerList
+        */
+        @Test
         public void testLoadServerList() {
+                assertNotNull(StringUtils.class.getClassLoader().getResource("servers.properties"));
                 String[] actual = StringUtils.loadServerList();
                 assertNotNull(actual);
                 assertTrue(actual.length > 0);

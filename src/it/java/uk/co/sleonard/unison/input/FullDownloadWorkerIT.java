@@ -26,12 +26,14 @@ public class FullDownloadWorkerIT {
 
 	@Before
 	public void setUp() throws Exception {
-		final String server = StringUtils.loadServerList()[0];
-		this.outQueue = HeaderDownloadWorkerIT.populateQueueWithOneRealMessage();
+                final String[] servers = StringUtils.loadServerList();
+                Assert.assertTrue("No servers configured", servers.length > 0);
+                final String server = servers[0];
+                this.outQueue = HeaderDownloadWorkerIT.populateQueueWithOneRealMessage();
 
-		final NewsClient newsClient = new NewsClientImpl();
-		this.worker = new FullDownloadWorker(server, this.outQueue, newsClient);
-	}
+                final NewsClient newsClient = new NewsClientImpl();
+                this.worker = new FullDownloadWorker(server, this.outQueue, newsClient);
+        }
 
 	@Test
 	public final void testDownloadArticleHeaders() throws UNISoNException, InterruptedException {

@@ -90,7 +90,9 @@ public class HeaderDownloadWorkerTest {
 		final Date fromAndTo = Calendar.getInstance().getTime();
 		Assert.assertFalse(this.worker.isDownloading());
 
-		final String server = StringUtils.loadServerList()[0];
+                final String[] servers = StringUtils.loadServerList();
+                Assert.assertTrue("No servers configured", servers.length > 0);
+                final String server = servers[0];
 
 		this.worker.initialise(ngr, 0, 1, server, "newsgroup", uniLog, DownloadMode.ALL, fromAndTo,
 		        fromAndTo);

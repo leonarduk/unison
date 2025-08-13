@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 
 import uk.co.sleonard.unison.datahandling.DAO.Location;
@@ -27,10 +27,8 @@ import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
  * @since v1.0.0
  *
  */
+@Slf4j
 public class DataQuery {
-
-	/** The logger. */
-	private static Logger logger = Logger.getLogger("DataQuery");
 
 	/** The helper. */
 	private final HibernateHelper helper;
@@ -59,7 +57,7 @@ public class DataQuery {
 	 */
 	private StringBuffer addWhereClause(final StringBuffer sqlBuffer,
 	        final Vector<String> whereClauses) {
-		DataQuery.logger.debug("addWhereClause");
+		log.debug("addWhereClause");
 
 		if (whereClauses.size() > 0) {
 			sqlBuffer.append(" WHERE " + whereClauses.get(0));
@@ -113,7 +111,7 @@ public class DataQuery {
 	 * @return the message ids string
 	 */
 	StringBuffer getMessageIdsString(final Vector<Message> users) {
-		DataQuery.logger.debug("getMessageIdsString");
+		log.debug("getMessageIdsString");
 
 		final StringBuffer buf = new StringBuffer();
 		if ((users != null) && (users.size() > 0)) {
@@ -152,7 +150,7 @@ public class DataQuery {
 	        final Vector<UsenetUser> users, final Session session, final Date fromDate,
 	        final Date toDate, final boolean filtered, final List<NewsGroup> newsgroups,
 	        final Set<String> countries) {
-		DataQuery.logger.debug("getMessages");
+		log.debug("getMessages");
 
 		StringBuffer sqlBuffer = this.getBaseQuery(Message.class);
 		sqlBuffer.append(" as message ");
@@ -228,7 +226,7 @@ public class DataQuery {
 	 * @return the usenet user ids string
 	 */
 	StringBuffer getUsenetUserIdsString(final Vector<UsenetUser> users) {
-		DataQuery.logger.debug("getUsenetUserIdsString");
+		log.debug("getUsenetUserIdsString");
 
 		final StringBuffer buf = new StringBuffer();
 		if ((users != null) && (users.size() > 0)) {

@@ -13,7 +13,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +34,6 @@ import uk.co.sleonard.unison.utils.StringUtils;
  */
 public class HeaderDownloadWorkerTest {
 
-	private static Logger			logger	= Logger.getLogger(HeaderDownloadWorkerTest.class);
 	private HeaderDownloadWorker	worker;
 
 	/**

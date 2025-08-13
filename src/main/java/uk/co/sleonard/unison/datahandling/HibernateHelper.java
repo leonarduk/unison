@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
@@ -30,7 +31,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.MappingException;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -582,7 +583,7 @@ public class HibernateHelper {
         final Query query = session
                 .createQuery("from " + NewsGroup.class.getName() + " where fullname=?");
 
-        final NewsGroup group = (NewsGroup) query.setString(0, groupName).uniqueResult();
+        final NewsGroup group = (NewsGroup) query.setParameter(0, groupName).uniqueResult();
         return group;
     }
 
@@ -703,12 +704,11 @@ public class HibernateHelper {
      * @return the vector
      */
     @SuppressWarnings("unchecked")
-    <T> Vector<T> runQuery(final Query query, final Class<T> type) {
-        log.debug("runSQL: " + query);
-        // TODO create prepared statements
-        Vector<?> returnVal = null;
+    <T> Vector<T> runQuery(final Query<T> query) {
+        log.debug("runSQL: " + query.getQueryString());
+        Vector<T> returnVal = new Vector<>();
         try {
-            returnVal = new Vector<T>(query.list());
+            returnVal.addAll(query.getResultList());
         }
         catch (final GenericJDBCException dbe) {
             throw dbe;
@@ -716,10 +716,7 @@ public class HibernateHelper {
         catch (final HibernateException e) {
             log.error("Error fetching " + NewsGroup.class.getName(), e);
         }
-        if (null == returnVal) {
-            returnVal = new Vector<>();
-        }
-        return (Vector<T>) returnVal;
+        return returnVal;
     }
 
     /**
@@ -737,9 +734,32 @@ public class HibernateHelper {
      */
     public <T> Vector<T> runQuery(final String query, final Session hibernateSession,
                                   final Class<T> type) {
+        return this.runQuery(query, null, hibernateSession, type);
+    }
+
+    /**
+     * Run query with parameters.
+     *
+     * @param <T>
+     *            the generic type
+     * @param query
+     *            the query
+     * @param params
+     *            the parameters to bind
+     * @param hibernateSession
+     *            the hibernate session
+     * @param type
+     *            the type
+     * @return the vector
+     */
+    public <T> Vector<T> runQuery(final String query, final Map<String, Object> params,
+                                  final Session hibernateSession, final Class<T> type) {
         log.debug("runSQL: " + query);
-        final Query createQuery = hibernateSession.createQuery(query);
-        return this.runQuery(createQuery, type);
+        final Query<T> createQuery = hibernateSession.createQuery(query, type);
+        if (params != null) {
+            params.forEach(createQuery::setParameter);
+        }
+        return this.runQuery(createQuery);
     }
 
     /**
@@ -758,7 +778,7 @@ public class HibernateHelper {
     private <T> List<T> runSQLQuery(final String query, final Session session,
                                     final Class<T> type) {
         log.debug("runSQL: " + query);
-        return this.runQuery(session.createSQLQuery(query), type);
+        return this.runQuery(session.createNativeQuery(query, type));
     }
 
 

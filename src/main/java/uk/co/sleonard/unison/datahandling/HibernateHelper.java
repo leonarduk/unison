@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
+import java.util.Collections;
 
 import javax.naming.NamingException;
 import javax.swing.JOptionPane;
@@ -703,7 +704,6 @@ public class HibernateHelper {
      *            the type
      * @return the vector
      */
-    @SuppressWarnings("unchecked")
     <T> Vector<T> runQuery(final Query<T> query) {
         log.debug("runSQL: " + query.getQueryString());
         Vector<T> returnVal = new Vector<>();
@@ -734,7 +734,7 @@ public class HibernateHelper {
      */
     public <T> Vector<T> runQuery(final String query, final Session hibernateSession,
                                   final Class<T> type) {
-        return this.runQuery(query, null, hibernateSession, type);
+        return this.runQuery(query, Collections.emptyMap(), hibernateSession, type);
     }
 
     /**

@@ -275,6 +275,13 @@
 			<version>${oscache.version}</version>
 		</dependency>
 
+		<!-- gnumail lib not found. Then we checked that the package used is (javax.mail). 
+			So, we have added its dependency -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>${mail.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.swinglabs</groupId>
 			<artifactId>swing-layout</artifactId>

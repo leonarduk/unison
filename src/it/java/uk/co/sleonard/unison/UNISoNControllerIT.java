@@ -35,7 +35,7 @@ public class UNISoNControllerIT {
 		final ListModel<NewsGroup> model = this.controller.getAvailableGroupsModel(groups);
 		final NewsGroup firstGroup = model.getElementAt(0);
 		Assert.assertNotNull(firstGroup);
-		Assert.assertTrue(org.apache.commons.lang.StringUtils.isNotEmpty(firstGroup.getFullName()));
+                Assert.assertTrue(org.apache.commons.lang3.StringUtils.isNotEmpty(firstGroup.getFullName()));
 
 	}
 

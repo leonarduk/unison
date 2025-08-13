@@ -214,7 +214,8 @@ public class HibernateHelper {
      * @return the usenet user
      */
     private synchronized UsenetUser createUsenetUser(final NewsArticle article,
-                                                     final Session session, final Location locationInput, final String gender) {
+                                                     final Session session, final Location locationInput, final String gender)
+            throws UNISoNException {
         Location location = locationInput;
         // Add location details if got all details
         if (article.isFullHeader()) {
@@ -407,11 +408,20 @@ public class HibernateHelper {
      * @return the usenet user
      */
     private synchronized UsenetUser findOrCreateUsenetUser(final NewsArticle article,
-                                                           final Session session, final String gender) {
-        // Need to create a user to get the correctly formatted email
-        // for the key
-        final EmailAddress emailAddress = UsenetUserHelper.parseFromField(article);
-        UsenetUser poster = this.findUsenetUser(article, session);
+                                                           final Session session, final String gender)
+            throws UNISoNException {
+        EmailAddress emailAddress;
+        try {
+            emailAddress = UsenetUserHelper.parseFromField(article);
+        }
+        catch (final IllegalArgumentException e) {
+            throw new UNISoNException("Failed to parse From field: " + article.getFrom(), e);
+        }
+        if ((emailAddress == null) || (emailAddress.getEmail() == null)) {
+            throw new UNISoNException(
+                    "Missing email address in From field: " + article.getFrom());
+        }
+        UsenetUser poster = this.findUsenetUser(emailAddress, session);
 
         if (null == poster) {
             poster = new UsenetUser(emailAddress.getName(), emailAddress.getEmail(),
@@ -421,8 +431,11 @@ public class HibernateHelper {
         return poster;
     }
 
-    synchronized UsenetUser findUsenetUser(final NewsArticle article, final Session session) {
-        final EmailAddress emailAddress = UsenetUserHelper.parseFromField(article);
+    synchronized UsenetUser findUsenetUser(final EmailAddress emailAddress,
+            final Session session) {
+        if ((emailAddress == null) || (emailAddress.getEmail() == null)) {
+            return null;
+        }
         return (UsenetUser) this.findByKey(emailAddress.getEmail(), session, UsenetUser.class);
     }
 

@@ -33,7 +33,8 @@ public class HibernateHelperIT {
 		Assert.assertNotNull(article);
 		// Assert.assertNotNull(helper.findUsenetUser(article, session));
 //		Assert.assertTrue(helper.hibernateData(article, session));
-		final UsenetUser user = helper.findUsenetUser(article, session);
+                final UsenetUser user = helper
+                        .findUsenetUser(UsenetUserHelper.parseFromField(article), session);
 //		Assert.assertNotNull(user);
 //		final Message message = helper.createMessage(article, null, user);
 //		final Message findMessage = helper.findMessage(message, session);

@@ -21,54 +21,58 @@ import uk.co.sleonard.unison.input.NewsArticle;
 @Slf4j
 class UsenetUserHelper {
 
-	/**
-	 * Augment data and create user.
-	 *
-	 * @param name
-	 *            the name
-	 * @param email
-	 *            the email
-	 * @param gender
-	 *            the gender
-	 * @param ipAddress
-	 *            the ip address
-	 * @return the email address
-	 */
-	private static EmailAddress augmentDataAndCreateUser(final String nameInput,
-	        final String emailInput, final String gender, final String ipAddressInput) {
-		EmailAddress emailAddress = null;
-		String name = nameInput;
-		String email = emailInput;
-		String ipAddress = ipAddressInput;
-		if ((null == ipAddress) || ipAddress.equals("")) {
-			ipAddress = "UNKNOWN";
-		}
+        /**
+         * Augments data and creates a user. Either {@code name} or {@code email} must be
+         * provided; otherwise an {@link IllegalArgumentException} is thrown.
+         *
+         * @param name
+         *            the name
+         * @param email
+         *            the email
+         * @param gender
+         *            the gender
+         * @param ipAddress
+         *            the ip address
+         * @return the email address
+         * @throws IllegalArgumentException
+         *             if both {@code name} and {@code email} are {@code null} or empty
+         */
+        private static EmailAddress augmentDataAndCreateUser(final String nameInput,
+                final String emailInput, final String gender, final String ipAddressInput) {
+                EmailAddress emailAddress = null;
+                String name = nameInput;
+                String email = emailInput;
+                String ipAddress = ipAddressInput;
+                if ((null == ipAddress) || ipAddress.equals("")) {
+                        ipAddress = "UNKNOWN";
+                }
 
-		// TODO throw exception here instead?
-		// can only create if have either name or email
-		if ((null != email) || (null != name)) {
-			// create name from email if missing
-			if ((null == name) || name.equals("")) {
-				// if just email address
-				final int atIndex = email.indexOf("@");
-				if (atIndex > -1) {
-					name = email.substring(0, atIndex).trim();
-				}
-				else {
-					name = email.trim();
-					email = null;
-				}
-			}
-			// create email from name and ipAddress if missing
-			if ((null == email) || email.equals("")) {
-				email = name + "@" + ipAddress;
-			}
+                if (((name == null) || name.trim().isEmpty())
+                        && ((email == null) || email.trim().isEmpty())) {
+                        throw new IllegalArgumentException("Either name or email must be provided");
+                }
 
-			emailAddress = new EmailAddress(name, email, ipAddress);
-		}
-		return emailAddress;
+                // create name from email if missing
+                if ((null == name) || name.trim().isEmpty()) {
+                        // if just email address
+                        final int atIndex = email.indexOf("@");
+                        if (atIndex > -1) {
+                                name = email.substring(0, atIndex).trim();
+                        }
+                        else {
+                                name = email.trim();
+                                email = null;
+                        }
+                }
+                // create email from name and ipAddress if missing
+                if ((null == email) || email.trim().isEmpty()) {
+                        email = name + "@" + ipAddress;
+                }
 
-	}
+                emailAddress = new EmailAddress(name, email, ipAddress);
+                return emailAddress;
+
+        }
 
 	/**
 	 * Creates the user by removing brackets.
@@ -92,50 +96,53 @@ class UsenetUserHelper {
 		final String gender = null;
 		EmailAddress emailAddress = null;
 
-		try {
-			// if in format "name" <email@domain.com>
-			final int leftBracket = emailString.indexOf(leftBracketString);
-			int rightBracket = emailString.lastIndexOf(rightBracketString);
-			if (leftBracket > -1) {
-				if (rightBracket < 0) {
-					rightBracket = emailString.length();
-				}
-				final String inBrackets = emailString.substring(leftBracket + 1, rightBracket);
-				String outsideBrackets = null;
+                try {
+                        // if in format "name" <email@domain.com>
+                        final int leftBracket = emailString.indexOf(leftBracketString);
+                        int rightBracket = emailString.lastIndexOf(rightBracketString);
+                        if (leftBracket > -1) {
+                                if (rightBracket < 0) {
+                                        rightBracket = emailString.length();
+                                }
+                                final String inBrackets = emailString.substring(leftBracket + 1, rightBracket);
+                                String outsideBrackets = null;
 
-				// if email is first, then take name from after it
-				if (leftBracket == 0) {
-					outsideBrackets = emailString.substring(rightBracket + 1).trim();
-				}
-				else {
-					outsideBrackets = emailString.substring(0, leftBracket).trim();
-				}
+                                // if email is first, then take name from after it
+                                if (leftBracket == 0) {
+                                        outsideBrackets = emailString.substring(rightBracket + 1).trim();
+                                }
+                                else {
+                                        outsideBrackets = emailString.substring(0, leftBracket).trim();
+                                }
 
-				int atIndex = inBrackets.indexOf("@");
-				if (atIndex > -1) {
-					email = inBrackets;
-					name = outsideBrackets;
-				}
-				else {
-					atIndex = outsideBrackets.indexOf("@");
-					if (atIndex > -1) {
-						email = outsideBrackets;
-						name = inBrackets;
-					}
-				}
+                                int atIndex = inBrackets.indexOf("@");
+                                if (atIndex > -1) {
+                                        email = inBrackets;
+                                        name = outsideBrackets;
+                                }
+                                else {
+                                        atIndex = outsideBrackets.indexOf("@");
+                                        if (atIndex > -1) {
+                                                email = outsideBrackets;
+                                                name = inBrackets;
+                                        }
+                                }
 
-				emailAddress = UsenetUserHelper.augmentDataAndCreateUser(name, email, gender,
-				        ipAddress);
-			}
-		}
-		catch (final Exception e) {
-			log
-			        .warn("Couldn't parse " + emailString + " so using it for name and email", e);
-			emailAddress = new EmailAddress(emailString, emailString, ipAddress);
+                                emailAddress = UsenetUserHelper.augmentDataAndCreateUser(name, email, gender,
+                                        ipAddress);
+                        }
+                }
+                catch (final IllegalArgumentException e) {
+                        log.debug("Cannot create user for '{}' : {}", emailString, e.getMessage());
+                }
+                catch (final Exception e) {
+                        log
+                                .warn("Couldn't parse " + emailString + " so using it for name and email", e);
+                        emailAddress = new EmailAddress(emailString, emailString, ipAddress);
 
-		}
-		return emailAddress;
-	}
+                }
+                return emailAddress;
+        }
 
 	static EmailAddress parseFromField(final NewsArticle article) {
 		return UsenetUserHelper.parseFromField(article.getFrom(), article.getPostingHost());

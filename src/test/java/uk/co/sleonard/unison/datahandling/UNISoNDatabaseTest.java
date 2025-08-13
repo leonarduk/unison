@@ -13,7 +13,7 @@ import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import uk.co.sleonard.unison.NewsGroupFilter;
@@ -50,8 +50,8 @@ public class UNISoNDatabaseTest {
 		        new UsenetUser("poster", "poster@email.com", "127.0.0.1", null, null),
 		        new Topic("topic", null), null, null, messageBody);
 		messages.add(msg);
-		Mockito.when(this.helper2.runQuery(Matchers.anyString(), Matchers.any(Session.class),
-		        Matchers.any(Class.class))).thenReturn(messages);
+                Mockito.when(this.helper2.runQuery(ArgumentMatchers.anyString(), ArgumentMatchers.any(Session.class),
+                        ArgumentMatchers.any(Class.class))).thenReturn(messages);
 		this.database.getMessages(topic, this.session2);
 	}
 

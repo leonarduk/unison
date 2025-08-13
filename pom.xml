@@ -12,8 +12,8 @@
 		<slf4j-log4j12.version>1.7.36</slf4j-log4j12.version>
 		<junit.version>4.13.2</junit.version>
 		<java.version>17</java.version>
-		<powermock.version>1.6.5</powermock.version>
-		<mockito.version>1.10.19</mockito.version>
+                <powermock.version>2.0.9</powermock.version>
+                <mockito.version>5.11.0</mockito.version>
 		<javax.mail.version>1.4</javax.mail.version>
 		<maven-assembly-plugin.version>2.2-beta-4
 		</maven-assembly-plugin.version>
@@ -122,17 +122,18 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.3</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
-			</plugin>
+                        <plugin>
+                                <groupId>org.sonatype.plugins</groupId>
+                                <artifactId>nexus-staging-maven-plugin</artifactId>
+                                <version>1.6.3</version>
+                                <!-- extensions set to false to avoid plugin resolution during tests -->
+                                <extensions>false</extensions>
+                                <configuration>
+                                        <serverId>ossrh</serverId>
+                                        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                                </configuration>
+                        </plugin>
 			<plugin>
 				<!-- run the integration tests -->
 				<groupId>org.apache.maven.plugins</groupId>
@@ -401,12 +402,12 @@
 			<version>${mockito.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-api-mockito</artifactId>
-			<version>${powermock.version}</version>
-			<scope>test</scope>
-		</dependency>
+                <dependency>
+                        <groupId>org.powermock</groupId>
+                        <artifactId>powermock-api-mockito2</artifactId>
+                        <version>${powermock.version}</version>
+                        <scope>test</scope>
+                </dependency>
 
 		<dependency>
 			<groupId>org.powermock</groupId>

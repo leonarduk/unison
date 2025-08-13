@@ -16,7 +16,7 @@ import java.util.Vector;
 import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 
 import uk.co.sleonard.unison.datahandling.DataQuery;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
@@ -98,8 +98,8 @@ public class DataQueryTest {
 		countries.add("Brazil");
 		Session session = mock(Session.class);
 		boolean filtered = true;
-		when(this.helper.runQuery(Matchers.anyString(), Matchers.any(Session.class),
-		        Matchers.<Class<Message>> any())).thenReturn(messages);
+                when(this.helper.runQuery(ArgumentMatchers.anyString(), ArgumentMatchers.any(Session.class),
+                        ArgumentMatchers.<Class<Message>> any())).thenReturn(messages);
 		Vector<Message> actual = this.dataQuery.getMessages(messages, users, session, date, date,
 		        filtered, news, countries); // If
 		                                    // filtered

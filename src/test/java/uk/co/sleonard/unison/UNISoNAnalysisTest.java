@@ -17,7 +17,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
@@ -72,7 +72,7 @@ public class UNISoNAnalysisTest {
 	@Test
 	public final void testGetTopGroupsVector() {
 		final SQLQuery query = Mockito.mock(SQLQuery.class);
-		Mockito.when(this.session.createSQLQuery(Matchers.anyString())).thenReturn(query);
+                Mockito.when(this.session.createSQLQuery(ArgumentMatchers.anyString())).thenReturn(query);
 		this.analysis.getTopGroupsVector();
 	}
 
@@ -83,9 +83,9 @@ public class UNISoNAnalysisTest {
 		value.add(new Object[] { "name", Integer.valueOf(1) });
 		Mockito.when(query.list()).thenReturn(value);
 		final Vector<NewsGroup> posters = new Vector<>();
-		Mockito.when(this.helper.runQuery(Matchers.anyString(), Matchers.any(Session.class),
-		        Matchers.any(Class.class))).thenReturn(posters);
-		Mockito.when(this.session.createSQLQuery(Matchers.anyString())).thenReturn(query);
+                Mockito.when(this.helper.runQuery(ArgumentMatchers.anyString(), ArgumentMatchers.any(Session.class),
+                        ArgumentMatchers.any(Class.class))).thenReturn(posters);
+                Mockito.when(this.session.createSQLQuery(ArgumentMatchers.anyString())).thenReturn(query);
 		this.analysis.getTopGroupsVector();
 	}
 

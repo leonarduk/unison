@@ -8,46 +8,26 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-     <slf4j.version>2.0.9</slf4j.version>
-     <slf4j-log4j12.version>2.0.9</slf4j-log4j12.version>
-     <log4j.version>1.2.17</log4j.version>
-     <logback.version>1.4.14</logback.version>
-		<junit.version>4.13.2</junit.version>
-		<java.version>17</java.version>
-     <powermock.version>2.0.9</powermock.version>
-     <mockito.version>5.11.0</mockito.version>
-		<javax.mail.version>1.4</javax.mail.version>
-		<maven-assembly-plugin.version>2.2-beta-4
-		</maven-assembly-plugin.version>
-		<jacoco.version>0.8.12</jacoco.version>
-		<jms.version>1.1</jms.version>
-		<javassist.version>3.30.2-GA</javassist.version>
-		<commons-net>3.10.0</commons-net>
-		<freemarker.version>2.3.32</freemarker.version>
-		<httpunit.version>1.7</httpunit.version>
-		<oro.version>2.0.8</oro.version>
-		<javax-activation.version>1.1.1</javax-activation.version>
-		<antlr.version>2.7.7</antlr.version>
-		<asm.version>1.5.3</asm.version>
-		<asm-attrs.version>1.5.3</asm-attrs.version>
-		<cglib.version>2.2.2</cglib.version>
-		<colt.version>1.2.0</colt.version>
-		<commons-collections.version>3.2.2</commons-collections.version>
-    <commons-lang3.version>3.14.0</commons-lang3.version>
-		<commons-logging.version>1.3.2</commons-logging.version>
-		<db-ojb.version>1.0.4-patch9</db-ojb.version>
-		<ehcache.version>3.10.8</ehcache.version>
-		<hibernate-core.version>5.1.17.Final</hibernate-core.version>
-		<hibernate-tools.version>3.6.2.Final</hibernate-tools.version>
-		<hsqldb.version>1.8.0.10</hsqldb.version>
-		<jdom.version>b9</jdom.version>
-		<jta.version>1.1</jta.version>
-		<jtidy.version>r8-20060801</jtidy.version>
-		<jung.version>1.7.6</jung.version>
-		<oscache.version>2.4.1</oscache.version>
-		<swing-layout.version>1.0.3</swing-layout.version>
-		<mail.version>1.4.7</mail.version>
-		<dom4j.version>1.6.1</dom4j.version>
+        <slf4j.version>2.0.13</slf4j.version>
+        <logback.version>1.5.6</logback.version>
+                <junit.version>4.13.2</junit.version>
+                <java.version>17</java.version>
+        <powermock.version>2.0.9</powermock.version>
+        <mockito.version>5.12.0</mockito.version>
+                <maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
+                <jacoco.version>0.8.12</jacoco.version>
+                <jms.version>1.1.1</jms.version>
+                <javassist.version>3.30.2-GA</javassist.version>
+                <commons-net>3.10.0</commons-net>
+                <freemarker.version>2.3.33</freemarker.version>
+                <commons-lang.version>2.6</commons-lang.version>
+                <hibernate-core.version>5.6.15.Final</hibernate-core.version>
+                <hibernate-tools.version>5.6.15.Final</hibernate-tools.version>
+                <hsqldb.version>2.7.2</hsqldb.version>
+                <jung.version>1.7.6</jung.version>
+                <oscache.version>2.4.1</oscache.version>
+                <swing-layout.version>1.0.4</swing-layout.version>
+                <mail.version>1.6.2</mail.version>
 	</properties>
 
 	<build>
@@ -207,25 +187,11 @@
 
 	<dependencies>
 
-                <!-- Caused by: java.lang.ClassNotFoundException: org.slf4j.impl.StaticLoggerBinder -->
                 <dependency>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-log4j12</artifactId>
-			<version>${slf4j-log4j12.version}</version>
-		</dependency>
-
-                <!-- 1.2.9 to 1.2.12 -->
-                <dependency>
-                        <groupId>log4j</groupId>
-                        <artifactId>log4j</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-net</groupId>
-			<artifactId>commons-net</artifactId>
-			<version>${commons-net}</version>
-		</dependency>
+                        <groupId>commons-net</groupId>
+                        <artifactId>commons-net</artifactId>
+                        <version>${commons-net}</version>
+                </dependency>
 		<dependency>
 			<groupId>javax.jms</groupId>
 			<artifactId>jms</artifactId>

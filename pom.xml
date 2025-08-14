@@ -29,7 +29,8 @@
                 <hsqldb.version>2.7.3</hsqldb.version>
                 <jung.version>1.7.6</jung.version>
                 <ehcache.version>3.10.8</ehcache.version>
-                <swing-layout.version>1.0.4</swing-layout.version>
+                <swing-layout.version>1.0.3</swing-layout.version>
+                <jakarta.mail.version>2.1.3</jakarta.mail.version>
                 <skipITs>true</skipITs>
         </properties>
         <dependencyManagement>

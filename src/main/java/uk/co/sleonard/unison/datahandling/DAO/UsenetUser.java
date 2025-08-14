@@ -71,14 +71,12 @@ public class UsenetUser implements java.io.Serializable {
         this.location = location;
     }
     public UsenetUser(final UsenetUser poster) {
-        new UsenetUserBuilder()
-                .email(poster.getEmail())
-                .id(poster.getId())
-                .location(poster.getLocation())
-                .name(poster.getName())
-                .gender(poster.getGender())
-                .ipaddress(poster.getIpaddress())
-                .build();
+        this.name = poster.getName();
+        this.email = poster.getEmail();
+        this.ipaddress = poster.getIpaddress();
+        this.gender = poster.getGender();
+        this.location = poster.getLocation();
+        this.id = poster.getId();
     }
     @Override
     public String toString() {

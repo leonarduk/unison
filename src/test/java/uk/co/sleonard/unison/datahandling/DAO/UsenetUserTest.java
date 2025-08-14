@@ -32,8 +32,8 @@ public class UsenetUserTest {
 	 * Test Constructor
 	 */
 	@Test
-	public void testConstructor() {
-		UsenetUser actual = null;
+        public void testConstructor() {
+                UsenetUser actual = null;
 		final String expected = "John";
 		final String expected2 = "john@java.com";
 		final String expected3 = "127.0.0.1";
@@ -44,8 +44,26 @@ public class UsenetUserTest {
 		Assert.assertEquals(expected2, actual.getEmail());
 		Assert.assertEquals(expected3, actual.getIpaddress());
 		Assert.assertEquals(expected4, actual.getGender());
-		Assert.assertEquals(expected5, actual.getLocation());
-	}
+                Assert.assertEquals(expected5, actual.getLocation());
+        }
+
+        /**
+         * Test copy constructor.
+         */
+        @Test
+        public void testCopyConstructor() {
+                final Location location = new Location();
+                final UsenetUser original = new UsenetUser("John", "john@java.com", "127.0.0.1", "Programming", location);
+                original.setId(123);
+
+                final UsenetUser copy = new UsenetUser(original);
+                Assert.assertEquals(original.getName(), copy.getName());
+                Assert.assertEquals(original.getEmail(), copy.getEmail());
+                Assert.assertEquals(original.getIpaddress(), copy.getIpaddress());
+                Assert.assertEquals(original.getGender(), copy.getGender());
+                Assert.assertEquals(original.getLocation(), copy.getLocation());
+                Assert.assertEquals(original.getId(), copy.getId());
+        }
 
 	/**
 	 * Test getEmail.

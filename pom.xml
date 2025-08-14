@@ -24,8 +24,8 @@
                 <maven-jxr-plugin.version>3.3.1</maven-jxr-plugin.version>
                 <webstart-maven-plugin.version>1.0.0</webstart-maven-plugin.version>
 
-                <hibernate-core.version>5.6.20.Final</hibernate-core.version>
-                <hibernate-tools.version>5.6.20.Final</hibernate-tools.version>
+                <hibernate-core.version>5.6.15.Final</hibernate-core.version>
+                <hibernate-tools.version>5.6.15.Final</hibernate-tools.version>
                 <hsqldb.version>2.7.3</hsqldb.version>
                 <jung.version>1.7.6</jung.version>
                 <ehcache.version>3.10.8</ehcache.version>

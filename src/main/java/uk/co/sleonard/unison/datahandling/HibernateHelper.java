@@ -21,6 +21,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
 import java.util.Collections;
+import java.util.EnumSet;
 
 import javax.naming.NamingException;
 import javax.swing.JOptionPane;
@@ -37,8 +38,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.exception.GenericJDBCException;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
+import org.hibernate.tool.schema.TargetType;
 import org.hsqldb.util.DatabaseManagerSwing;
 
 import uk.co.sleonard.unison.UNISoNException;
@@ -434,11 +440,16 @@ public class HibernateHelper {
         Configuration config;
         try {
             config = this.getHibernateConfig();
-            final Session session = this.getHibernateSession();
-            final Transaction tx = session.beginTransaction();
-            final SchemaExport sch = new SchemaExport(config);
-            sch.create(true, true);
-            tx.commit();
+            final StandardServiceRegistry standardServiceRegistry = new StandardServiceRegistryBuilder()
+                    .applySettings(config.getProperties())
+                    .build();
+
+            final Metadata metadata = new MetadataSources(standardServiceRegistry)
+                    .addAnnotatedClass(UsenetUser.class) // add all mapped classes as needed
+                    .buildMetadata();
+
+            final SchemaExport export = new SchemaExport();
+            export.create(EnumSet.of(TargetType.DATABASE), metadata);
         }
         catch (final Exception e) {
             e.printStackTrace();

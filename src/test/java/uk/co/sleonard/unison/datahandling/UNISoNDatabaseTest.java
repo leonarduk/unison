@@ -58,8 +58,8 @@ public class UNISoNDatabaseTest {
 		        new UsenetUser("poster", "poster@email.com", "127.0.0.1", null, null),
 		        new Topic("topic", null), null, null, messageBody);
 		messages.add(msg);
-                Mockito.when(this.helper2.runQuery(ArgumentMatchers.anyString(), ArgumentMatchers.any(Session.class),
-                        ArgumentMatchers.any(Class.class))).thenReturn(messages);
+               Mockito.when(this.helper2.runQuery(ArgumentMatchers.anyString(), ArgumentMatchers.nullable(Session.class),
+                       ArgumentMatchers.any(Class.class))).thenReturn(messages);
                 final Set<Message> result = this.database.getMessages(topic, this.session2);
                 Assert.assertEquals(1, result.size());
                 Assert.assertTrue(result.contains(msg));

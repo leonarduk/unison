@@ -62,7 +62,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>uk.co.sleonard.unison.gui.generated.DownloadNewsPanel
+                            <mainClass>uk.co.sleonard.unison.UnisonMain
                             </mainClass>
                         </manifest>
                     </archive>
@@ -84,7 +84,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>uk.co.sleonard.unison.gui.generated.DownloadNewsPanel
+                            <mainClass>uk.co.sleonard.unison.UnisonMain
                             </mainClass>
                         </manifest>
                     </archive>
@@ -481,7 +481,7 @@
 
                                 <!-- used to automatically identify the jar containing the main class. -->
                                 <!-- this is perhaps going to change -->
-                                <mainClass>uk.co.sleonard.unison.gui.generated.DownloadNewsPanel
+                                <mainClass>uk.co.sleonard.unison.UnisonMain
                                 </mainClass>
                             </jnlp>
 

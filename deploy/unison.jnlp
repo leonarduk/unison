@@ -10,7 +10,7 @@
         <!-- Application Resources -->
             <jar href="unison.jar" main="true" />
     </resources>
-    <application-desc main-class="uk.co.sleonard.unison.gui.generated.DownloadNewsPanel">
+    <application-desc main-class="uk.co.sleonard.unison.UnisonMain">
         <!-- Application Arguments -->
     </application-desc>
     <security><all-permissions/></security>

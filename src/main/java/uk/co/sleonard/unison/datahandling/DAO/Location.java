@@ -31,7 +31,7 @@ public class Location implements java.io.Serializable {
 	private String CountryCode;
 	private boolean Guessed;
 	private int id;
-	private List<IpAddress> IpAddresses = new ArrayList<>(0);
+        private List<IpAddress> ipAddresses = new ArrayList<>(0);
 	private List<UsenetUser> posters = new ArrayList<>(0);
 
 	public Location(final String city, final String country, final String countryCode,
@@ -41,8 +41,8 @@ public class Location implements java.io.Serializable {
 		this.Country = country;
 		this.CountryCode = countryCode;
 		this.Guessed = guessed;
-		this.posters = posters;
-		this.IpAddresses = ipAddresses;
+                this.posters = posters;
+                this.ipAddresses = ipAddresses;
 	}
 
 	/**

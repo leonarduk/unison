@@ -33,7 +33,7 @@
 				class="uk.co.sleonard.unison.datahandling.DAO.UsenetUser" />
 		</list>
 
-		<list name="IpAddresses" lazy="false" inverse="true"
+                <list name="ipAddresses" lazy="false" inverse="true"
 			table="LOCATION_IP">
 			<key column="LOCATION_ID" />
 			<index column="IP_ID" />

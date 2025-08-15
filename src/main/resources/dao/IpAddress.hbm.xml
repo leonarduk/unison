@@ -4,7 +4,7 @@
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="uk.co.sleonard.unison.datahandling.DAO">
-	<class name="IpAddress" table="IPADRESS">
+        <class name="IpAddress" table="IPADDRESS">
 		<meta attribute="class-description">
 			The  IP address
 		</meta>

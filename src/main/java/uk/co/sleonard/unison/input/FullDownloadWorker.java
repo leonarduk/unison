@@ -45,8 +45,11 @@ public class FullDownloadWorker extends SwingWorker {
         /** The download queue. */
         private static LinkedBlockingQueue<DownloadRequest> downloadQueue = new LinkedBlockingQueue<>();
 
-	/** The log. */
-	private static UNISoNLogger log;
+       /** The log. */
+       private static UNISoNLogger log;
+
+       /** The logger. */
+       private static final Logger LOGGER = LoggerFactory.getLogger(FullDownloadWorker.class);
 
 	/** The Constant downloaders. */
 	private final static ArrayList<FullDownloadWorker> downloaders = new ArrayList<>();
@@ -292,34 +295,40 @@ public class FullDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	NewsArticle downloadArticle(final DownloadRequest request) throws UNISoNException {
-		NewsArticle article = null;
-		try {
-			switch (request.getMode()) {
-				case HEADERS:
-					article = this.downloadHeader(request);
-					break;
-				case ALL:
-					article = this.downloadFullMessage(request);
-					break;
-				case BASIC:
-					break;
-				default:
-					break;
-			}
-		}
-		catch (final MalformedServerReplyException e) {
-			throw new UNISoNException("Failed to download message:" + e.getMessage(), e);
-		}
-		catch (final Throwable e) {
-			throw new UNISoNException("Failed to download message:", e);
-		}
+       NewsArticle downloadArticle(final DownloadRequest request) throws UNISoNException {
+               LOGGER.debug("Fetching article {}", request.getUsenetID());
+               NewsArticle article = null;
+               try {
+                       switch (request.getMode()) {
+                               case HEADERS:
+                                       article = this.downloadHeader(request);
+                                       break;
+                               case ALL:
+                                       article = this.downloadFullMessage(request);
+                                       break;
+                               case BASIC:
+                                       break;
+                               default:
+                                       break;
+                       }
+               }
+               catch (final MalformedServerReplyException e) {
+                       throw new UNISoNException("Failed to download message:" + e.getMessage(), e);
+               }
+               catch (final Throwable e) {
+                       throw new UNISoNException("Failed to download message:", e);
+               }
 
-		if (null == article) {
-			FullDownloadWorker.log.log("Skipped message " + request.getUsenetID());
-		}
-		return article;
-	}
+               if (null == article) {
+                       FullDownloadWorker.log.log("Skipped message " + request.getUsenetID());
+                       LOGGER.warn("Article {} returned null", request.getUsenetID());
+               }
+               else {
+                       LOGGER.debug("Retrieved article {} ({}) queue size {}", request.getUsenetID(),
+                                       article.getSubject(), FullDownloadWorker.downloadQueue.size());
+               }
+               return article;
+       }
 
 	/**
 	 * Download full message.
@@ -429,18 +438,23 @@ public class FullDownloadWorker extends SwingWorker {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	private boolean storeNextMessage(final LinkedBlockingQueue<NewsArticle> queue)
-	        throws UNISoNException {
-		final DownloadRequest request = this.pollQueue();
+       private boolean storeNextMessage(final LinkedBlockingQueue<NewsArticle> queue)
+               throws UNISoNException {
+               final DownloadRequest request = this.pollQueue();
 
-		final NewsArticle article = this.downloadArticle(request);
-		if (null != article) {
-			FullDownloadWorker.log.log("Got:" + article.getSubject() + " " + article.getFrom() + " "
-			        + article.getArticleID() + " to q: " + queue.size() + "[" + new Date());
+               final NewsArticle article = this.downloadArticle(request);
+               if (null != article) {
+                       LOGGER.debug("Retrieved article {} - subject '{}' queue size before add {}", request.getUsenetID(),
+                                       article.getSubject(), queue.size());
+                       FullDownloadWorker.log.log("Got:" + article.getSubject() + " " + article.getFrom() + " "
+                                       + article.getArticleID() + " to q: " + queue.size() + "[" + new Date());
 
-			queue.add(article);
-			return true;
-		}
-		return false;
-	}
+                       queue.add(article);
+                       LOGGER.debug("Queue size now {} remaining requests {}", queue.size(),
+                                       FullDownloadWorker.downloadQueue.size());
+                       return true;
+               }
+               LOGGER.warn("No article to store for {}", request.getUsenetID());
+               return false;
+       }
 }

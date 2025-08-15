@@ -191,9 +191,11 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 
 			this.switchFilter(this.filterToggle.isSelected());
 		}
-		catch (final UNISoNException e) {
-			this.controller.getGui().showAlert("Error :" + e.getMessage());
-		}
+                catch (final UNISoNException e) {
+                        if (this.controller.getGui() != null) {
+                                this.controller.getGui().showAlert("Error :" + e.getMessage());
+                        }
+                }
 	}
 
 	/**
@@ -238,8 +240,10 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 	 */
 	@Override
 	public void alert(final String message) {
-		this.log(message);
-		this.controller.getGui().showAlert(message);
+                this.log(message);
+                if (this.controller.getGui() != null) {
+                        this.controller.getGui().showAlert(message);
+                }
 	}
 
 	/**
@@ -339,9 +343,11 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 		try {
 			this.switchFilter(this.filterToggle.isSelected());
 		}
-		catch (final UNISoNException e) {
-			this.controller.getGui().showAlert("Error :" + e.getMessage());
-		}
+                catch (final UNISoNException e) {
+                        if (this.controller.getGui() != null) {
+                                this.controller.getGui().showAlert("Error :" + e.getMessage());
+                        }
+                }
 	}// GEN-LAST:event_filterToggleActionPerformed
 
 	/**

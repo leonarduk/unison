@@ -147,18 +147,20 @@ class PajekPanel extends javax.swing.JPanel implements Observer {
 		try {
 
 			this.frame = frame;
-			this.controller = UNISoNController.getInstance();
-			this.session = this.controller.helper().getHibernateSession();
+                        this.controller = UNISoNController.getInstance();
+                        this.session = this.controller.helper().getHibernateSession();
                         this.initComponents();
 
                         this.resultsMatrixTable.setEnabled(false);
                         this.getFilePreviewArea().setEditable(false);
-			this.previousRadio.setSelected(true);
-			this.refreshPajekMatrixTable();
-		}
-		catch (final UNISoNException e) {
-			this.controller.getGui().showAlert("Error: " + e.getMessage());
-		}
+                        this.previousRadio.setSelected(true);
+                        this.refreshPajekMatrixTable();
+                }
+                catch (final UNISoNException e) {
+                        if (this.controller.getGui() != null) {
+                                this.controller.getGui().showAlert("Error: " + e.getMessage());
+                        }
+                }
 
 	}
 
@@ -208,7 +210,9 @@ class PajekPanel extends javax.swing.JPanel implements Observer {
                 }
                 catch (final UNISoNException e) {
                         LOG.error("Error exporting CSV", e);
-                        this.controller.getGui().showAlert("Error: " + e.getMessage());
+                        if (this.controller.getGui() != null) {
+                                this.controller.getGui().showAlert("Error: " + e.getMessage());
+                        }
                 }
         }// GEN-LAST:event_csvButtonActionPerformed
 

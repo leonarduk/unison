@@ -447,10 +447,10 @@ public class HibernateHelper {
             final Metadata metadata = new MetadataSources(standardServiceRegistry)
                     .addAnnotatedClass(UsenetUser.class)
                     .addResource("dao/Location.hbm.xml")
+                    .addResource("dao/IpAddress.hbm.xml")
                     .addResource("dao/Message.hbm.xml")
                     .addResource("dao/NewsGroup.hbm.xml")
                     .addResource("dao/Topic.hbm.xml")
-                    .addResource("dao/IpAddress.hbm.xml")
                     .buildMetadata();
 
             final SchemaExport export = new SchemaExport();

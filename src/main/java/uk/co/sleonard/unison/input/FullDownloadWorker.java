@@ -48,9 +48,6 @@ public class FullDownloadWorker extends SwingWorker {
        /** The log. */
        private static UNISoNLogger log;
 
-       /** The logger. */
-       private static final Logger LOGGER = LoggerFactory.getLogger(FullDownloadWorker.class);
-
 	/** The Constant downloaders. */
 	private final static ArrayList<FullDownloadWorker> downloaders = new ArrayList<>();
 

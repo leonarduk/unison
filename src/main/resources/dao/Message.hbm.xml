@@ -11,14 +11,14 @@
 			<meta attribute="scope-set">protected</meta>
 			<generator class="native" />
 		</id>
-                <property name="dateCreated" type="date" not-null="true"
-                        column="DateCreated" />
+		<property name="dateCreated" type="date" not-null="true"
+			column="DateCreated" />
 
-                <property name="usenetMessageID" type="string" not-null="true"
-                        column="UsenetMessageID" />
+		<property name="usenetMessageID" type="string" not-null="true"
+			column="UsenetMessageID" />
 
-                <property name="subject" type="string" not-null="true"
-                        column="subject" />
+		<property name="subject" type="string" not-null="true"
+			column="subject" />
 		<many-to-one name="poster" column="USENETUSER_ID"
 			class="uk.co.sleonard.unison.datahandling.DAO.UsenetUser"
 			lazy="false" not-null="false" />
@@ -31,16 +31,16 @@
 				class="uk.co.sleonard.unison.datahandling.DAO.NewsGroup"
 				column="NEWSGROUP_ID" />
 		</set>
-                <property name="referencedMessages" type="string" not-null="false"
-                        column="referencedMessages" />
-                <property name="messageBody" type="binary" not-null="false"
-                        column="MessageBody" />
+		<property name="referencedMessages" type="string" not-null="false"
+			column="referencedMessages" />
+		<property name="messageBody" type="binary" not-null="false"
+			column="MessageBody" />
 
 	</class>
 	<query
 		name="uk.co.sleonard.unison.datahandling.DAO.Message.findByKey">
-                <![CDATA[ from uk.co.sleonard.unison.datahandling.DAO.Message as t
-                  where t.usenetMessageID = :key
-                  ]]>
+		<![CDATA[ from uk.co.sleonard.unison.datahandling.DAO.Message as t
+	          where t.usenetMessageID = :key
+	          ]]>
 	</query>
 </hibernate-mapping>

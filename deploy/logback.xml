@@ -7,6 +7,10 @@
 
   <logger name="org.hibernate" level="WARN"/>
 
+  <!-- Adjust the verbosity for input classes via UNISON_INPUT_LOG_LEVEL property -->
+  <!-- e.g. run with -DUNISON_INPUT_LOG_LEVEL=INFO to reduce output -->
+  <logger name="uk.co.sleonard.unison.input" level="${UNISON_INPUT_LOG_LEVEL:-DEBUG}"/>
+
   <root level="INFO">
     <appender-ref ref="CONSOLE" />
   </root>

@@ -7,11 +7,13 @@
 package uk.co.sleonard.unison.datahandling.DAO;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.commons.net.nntp.NewsgroupInfo;
 
 /**
@@ -21,7 +23,8 @@ import org.apache.commons.net.nntp.NewsgroupInfo;
  * @since Generated 11-Nov-2007 17:31:30
  *
  */
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class NewsGroup implements java.io.Serializable, Comparable<NewsGroup> {
@@ -89,13 +92,30 @@ private String fullName;
 	 *
 	 * @return true, if is last node
 	 */
-	public boolean isLastNode() {
-		return this.lastNode;
-	}
+        public boolean isLastNode() {
+                return this.lastNode;
+        }
 
-	@Override
-	public String toString() {
-		return this.getFullName() + "(" + this.getArticleCount() + ")";
-	}
+        @Override
+        public boolean equals(final Object obj) {
+                if (this == obj) {
+                        return true;
+                }
+                if (!(obj instanceof NewsGroup)) {
+                        return false;
+                }
+                final NewsGroup other = (NewsGroup) obj;
+                return this.id == other.id && Objects.equals(this.name, other.name);
+        }
+
+        @Override
+        public int hashCode() {
+                return Objects.hash(this.id, this.name);
+        }
+
+        @Override
+        public String toString() {
+                return this.getFullName() + "(" + this.getArticleCount() + ")";
+        }
 
 }

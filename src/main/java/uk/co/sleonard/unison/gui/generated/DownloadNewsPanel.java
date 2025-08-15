@@ -26,7 +26,7 @@ import uk.co.sleonard.unison.utils.StringUtils;
  *
  */
 @SuppressWarnings("rawtypes")
-class DownloadNewsPanel extends javax.swing.JPanel
+public class DownloadNewsPanel extends javax.swing.JPanel
         implements UNISoNLogger, Observer, StatusMonitor {
 
 	/** The Constant serialVersionUID. */
@@ -385,8 +385,8 @@ class DownloadNewsPanel extends javax.swing.JPanel
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(this.jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 193,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addContainerGap()))
-                                .addComponent(this.progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addContainerGap())
+                                .addComponent(this.progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
 
                 layout.linkSize(javax.swing.SwingConstants.HORIZONTAL,
                         new java.awt.Component[] { this.cancelButton, this.downloadButton, this.findButton,

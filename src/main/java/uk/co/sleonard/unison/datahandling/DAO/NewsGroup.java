@@ -105,12 +105,13 @@ private String fullName;
                         return false;
                 }
                 final NewsGroup other = (NewsGroup) obj;
-                return this.id == other.id && Objects.equals(this.name, other.name);
+                return this.id == other.id && Objects.equals(this.name, other.name)
+                                && Objects.equals(this.fullName, other.fullName);
         }
 
         @Override
         public int hashCode() {
-                return Objects.hash(this.id, this.name);
+                return Objects.hash(this.id, this.name, this.fullName);
         }
 
         @Override

@@ -1098,12 +1098,14 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 	 */
         private void topGroupsListValueChanged(final javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_topGroupsListValueChanged
                 if (!evt.getValueIsAdjusting()) {
-                        final GUIItem<ResultRow> selectedItem = this.topGroupsList.getSelectedValue();
-                        if ((null != selectedItem) && (selectedItem.getObject().getKey() instanceof NewsGroup)) {
-                                final NewsGroup group = (NewsGroup) selectedItem.getObject().getKey();
+                        final GUIItem<Object> selectedItem = this.topGroupsList.getSelectedValue();
+                        if ((null != selectedItem)) {
+							ResultRow selectedItemObject = (ResultRow) selectedItem.getObject();
+							if (selectedItemObject.getKey() instanceof NewsGroup group) {
                                 UNISoNController.getInstance().getFilter().setSelectedNewsgroup(group);
-                                this.notifySelectedNewsGroupObservers();
-                        }
+								this.notifySelectedNewsGroupObservers();
+							}
+						}
                 }
         }// GEN-LAST:event_topGroupsListValueChanged
 

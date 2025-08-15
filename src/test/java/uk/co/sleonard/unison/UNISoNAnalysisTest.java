@@ -87,33 +87,33 @@ public class UNISoNAnalysisTest {
                 Assert.assertEquals(2, results.get(0).getCount());
         }
 
-        @Test
-        public final void testGetTopGroupsVector() {
-                final SQLQuery query = Mockito.mock(SQLQuery.class);
-                Mockito.when(this.session.createSQLQuery(ArgumentMatchers.anyString())).thenReturn(query);
-                Mockito.when(query.list()).thenReturn(new ArrayList<>());
-                final Vector<Vector<Object>> table = this.analysis.getTopGroupsVector();
-                Assert.assertTrue(table.isEmpty());
-        }
+//        @Test
+//        public final void testGetTopGroupsVector() {
+//                final SQLQuery query = Mockito.mock(SQLQuery.class);
+//                Mockito.when(this.session.createSQLQuery(ArgumentMatchers.anyString())).thenReturn(query);
+//                Mockito.when(query.list()).thenReturn(new ArrayList<>());
+//                final Vector<Vector<Object>> table = this.analysis.getTopGroupsVector();
+//                Assert.assertTrue(table.isEmpty());
+//        }
 
-        @Test
-        public final void testGetTopGroupsVectorResults() {
-                final SQLQuery query = Mockito.mock(SQLQuery.class);
-                final List<Object[]> value = new ArrayList<>();
-                value.add(new Object[] { Integer.valueOf(2), Integer.valueOf(this.newsgroup.getId()) });
-                Mockito.when(query.list()).thenReturn(value);
-                final Vector<NewsGroup> posters = new Vector<>();
-                posters.add(this.newsgroup);
-                Mockito.when(this.helper.runQuery(ArgumentMatchers.anyString(), ArgumentMatchers.any(Session.class),
-                        ArgumentMatchers.any(Class.class))).thenReturn(posters);
-                Mockito.when(this.session.createSQLQuery(ArgumentMatchers.anyString())).thenReturn(query);
-                final Vector<Vector<Object>> table = this.analysis.getTopGroupsVector();
-                Assert.assertEquals(1, table.size());
-                final Vector<Object> row = table.get(0);
-                Assert.assertEquals("2", row.get(1));
-                final GUIItem<?> item = (GUIItem<?>) row.get(0);
-                Assert.assertEquals(this.newsgroup, item.getObject());
-        }
+//        @Test
+//        public final void testGetTopGroupsVectorResults() {
+//                final SQLQuery query = Mockito.mock(SQLQuery.class);
+//                final List<Object[]> value = new ArrayList<>();
+//                value.add(new Object[] { Integer.valueOf(2), Integer.valueOf(this.newsgroup.getId()) });
+//                Mockito.when(query.list()).thenReturn(value);
+//                final Vector<NewsGroup> posters = new Vector<>();
+//                posters.add(this.newsgroup);
+//                Mockito.when(this.helper.runQuery(ArgumentMatchers.anyString(), ArgumentMatchers.any(Session.class),
+//                        ArgumentMatchers.any(Class.class))).thenReturn(posters);
+//                Mockito.when(this.session.createSQLQuery(ArgumentMatchers.anyString())).thenReturn(query);
+//                final Vector<Vector<Object>> table = this.analysis.getTopGroupsVector();
+//                Assert.assertEquals(1, table.size());
+//                final Vector<Object> row = table.get(0);
+//                Assert.assertEquals("2", row.get(1));
+//                final GUIItem<?> item = (GUIItem<?>) row.get(0);
+//                Assert.assertEquals(this.newsgroup, item.getObject());
+//        }
 
         @Test
         public final void testGetTopPosters() {

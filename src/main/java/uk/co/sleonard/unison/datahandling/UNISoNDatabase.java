@@ -44,23 +44,35 @@ public class UNISoNDatabase extends Observable {
 	 *            the session
 	 * @return the messages
 	 */
-	public Set<Message> getMessages(final Topic topic, final Session session1) {
-		final String query = "from  Message  where topic_id = " + topic.getId();
-		final HashSet<Message> returnVal = new HashSet<>();
-		final List<Message> results = this.helper.runQuery(query, session1, Message.class);
-		for (final Message message1 : results) {
-			if (((null == this.filter.getSelectedMessages())
-			        || (this.filter.getSelectedMessages().size() == 0)
-			        || this.filter.getSelectedMessages().contains(message1))
-			        && ((null == this.filter.getSelectedPosters())
-			                || (this.filter.getSelectedPosters().size() == 0)
-			                || this.filter.getSelectedPosters().contains(message1.getPoster()))) {
-				returnVal.add(message1);
-			}
-		}
+        public Set<Message> getMessages(final Topic topic, final Session session1) {
+                final String query = "from  Message  where topic_id = " + topic.getId();
+                final HashSet<Message> returnVal = new HashSet<>();
+                List<Message> results = null;
+                try {
+                        results = this.helper.runQuery(query, session1, Message.class);
+                }
+                catch (final Exception e) {
+                        log.warn("Failed to run query {}", query, e);
+                        return returnVal;
+                }
 
-		return returnVal;
-	}
+                if ((results == null) || results.isEmpty()) {
+                        return returnVal;
+                }
+
+                for (final Message message1 : results) {
+                        if (((null == this.filter.getSelectedMessages())
+                                || (this.filter.getSelectedMessages().size() == 0)
+                                || this.filter.getSelectedMessages().contains(message1))
+                                && ((null == this.filter.getSelectedPosters())
+                                        || (this.filter.getSelectedPosters().size() == 0)
+                                        || this.filter.getSelectedPosters().contains(message1.getPoster()))) {
+                                returnVal.add(message1);
+                        }
+                }
+
+                return returnVal;
+        }
 
 	/*
 	 * (non-Javadoc)

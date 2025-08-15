@@ -19,6 +19,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.commons.net.MalformedServerReplyException;
 import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
@@ -37,8 +39,11 @@ import uk.co.sleonard.unison.utils.StringUtils;
  */
 public class FullDownloadWorker extends SwingWorker {
 
-	/** The download queue. */
-	private static LinkedBlockingQueue<DownloadRequest> downloadQueue = new LinkedBlockingQueue<>();
+        /** The logger. */
+        private static final Logger LOGGER = LoggerFactory.getLogger(FullDownloadWorker.class);
+
+        /** The download queue. */
+        private static LinkedBlockingQueue<DownloadRequest> downloadQueue = new LinkedBlockingQueue<>();
 
 	/** The log. */
 	private static UNISoNLogger log;
@@ -146,11 +151,11 @@ public class FullDownloadWorker extends SwingWorker {
 	 *
 	 * @see uk.co.sleonard.unison.input.SwingWorker#construct()
 	 */
-	@Override
-	public Object construct() {
-		System.out.println("construct");
+        @Override
+        public Object construct() {
+                LOGGER.debug("FullDownloadWorker construct called - starting worker");
 
-		try {
+                try {
 			while (this.download) {
 				while (FullDownloadWorker.downloadQueue.size() > 0) {
 					this.storeNextMessage(this.outQueue);
@@ -170,11 +175,11 @@ public class FullDownloadWorker extends SwingWorker {
                         if (this.controller.getGui() != null) {
                                 this.controller.getGui().showAlert("Error in download:" + e);
                         }
-                        e.printStackTrace();
+                        LOGGER.error("Error in download", e);
                         return "FAIL";
                 }
-		return "Completed";
-	}
+                return "Completed";
+        }
 
 	/**
 	 * Convert header string to article.
@@ -220,7 +225,7 @@ public class FullDownloadWorker extends SwingWorker {
 					value += "," + row;
 				}
 
-				// System.out.println("KEY: " + key + " ROW:" + row);
+                                // LOGGER.debug("KEY: {} ROW:{}", key, row);
 
 				// this is the message body
 				if (key.equalsIgnoreCase("X-Received-Date")) {
@@ -238,7 +243,7 @@ public class FullDownloadWorker extends SwingWorker {
 				headerFields.put(key.toUpperCase(), value);
 			}
 		}
-		// System.out.println("MAP:" + headerFields);
+                // LOGGER.debug("MAP:{}", headerFields);
 		final int messageNumber = -1;
 		final String references = headerFields.get("REFERENCES");
 		Date date;
@@ -331,15 +336,15 @@ public class FullDownloadWorker extends SwingWorker {
 	        throws IOException, UNISoNException {
 		try (Reader reader = this.client.retrieveArticle(request.getUsenetID());) {
 			NewsArticle article = null;
-			if (null != reader) {
-				article = this.convertReaderToArticle(reader);
-			}
-			else {
-				System.err.println("No message returned");
-			}
-			return article;
-		}
-	}
+                        if (null != reader) {
+                                article = this.convertReaderToArticle(reader);
+                        }
+                        else {
+                                LOGGER.warn("No message returned for {}", request.getUsenetID());
+                        }
+                        return article;
+                }
+        }
 
 	/**
 	 * Download header.
@@ -356,15 +361,15 @@ public class FullDownloadWorker extends SwingWorker {
 	        throws IOException, UNISoNException {
 		try (Reader reader = this.client.retrieveArticleHeader(request.getUsenetID());) {
 			NewsArticle article = null;
-			if (null != reader) {
-				article = this.convertReaderToArticle(reader);
-			}
-			else {
-				System.err.println("No message returned");
-			}
-			return article;
-		}
-	}
+                        if (null != reader) {
+                                article = this.convertReaderToArticle(reader);
+                        }
+                        else {
+                                LOGGER.warn("No message returned for {}", request.getUsenetID());
+                        }
+                        return article;
+                }
+        }
 
 	/*
 	 * (non-Javadoc)
@@ -402,17 +407,17 @@ public class FullDownloadWorker extends SwingWorker {
 		final BufferedReader bufReader = new BufferedReader(reader);
 
 		sb = new StringBuffer();
-		try {
-			temp = bufReader.readLine();
-			while (temp != null) {
-				sb.append(temp);
-				sb.append("\n");
-				temp = bufReader.readLine();
-			}
-		}
-		catch (final IOException e) {
-			e.printStackTrace();
-		}
+                try {
+                        temp = bufReader.readLine();
+                        while (temp != null) {
+                                sb.append(temp);
+                                sb.append("\n");
+                                temp = bufReader.readLine();
+                        }
+                }
+                catch (final IOException e) {
+                        LOGGER.error("Failed to read from reader", e);
+                }
 
 		return sb.toString();
 	}

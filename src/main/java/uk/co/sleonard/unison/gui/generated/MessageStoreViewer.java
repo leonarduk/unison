@@ -129,20 +129,20 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 	/** The todate label. */
 	private javax.swing.JLabel todateLabel;
 
-	/** The top countries list. */
-	private javax.swing.JList<GUIItem<Object>> topCountriesList;
+       /** The top countries list. */
+       private javax.swing.JList<GUIItem<ResultRow>> topCountriesList;
 
 	/** The top countries scroll pane. */
 	private javax.swing.JScrollPane topCountriesScrollPane;
 
-	/** The top groups list. */
-	private javax.swing.JList<GUIItem<Object>> topGroupsList;
+       /** The top groups list. */
+       private javax.swing.JList<GUIItem<ResultRow>> topGroupsList;
 
 	/** The top groups scroll pane. */
 	private javax.swing.JScrollPane topGroupsScrollPane;
 
-	/** The top posters list. */
-	private javax.swing.JList<GUIItem<Object>> topPostersList;
+       /** The top posters list. */
+       private javax.swing.JList<GUIItem<ResultRow>> topPostersList;
 
 	/** The top posters scroll pane. */
 	private javax.swing.JScrollPane topPostersScrollPane;
@@ -362,22 +362,24 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 	 *            the results
 	 * @return the list model
 	 */
-	private ListModel<GUIItem<Object>> getListModel(final List<ResultRow> results) {
-		final DefaultListModel<GUIItem<Object>> model = new DefaultListModel<>();
-		for (final ListIterator<ResultRow> iter = results.listIterator(); iter.hasNext();) {
-			final Object next = iter.next();
-			String name = next.toString();
-			if (next instanceof UsenetUser) {
-				name = ((UsenetUser) next).getName() + "<" + ((UsenetUser) next).getEmail() + ">";
-			}
-			else if (next instanceof Location) {
-				name = ((Location) next).getCountry();
-			}
+       private ListModel<GUIItem<ResultRow>> getListModel(final List<ResultRow> results) {
+               final DefaultListModel<GUIItem<ResultRow>> model = new DefaultListModel<>();
+               for (final ListIterator<ResultRow> iter = results.listIterator(); iter.hasNext();) {
+                       final ResultRow row = iter.next();
+                       final Object key = row.getKey();
+                       String name = (key == null) ? null : key.toString();
+                       if (key instanceof UsenetUser) {
+                               final UsenetUser user = (UsenetUser) key;
+                               name = user.getName() + "<" + user.getEmail() + ">";
+                       }
+                       else if (key instanceof Location) {
+                               name = ((Location) key).getCountry();
+                       }
 
-			model.addElement(new GUIItem<>(name, next));
-		}
-		return model;
-	}
+                       model.addElement(new GUIItem<>(name, row));
+               }
+               return model;
+       }
 
 	/**
 	 * Groups hierarchy value changed.
@@ -504,7 +506,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 		this.crosspostComboBox.addActionListener(
 		        evt -> MessageStoreViewer.this.crosspostComboBoxActionPerformed(evt));
 
-		this.topPostersList.setModel(new AbstractListModelExtension());
+               this.topPostersList.setModel(new DefaultListModel<>());
 		this.topPostersList.addListSelectionListener(
 		        evt -> MessageStoreViewer.this.topPostersListValueChanged(evt));
 
@@ -512,7 +514,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 
 		this.statsTabPane.addTab(" Posters", this.topPostersScrollPane);
 
-		this.topGroupsList.setModel(new AbstractListModelExtension2());
+               this.topGroupsList.setModel(new DefaultListModel<>());
 		this.topGroupsList.addListSelectionListener(
 		        evt -> MessageStoreViewer.this.topGroupsListValueChanged(evt));
 
@@ -520,19 +522,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 
 		this.statsTabPane.addTab("Groups", this.topGroupsScrollPane);
 
-		this.topCountriesList.setModel(new javax.swing.AbstractListModel() {
-			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-
-			@Override
-			public Object getElementAt(final int i) {
-				return this.strings[i];
-			}
-
-			@Override
-			public int getSize() {
-				return this.strings.length;
-			}
-		});
+               this.topCountriesList.setModel(new DefaultListModel<>());
 		this.topCountriesList.addListSelectionListener(
 		        evt -> MessageStoreViewer.this.topCountriesListValueChanged(evt));
 
@@ -1031,35 +1021,32 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 				final Date toDate = StringUtils.stringToDate(this.toDateField.getText());
 				controller.getFilter().setDates(fromDate, toDate);
 
-				final List<GUIItem<Object>> selectedCountries = this.topCountriesList
-				        .getSelectedValuesList();
-				final Set<String> countries = new HashSet<>();
-				for (final Object country : selectedCountries) {
-					final GUIItem<ResultRow> row = (GUIItem<ResultRow>) country;
-					final String selectedcountry = (String) row.getObject().getKey();
-					countries.add(selectedcountry);
-				}
-				controller.getFilter().setSelectedCountries(countries);
+                               final List<GUIItem<ResultRow>> selectedCountries = this.topCountriesList
+                                               .getSelectedValuesList();
+                               final Set<String> countries = new HashSet<>();
+                               for (final GUIItem<ResultRow> row : selectedCountries) {
+                                       final String selectedcountry = (String) row.getObject().getKey();
+                                       countries.add(selectedcountry);
+                               }
+                               controller.getFilter().setSelectedCountries(countries);
 
-				final List<GUIItem<Object>> selectedNewsgroups = this.topGroupsList
-				        .getSelectedValuesList();
-				final Vector<NewsGroup> groups = new Vector<>();
-				for (final Object group : selectedNewsgroups) {
-					final GUIItem<ResultRow> row = (GUIItem<ResultRow>) group;
-					final NewsGroup selectedgroup = (NewsGroup) row.getObject().getKey();
-					groups.add(selectedgroup);
-				}
-				controller.getFilter().setSelectedNewsgroups(groups);
+                               final List<GUIItem<ResultRow>> selectedNewsgroups = this.topGroupsList
+                                               .getSelectedValuesList();
+                               final Vector<NewsGroup> groups = new Vector<>();
+                               for (final GUIItem<ResultRow> row : selectedNewsgroups) {
+                                       final NewsGroup selectedgroup = (NewsGroup) row.getObject().getKey();
+                                       groups.add(selectedgroup);
+                               }
+                               controller.getFilter().setSelectedNewsgroups(groups);
 
-				final List<GUIItem<Object>> selectedPosters = this.topPostersList
-				        .getSelectedValuesList();
-				final Vector<UsenetUser> posters = new Vector<>();
-				for (final Object poster : selectedPosters) {
-					final GUIItem<ResultRow> row = (GUIItem<ResultRow>) poster;
-					final UsenetUser selectedUser = (UsenetUser) row.getObject().getKey();
-					posters.add(selectedUser);
-				}
-				controller.getFilter().setSelectedPosters(posters);
+                               final List<GUIItem<ResultRow>> selectedPosters = this.topPostersList
+                                               .getSelectedValuesList();
+                               final Vector<UsenetUser> posters = new Vector<>();
+                               for (final GUIItem<ResultRow> row : selectedPosters) {
+                                       final UsenetUser selectedUser = (UsenetUser) row.getObject().getKey();
+                                       posters.add(selectedUser);
+                               }
+                               controller.getFilter().setSelectedPosters(posters);
 				this.filterToggle.setText("Filtered");
 				this.filterToggle.setToolTipText("Click again to remove filter");
 				this.refreshButton.setEnabled(false);
@@ -1097,17 +1084,17 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 	 *            the evt
 	 */
         private void topGroupsListValueChanged(final javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_topGroupsListValueChanged
-                if (!evt.getValueIsAdjusting()) {
-                        final GUIItem<Object> selectedItem = this.topGroupsList.getSelectedValue();
-                        if ((null != selectedItem)) {
-							ResultRow selectedItemObject = (ResultRow) selectedItem.getObject();
-							if (selectedItemObject.getKey() instanceof NewsGroup group) {
-                                UNISoNController.getInstance().getFilter().setSelectedNewsgroup(group);
-								this.notifySelectedNewsGroupObservers();
-							}
-						}
-                }
-        }// GEN-LAST:event_topGroupsListValueChanged
+               if (!evt.getValueIsAdjusting()) {
+                       final GUIItem<ResultRow> selectedItem = this.topGroupsList.getSelectedValue();
+                       if (null != selectedItem) {
+                               final ResultRow selectedItemObject = selectedItem.getObject();
+                               if (selectedItemObject.getKey() instanceof NewsGroup group) {
+                                       UNISoNController.getInstance().getFilter().setSelectedNewsgroup(group);
+                                       this.notifySelectedNewsGroupObservers();
+                               }
+                       }
+               }
+       }// GEN-LAST:event_topGroupsListValueChanged
 
 	/**
 	 * Topics hierarchy value changed.
@@ -1151,37 +1138,5 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 		this.refreshGUIData();
 	}
 
-	private final class AbstractListModelExtension extends javax.swing.AbstractListModel {
-		String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-
-		@Override
-		public Object getElementAt(final int i) {
-			return this.strings[i];
-		}
-
-		@Override
-		public int getSize() {
-			return this.strings.length;
-		}
-	}
-
-	private final class AbstractListModelExtension2 extends javax.swing.AbstractListModel {
-		/**
-		 *
-		 */
-		private static final long	serialVersionUID	= 1L;
-		String[]					strings			= { "Item 1", "Item 2", "Item 3", "Item 4",
-		        "Item 5" };
-
-		@Override
-		public Object getElementAt(final int i) {
-			return this.strings[i];
-		}
-
-		@Override
-		public int getSize() {
-			return this.strings.length;
-		}
-	}
 
 }

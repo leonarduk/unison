@@ -47,9 +47,10 @@ public class UNISoNDatabase extends Observable {
         public Set<Message> getMessages(final Topic topic, final Session session1) {
                 final String query = "from  Message  where topic_id = " + topic.getId();
                 final HashSet<Message> returnVal = new HashSet<>();
+                final Session effective = (session1 != null) ? session1 : this.session;
                 List<Message> results = null;
                 try {
-                        results = this.helper.runQuery(query, session1, Message.class);
+                        results = this.helper.runQuery(query, effective, Message.class);
                 }
                 catch (final Exception e) {
                         log.warn("Failed to run query {}", query, e);

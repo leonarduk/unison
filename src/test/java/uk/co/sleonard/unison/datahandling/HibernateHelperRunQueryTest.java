@@ -28,6 +28,13 @@ public class HibernateHelperRunQueryTest {
         this.helper = new HibernateHelper(null);
         this.session = this.helper.getHibernateSession();
 
+        // Ensure a clean database state before seeding
+        this.session.beginTransaction();
+        this.session.createQuery("delete from Message").executeUpdate();
+        this.session.createQuery("delete from Topic").executeUpdate();
+        this.session.createQuery("delete from UsenetUser").executeUpdate();
+        this.session.getTransaction().commit();
+
         // Seed the in-memory database with a single message
         this.session.beginTransaction();
         UsenetUser poster = new UsenetUser("poster", "poster@example.com", "127.0.0.1", null, null);

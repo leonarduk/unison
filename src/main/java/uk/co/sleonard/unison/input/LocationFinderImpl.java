@@ -80,17 +80,16 @@ public class LocationFinderImpl implements LocationFinder {
 			final URLConnection request = url.openConnection();
 			request.connect();
 
-			// Convert to a JSON object to print data
-			final JsonParser jp = new JsonParser(); // from gson
-			final JsonElement root = jp
-			        .parse(new InputStreamReader((InputStream) request.getContent())); // Convert
-			                                                                           // the
-			                                                                           // input
-			                                                                           // stream
-			                                                                           // to
-			                                                                           // a
-			                                                                           // json
-			                                                                           // element
+                        // Convert to a JSON object to print data
+                        final JsonElement root = JsonParser
+                                        .parseReader(new InputStreamReader((InputStream) request.getContent())); // Convert
+                                                                                                                // the
+                                                                                                                // input
+                                                                                                                // stream
+                                                                                                                // to
+                                                                                                                // a
+                                                                                                                // json
+                                                                                                                // element
 			final JsonObject rootobj = root.getAsJsonObject(); // May be an array, may be an object.
 
 			final String city = rootobj.get("city").getAsString();

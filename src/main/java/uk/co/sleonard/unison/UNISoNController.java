@@ -80,12 +80,11 @@ public class UNISoNController {
 
 	private NewsClient client;
 
-	public static UNISoNController create(final JFrame frame, final DataHibernatorPool pool)
-	        throws UNISoNException {
-		UNISoNController.instance = new UNISoNController(pool);
-		UNISoNController.instance.setGui(new UNISoNGUI(frame));
-		return UNISoNController.instance;
-	}
+        public static UNISoNController create(final JFrame frame, final DataHibernatorPool pool)
+                throws UNISoNException {
+                UNISoNController.instance = new UNISoNController(frame, pool);
+                return UNISoNController.instance;
+        }
 	// private static UNISoNController instance;
 
 	/**
@@ -102,26 +101,30 @@ public class UNISoNController {
 	 *
 	 * @throws UNISoNException
 	 */
-	private UNISoNController(final DataHibernatorPool hibernatorPool) throws UNISoNException {
-		this.pool = hibernatorPool;
+        private UNISoNController(final JFrame frame, final DataHibernatorPool hibernatorPool)
+                throws UNISoNException {
+                this.pool = hibernatorPool;
+                this.gui = (frame != null) ? new UNISoNGUI(frame) : null;
 
-		this.messageQueue = new LinkedBlockingQueue<>();
-		this.helper = new HibernateHelper(this.gui);
-		try {
-			final Session hibernateSession = this.getHelper().getHibernateSession();
-			this.setSession(hibernateSession);
-			this.filter = new NewsGroupFilter(hibernateSession, this.helper);
-			this.analysis = new UNISoNAnalysis(this.filter, hibernateSession, this.helper);
-			this.database = new UNISoNDatabase(this.filter, hibernateSession, this.helper,
-			        new DataQuery(this.helper));
-		}
-		catch (final UNISoNException e) {
-			this.getGui().showAlert("Error:" + e.getMessage());
-			throw e;
-		}
+                this.messageQueue = new LinkedBlockingQueue<>();
+                this.helper = new HibernateHelper(this.gui);
+                try {
+                        final Session hibernateSession = this.getHelper().getHibernateSession();
+                        this.setSession(hibernateSession);
+                        this.filter = new NewsGroupFilter(hibernateSession, this.helper);
+                        this.analysis = new UNISoNAnalysis(this.filter, hibernateSession, this.helper);
+                        this.database = new UNISoNDatabase(this.filter, hibernateSession, this.helper,
+                                new DataQuery(this.helper));
+                }
+                catch (final UNISoNException e) {
+                        if (this.getGui() != null) {
+                                this.getGui().showAlert("Error:" + e.getMessage());
+                        }
+                        throw e;
+                }
 
-		this.nntpReader = new NewsGroupReader(this);
-	}
+                this.nntpReader = new NewsGroupReader(this);
+        }
 
 	public void cancel() {
 		this.getHeaderDownloader().fullstop();

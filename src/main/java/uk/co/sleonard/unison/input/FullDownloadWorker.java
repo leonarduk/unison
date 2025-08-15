@@ -166,11 +166,13 @@ public class FullDownloadWorker extends SwingWorker {
 		catch (@SuppressWarnings("unused") final InterruptedException e) {
 			return "Interrupted";
 		}
-		catch (final UNISoNException e) {
-			this.controller.getGui().showAlert("Error in download:" + e);
-			e.printStackTrace();
-			return "FAIL";
-		}
+                catch (final UNISoNException e) {
+                        if (this.controller.getGui() != null) {
+                                this.controller.getGui().showAlert("Error in download:" + e);
+                        }
+                        e.printStackTrace();
+                        return "FAIL";
+                }
 		return "Completed";
 	}
 

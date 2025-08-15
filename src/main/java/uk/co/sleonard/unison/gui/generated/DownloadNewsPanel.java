@@ -156,8 +156,10 @@ public class DownloadNewsPanel extends javax.swing.JPanel
 	 */
 	@Override
 	public void alert(final String message) {
-		this.log(message);
-		this.controller.getGui().showAlert(message);
+                this.log(message);
+                if (this.controller.getGui() != null) {
+                        this.controller.getGui().showAlert(message);
+                }
 	}
 
 	/**

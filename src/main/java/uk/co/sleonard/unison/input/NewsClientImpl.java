@@ -233,18 +233,24 @@ public class NewsClientImpl implements NewsClient {
 	 * @throws UNISoNException
 	 *             the UNI so n exception
 	 */
-	@Override
-	public void reconnect() throws UNISoNException {
-		// If it should be connected but has timed out
-		if (!this.isConnected()) {
-			try {
-				this.connect(this.host);
-			}
-			catch (final IOException e) {
-				throw new UNISoNException("Failed to connect", e);
-			}
-		}
-	}
+        @Override
+        public void reconnect() throws UNISoNException {
+                // If it should be connected but has timed out
+                if (!this.isConnected()) {
+                        try {
+                                this.connect(this.host);
+                        }
+                        catch (final SocketException e) {
+                                // preserve the original socket exception as the cause
+                                throw new UNISoNException("Failed to connect", e);
+                        }
+                        catch (final IOException e) {
+                                // retain the root cause of the IOException where possible
+                                final Throwable cause = (e.getCause() != null) ? e.getCause() : e;
+                                throw new UNISoNException("Failed to connect", cause);
+                        }
+                }
+        }
 
 	@Override
 	public Reader retrieveArticle(final String articleId) throws IOException {

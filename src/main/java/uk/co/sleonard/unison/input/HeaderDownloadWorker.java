@@ -333,15 +333,23 @@ public class HeaderDownloadWorker extends SwingWorker {
 					this.notifyObservers();
 					throw new UNISoNException("Download aborted");
 				}
-				// If told to pause or queue is getting a bit full wait
-				while (!this.downloading || (queue1.size() > 1000)) {
-					try {
-						Thread.sleep(1000);
-					}
-					catch (final InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
+                                // If told to pause or queue is getting a bit full wait
+                                boolean pausedForQueue = false;
+                                while (!this.downloading || (queue1.size() > 1000)) {
+                                        if ((queue1.size() > 1000) && !pausedForQueue) {
+                                                LOGGER.info("Pausing as queue size {} exceeds 1000", queue1.size());
+                                                pausedForQueue = true;
+                                        }
+                                        try {
+                                                Thread.sleep(1000);
+                                        }
+                                        catch (final InterruptedException e) {
+                                                e.printStackTrace();
+                                        }
+                                }
+                                if (pausedForQueue) {
+                                        LOGGER.info("Resuming processing; queue size {}", queue1.size());
+                                }
 
 				this.processMessage(queue1, line);
 				this.index++;
@@ -400,13 +408,16 @@ public class HeaderDownloadWorker extends SwingWorker {
 			this.skipped = 0;
 			this.kept = 0;
 
-			// fetch back 500 messages at a time
-			for (int i = this.startIndex; i < this.endIndex; i += 500) {
-				try (final Reader reader = this.newsReader.client.retrieveArticleInfo(
-				        Long.valueOf(i).longValue(), Long.valueOf(i + 500).longValue());) {
-					this.queueMessages(queue1, reader);
-				}
-			}
+                        // fetch back 500 messages at a time
+                        for (int i = this.startIndex; i < this.endIndex; i += 500) {
+                                final int batchEndIndex = Math.min(i + 499, this.endIndex);
+                                LOGGER.debug("Starting batch {}-{}", i, batchEndIndex);
+                                try (final Reader reader = this.newsReader.client.retrieveArticleInfo(
+                                        Long.valueOf(i).longValue(), Long.valueOf(i + 500).longValue());) {
+                                        this.queueMessages(queue1, reader);
+                                }
+                                LOGGER.debug("Finished batch {}-{}", i, batchEndIndex);
+                        }
 		}
 		catch (final IOException e1) {
 			this.getLog().alert("ERROR: " + e1);

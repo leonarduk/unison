@@ -4,7 +4,9 @@ import static org.junit.Assert.*;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Vector;
+import java.util.Date;
 
 import org.hibernate.Session;
 import org.junit.After;
@@ -13,6 +15,8 @@ import org.junit.Test;
 
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
+import uk.co.sleonard.unison.datahandling.DAO.Topic;
+import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 
 public class HibernateHelperRunQueryTest {
 
@@ -23,6 +27,17 @@ public class HibernateHelperRunQueryTest {
     public void setUp() throws UNISoNException {
         this.helper = new HibernateHelper(null);
         this.session = this.helper.getHibernateSession();
+
+        // Seed the in-memory database with a single message
+        this.session.beginTransaction();
+        UsenetUser poster = new UsenetUser("poster", "poster@example.com", "127.0.0.1", null, null);
+        this.session.save(poster);
+        Topic topic = new Topic("topic", new HashSet<>());
+        this.session.save(topic);
+        Message msg = new Message(new Date(), "msg-1", "Duke Nukem Hall of Shame (update)", poster, topic,
+                new HashSet<>(), null, null);
+        this.session.save(msg);
+        this.session.getTransaction().commit();
     }
 
     @After

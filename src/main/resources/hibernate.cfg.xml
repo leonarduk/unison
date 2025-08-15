@@ -7,9 +7,9 @@
 		<property name="hibernate.connection.driver_class">
 			org.hsqldb.jdbcDriver
 		</property>
-		<property name="hibernate.connection.url">
-			jdbc:hsqldb:file:src/main/resources/DB/projectDB
-		</property>
+                <property name="hibernate.connection.url">
+                        jdbc:hsqldb:mem:testdb
+                </property>
 		<property name="hibernate.connection.username">SA</property>
 		<property name="hibernate.dialect">
 			org.hibernate.dialect.HSQLDialect
@@ -24,11 +24,14 @@
 			false
 		</property>
 
-		<!-- JDBC connection pool (use the built-in) -->
-		<property name="hibernate.connection.pool_size">20</property>
+                <!-- JDBC connection pool (use the built-in) -->
+                <property name="hibernate.connection.pool_size">20</property>
 
-		<!-- Echo all executed SQL to stdout -->
-		<property name="hibernate.show_sql">false</property>
+                <!-- Create schema for tests on startup -->
+                <property name="hibernate.hbm2ddl.auto">create</property>
+
+                <!-- Echo all executed SQL to stdout -->
+                <property name="hibernate.show_sql">false</property>
 		<mapping resource="dao/Topic.hbm.xml" />
 		<mapping resource="dao/NewsGroup.hbm.xml" />
                 <mapping resource="dao/Message.hbm.xml" />

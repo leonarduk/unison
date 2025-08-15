@@ -237,6 +237,9 @@ public class NewsClientImpl implements NewsClient {
         public void reconnect() throws UNISoNException {
                 // If it should be connected but has timed out
                 if (!this.isConnected()) {
+                        if (this.host == null) {
+                                throw new UNISoNException("No host specified");
+                        }
                         try {
                                 this.connect(this.host);
                         }

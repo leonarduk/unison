@@ -10,6 +10,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
+import lombok.extern.slf4j.Slf4j;
+
 import uk.co.sleonard.unison.StatusMonitor;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNLogger;
@@ -25,6 +27,7 @@ import uk.co.sleonard.unison.utils.StringUtils;
  * @since v1.0.0
  *
  */
+@Slf4j
 @SuppressWarnings("rawtypes")
 public class DownloadNewsPanel extends javax.swing.JPanel
         implements UNISoNLogger, Observer, StatusMonitor {
@@ -149,18 +152,20 @@ public class DownloadNewsPanel extends javax.swing.JPanel
 
         }
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see uk.co.sleonard.unison.gui.UNISoNLogger#alert(java.lang.String)
-	 */
-	@Override
-	public void alert(final String message) {
-                this.log(message);
+        /*
+         * (non-Javadoc)
+         *
+         * @see uk.co.sleonard.unison.gui.UNISoNLogger#alert(java.lang.String)
+         */
+        @Override
+        public void alert(final String message) {
+                log.warn(message);
+                this.logText.append(message + "\n");
+                this.notesArea.setText(this.logText.toString());
                 if (this.controller.getGui() != null) {
                         this.controller.getGui().showAlert(message);
                 }
-	}
+        }
 
 	/**
 	 * Available newsgroups value changed.
@@ -477,11 +482,12 @@ public class DownloadNewsPanel extends javax.swing.JPanel
 	 *
 	 * @see uk.co.sleonard.unison.gui.UNISoNLogger#log(java.lang.String)
 	 */
-	@Override
-	public void log(final String message) {
-		this.logText.append(message + "\n");
-		this.notesArea.setText(this.logText.toString());
-	}
+        @Override
+        public void log(final String message) {
+                log.info(message);
+                this.logText.append(message + "\n");
+                this.notesArea.setText(this.logText.toString());
+        }
 
 	/**
 	 * Updates the download progress bar.

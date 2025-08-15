@@ -139,10 +139,11 @@ public class NewsClientTest {
 		this.client.connectToNewsGroup("host", "group");
 	}
 
-	@Test
-	public final void testReconnect() throws UNISoNException {
-		this.client.reconnect();
-	}
+        @Test
+        public final void testReconnect() throws UNISoNException {
+                this.client.connect("host");
+                this.client.reconnect();
+        }
 
 	@Test(expected = UNISoNException.class)
 	public final void testReconnectException()

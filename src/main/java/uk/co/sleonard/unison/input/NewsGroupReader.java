@@ -8,7 +8,6 @@ package uk.co.sleonard.unison.input;
 
 import lombok.extern.slf4j.Slf4j;
 import uk.co.sleonard.unison.UNISoNController;
-import uk.co.sleonard.unison.UNISoNLogger;
 
 /**
  * The Class NewsGroupReader.
@@ -17,7 +16,7 @@ import uk.co.sleonard.unison.UNISoNLogger;
  * @since v1.0.0
  */
 @Slf4j
-public class NewsGroupReader implements UNISoNLogger {
+public class NewsGroupReader {
 
     /**
      * The client.
@@ -48,15 +47,6 @@ public class NewsGroupReader implements UNISoNLogger {
         this.client = new NewsClientImpl();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see uk.co.sleonard.unison.gui.UNISoNLogger#alert(java.lang.String)
-     */
-    @Override
-    public void alert(final String message) {
-        log.warn(message);
-    }
 
     public NewsClient getClient() {
         return this.client;
@@ -121,15 +111,6 @@ public class NewsGroupReader implements UNISoNLogger {
         return this.client.isConnected();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see uk.co.sleonard.unison.gui.UNISoNLogger#log(java.lang.String)
-     */
-    @Override
-    public void log(final String message) {
-        log.info(message);
-    }
 
     // public void startDownload(String newsgroup, Date toDate, Date fromDate)
     // throws UNISoNException {

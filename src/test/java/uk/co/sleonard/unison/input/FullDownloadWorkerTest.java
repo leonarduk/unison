@@ -13,7 +13,6 @@ import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
@@ -66,11 +65,11 @@ public class FullDownloadWorkerTest {
             final HibernateHelper helper = Mockito.mock(HibernateHelper.class);
             final Session session = Mockito.mock(Session.class);
             FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
-                    DownloadMode.ALL, Mockito.mock(UNISoNLogger.class), nntpHost, queue,
+                    DownloadMode.ALL, nntpHost, queue,
                     this.newsClient, reader, helper, session);
             queue.add(new NewsArticle("123", 1, new Date(), "eg@mail.com", "Lets talk", "", "alt"));
             FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
-                    DownloadMode.ALL, Mockito.mock(UNISoNLogger.class), nntpHost, queue,
+                    DownloadMode.ALL, nntpHost, queue,
                     this.newsClient, reader, helper, session);
 
             // Assert.assertTrue(FullDownloadWorker.queueSize() >= 1);
@@ -92,11 +91,11 @@ public class FullDownloadWorkerTest {
             final HibernateHelper helper = Mockito.mock(HibernateHelper.class);
             final Session session = Mockito.mock(Session.class);
             FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
-                    DownloadMode.HEADERS, Mockito.mock(UNISoNLogger.class), nntpHost, queue,
+                    DownloadMode.HEADERS, nntpHost, queue,
                     this.newsClient, reader, helper, session);
             queue.add(new NewsArticle("123", 1, new Date(), "eg@mail.com", "Lets talk", "", "alt"));
             FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
-                    DownloadMode.HEADERS, Mockito.mock(UNISoNLogger.class), nntpHost, queue,
+                    DownloadMode.HEADERS, nntpHost, queue,
                     this.newsClient, reader, helper, session);
 
             // Assert.assertTrue(FullDownloadWorker.queueSize() >= 1);

@@ -11,7 +11,6 @@ package uk.co.sleonard.unison.input;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 
 import java.util.ArrayList;
@@ -33,8 +32,6 @@ public class DataHibernatorWorker extends SwingWorker {
     /** The number of hibernators. */
     private static int numberofHibernators = 20;
 
-    /** The log. */
-    private static UNISoNLogger log;
 
     /** The workers. */
     private static ArrayList<DataHibernatorWorker> workers = new ArrayList<>();
@@ -50,16 +47,6 @@ public class DataHibernatorWorker extends SwingWorker {
     private final LinkedBlockingQueue<NewsArticle> queue;
 
     private final Session session;
-
-    /**
-     * Sets the logger.
-     *
-     * @param logger
-     *            the new logger
-     */
-    public static void setLogger(final UNISoNLogger logger) {
-        DataHibernatorWorker.log = logger;
-    }
 
     /**
      * Start hibernators.
@@ -128,7 +115,7 @@ public class DataHibernatorWorker extends SwingWorker {
             }
             DataHibernatorWorker.workers.remove(this);
             if (DataHibernatorWorker.workers.size() == 0) {
-                DataHibernatorWorker.log.alert("Download complete");
+            LOGGER.info("Download complete");
             }
         } catch (@SuppressWarnings("unused") final InterruptedException e) {
             return "Interrupted";

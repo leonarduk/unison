@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
@@ -43,10 +42,6 @@ public class FullDownloadWorker extends SwingWorker {
      */
     private static LinkedBlockingQueue<DownloadRequest> downloadQueue = new LinkedBlockingQueue<>();
 
-    /**
-     * The log.
-     */
-    private static UNISoNLogger log;
 
     /**
      * The Constant downloaders.
@@ -81,13 +76,12 @@ public class FullDownloadWorker extends SwingWorker {
      */
 
     public synchronized static void addDownloadRequest(final String usenetID,
-                                                       final DownloadMode mode, final UNISoNLogger log1, final String nntpHost,
+                                                       final DownloadMode mode, final String nntpHost,
                                                        final LinkedBlockingQueue<NewsArticle> queue, final NewsClient newsClient,
                                                        final NewsGroupReader nntpReader, final HibernateHelper helper, final Session session)
             throws UNISoNException {
         final DownloadRequest request = new DownloadRequest(usenetID, mode);
 
-        FullDownloadWorker.log = log1;
         FullDownloadWorker.downloadQueue.add(request);
         if (FullDownloadWorker.downloaders.size() < 1) {
             FullDownloadWorker.startDownloaders(1, nntpHost, queue, newsClient);
@@ -299,7 +293,7 @@ public class FullDownloadWorker extends SwingWorker {
         }
 
         if (null == article) {
-            FullDownloadWorker.log.log("Skipped message " + request.getUsenetID());
+            LOGGER.info("Skipped message {}", request.getUsenetID());
             LOGGER.warn("Article {} returned null", request.getUsenetID());
         } else {
             LOGGER.debug("Retrieved article {} ({}) queue size {}", request.getUsenetID(),
@@ -359,7 +353,7 @@ public class FullDownloadWorker extends SwingWorker {
     public void finished() {
         FullDownloadWorker.downloaders.remove(this);
         if (FullDownloadWorker.downloaders.size() == 0) {
-            FullDownloadWorker.log.alert("Download of extra fields complete");
+            LOGGER.info("Download of extra fields complete");
         }
     }
 
@@ -413,8 +407,8 @@ public class FullDownloadWorker extends SwingWorker {
         if (null != article) {
             LOGGER.debug("Retrieved article {} - subject '{}' queue size before add {}", request.getUsenetID(),
                     article.getSubject(), queue.size());
-            FullDownloadWorker.log.log("Got:" + article.getSubject() + " " + article.getFrom() + " "
-                    + article.getArticleID() + " to q: " + queue.size() + "[" + new Date());
+            LOGGER.info("Got:{} {} {} to q: {}[{}]", article.getSubject(), article.getFrom(),
+                    article.getArticleID(), queue.size(), new Date());
 
             queue.add(article);
             LOGGER.debug("Queue size now {} remaining requests {}", queue.size(),

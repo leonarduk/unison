@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.input.FullDownloadWorker;
@@ -29,11 +28,9 @@ public class DownloaderImplTest {
 
         final String usenetId = "123";
         final DownloadMode mode = DownloadMode.BASIC;
-        final UNISoNLogger logger = Mockito.mock(UNISoNLogger.class);
-
         try (MockedStatic<FullDownloadWorker> worker = Mockito.mockStatic(FullDownloadWorker.class)) {
-            downloader.addDownloadRequest(usenetId, mode, logger);
-            worker.verify(() -> FullDownloadWorker.addDownloadRequest(usenetId, mode, logger, host, queue, client, reader, helper, session));
+            downloader.addDownloadRequest(usenetId, mode);
+            worker.verify(() -> FullDownloadWorker.addDownloadRequest(usenetId, mode, host, queue, client, reader, helper, session));
         }
     }
 }

@@ -21,6 +21,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
@@ -375,10 +376,21 @@ public class StringUtils {
                                 return Date.from(zonedDateTime.toInstant());
                         }
                         else {
-                                // 30 Jan 2015 23:37:13 GMT
-                                final DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
-                                final ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateText, formatter);
-                                return Date.from(zonedDateTime.toInstant());
+                                // 30 Jan 2015 23:37:13 GMT or 18 Jan 2015 23:40:56 +0000
+                                final DateTimeFormatter[] formatters = {
+                                                DateTimeFormatter.ofPattern("d MMM yyyy HH:mm:ss z", Locale.ENGLISH),
+                                                DateTimeFormatter.ofPattern("d MMM yyyy HH:mm:ss Z", Locale.ENGLISH) };
+
+                                for (final DateTimeFormatter formatter : formatters) {
+                                        try {
+                                                final ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateText, formatter);
+                                                return Date.from(zonedDateTime.toInstant());
+                                        }
+                                        catch (final DateTimeParseException e) {
+                                                // try next pattern
+                                        }
+                                }
+                                throw new UNISoNException("Failed to parse date:" + text);
                         }
                 }
         }

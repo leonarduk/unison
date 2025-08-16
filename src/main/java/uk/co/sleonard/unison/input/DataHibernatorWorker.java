@@ -113,6 +113,7 @@ public class DataHibernatorWorker extends SwingWorker {
               log.info("Download complete");
             }
         } catch (@SuppressWarnings("unused") final InterruptedException e) {
+            Thread.currentThread().interrupt();
             return "Interrupted";
         }
         return "Completed";
@@ -133,7 +134,7 @@ public class DataHibernatorWorker extends SwingWorker {
     private void pollQueue(final LinkedBlockingQueue<NewsArticle> queue, final Session session)
             throws InterruptedException {
         while (!queue.isEmpty()) {
-            if (Thread.interrupted()) {
+            if (Thread.currentThread().isInterrupted()) {
                 this.stopHibernatingData();
                 throw new InterruptedException();
             }

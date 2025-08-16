@@ -169,11 +169,14 @@ public class NewsClientImpl implements NewsClient {
     @Override
     public Set<NewsGroup> listNewsGroups(final String wildcard, final String nntpserver)
             throws UNISoNException {
+        log.debug("Listing newsgroups for wildcard '{}' on '{}'", wildcard, nntpserver);
 
         final Set<NewsGroup> groupSet = new TreeSet<>();
 
         try {
+            log.debug("Connecting to NNTP server {}", nntpserver);
             this.connect(nntpserver);
+            log.debug("Connected to {}", nntpserver);
             // Attempt a simple command to keep the connection alive before listing
             try {
                 this.client.listHelp();
@@ -200,6 +203,7 @@ public class NewsClientImpl implements NewsClient {
                 }
             }
         } catch (final Exception e) {
+            log.error("Failed to list newsgroups on {}: {}", nntpserver, e.getMessage(), e);
             throw new UNISoNException("Failed to connect", e);
         }
 

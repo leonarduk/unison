@@ -6,6 +6,7 @@
  */
 package uk.co.sleonard.unison.input;
 
+import lombok.extern.slf4j.Slf4j;
 import javax.swing.*;
 import java.util.Observable;
 
@@ -24,6 +25,7 @@ import java.util.Observable;
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  */
+@Slf4j
 abstract class SwingWorker extends Observable implements Runnable {
     /**
      * The thread var.
@@ -36,6 +38,7 @@ abstract class SwingWorker extends Observable implements Runnable {
      * @param name the name
      */
     SwingWorker(final String name) {
+        log.debug("Initialising SwingWorker with thread name {}", name);
         final Thread t = new Thread(this, name);
         this.threadVar = new ThreadVar(t);
     }
@@ -52,7 +55,7 @@ abstract class SwingWorker extends Observable implements Runnable {
      * <code>construct</code> method has returned.
      */
     public void finished() {
-        //
+        log.debug("SwingWorker finished");
     }
 
     /**
@@ -62,6 +65,7 @@ abstract class SwingWorker extends Observable implements Runnable {
     void interrupt() {
         final Thread t = this.threadVar.get();
         if (t != null) {
+            log.debug("Interrupting thread {}", t.getName());
             t.interrupt();
         }
         this.threadVar.clear();
@@ -74,6 +78,7 @@ abstract class SwingWorker extends Observable implements Runnable {
      */
     @Override
     public void run() {
+        log.debug("Thread {} starting", Thread.currentThread().getName());
         try {
             this.setValue(this.construct());
         } finally {
@@ -99,6 +104,7 @@ abstract class SwingWorker extends Observable implements Runnable {
     public void start() {
         final Thread t = this.threadVar.get();
         if (t != null) {
+            log.debug("Starting thread {}", t.getName());
             t.start();
         }
     }

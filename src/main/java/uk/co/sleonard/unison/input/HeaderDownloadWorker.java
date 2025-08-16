@@ -394,7 +394,7 @@ public class HeaderDownloadWorker extends SwingWorker {
                 final int batchEndIndex = Math.min(i + 499, this.endIndex);
                 log.debug("Starting batch {}-{}", i, batchEndIndex);
                 try (final Reader reader = this.newsReader.client.retrieveArticleInfo(
-                        Long.valueOf(i).longValue(), Long.valueOf(i + 500).longValue());) {
+                        i, batchEndIndex);) {
                     this.queueMessages(queue1, reader);
                 }
                 log.debug("Finished batch {}-{}", i, batchEndIndex);

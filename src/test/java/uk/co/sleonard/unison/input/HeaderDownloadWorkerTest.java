@@ -9,6 +9,7 @@ package uk.co.sleonard.unison.input;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import uk.co.sleonard.unison.UNISoNException;
@@ -16,9 +17,11 @@ import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.utils.Downloader;
 import uk.co.sleonard.unison.utils.StringUtils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -202,5 +205,38 @@ public class HeaderDownloadWorkerTest {
         final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
         final boolean actual = this.worker.storeArticleInfo(queue);
         Assert.assertTrue(actual);
+    }
+
+    @Test
+    public void testStoreArticleInfoDoesNotRequestBeyondEndIndex() throws Exception {
+        final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
+
+        final NewsGroupReader reader = new NewsGroupReader(null);
+        final NewsClient client = Mockito.mock(NewsClient.class);
+        Mockito.when(client.retrieveArticleInfo(Mockito.anyLong(), Mockito.anyLong()))
+                .thenReturn(new BufferedReader(new StringReader("")));
+        reader.setClient(client);
+
+        // configure worker
+        this.worker.resume();
+        setField(this.worker, "startIndex", 0);
+        setField(this.worker, "endIndex", 600);
+        setField(this.worker, "newsReader", reader);
+
+        this.worker.storeArticleInfo(queue);
+
+        final ArgumentCaptor<Long> endCaptor = ArgumentCaptor.forClass(Long.class);
+        Mockito.verify(client, Mockito.atLeastOnce())
+                .retrieveArticleInfo(Mockito.anyLong(), endCaptor.capture());
+
+        for (final Long end : endCaptor.getAllValues()) {
+            Assert.assertTrue("Requested message beyond end index", end <= 600L);
+        }
+    }
+
+    private void setField(final Object target, final String fieldName, final Object value) throws Exception {
+        final Field field = target.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+        field.set(target, value);
     }
 }

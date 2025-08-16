@@ -20,36 +20,36 @@ import java.util.concurrent.LinkedBlockingQueue;
 @Ignore("Requires a live NNTP server and is disabled to avoid external network calls")
 public class FullDownloadWorkerIT {
 
-	private FullDownloadWorker					worker;
-	private LinkedBlockingQueue<NewsArticle>	outQueue;
+    private FullDownloadWorker worker;
+    private LinkedBlockingQueue<NewsArticle> outQueue;
 
-	@Before
-	public void setUp() throws Exception {
-                final String[] servers = StringUtils.loadServerList();
-                Assert.assertTrue("No servers configured", servers.length > 0);
-                final String server = servers[0];
-                this.outQueue = HeaderDownloadWorkerIT.populateQueueWithOneRealMessage();
+    @Before
+    public void setUp() throws Exception {
+        final String[] servers = StringUtils.loadServerList();
+        Assert.assertTrue("No servers configured", servers.length > 0);
+        final String server = servers[0];
+        this.outQueue = HeaderDownloadWorkerIT.populateQueueWithOneRealMessage();
 
-                final NewsClient newsClient = new NewsClientImpl();
-                this.worker = new FullDownloadWorker(server, this.outQueue, newsClient);
-        }
+        final NewsClient newsClient = new NewsClientImpl();
+        this.worker = new FullDownloadWorker(server, this.outQueue, newsClient);
+    }
 
-	@Test
-	public final void testDownloadArticleHeaders() throws UNISoNException, InterruptedException {
-		final NewsArticle header = this.outQueue.take();
-		final String usenetID = header.getArticleID();
-		final DownloadRequest request = new DownloadRequest(usenetID, DownloadMode.HEADERS);
-		final NewsArticle article = this.worker.downloadArticle(request);
-		Assert.assertEquals(header.getArticleID(), article.getArticleID());
-	}
+    @Test
+    public final void testDownloadArticleHeaders() throws UNISoNException, InterruptedException {
+        final NewsArticle header = this.outQueue.take();
+        final String usenetID = header.getArticleID();
+        final DownloadRequest request = new DownloadRequest(usenetID, DownloadMode.HEADERS);
+        final NewsArticle article = this.worker.downloadArticle(request);
+        Assert.assertEquals(header.getArticleID(), article.getArticleID());
+    }
 
-	@Test
-	public final void testDownloadFullArticle() throws UNISoNException, InterruptedException {
-		final NewsArticle header = this.outQueue.take();
-		final String usenetID = header.getArticleID();
-		final DownloadRequest request = new DownloadRequest(usenetID, DownloadMode.ALL);
-		final NewsArticle article = this.worker.downloadArticle(request);
-		Assert.assertEquals(header.getArticleID(), article.getArticleID());
-	}
+    @Test
+    public final void testDownloadFullArticle() throws UNISoNException, InterruptedException {
+        final NewsArticle header = this.outQueue.take();
+        final String usenetID = header.getArticleID();
+        final DownloadRequest request = new DownloadRequest(usenetID, DownloadMode.ALL);
+        final NewsArticle article = this.worker.downloadArticle(request);
+        Assert.assertEquals(header.getArticleID(), article.getArticleID());
+    }
 
 }

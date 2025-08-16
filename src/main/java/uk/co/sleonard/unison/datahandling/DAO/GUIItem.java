@@ -12,19 +12,19 @@ import lombok.Data;
 /**
  * The Class GUIItem.
  *
- * @param <T>
- *            the generic type
+ * @param <T> the generic type
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  */
 @Data
 @AllArgsConstructor
 public class GUIItem<T> {
-	private final String name;
-	private final T object;
-	@Override
-	public String toString() {
-		return this.name;
-	}
+    private final String name;
+    private final T object;
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 
 }

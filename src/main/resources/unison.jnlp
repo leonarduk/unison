@@ -8,10 +8,12 @@
     </information>
     <resources>
         <!-- Application Resources -->
-            <jar href="unison.jar" main="true" />
+        <jar href="unison.jar" main="true"/>
     </resources>
     <application-desc main-class="uk.co.sleonard.unison.UnisonMain">
         <!-- Application Arguments -->
     </application-desc>
-    <security><all-permissions/></security>
+    <security>
+        <all-permissions/>
+    </security>
 </jnlp>

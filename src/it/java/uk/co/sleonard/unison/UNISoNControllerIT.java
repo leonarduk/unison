@@ -21,35 +21,35 @@ import java.util.Set;
 @Slf4j
 @Ignore("Requires a live NNTP server and is disabled to avoid external network calls")
 public class UNISoNControllerIT {
-	private UNISoNController	controller;
+    private UNISoNController controller;
 
-	@Before
-	public void setUp() throws Exception {
-		this.controller = UNISoNController.create(null, new DataHibernatorPoolImpl());
-	}
+    @Before
+    public void setUp() throws Exception {
+        this.controller = UNISoNController.create(null, new DataHibernatorPoolImpl());
+    }
 
-	@Test
-	public final void testGetAvailableGroupsModel() throws UNISoNException {
-                final String[] servers = StringUtils.loadServerList();
-                Assert.assertTrue("No servers configured", servers.length > 0);
-                final Set<NewsGroup> groups = this.controller.listNewsgroups("", servers[0],
-                        this.controller.getNntpReader().getClient());
-		final ListModel<NewsGroup> model = this.controller.getAvailableGroupsModel(groups);
-		final NewsGroup firstGroup = model.getElementAt(0);
-		Assert.assertNotNull(firstGroup);
-                Assert.assertTrue(org.apache.commons.lang3.StringUtils.isNotEmpty(firstGroup.getFullName()));
+    @Test
+    public final void testGetAvailableGroupsModel() throws UNISoNException {
+        final String[] servers = StringUtils.loadServerList();
+        Assert.assertTrue("No servers configured", servers.length > 0);
+        final Set<NewsGroup> groups = this.controller.listNewsgroups("", servers[0],
+                this.controller.getNntpReader().getClient());
+        final ListModel<NewsGroup> model = this.controller.getAvailableGroupsModel(groups);
+        final NewsGroup firstGroup = model.getElementAt(0);
+        Assert.assertNotNull(firstGroup);
+        Assert.assertTrue(org.apache.commons.lang3.StringUtils.isNotEmpty(firstGroup.getFullName()));
 
-	}
+    }
 
-	@Test
-	public final void testListnewsgroups() throws UNISoNException {
-                final String[] servers = StringUtils.loadServerList();
-                Assert.assertTrue("No servers configured", servers.length > 0);
-                final Set<NewsGroup> groups = this.controller.listNewsgroups("", servers[0],
-                        this.controller.getNntpReader().getClient());
-		Assert.assertTrue(groups.size() > 0);
-		log.info("Found " + groups.size());
+    @Test
+    public final void testListnewsgroups() throws UNISoNException {
+        final String[] servers = StringUtils.loadServerList();
+        Assert.assertTrue("No servers configured", servers.length > 0);
+        final Set<NewsGroup> groups = this.controller.listNewsgroups("", servers[0],
+                this.controller.getNntpReader().getClient());
+        Assert.assertTrue(groups.size() > 0);
+        log.info("Found " + groups.size());
 
-	}
+    }
 
 }

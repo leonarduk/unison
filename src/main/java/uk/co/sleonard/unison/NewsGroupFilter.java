@@ -20,321 +20,343 @@ import java.util.Set;
 import java.util.Vector;
 
 public class NewsGroupFilter {
-	/** The selected messages. */
-	private Vector<Message>	selectedMessages	= null;
-	/** The topics filter. */
-	private Set<Topic>		topicsFilter		= null;
+    /**
+     * The selected messages.
+     */
+    private Vector<Message> selectedMessages = null;
+    /**
+     * The topics filter.
+     */
+    private Set<Topic> topicsFilter = null;
 
-	/** The messages filter. */
-	private Vector<Message> messagesFilter = null;
+    /**
+     * The messages filter.
+     */
+    private Vector<Message> messagesFilter = null;
 
-	/** The newsgroup filter. */
-	private Set<NewsGroup>		newsgroupFilter		= null;
-	/** The usenet users filter. */
-	private Vector<UsenetUser>	usenetUsersFilter	= null;
-	/** The filtered. */
-	private boolean				filtered				= false;
+    /**
+     * The newsgroup filter.
+     */
+    private Set<NewsGroup> newsgroupFilter = null;
+    /**
+     * The usenet users filter.
+     */
+    private Vector<UsenetUser> usenetUsersFilter = null;
+    /**
+     * The filtered.
+     */
+    private boolean filtered = false;
 
-	/** The message. */
-	private Message message;
+    /**
+     * The message.
+     */
+    private Message message;
 
-	/** The from date. */
-	private Date				fromDate;
-	/** The to date. */
-	private Date				toDate;
-	/** The selected newsgroup. */
-	private NewsGroup			selectedNewsgroup;
-	/** The selected newsgroups. */
-	private Vector<NewsGroup>	selectedNewsgroups;
-	/** The selected posters. */
-	private Vector<UsenetUser>	selectedPosters;
+    /**
+     * The from date.
+     */
+    private Date fromDate;
+    /**
+     * The to date.
+     */
+    private Date toDate;
+    /**
+     * The selected newsgroup.
+     */
+    private NewsGroup selectedNewsgroup;
+    /**
+     * The selected newsgroups.
+     */
+    private Vector<NewsGroup> selectedNewsgroups;
+    /**
+     * The selected posters.
+     */
+    private Vector<UsenetUser> selectedPosters;
 
-	/** The countries filter. */
-	private Set<String> countriesFilter = null;
+    /**
+     * The countries filter.
+     */
+    private Set<String> countriesFilter = null;
 
-	/** The tops newsgroups. */
-	private Set<NewsGroup> topsNewsgroups;
+    /**
+     * The tops newsgroups.
+     */
+    private Set<NewsGroup> topsNewsgroups;
 
-	/** The selected countries. */
-	private Set<String>		selectedCountries	= null;
-	private final Session	session;
+    /**
+     * The selected countries.
+     */
+    private Set<String> selectedCountries = null;
+    private final Session session;
 
-	private final HibernateHelper helper;
+    private final HibernateHelper helper;
 
-	NewsGroupFilter(final Session session, final HibernateHelper helper) {
-		super();
-		this.clear();
-		this.session = session;
-		this.helper = helper;
-	}
+    NewsGroupFilter(final Session session, final HibernateHelper helper) {
+        super();
+        this.clear();
+        this.session = session;
+        this.helper = helper;
+    }
 
-	public void clear() {
-		this.usenetUsersFilter = new Vector<>();
-		this.newsgroupFilter = new HashSet<>();
-		this.setTopsNewsgroups(new HashSet<>());
-		this.topicsFilter = new HashSet<>();
-		this.countriesFilter = new HashSet<>();
-		this.messagesFilter = new Vector<>();
-		this.selectedPosters = new Vector<>();
-		this.selectedCountries = new HashSet<>();
-		this.selectedNewsgroups = new Vector<>();
-		this.selectedMessages = new Vector<>();
-	}
+    public void clear() {
+        this.usenetUsersFilter = new Vector<>();
+        this.newsgroupFilter = new HashSet<>();
+        this.setTopsNewsgroups(new HashSet<>());
+        this.topicsFilter = new HashSet<>();
+        this.countriesFilter = new HashSet<>();
+        this.messagesFilter = new Vector<>();
+        this.selectedPosters = new Vector<>();
+        this.selectedCountries = new HashSet<>();
+        this.selectedNewsgroups = new Vector<>();
+        this.selectedMessages = new Vector<>();
+    }
 
-	public Set<String> getCountriesFilter() {
-		return this.countriesFilter;
-	}
+    public Set<String> getCountriesFilter() {
+        return this.countriesFilter;
+    }
 
-	public Date getFromDate() {
-		return this.fromDate;
-	}
+    public Date getFromDate() {
+        return this.fromDate;
+    }
 
-	public Message getMessage() {
-		return this.message;
-	}
+    public Message getMessage() {
+        return this.message;
+    }
 
-	/**
-	 * Gets the messages filter.
-	 *
-	 * @return the messages filter
-	 */
-	public Vector<Message> getMessagesFilter() {
-		return this.messagesFilter;
-	}
+    /**
+     * Gets the messages filter.
+     *
+     * @return the messages filter
+     */
+    public Vector<Message> getMessagesFilter() {
+        return this.messagesFilter;
+    }
 
-	/**
-	 * Gets the newsgroup filter.
-	 *
-	 * @return the newsgroup filter
-	 */
-	public Set<NewsGroup> getNewsgroupFilter() {
-		return this.newsgroupFilter;
-	}
+    /**
+     * Gets the newsgroup filter.
+     *
+     * @return the newsgroup filter
+     */
+    public Set<NewsGroup> getNewsgroupFilter() {
+        return this.newsgroupFilter;
+    }
 
-	/**
-	 * Gets the selected countries.
-	 *
-	 * @return the selected countries
-	 */
-	public Set<String> getSelectedCountries() {
-		return this.selectedCountries;
-	}
+    /**
+     * Gets the selected countries.
+     *
+     * @return the selected countries
+     */
+    public Set<String> getSelectedCountries() {
+        return this.selectedCountries;
+    }
 
-	/**
-	 * Gets the selected message.
-	 *
-	 * @return the selected message
-	 */
-	public Message getSelectedMessage() {
-		if (this.isFiltered() && !this.getMessagesFilter().contains(this.message)) {
-			return null;
-		}
-		return this.message;
-	}
+    /**
+     * Gets the selected message.
+     *
+     * @return the selected message
+     */
+    public Message getSelectedMessage() {
+        if (this.isFiltered() && !this.getMessagesFilter().contains(this.message)) {
+            return null;
+        }
+        return this.message;
+    }
 
-	public Vector<Message> getSelectedMessages() {
-		return this.selectedMessages;
-	}
+    public Vector<Message> getSelectedMessages() {
+        return this.selectedMessages;
+    }
 
-	/**
-	 * Gets the selected newsgroup.
-	 *
-	 * @return the selected newsgroup
-	 */
-	public NewsGroup getSelectedNewsgroup() {
-		if (this.isFiltered() && !this.newsgroupFilter.contains(this.selectedNewsgroup)) {
-			return null;
-		}
-		return this.selectedNewsgroup;
-	}
+    /**
+     * Gets the selected newsgroup.
+     *
+     * @return the selected newsgroup
+     */
+    public NewsGroup getSelectedNewsgroup() {
+        if (this.isFiltered() && !this.newsgroupFilter.contains(this.selectedNewsgroup)) {
+            return null;
+        }
+        return this.selectedNewsgroup;
+    }
 
-	/**
-	 * Gets the selected newsgroups.
-	 *
-	 * @return the selected newsgroups
-	 */
-	public Vector<NewsGroup> getSelectedNewsgroups() {
-		if (!this.isFiltered()) {
-			return null;
-		}
-		return this.selectedNewsgroups;
-	}
+    /**
+     * Gets the selected newsgroups.
+     *
+     * @return the selected newsgroups
+     */
+    public Vector<NewsGroup> getSelectedNewsgroups() {
+        if (!this.isFiltered()) {
+            return null;
+        }
+        return this.selectedNewsgroups;
+    }
 
-	/**
-	 * Gets the selected posters.
-	 *
-	 * @return the selected posters
-	 */
-	public Vector<UsenetUser> getSelectedPosters() {
-		if (!this.isFiltered()) {
-			return null;
-		}
-		return this.selectedPosters;
-	}
+    /**
+     * Gets the selected posters.
+     *
+     * @return the selected posters
+     */
+    public Vector<UsenetUser> getSelectedPosters() {
+        if (!this.isFiltered()) {
+            return null;
+        }
+        return this.selectedPosters;
+    }
 
-	public Date getToDate() {
-		return this.toDate;
-	}
+    public Date getToDate() {
+        return this.toDate;
+    }
 
-	/**
-	 * Gets the topics filter.
-	 *
-	 * @return the topics filter
-	 */
-	public Set<Topic> getTopicsFilter() {
-		return this.topicsFilter;
-	}
+    /**
+     * Gets the topics filter.
+     *
+     * @return the topics filter
+     */
+    public Set<Topic> getTopicsFilter() {
+        return this.topicsFilter;
+    }
 
-	/**
-	 * Gets the top news groups.
-	 *
-	 * @return the top news groups
-	 */
-	public Set<NewsGroup> getTopNewsGroups() {
-		return this.getTopsNewsgroups();
-	}
+    /**
+     * Gets the top news groups.
+     *
+     * @return the top news groups
+     */
+    public Set<NewsGroup> getTopNewsGroups() {
+        return this.getTopsNewsgroups();
+    }
 
-	public Set<NewsGroup> getTopsNewsgroups() {
-		return this.topsNewsgroups;
-	}
+    public Set<NewsGroup> getTopsNewsgroups() {
+        return this.topsNewsgroups;
+    }
 
-	/**
-	 * Gets the usenet users filter.
-	 *
-	 * @return the usenet users filter
-	 */
-	public Vector<UsenetUser> getUsenetUsersFilter() {
-		return this.usenetUsersFilter;
-	}
+    /**
+     * Gets the usenet users filter.
+     *
+     * @return the usenet users filter
+     */
+    public Vector<UsenetUser> getUsenetUsersFilter() {
+        return this.usenetUsersFilter;
+    }
 
-	/**
-	 * Checks if is filtered.
-	 *
-	 * @return true, if is filtered
-	 */
-	public boolean isFiltered() {
-		return this.filtered;
-	}
+    /**
+     * Checks if is filtered.
+     *
+     * @return true, if is filtered
+     */
+    public boolean isFiltered() {
+        return this.filtered;
+    }
 
-	public void setCountriesFilter(final Set<String> countriesFilter) {
-		this.countriesFilter = countriesFilter;
-	}
+    public void setCountriesFilter(final Set<String> countriesFilter) {
+        this.countriesFilter = countriesFilter;
+    }
 
-	/**
-	 * Sets the dates.
-	 *
-	 * @param fromDate2
-	 *            the from date2
-	 * @param toDate2
-	 *            the to date2
-	 */
-	public void setDates(final Date fromDate2, final Date toDate2) {
-		this.setToDate(toDate2);
-		this.setFromDate(fromDate2);
-	}
+    /**
+     * Sets the dates.
+     *
+     * @param fromDate2 the from date2
+     * @param toDate2   the to date2
+     */
+    public void setDates(final Date fromDate2, final Date toDate2) {
+        this.setToDate(toDate2);
+        this.setFromDate(fromDate2);
+    }
 
-	public void setFiltered(final boolean on) {
-		this.filtered = on;
-	}
+    public void setFiltered(final boolean on) {
+        this.filtered = on;
+    }
 
-	public void setFromDate(final Date fromDate) {
-		this.fromDate = fromDate;
-	}
+    public void setFromDate(final Date fromDate) {
+        this.fromDate = fromDate;
+    }
 
-	public void setMessage(final Message message) {
-		this.message = message;
-	}
+    public void setMessage(final Message message) {
+        this.message = message;
+    }
 
-	public void setMessagesFilter(final Vector<Message> messagesFilter) {
-		this.messagesFilter = messagesFilter;
-	}
+    public void setMessagesFilter(final Vector<Message> messagesFilter) {
+        this.messagesFilter = messagesFilter;
+    }
 
-	public void setNewsgroupFilter(final Set<NewsGroup> newsgroupFilter) {
-		this.newsgroupFilter = newsgroupFilter;
-	}
+    public void setNewsgroupFilter(final Set<NewsGroup> newsgroupFilter) {
+        this.newsgroupFilter = newsgroupFilter;
+    }
 
-	/**
-	 * Sets the selected countries.
-	 *
-	 * @param countries
-	 *            the new selected countries
-	 */
-	public void setSelectedCountries(final Set<String> countries) {
-		this.selectedCountries = countries;
-	}
+    /**
+     * Sets the selected countries.
+     *
+     * @param countries the new selected countries
+     */
+    public void setSelectedCountries(final Set<String> countries) {
+        this.selectedCountries = countries;
+    }
 
-	/**
-	 * Sets the selected message.
-	 *
-	 * @param message
-	 *            the new selected message
-	 */
-	public void setSelectedMessage(final Message message) {
-		this.message = message;
-	}
+    /**
+     * Sets the selected message.
+     *
+     * @param message the new selected message
+     */
+    public void setSelectedMessage(final Message message) {
+        this.message = message;
+    }
 
-	public void setSelectedMessages(final Vector<Message> selectedMessages2) {
-		this.selectedMessages = selectedMessages2;
-	}
+    public void setSelectedMessages(final Vector<Message> selectedMessages2) {
+        this.selectedMessages = selectedMessages2;
+    }
 
-	/**
-	 * Sets the selected newsgroup.
-	 *
-	 * @param group
-	 *            the new selected newsgroup
-	 */
-	public void setSelectedNewsgroup(final NewsGroup group) {
-		this.selectedNewsgroup = group;
-		// this.frame.setSelectedNewsgroup(group);
-	}
+    /**
+     * Sets the selected newsgroup.
+     *
+     * @param group the new selected newsgroup
+     */
+    public void setSelectedNewsgroup(final NewsGroup group) {
+        this.selectedNewsgroup = group;
+        // this.frame.setSelectedNewsgroup(group);
+    }
 
-	/**
-	 * Sets the selected newsgroup.
-	 *
-	 * @param groupName
-	 *            the new selected newsgroup
-	 */
-	public void setSelectedNewsgroup(final String groupName) {
-		NewsGroup group = null;
-		if (!StringUtils.isEmpty(groupName)) {
-			group = this.helper.getNewsgroupByFullName(groupName, this.session);
-		}
-		this.setSelectedNewsgroup(group);
-	}
+    /**
+     * Sets the selected newsgroup.
+     *
+     * @param groupName the new selected newsgroup
+     */
+    public void setSelectedNewsgroup(final String groupName) {
+        NewsGroup group = null;
+        if (!StringUtils.isEmpty(groupName)) {
+            group = this.helper.getNewsgroupByFullName(groupName, this.session);
+        }
+        this.setSelectedNewsgroup(group);
+    }
 
-	/**
-	 * Sets the selected newsgroups.
-	 *
-	 * @param groups
-	 *            the new selected newsgroups
-	 */
-	public void setSelectedNewsgroups(final Vector<NewsGroup> groups) {
-		this.selectedNewsgroups = groups;
-	}
+    /**
+     * Sets the selected newsgroups.
+     *
+     * @param groups the new selected newsgroups
+     */
+    public void setSelectedNewsgroups(final Vector<NewsGroup> groups) {
+        this.selectedNewsgroups = groups;
+    }
 
-	/**
-	 * Sets the selected posters.
-	 *
-	 * @param posters
-	 *            the new selected posters
-	 */
-	public void setSelectedPosters(final Vector<UsenetUser> posters) {
-		this.selectedPosters = posters;
-	}
+    /**
+     * Sets the selected posters.
+     *
+     * @param posters the new selected posters
+     */
+    public void setSelectedPosters(final Vector<UsenetUser> posters) {
+        this.selectedPosters = posters;
+    }
 
-	public void setToDate(final Date toDate) {
-		this.toDate = toDate;
-	}
+    public void setToDate(final Date toDate) {
+        this.toDate = toDate;
+    }
 
-	public void setTopicsFilter(final Set<Topic> topicsFilter) {
-		this.topicsFilter = topicsFilter;
-	}
+    public void setTopicsFilter(final Set<Topic> topicsFilter) {
+        this.topicsFilter = topicsFilter;
+    }
 
-	public void setTopsNewsgroups(final Set<NewsGroup> topsNewsgroups) {
-		this.topsNewsgroups = topsNewsgroups;
-	}
+    public void setTopsNewsgroups(final Set<NewsGroup> topsNewsgroups) {
+        this.topsNewsgroups = topsNewsgroups;
+    }
 
-	public void setUsenetUsersFilter(final Vector<UsenetUser> usenetUsersFilter) {
-		this.usenetUsersFilter = usenetUsersFilter;
-	}
+    public void setUsenetUsersFilter(final Vector<UsenetUser> usenetUsersFilter) {
+        this.usenetUsersFilter = usenetUsersFilter;
+    }
 }

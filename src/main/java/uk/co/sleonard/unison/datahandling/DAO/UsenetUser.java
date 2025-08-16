@@ -63,6 +63,7 @@ public class UsenetUser implements java.io.Serializable {
         this.gender = gender;
         this.location = location;
     }
+
     public UsenetUser(final UsenetUser poster) {
         this.name = poster.getName();
         this.email = poster.getEmail();
@@ -71,6 +72,7 @@ public class UsenetUser implements java.io.Serializable {
         this.location = poster.getLocation();
         this.id = poster.getId();
     }
+
     @Override
     public String toString() {
         return this.getName() + "(" + this.getEmail() + ")";

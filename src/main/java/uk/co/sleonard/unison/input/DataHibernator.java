@@ -7,5 +7,5 @@
 package uk.co.sleonard.unison.input;
 
 interface DataHibernator {
-	//
+    //
 }

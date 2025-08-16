@@ -1,6 +1,6 @@
 /**
  * ResultRow
- * 
+ *
  * @author ${author}
  * @since 20-Jun-2016
  */
@@ -19,21 +19,23 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ResultRow implements Comparable<ResultRow> {
-private final Object key;
-	private final int count;
-	private final Class<?> type;
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	@Override
-	public int compareTo(final ResultRow that) {
-		// reverse order to get top ones first
-		return -(this.count - that.count);
-	}
-	@Override
-	public String toString() {
-		return this.getCount() + " " + this.getKey();
-	}
+    private final Object key;
+    private final int count;
+    private final Class<?> type;
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+    @Override
+    public int compareTo(final ResultRow that) {
+        // reverse order to get top ones first
+        return -(this.count - that.count);
+    }
+
+    @Override
+    public String toString() {
+        return this.getCount() + " " + this.getKey();
+    }
 }

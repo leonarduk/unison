@@ -1,29 +1,29 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC
-	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="uk.co.sleonard.unison.datahandling.DAO">
-        <class name="IpAddress" table="IPADDRESS">
-		<meta attribute="class-description">
-			The  IP address
-		</meta>
-		<cache usage="read-only"/>
-		<id name="id" type="int" column="IP_ID"
-			unsaved-value="0">
-			<meta attribute="scope-set">protected</meta>
-			<generator class="native" />
-		</id>
-		<property name="IpAddress" type="string" not-null="false"
-			column="IPADDRESS" />
-		<many-to-one name="location" column="LOCATION_ID"
-			class="uk.co.sleonard.unison.datahandling.DAO.Location"
-			not-null="false" />
-	</class>
-	<query
-		name="uk.co.sleonard.unison.datahandling.DAO.IpAddress.findByKey">
-		<![CDATA[ from uk.co.sleonard.unison.datahandling.DAO.IpAddress as i 
+    <class name="IpAddress" table="IPADDRESS">
+        <meta attribute="class-description">
+            The IP address
+        </meta>
+        <cache usage="read-only"/>
+        <id name="id" type="int" column="IP_ID"
+            unsaved-value="0">
+            <meta attribute="scope-set">protected</meta>
+            <generator class="native"/>
+        </id>
+        <property name="IpAddress" type="string" not-null="false"
+                  column="IPADDRESS"/>
+        <many-to-one name="location" column="LOCATION_ID"
+                     class="uk.co.sleonard.unison.datahandling.DAO.Location"
+                     not-null="false"/>
+    </class>
+    <query
+            name="uk.co.sleonard.unison.datahandling.DAO.IpAddress.findByKey">
+        <![CDATA[ from uk.co.sleonard.unison.datahandling.DAO.IpAddress as i
 	          where i.IpAddress = :key
 	          ]]>
-	</query>
+    </query>
 </hibernate-mapping>

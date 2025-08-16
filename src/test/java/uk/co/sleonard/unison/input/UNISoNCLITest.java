@@ -14,7 +14,7 @@ public class UNISoNCLITest {
     @Test
     public void parseArgsReturnsCommandAndArgument() {
         final Optional<UNISoNCLI.ParsedArgs> parsed = UNISoNCLI.parseArgs(
-                new String[] { "quickdownload", "pattern" });
+                new String[]{"quickdownload", "pattern"});
         assertTrue(parsed.isPresent());
         assertEquals(UNISoNCLI.Command.QUICKDOWNLOAD, parsed.get().command);
         assertEquals("pattern", parsed.get().argument);
@@ -22,7 +22,7 @@ public class UNISoNCLITest {
 
     @Test
     public void parseArgsReturnsEmptyOnInvalidCommand() {
-        assertFalse(UNISoNCLI.parseArgs(new String[] { "invalid" }).isPresent());
+        assertFalse(UNISoNCLI.parseArgs(new String[]{"invalid"}).isPresent());
     }
 }
 

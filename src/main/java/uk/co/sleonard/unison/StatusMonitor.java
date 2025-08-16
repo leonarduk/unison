@@ -11,8 +11,8 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import java.util.Set;
 
 public interface StatusMonitor {
-	void downloadEnabled(final boolean enabled);
+    void downloadEnabled(final boolean enabled);
 
-	public void updateAvailableGroups(final Set<NewsGroup> availableGroups);
+    public void updateAvailableGroups(final Set<NewsGroup> availableGroups);
 
 }

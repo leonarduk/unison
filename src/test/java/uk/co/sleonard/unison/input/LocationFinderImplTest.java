@@ -15,25 +15,25 @@ import java.net.URL;
 
 public class LocationFinderImplTest {
 
-	private LocationFinderImpl finder;
+    private LocationFinderImpl finder;
 
-	@Before
-	public void setUp() throws Exception {
-		final URL resource = this.getClass().getClassLoader().getResource("locationFinder/");
-		this.finder = new LocationFinderImpl(resource.toString());
-	}
+    @Before
+    public void setUp() throws Exception {
+        final URL resource = this.getClass().getClassLoader().getResource("locationFinder/");
+        this.finder = new LocationFinderImpl(resource.toString());
+    }
 
-	@Test
-	public final void testCreateLocation() {
-		final Location actual = this.finder.createLocation("213.205.194.135");
-		Assert.assertNotNull(actual);
-		Assert.assertEquals("United Kingdom", actual.getCountry());
-		Assert.assertEquals("London", actual.getCity());
-		Assert.assertEquals("GB", actual.getCountryCode());
+    @Test
+    public final void testCreateLocation() {
+        final Location actual = this.finder.createLocation("213.205.194.135");
+        Assert.assertNotNull(actual);
+        Assert.assertEquals("United Kingdom", actual.getCountry());
+        Assert.assertEquals("London", actual.getCity());
+        Assert.assertEquals("GB", actual.getCountryCode());
 
-		Location actual2 = this.finder.createLocation("wrongipaddress");
-		Assert.assertNull(actual2.getCountry());
-		Assert.assertNull(actual2.getCity());
-		Assert.assertNull(actual2.getCountryCode());
-	}
+        Location actual2 = this.finder.createLocation("wrongipaddress");
+        Assert.assertNull(actual2.getCountry());
+        Assert.assertNull(actual2.getCity());
+        Assert.assertNull(actual2.getCountryCode());
+    }
 }

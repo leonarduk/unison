@@ -1,6 +1,6 @@
 /**
  * ExportToCSVTest
- * 
+ *
  * @author ${author}
  * @since 30-May-2016
  */
@@ -28,63 +28,62 @@ import java.util.Vector;
  */
 public class ExportToCSVTest {
 
-	/** The export. */
-	private ExportToCSV export;
+    /** The export. */
+    private ExportToCSV export;
 
-	/**
-	 * Generate JTable with test data.
-	 *
-	 * @return JTable filled.
-	 */
-	private JTable generateJTableToTest() {
-		DefaultTableModel model;
-		model = new DefaultTableModel();
-		final JTable jTable = new JTable(model);
-		model.addColumn(null);
-		model.addColumn(null);
-		model.addColumn(null);
-		model.addRow(new Object[] { "element1", "element2", "test" });
-		model.addRow(new Object[] { "element3", "element4", "test" });
-		return jTable;
-	}
+    /**
+     * Generate JTable with test data.
+     *
+     * @return JTable filled.
+     */
+    private JTable generateJTableToTest() {
+        DefaultTableModel model;
+        model = new DefaultTableModel();
+        final JTable jTable = new JTable(model);
+        model.addColumn(null);
+        model.addColumn(null);
+        model.addColumn(null);
+        model.addRow(new Object[]{"element1", "element2", "test"});
+        model.addRow(new Object[]{"element3", "element4", "test"});
+        return jTable;
+    }
 
-	/**
-	 * Setup.
-	 *
-	 * @throws Exception
-	 *             the exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-		this.export = new ExportToCSV();
+    /**
+     * Setup.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Before
+    public void setUp() throws Exception {
+        this.export = new ExportToCSV();
 
-	}
+    }
 
-	/**
-	 * Create the data table, export in text file, read it and delete.
-	 */
-	@Test
-	public void testExportTable() {
-		final String archiveName = new String("export_test");
-		final Vector<String> fieldNames = new Vector<>();
-		fieldNames.addElement("column1");
-		fieldNames.addElement("column2");
-		fieldNames.addElement("test");
-		try {
-			this.export.exportTable(archiveName, this.generateJTableToTest(), fieldNames);
-			final File file = new File(archiveName);
-			final FileReader fileReader = new FileReader(file.getCanonicalPath());
-			final BufferedReader reader = new BufferedReader(fileReader);
-			String currentLine = reader.readLine();
-			while (currentLine != null) {
-				Assert.assertTrue(currentLine.contains("test"));
-				currentLine = reader.readLine();
-			}
-			reader.close();
-			file.delete();
-		}
-		catch (UNISoNException | IOException f) {
-			Assert.fail("ERROR: " + f.getMessage());
-		}
-	}
+    /**
+     * Create the data table, export in text file, read it and delete.
+     */
+    @Test
+    public void testExportTable() {
+        final String archiveName = new String("export_test");
+        final Vector<String> fieldNames = new Vector<>();
+        fieldNames.addElement("column1");
+        fieldNames.addElement("column2");
+        fieldNames.addElement("test");
+        try {
+            this.export.exportTable(archiveName, this.generateJTableToTest(), fieldNames);
+            final File file = new File(archiveName);
+            final FileReader fileReader = new FileReader(file.getCanonicalPath());
+            final BufferedReader reader = new BufferedReader(fileReader);
+            String currentLine = reader.readLine();
+            while (currentLine != null) {
+                Assert.assertTrue(currentLine.contains("test"));
+                currentLine = reader.readLine();
+            }
+            reader.close();
+            file.delete();
+        } catch (UNISoNException | IOException f) {
+            Assert.fail("ERROR: " + f.getMessage());
+        }
+    }
 }

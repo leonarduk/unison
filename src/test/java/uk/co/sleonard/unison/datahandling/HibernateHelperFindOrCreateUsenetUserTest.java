@@ -31,8 +31,7 @@ public class HibernateHelperFindOrCreateUsenetUserTest {
         assertThrows(UNISoNException.class, () -> {
             try {
                 m.invoke(helper, article, session, null);
-            }
-            catch (InvocationTargetException e) {
+            } catch (InvocationTargetException e) {
                 throw e.getCause();
             }
         });

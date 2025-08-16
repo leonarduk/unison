@@ -7,9 +7,9 @@
 package uk.co.sleonard.unison.input;
 
 public class DataHibernatorPoolImpl implements DataHibernatorPool {
-	@Override
-	public void stopAllDownloads() {
-		DataHibernatorWorker.stopDownload();
-	}
+    @Override
+    public void stopAllDownloads() {
+        DataHibernatorWorker.stopDownload();
+    }
 
 }

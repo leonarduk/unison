@@ -1,67 +1,67 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC
-	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="uk.co.sleonard.unison.datahandling.DAO">
-	<class name="NewsGroup" table="NEWSGROUP">
-		<meta attribute="class-description">
-			Represents a news group e.g. soc.senior.issues
-		</meta>
-		<cache usage="read-write"/>
-		<id name="id" type="int" column="NEWSGROUP_ID"
-			unsaved-value="0">
-			<meta attribute="scope-set">protected</meta>
-			<generator class="native" />
-		</id>
-		<property name="name" type="string" not-null="true"
-			column="name">
-			<meta attribute="use-in-tostring">true</meta>
-		</property>
+    <class name="NewsGroup" table="NEWSGROUP">
+        <meta attribute="class-description">
+            Represents a news group e.g. soc.senior.issues
+        </meta>
+        <cache usage="read-write"/>
+        <id name="id" type="int" column="NEWSGROUP_ID"
+            unsaved-value="0">
+            <meta attribute="scope-set">protected</meta>
+            <generator class="native"/>
+        </id>
+        <property name="name" type="string" not-null="true"
+                  column="name">
+            <meta attribute="use-in-tostring">true</meta>
+        </property>
 
 
-		<many-to-one name="parentNewsGroup"
-			class="uk.co.sleonard.unison.datahandling.DAO.NewsGroup"
-			not-null="false" lazy="false" />
+        <many-to-one name="parentNewsGroup"
+                     class="uk.co.sleonard.unison.datahandling.DAO.NewsGroup"
+                     not-null="false" lazy="false"/>
 
-		<set name="topics" table="NEWSGROUP_TOPIC" inverse="true">
-			<meta attribute="field-description">
-				Message Threads in this NewsGroup
-			</meta>
-			<key column="NEWSGROUP_ID" />
-			<many-to-many
-				class="uk.co.sleonard.unison.datahandling.DAO.Topic"
-				column="TOPIC_ID" lazy="false" />
-		</set>
-		<set name="messages" table="NEWSGROUP_MESSAGE" inverse="true"
-			cascade="all">
-			<meta attribute="field-description">
-				Messages in this NewsGroup
-			</meta>
-			<key column="NEWSGROUP_ID" />
-			<many-to-many
-				class="uk.co.sleonard.unison.datahandling.DAO.Message"
-				column="MESSAGE_ID" />
-		</set>
-		<property name="lastIndexDownloaded" type="int" not-null="false"
-			column="lastIndex" />
+        <set name="topics" table="NEWSGROUP_TOPIC" inverse="true">
+            <meta attribute="field-description">
+                Message Threads in this NewsGroup
+            </meta>
+            <key column="NEWSGROUP_ID"/>
+            <many-to-many
+                    class="uk.co.sleonard.unison.datahandling.DAO.Topic"
+                    column="TOPIC_ID" lazy="false"/>
+        </set>
+        <set name="messages" table="NEWSGROUP_MESSAGE" inverse="true"
+             cascade="all">
+            <meta attribute="field-description">
+                Messages in this NewsGroup
+            </meta>
+            <key column="NEWSGROUP_ID"/>
+            <many-to-many
+                    class="uk.co.sleonard.unison.datahandling.DAO.Message"
+                    column="MESSAGE_ID"/>
+        </set>
+        <property name="lastIndexDownloaded" type="int" not-null="false"
+                  column="lastIndex"/>
 
-		<property name="lastMessageTotal" type="int" not-null="false"
-			column="lasttotal" />
-		<property name="firstMessage" type="int" not-null="false"
-			column="firstmessage" />
-		<property name="lastMessage" type="int" not-null="false"
-			column="lastmessage" />
+        <property name="lastMessageTotal" type="int" not-null="false"
+                  column="lasttotal"/>
+        <property name="firstMessage" type="int" not-null="false"
+                  column="firstmessage"/>
+        <property name="lastMessage" type="int" not-null="false"
+                  column="lastmessage"/>
 
-		<property name="fullName" type="string" not-null="false"
-			column="fullName" />
-		<property name="lastNode" type="boolean" not-null="false"
-			column="lastNode" />
-	</class>
-	<query
-		name="uk.co.sleonard.unison.datahandling.DAO.NewsGroup.findByKey">
-		<![CDATA[ from uk.co.sleonard.unison.datahandling.DAO.NewsGroup as g
+        <property name="fullName" type="string" not-null="false"
+                  column="fullName"/>
+        <property name="lastNode" type="boolean" not-null="false"
+                  column="lastNode"/>
+    </class>
+    <query
+            name="uk.co.sleonard.unison.datahandling.DAO.NewsGroup.findByKey">
+        <![CDATA[ from uk.co.sleonard.unison.datahandling.DAO.NewsGroup as g
 	          where g.fullName = :key
 	          ]]>
-	</query>
+    </query>
 
 </hibernate-mapping>

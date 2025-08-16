@@ -24,301 +24,337 @@ import java.util.Observer;
  *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
- *
  */
 public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
 
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = -273253787613490358L;
+    /**
+     * The Constant serialVersionUID.
+     */
+    private static final long serialVersionUID = -273253787613490358L;
 
-	/** The Constant dbDriver. */
-	private final static String dbDriver = "org.hsqldb.jdbcDriver";
+    /**
+     * The Constant dbDriver.
+     */
+    private final static String dbDriver = "org.hsqldb.jdbcDriver";
 
-	/** The Constant dbUser. */
-	private final static String dbUser = "sa";
+    /**
+     * The Constant dbUser.
+     */
+    private final static String dbUser = "sa";
 
-	/** The Constant DB_URL. */
-	private final static String DB_URL = "jdbc:hsqldb:file:DB/projectDB";
+    /**
+     * The Constant DB_URL.
+     */
+    private final static String DB_URL = "jdbc:hsqldb:file:DB/projectDB";
 
-	/** The Constant GUI_ARGS. */
-	// http://www.electric-spoon.com/cgi-bin/man/man2html?hsqldb-databasemanagerswing+1
-	private static final String GUI_ARGS[] = { "-driver", UNISoNTabbedFrame.dbDriver, "-url",
-	        UNISoNTabbedFrame.DB_URL, "-user", UNISoNTabbedFrame.dbUser, "-noexit" };
+    /**
+     * The Constant GUI_ARGS.
+     */
+    // http://www.electric-spoon.com/cgi-bin/man/man2html?hsqldb-databasemanagerswing+1
+    private static final String GUI_ARGS[] = {"-driver", UNISoNTabbedFrame.dbDriver, "-url",
+            UNISoNTabbedFrame.DB_URL, "-user", UNISoNTabbedFrame.dbUser, "-noexit"};
 
-	/** The about menu item. */
-	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JMenuItem aboutMenuItem;
+    /**
+     * The about menu item.
+     */
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem aboutMenuItem;
 
-	/** The delete db menu item. */
-	private javax.swing.JMenuItem deleteDBMenuItem;
+    /**
+     * The delete db menu item.
+     */
+    private javax.swing.JMenuItem deleteDBMenuItem;
 
-	/** The download news panel1. */
-	private uk.co.sleonard.unison.gui.generated.DownloadNewsPanel downloadNewsPanel1;
+    /**
+     * The download news panel1.
+     */
+    private uk.co.sleonard.unison.gui.generated.DownloadNewsPanel downloadNewsPanel1;
 
-	/** The exit menu item. */
-	private javax.swing.JMenuItem exitMenuItem;
+    /**
+     * The exit menu item.
+     */
+    private javax.swing.JMenuItem exitMenuItem;
 
-	/** The file menu. */
-	private javax.swing.JMenu fileMenu;
+    /**
+     * The file menu.
+     */
+    private javax.swing.JMenu fileMenu;
 
-	/** The help menu. */
-	private javax.swing.JMenu helpMenu;
+    /**
+     * The help menu.
+     */
+    private javax.swing.JMenu helpMenu;
 
-	/** The j menu bar1. */
-	private javax.swing.JMenuBar jMenuBar1;
+    /**
+     * The j menu bar1.
+     */
+    private javax.swing.JMenuBar jMenuBar1;
 
-	/** The j separator1. */
-	private javax.swing.JSeparator jSeparator1;
+    /**
+     * The j separator1.
+     */
+    private javax.swing.JSeparator jSeparator1;
 
-	/** The j separator2. */
-	private javax.swing.JSeparator jSeparator2;
+    /**
+     * The j separator2.
+     */
+    private javax.swing.JSeparator jSeparator2;
 
-	/** The message store viewer1. */
-	private uk.co.sleonard.unison.gui.generated.MessageStoreViewer messageStoreViewer1;
+    /**
+     * The message store viewer1.
+     */
+    private uk.co.sleonard.unison.gui.generated.MessageStoreViewer messageStoreViewer1;
 
-	/** The pajek panel1. */
-	private uk.co.sleonard.unison.gui.generated.PajekPanel pajekPanel1;
+    /**
+     * The pajek panel1.
+     */
+    private uk.co.sleonard.unison.gui.generated.PajekPanel pajekPanel1;
 
-	/** The refresh db menu item. */
-	private javax.swing.JMenuItem refreshDBMenuItem;
+    /**
+     * The refresh db menu item.
+     */
+    private javax.swing.JMenuItem refreshDBMenuItem;
 
-	/** The show d bclient menu item. */
-	private javax.swing.JMenuItem showDBclientMenuItem;
+    /**
+     * The show d bclient menu item.
+     */
+    private javax.swing.JMenuItem showDBclientMenuItem;
 
-	/** The tabbed pane. */
-	private javax.swing.JTabbedPane tabbedPane;
+    /**
+     * The tabbed pane.
+     */
+    private javax.swing.JTabbedPane tabbedPane;
 
-	/** The controller. */
-	private final UNISoNController controller;
+    /**
+     * The controller.
+     */
+    private final UNISoNController controller;
 
-	/** The about dialog. */
-	private final AboutDialog aboutDialog;
+    /**
+     * The about dialog.
+     */
+    private final AboutDialog aboutDialog;
 
-	// End of variables declaration//GEN-END:variables
-	/**
-	 * Creates new form UNISoNTabbedFrame.
-	 *
-	 * @throws UNISoNException
-	 */
-	public UNISoNTabbedFrame() throws UNISoNException {
-		this.setTitle("UNISoN");
-		final JSplashScreen splash = new JSplashScreen("Loading ...", this);
-		splash.setProgress(10);
+    // End of variables declaration//GEN-END:variables
 
-		this.controller = UNISoNController.create(this, new DataHibernatorPoolImpl());
+    /**
+     * Creates new form UNISoNTabbedFrame.
+     *
+     * @throws UNISoNException
+     */
+    public UNISoNTabbedFrame() throws UNISoNException {
+        this.setTitle("UNISoN");
+        final JSplashScreen splash = new JSplashScreen("Loading ...", this);
+        splash.setProgress(10);
 
-		splash.setProgress(50);
-		this.initComponents();
-		splash.setProgress(80);
+        this.controller = UNISoNController.create(this, new DataHibernatorPoolImpl());
 
-		final UNISoNDatabase database = this.controller.getDatabase();
-		database.addObserver(this.downloadNewsPanel1);
-		database.addObserver(this.messageStoreViewer1);
-		database.addObserver(this.pajekPanel1);
-		database.addObserver(this);
+        splash.setProgress(50);
+        this.initComponents();
+        splash.setProgress(80);
 
-		this.aboutDialog = new AboutDialog(this, false);
+        final UNISoNDatabase database = this.controller.getDatabase();
+        database.addObserver(this.downloadNewsPanel1);
+        database.addObserver(this.messageStoreViewer1);
+        database.addObserver(this.pajekPanel1);
+        database.addObserver(this);
 
-		this.exitMenuItem
-		        .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
+        this.aboutDialog = new AboutDialog(this, false);
 
-		this.refreshDBMenuItem
-		        .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));
+        this.exitMenuItem
+                .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
 
-		this.deleteDBMenuItem
-		        .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, InputEvent.CTRL_MASK));
+        this.refreshDBMenuItem
+                .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));
 
-		this.showDBclientMenuItem
-		        .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, InputEvent.CTRL_MASK));
+        this.deleteDBMenuItem
+                .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, InputEvent.CTRL_MASK));
 
-		this.aboutMenuItem
-		        .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_HOME, InputEvent.CTRL_MASK));
+        this.showDBclientMenuItem
+                .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, InputEvent.CTRL_MASK));
 
-		database.refreshDataFromDatabase();
-		splash.setProgress(100);
+        this.aboutMenuItem
+                .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_HOME, InputEvent.CTRL_MASK));
 
-		splash.close();
-	}
+        database.refreshDataFromDatabase();
+        splash.setProgress(100);
 
-	/**
-	 * About menu item action performed.
-	 *
-	 * @param evt
-	 *            the evt
-	 */
-	private void aboutMenuItemActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_aboutMenuItemActionPerformed
-		this.aboutDialog.setVisible(true);
-	}// GEN-LAST:event_aboutMenuItemActionPerformed
+        splash.close();
+    }
 
-	/**
-	 * Delete db menu item action performed.
-	 *
-	 * @param evt
-	 *            the evt
-	 */
-	private void deleteDBMenuItemActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_deleteDBMenuItemActionPerformed
-		final int response = JOptionPane.showConfirmDialog(this,
-		        "This will delete ALL the data. Are you sure?", "DB Refresh",
-		        JOptionPane.YES_NO_OPTION);
-		switch (response) {
-			case JOptionPane.YES_OPTION:
-				this.controller.helper().generateSchema();
-				this.showAlert("DB refresh complete");
-				this.controller.getDatabase().refreshDataFromDatabase();
-				break;
-			default:
-				this.showAlert("DB refresh cancelled");
-				break;
-		}
-	}// GEN-LAST:event_deleteDBMenuItemActionPerformed
+    /**
+     * About menu item action performed.
+     *
+     * @param evt the evt
+     */
+    private void aboutMenuItemActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_aboutMenuItemActionPerformed
+        this.aboutDialog.setVisible(true);
+    }// GEN-LAST:event_aboutMenuItemActionPerformed
 
-	/**
-	 * Exit menu item action performed.
-	 *
-	 * @param evt
-	 *            the evt
-	 */
-	private void exitMenuItemActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_exitMenuItemActionPerformed
-		final int response = JOptionPane.showConfirmDialog(this, "Are you sure?",
-		        "Exit Application", JOptionPane.YES_NO_OPTION);
-		if (response == JOptionPane.YES_OPTION) {
-			System.exit(0);
-		}
-	}// GEN-LAST:event_exitMenuItemActionPerformed
+    /**
+     * Delete db menu item action performed.
+     *
+     * @param evt the evt
+     */
+    private void deleteDBMenuItemActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_deleteDBMenuItemActionPerformed
+        final int response = JOptionPane.showConfirmDialog(this,
+                "This will delete ALL the data. Are you sure?", "DB Refresh",
+                JOptionPane.YES_NO_OPTION);
+        switch (response) {
+            case JOptionPane.YES_OPTION:
+                this.controller.helper().generateSchema();
+                this.showAlert("DB refresh complete");
+                this.controller.getDatabase().refreshDataFromDatabase();
+                break;
+            default:
+                this.showAlert("DB refresh cancelled");
+                break;
+        }
+    }// GEN-LAST:event_deleteDBMenuItemActionPerformed
 
-	/**
-	 * This method is called from within the constructor to initialize the form. WARNING: Do NOT
-	 * modify this code. The content of this method is always regenerated by the Form Editor.
-	 */
-	// <editor-fold defaultstate="collapsed" desc=" Generated Code
-	// ">//GEN-BEGIN:initComponents
-	private void initComponents() {
-		this.tabbedPane = new javax.swing.JTabbedPane();
-		this.downloadNewsPanel1 = new uk.co.sleonard.unison.gui.generated.DownloadNewsPanel(
-		        UNISoNController.getInstance());
-		this.messageStoreViewer1 = new uk.co.sleonard.unison.gui.generated.MessageStoreViewer();
-		this.pajekPanel1 = new uk.co.sleonard.unison.gui.generated.PajekPanel(this);
-		this.jMenuBar1 = new javax.swing.JMenuBar();
-		this.fileMenu = new javax.swing.JMenu();
-		this.refreshDBMenuItem = new javax.swing.JMenuItem();
-		this.showDBclientMenuItem = new javax.swing.JMenuItem();
-		this.jSeparator1 = new javax.swing.JSeparator();
-		this.exitMenuItem = new javax.swing.JMenuItem();
-		this.helpMenu = new javax.swing.JMenu();
-		this.deleteDBMenuItem = new javax.swing.JMenuItem();
-		this.jSeparator2 = new javax.swing.JSeparator();
-		this.aboutMenuItem = new javax.swing.JMenuItem();
+    /**
+     * Exit menu item action performed.
+     *
+     * @param evt the evt
+     */
+    private void exitMenuItemActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_exitMenuItemActionPerformed
+        final int response = JOptionPane.showConfirmDialog(this, "Are you sure?",
+                "Exit Application", JOptionPane.YES_NO_OPTION);
+        if (response == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    }// GEN-LAST:event_exitMenuItemActionPerformed
 
-		this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-		this.tabbedPane.setName("");
-		this.tabbedPane.addTab("Download Messages", this.downloadNewsPanel1);
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT
+     * modify this code. The content of this method is always regenerated by the Form Editor.
+     */
+    // <editor-fold defaultstate="collapsed" desc=" Generated Code
+    // ">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        this.tabbedPane = new javax.swing.JTabbedPane();
+        this.downloadNewsPanel1 = new uk.co.sleonard.unison.gui.generated.DownloadNewsPanel(
+                UNISoNController.getInstance());
+        this.messageStoreViewer1 = new uk.co.sleonard.unison.gui.generated.MessageStoreViewer();
+        this.pajekPanel1 = new uk.co.sleonard.unison.gui.generated.PajekPanel(this);
+        this.jMenuBar1 = new javax.swing.JMenuBar();
+        this.fileMenu = new javax.swing.JMenu();
+        this.refreshDBMenuItem = new javax.swing.JMenuItem();
+        this.showDBclientMenuItem = new javax.swing.JMenuItem();
+        this.jSeparator1 = new javax.swing.JSeparator();
+        this.exitMenuItem = new javax.swing.JMenuItem();
+        this.helpMenu = new javax.swing.JMenu();
+        this.deleteDBMenuItem = new javax.swing.JMenuItem();
+        this.jSeparator2 = new javax.swing.JSeparator();
+        this.aboutMenuItem = new javax.swing.JMenuItem();
 
-		this.tabbedPane.addTab("View Saved Data", this.messageStoreViewer1);
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        this.tabbedPane.setName("");
+        this.tabbedPane.addTab("Download Messages", this.downloadNewsPanel1);
 
-		this.tabbedPane.addTab("Transform Data For Pajek", this.pajekPanel1);
+        this.tabbedPane.addTab("View Saved Data", this.messageStoreViewer1);
 
-		this.fileMenu.setText("File");
-		this.refreshDBMenuItem.setText("Refresh Data");
-		this.refreshDBMenuItem.setToolTipText("Loads the latest data from the database");
-		this.refreshDBMenuItem.addActionListener(
-		        evt -> UNISoNTabbedFrame.this.refreshDBMenuItemActionPerformed(evt));
+        this.tabbedPane.addTab("Transform Data For Pajek", this.pajekPanel1);
 
-		this.fileMenu.add(this.refreshDBMenuItem);
+        this.fileMenu.setText("File");
+        this.refreshDBMenuItem.setText("Refresh Data");
+        this.refreshDBMenuItem.setToolTipText("Loads the latest data from the database");
+        this.refreshDBMenuItem.addActionListener(
+                evt -> UNISoNTabbedFrame.this.refreshDBMenuItemActionPerformed(evt));
 
-		this.showDBclientMenuItem.setText("DB GUI");
-		this.showDBclientMenuItem.setToolTipText("Brings up a DB client to view the data directly");
-		this.showDBclientMenuItem.addActionListener(
-		        evt -> UNISoNTabbedFrame.this.showDBclientMenuItemActionPerformed(evt));
+        this.fileMenu.add(this.refreshDBMenuItem);
 
-		this.fileMenu.add(this.showDBclientMenuItem);
+        this.showDBclientMenuItem.setText("DB GUI");
+        this.showDBclientMenuItem.setToolTipText("Brings up a DB client to view the data directly");
+        this.showDBclientMenuItem.addActionListener(
+                evt -> UNISoNTabbedFrame.this.showDBclientMenuItemActionPerformed(evt));
 
-		this.fileMenu.add(this.jSeparator1);
+        this.fileMenu.add(this.showDBclientMenuItem);
 
-		this.exitMenuItem.setText("Exit");
-		this.exitMenuItem.setToolTipText("Exits the application");
-		this.exitMenuItem
-		        .addActionListener(evt -> UNISoNTabbedFrame.this.exitMenuItemActionPerformed(evt));
+        this.fileMenu.add(this.jSeparator1);
 
-		this.fileMenu.add(this.exitMenuItem);
+        this.exitMenuItem.setText("Exit");
+        this.exitMenuItem.setToolTipText("Exits the application");
+        this.exitMenuItem
+                .addActionListener(evt -> UNISoNTabbedFrame.this.exitMenuItemActionPerformed(evt));
 
-		this.jMenuBar1.add(this.fileMenu);
+        this.fileMenu.add(this.exitMenuItem);
 
-		this.helpMenu.setText("Help");
-		this.deleteDBMenuItem.setText("Delete All Data");
-		this.deleteDBMenuItem.setToolTipText(
-		        "This clears all the downloaded data - warning you will need to download everything again");
-		this.deleteDBMenuItem.addActionListener(
-		        evt -> UNISoNTabbedFrame.this.deleteDBMenuItemActionPerformed(evt));
+        this.jMenuBar1.add(this.fileMenu);
 
-		this.helpMenu.add(this.deleteDBMenuItem);
+        this.helpMenu.setText("Help");
+        this.deleteDBMenuItem.setText("Delete All Data");
+        this.deleteDBMenuItem.setToolTipText(
+                "This clears all the downloaded data - warning you will need to download everything again");
+        this.deleteDBMenuItem.addActionListener(
+                evt -> UNISoNTabbedFrame.this.deleteDBMenuItemActionPerformed(evt));
 
-		this.helpMenu.add(this.jSeparator2);
+        this.helpMenu.add(this.deleteDBMenuItem);
 
-		this.aboutMenuItem.setText("About UNISoN");
-		this.aboutMenuItem.setToolTipText("A little bit about this application.");
-		this.aboutMenuItem
-		        .addActionListener(evt -> UNISoNTabbedFrame.this.aboutMenuItemActionPerformed(evt));
+        this.helpMenu.add(this.jSeparator2);
 
-		this.helpMenu.add(this.aboutMenuItem);
+        this.aboutMenuItem.setText("About UNISoN");
+        this.aboutMenuItem.setToolTipText("A little bit about this application.");
+        this.aboutMenuItem
+                .addActionListener(evt -> UNISoNTabbedFrame.this.aboutMenuItemActionPerformed(evt));
 
-		this.jMenuBar1.add(this.helpMenu);
+        this.helpMenu.add(this.aboutMenuItem);
 
-		this.setJMenuBar(this.jMenuBar1);
+        this.jMenuBar1.add(this.helpMenu);
 
-		final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this.getContentPane());
-		this.getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(
-		        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-		                this.tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 566,
-		                Short.MAX_VALUE));
-		layout.setVerticalGroup(
-		        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-		                .addGroup(layout.createSequentialGroup().addContainerGap().addComponent(
-		                        this.tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 373,
-		                        Short.MAX_VALUE)));
-		this.pack();
-	}// </editor-fold>//GEN-END:initComponents
+        this.setJMenuBar(this.jMenuBar1);
 
-	/**
-	 * Refresh db menu item action performed.
-	 *
-	 * @param evt
-	 *            the evt
-	 */
-	private void refreshDBMenuItemActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_refreshDBMenuItemActionPerformed
-		this.controller.getDatabase().refreshDataFromDatabase();
-	}// GEN-LAST:event_refreshDBMenuItemActionPerformed
+        final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this.getContentPane());
+        this.getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                        this.tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 566,
+                        Short.MAX_VALUE));
+        layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup().addContainerGap().addComponent(
+                                this.tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 373,
+                                Short.MAX_VALUE)));
+        this.pack();
+    }// </editor-fold>//GEN-END:initComponents
 
-	/**
-	 * Show alert.
-	 *
-	 * @param message
-	 *            the message
-	 */
-	private void showAlert(final String message) {
-		JOptionPane.showMessageDialog(this, message);
-	}
+    /**
+     * Refresh db menu item action performed.
+     *
+     * @param evt the evt
+     */
+    private void refreshDBMenuItemActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_refreshDBMenuItemActionPerformed
+        this.controller.getDatabase().refreshDataFromDatabase();
+    }// GEN-LAST:event_refreshDBMenuItemActionPerformed
 
-	/**
-	 * Show d bclient menu item action performed.
-	 *
-	 * @param evt
-	 *            the evt
-	 */
-	private void showDBclientMenuItemActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_showDBclientMenuItemActionPerformed
-		DatabaseManagerSwing.main(UNISoNTabbedFrame.GUI_ARGS);
-	}// GEN-LAST:event_showDBclientMenuItemActionPerformed
+    /**
+     * Show alert.
+     *
+     * @param message the message
+     */
+    private void showAlert(final String message) {
+        JOptionPane.showMessageDialog(this, message);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
-	 */
-	@Override
-	public void update(final Observable observable, final Object arg1) {
-		if (observable instanceof UNISoNDatabase) {
-			this.showAlert("GUI has been refreshed from the database");
-		}
-	}
+    /**
+     * Show d bclient menu item action performed.
+     *
+     * @param evt the evt
+     */
+    private void showDBclientMenuItemActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_showDBclientMenuItemActionPerformed
+        DatabaseManagerSwing.main(UNISoNTabbedFrame.GUI_ARGS);
+    }// GEN-LAST:event_showDBclientMenuItemActionPerformed
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+     */
+    @Override
+    public void update(final Observable observable, final Object arg1) {
+        if (observable instanceof UNISoNDatabase) {
+            this.showAlert("GUI has been refreshed from the database");
+        }
+    }
 
 }

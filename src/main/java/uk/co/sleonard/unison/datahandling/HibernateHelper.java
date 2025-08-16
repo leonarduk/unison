@@ -47,32 +47,45 @@ import java.util.*;
  *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
- *
  */
 @Slf4j
 public class HibernateHelper {
 
-    /** The Constant DB_URL. */
+    /**
+     * The Constant DB_URL.
+     */
     // private final static String DB_URL = "jdbc:hsqldb:file:DB/projectDB";
     private final static String DB_URL = "jdbc:hsqldb:file:src/main/resources/DB/projectDB";
 
-    /** The Constant dbDriver. */
+    /**
+     * The Constant dbDriver.
+     */
     private final static String dbDriver = "org.hsqldb.jdbcDriver";
 
-    /** The Constant dbUser. */
+    /**
+     * The Constant dbUser.
+     */
     private final static String dbUser = "sa";
 
-    /** The first connect. */
+    /**
+     * The first connect.
+     */
     private static boolean firstConnect = true;
 
-    /** The Constant GUI_ARGS. */
-    public static final String GUI_ARGS[] = { "-driver", HibernateHelper.dbDriver, "-url",
-            HibernateHelper.DB_URL, "-user", HibernateHelper.dbUser };
+    /**
+     * The Constant GUI_ARGS.
+     */
+    public static final String GUI_ARGS[] = {"-driver", HibernateHelper.dbDriver, "-url",
+            HibernateHelper.DB_URL, "-user", HibernateHelper.dbUser};
 
-    /** The Constant HIBERNATE_CONNECTION_URL. */
+    /**
+     * The Constant HIBERNATE_CONNECTION_URL.
+     */
     private static final String HIBERNATE_CONNECTION_URL = "hibernate.connection.url";
 
-    /** The session factory. */
+    /**
+     * The session factory.
+     */
     private static SessionFactory sessionFactory = null;
 
     private final LocationFinder locationFinder;
@@ -86,8 +99,7 @@ public class HibernateHelper {
     /**
      * This opens up a SQL client to access the database directly.
      *
-     * @param args
-     *            the arguments
+     * @param args the arguments
      */
     public static void main(final String[] args) {
         final HibernateHelper helper = new HibernateHelper(null);
@@ -98,8 +110,7 @@ public class HibernateHelper {
     /**
      * Instantiates a new hibernate helper.
      *
-     * @param gui
-     *            the controller
+     * @param gui the controller
      */
     public HibernateHelper(final UNISoNGUI gui) {
         this.gui = gui;
@@ -113,10 +124,8 @@ public class HibernateHelper {
     /**
      * Creates the location.
      *
-     * @param article
-     *            the article
-     * @param session
-     *            the session
+     * @param article the article
+     * @param session the session
      * @return the location
      */
     private synchronized Location createLocation(final NewsArticle article, final Session session) {
@@ -133,15 +142,11 @@ public class HibernateHelper {
     /**
      * Creates the message.
      *
-     * @param article
-     *            the article
-     * @param topic
-     *            the topic
-     * @param poster
-     *            the poster
+     * @param article the article
+     * @param topic   the topic
+     * @param poster  the poster
      * @return the message
-     * @throws UNISoNException
-     *             the UNI so n exception
+     * @throws UNISoNException the UNI so n exception
      */
     Message createMessage(final NewsArticle article, final Topic topic, final UsenetUser poster)
             throws UNISoNException {
@@ -151,8 +156,7 @@ public class HibernateHelper {
             // As messages can be quite large, we compress them
             try {
                 body = StringUtils.compress(article.getContent().toString());
-            }
-            catch (final IOException e) {
+            } catch (final IOException e) {
                 throw new UNISoNException("Failed to compress message", e);
             }
         }
@@ -172,14 +176,10 @@ public class HibernateHelper {
     /**
      * Creates the usenet user.
      *
-     * @param article
-     *            the article
-     * @param session
-     *            the session
-     * @param locationInput
-     *            the location
-     * @param gender
-     *            the gender
+     * @param article       the article
+     * @param session       the session
+     * @param locationInput the location
+     * @param gender        the gender
      * @return the usenet user
      */
     private synchronized UsenetUser createUsenetUser(final NewsArticle article,
@@ -201,14 +201,12 @@ public class HibernateHelper {
     /**
      * Find by key.
      *
-     * @param key
-     *            the key
-     * @param session
-     *            the session
-     * @param objclass
-     *            the objclass
+     * @param key      the key
+     * @param session  the session
+     * @param objclass the objclass
      * @return the object
-     * @throws HibernateException     */
+     * @throws HibernateException
+     */
     public Object findByKey(final String key, final Session session, final Class<?> objclass)
             throws HibernateException {
 
@@ -219,8 +217,7 @@ public class HibernateHelper {
         try {
             uniqueResult = query.uniqueResult();
 
-        }
-        catch (final NonUniqueResultException e) {
+        } catch (final NonUniqueResultException e) {
             throw new RuntimeException(
                     "Got non-unique result for " + key + " on " + objclass.getName() + " " + e);
         }
@@ -241,10 +238,8 @@ public class HibernateHelper {
     /**
      * Find or create ip address.
      *
-     * @param article
-     *            the article
-     * @param session
-     *            the session
+     * @param article the article
+     * @param session the session
      * @return the ip address
      */
     private synchronized IpAddress findOrCreateIpAddress(final NewsArticle article,
@@ -263,10 +258,8 @@ public class HibernateHelper {
     /**
      * Find or create location.
      *
-     * @param session
-     *            the session
-     * @param ipAddress
-     *            the ip address
+     * @param session   the session
+     * @param ipAddress the ip address
      * @return the location
      */
     synchronized Location findOrCreateLocation(final Session session, final IpAddress ipAddress) {
@@ -302,8 +295,7 @@ public class HibernateHelper {
                 session.saveOrUpdate(aMessage);
                 this.messagesCache.put(aMessage.getUsenetMessageID(), message);
             }
-        }
-        catch (final ObjectNotFoundException e) {
+        } catch (final ObjectNotFoundException e) {
             log.warn(aMessage.getPoster().toString(), e);
         }
         return message;
@@ -345,10 +337,8 @@ public class HibernateHelper {
     /**
      * Find or create topic.
      *
-     * @param session
-     *            the session
-     * @param subjectInput
-     *            the subject
+     * @param session      the session
+     * @param subjectInput the subject
      * @return the topic
      */
     private synchronized Topic findOrCreateTopic(final Session session, final String subjectInput) {
@@ -367,12 +357,9 @@ public class HibernateHelper {
     /**
      * Find or create usenet user.
      *
-     * @param article
-     *            the article
-     * @param session
-     *            the session
-     * @param gender
-     *            the gender
+     * @param article the article
+     * @param session the session
+     * @param gender  the gender
      * @return the usenet user
      */
     private synchronized UsenetUser findOrCreateUsenetUser(final NewsArticle article,
@@ -381,8 +368,7 @@ public class HibernateHelper {
         EmailAddress emailAddress;
         try {
             emailAddress = UsenetUserHelper.parseFromField(article);
-        }
-        catch (final IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             throw new UNISoNException("Failed to parse From field: " + article.getFrom(), e);
         }
         if ((emailAddress == null) || (emailAddress.getEmail() == null)) {
@@ -400,7 +386,7 @@ public class HibernateHelper {
     }
 
     synchronized UsenetUser findUsenetUser(final EmailAddress emailAddress,
-            final Session session) {
+                                           final Session session) {
         if ((emailAddress == null) || (emailAddress.getEmail() == null)) {
             return null;
         }
@@ -429,8 +415,7 @@ public class HibernateHelper {
 
             final SchemaExport export = new SchemaExport();
             export.create(EnumSet.of(TargetType.DATABASE), metadata);
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
@@ -439,12 +424,9 @@ public class HibernateHelper {
      * Gets the hibernate config.
      *
      * @return the hibernate config
-     * @throws HibernateException
-     *             the hibernate exception
-     * @throws MappingException
-     *             the mapping exception
-     * @throws NamingException
-     *             the naming exception
+     * @throws HibernateException the hibernate exception
+     * @throws MappingException   the mapping exception
+     * @throws NamingException    the naming exception
      */
     private Configuration getHibernateConfig()
             throws HibernateException, MappingException, NamingException {
@@ -474,7 +456,7 @@ public class HibernateHelper {
                         + " otherwise click OK";
                 final String defaultOption = "OK";
 
-                final String[] options = { defaultOption, "Quit" };
+                final String[] options = {defaultOption, "Quit"};
                 final String title = "Database locked";
                 if (null != this.gui) {
                     final int response = this.gui.askQuestion(question, options, title,
@@ -491,8 +473,7 @@ public class HibernateHelper {
                         default:
                             break;
                     }
-                }
-                else {
+                } else {
                     dbLock.delete();
                 }
             }
@@ -524,8 +505,7 @@ public class HibernateHelper {
                 HibernateHelper.sessionFactory = config.buildSessionFactory();
                 root.setLevel(level);
 
-            }
-            catch (final Throwable e) {
+            } catch (final Throwable e) {
                 e.printStackTrace();
                 throw new UNISoNException("Failed to connect to DB", e);
             }
@@ -539,14 +519,10 @@ public class HibernateHelper {
     /**
      * Gets the list results.
      *
-     * @param <T>
-     *            the generic type
-     * @param query
-     *            the query
-     * @param type
-     *            the type
-     * @param session
-     *            the session
+     * @param <T>     the generic type
+     * @param query   the query
+     * @param type    the type
+     * @param session the session
      * @return the list results
      */
     <T> Vector<ResultRow> getListResults(final String query, final Class<T> type,
@@ -565,10 +541,8 @@ public class HibernateHelper {
     /**
      * Gets the newsgroup by full name.
      *
-     * @param groupName
-     *            the group name
-     * @param session
-     *            the session
+     * @param groupName the group name
+     * @param session   the session
      * @return the newsgroup by full name
      */
     public NewsGroup getNewsgroupByFullName(final String groupName, final Session session) {
@@ -582,30 +556,25 @@ public class HibernateHelper {
     /**
      * Gets the text.
      *
-     * @param object
-     *            the object
+     * @param object the object
      * @return the text
      */
     public String getText(final Object object) {
         String text = "";
         if (object instanceof Message) {
             text = "From:" + ((Message) object).getPoster().toString();
-        }
-        else if (object instanceof NewsGroup) {
+        } else if (object instanceof NewsGroup) {
             final NewsGroup group = (NewsGroup) object;
             text = group.getName();
             if (group.getLastMessageTotal() > 0) {
                 text += " (" + group.getLastMessageTotal() + ")";
             }
-        }
-        else if (object instanceof Location) {
+        } else if (object instanceof Location) {
             final Location location = (Location) object;
             text = "Location : " + location.getCity() + "," + location.getCountryCode();
-        }
-        else if (object instanceof UsenetUser) {
+        } else if (object instanceof UsenetUser) {
             text = "Poster : " + ((UsenetUser) object).getName();
-        }
-        else if (object instanceof Topic) {
+        } else if (object instanceof Topic) {
             // text = ((Topic) object).getSubject();
         }
         return text;
@@ -614,10 +583,8 @@ public class HibernateHelper {
     /**
      * Hibernate data.
      *
-     * @param article
-     *            the article
-     * @param session
-     *            the session
+     * @param article the article
+     * @param session the session
      * @return true, if successful
      */
     public synchronized boolean hibernateData(final NewsArticle article, final Session session) {
@@ -639,8 +606,7 @@ public class HibernateHelper {
 
             tx.commit();
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             if (e instanceof GenericJDBCException) {
                 e = (Exception) e.getCause();
             }
@@ -673,9 +639,8 @@ public class HibernateHelper {
             e.printStackTrace();
             if (tx != null) {
                 try {
-                  tx.rollback();
-                }
-                catch (final HibernateException e1) {
+                    tx.rollback();
+                } catch (final HibernateException e1) {
                     e1.printStackTrace();
                     return false;
                 }
@@ -687,12 +652,9 @@ public class HibernateHelper {
     /**
      * Run query.
      *
-     * @param <T>
-     *            the generic type
-     * @param query
-     *            the query
-     * @param type
-     *            the type
+     * @param <T>   the generic type
+     * @param query the query
+     * @param type  the type
      * @return the vector
      */
     <T> Vector<T> runQuery(final Query<T> query) {
@@ -700,11 +662,9 @@ public class HibernateHelper {
         Vector<T> returnVal = new Vector<>();
         try {
             returnVal.addAll(query.getResultList());
-        }
-        catch (final GenericJDBCException dbe) {
+        } catch (final GenericJDBCException dbe) {
             throw dbe;
-        }
-        catch (final HibernateException e) {
+        } catch (final HibernateException e) {
             log.error("Error fetching " + NewsGroup.class.getName(), e);
         }
         return returnVal;
@@ -713,14 +673,10 @@ public class HibernateHelper {
     /**
      * Run query.
      *
-     * @param <T>
-     *            the generic type
-     * @param query
-     *            the query
-     * @param hibernateSession
-     *            the hibernate session
-     * @param type
-     *            the type
+     * @param <T>              the generic type
+     * @param query            the query
+     * @param hibernateSession the hibernate session
+     * @param type             the type
      * @return the vector
      */
     public <T> Vector<T> runQuery(final String query, final Session hibernateSession,
@@ -731,16 +687,11 @@ public class HibernateHelper {
     /**
      * Run query with parameters.
      *
-     * @param <T>
-     *            the generic type
-     * @param query
-     *            the query
-     * @param params
-     *            the parameters to bind
-     * @param hibernateSession
-     *            the hibernate session
-     * @param type
-     *            the type
+     * @param <T>              the generic type
+     * @param query            the query
+     * @param params           the parameters to bind
+     * @param hibernateSession the hibernate session
+     * @param type             the type
      * @return the vector
      */
     public <T> Vector<T> runQuery(final String query, final Map<String, Object> params,
@@ -756,14 +707,10 @@ public class HibernateHelper {
     /**
      * Run sql query.
      *
-     * @param <T>
-     *            the generic type
-     * @param query
-     *            the query
-     * @param session
-     *            the session
-     * @param type
-     *            the type
+     * @param <T>     the generic type
+     * @param query   the query
+     * @param session the session
+     * @param type    the type
      * @return the list
      */
     private <T> List<T> runSQLQuery(final String query, final Session session,

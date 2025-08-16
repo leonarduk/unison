@@ -1,6 +1,6 @@
 /**
  * JSplashScreen
- * 
+ *
  * @author ${author}
  * @since 20-Jun-2016
  */
@@ -35,111 +35,111 @@ import java.awt.*;
  */
 public class JSplashScreen extends JDialog {
 
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = -6087186647558684188L;
+    /** The Constant serialVersionUID. */
+    private static final long serialVersionUID = -6087186647558684188L;
 
-	/** The status bar. */
-	private JProgressBar statusBar;
+    /** The status bar. */
+    private JProgressBar statusBar;
 
-	/**
-	 * Instantiates a new j splash screen.
-	 *
-	 * @param description
-	 *            the description
-	 * @param frame
-	 *            the frame
-	 */
-	public JSplashScreen(final String description, final JFrame frame) {
-		super(frame, description, false);
+    /**
+     * Instantiates a new j splash screen.
+     *
+     * @param description
+     *            the description
+     * @param frame
+     *            the frame
+     */
+    public JSplashScreen(final String description, final JFrame frame) {
+        super(frame, description, false);
 
-		final JPanel PanelForBorder = new JPanel(new BorderLayout());
-		PanelForBorder.setLayout(new BorderLayout());
-		final JLabel image = new JLabel(description);
-		image.setVisible(true);
-		PanelForBorder.add(image, BorderLayout.CENTER);
-		PanelForBorder.add(this.statusBar = new JProgressBar(0, 100), BorderLayout.SOUTH);
-		this.statusBar.setVisible(true);
-		PanelForBorder.setBorder(new BevelBorder(BevelBorder.RAISED));
-		PanelForBorder.setVisible(true);
-		this.add(PanelForBorder);
-		this.pack();
+        final JPanel PanelForBorder = new JPanel(new BorderLayout());
+        PanelForBorder.setLayout(new BorderLayout());
+        final JLabel image = new JLabel(description);
+        image.setVisible(true);
+        PanelForBorder.add(image, BorderLayout.CENTER);
+        PanelForBorder.add(this.statusBar = new JProgressBar(0, 100), BorderLayout.SOUTH);
+        this.statusBar.setVisible(true);
+        PanelForBorder.setBorder(new BevelBorder(BevelBorder.RAISED));
+        PanelForBorder.setVisible(true);
+        this.add(PanelForBorder);
+        this.pack();
 
-		// Plonk it on center of screen
-		final Dimension WindowSize = this.getSize();
-		final Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        // Plonk it on center of screen
+        final Dimension WindowSize = this.getSize();
+        final Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-		this.setBounds((ScreenSize.width - WindowSize.width) / 2,
-		        (ScreenSize.height - WindowSize.height) / 2, WindowSize.width, WindowSize.height);
-		this.setVisible(true);
+        this.setBounds((ScreenSize.width - WindowSize.width) / 2,
+                (ScreenSize.height - WindowSize.height) / 2, WindowSize.width, WindowSize.height);
+        this.setVisible(true);
 
-	}
+    }
 
-	/**
-	 * Close.
-	 */
-	public void close() {
-		// Close and dispose Window in AWT thread
-		SwingUtilities.invokeLater(new CloseJNSplash());
-	}
+    /**
+     * Close.
+     */
+    public void close() {
+        // Close and dispose Window in AWT thread
+        SwingUtilities.invokeLater(new CloseJNSplash());
+    }
 
-	/**
-	 * Sets the progress.
-	 *
-	 * @param value
-	 *            the new progress
-	 */
-	public void setProgress(final int value) {
-		this.statusBar.setValue(value);
-	}
+    /**
+     * Sets the progress.
+     *
+     * @param value
+     *            the new progress
+     */
+    public void setProgress(final int value) {
+        this.statusBar.setValue(value);
+    }
 
-	/**
-	 * Sets the width.
-	 *
-	 * @param maxCount
-	 *            the new width
-	 */
-	public void setWidth(final int maxCount) {
-		this.statusBar.setMaximum(maxCount);
-	}
+    /**
+     * Sets the width.
+     *
+     * @param maxCount
+     *            the new width
+     */
+    public void setWidth(final int maxCount) {
+        this.statusBar.setMaximum(maxCount);
+    }
 
-	/**
-	 * Sets the width value.
-	 *
-	 * @param maxCount
-	 *            the max count
-	 * @param currentStatus
-	 *            the current status
-	 */
-	public void setWidthValue(final int maxCount, final int currentStatus) {
-		this.statusBar.setMaximum(maxCount);
-		this.statusBar.setValue(currentStatus);
-	}
+    /**
+     * Sets the width value.
+     *
+     * @param maxCount
+     *            the max count
+     * @param currentStatus
+     *            the current status
+     */
+    public void setWidthValue(final int maxCount, final int currentStatus) {
+        this.statusBar.setMaximum(maxCount);
+        this.statusBar.setValue(currentStatus);
+    }
 
-	/**
-	 * Show status.
-	 *
-	 * @param currentStatus
-	 *            the current status
-	 */
-	public void showStatus(final int currentStatus) {
-		// Update Splash-Screen's status bar in AWT thread
-		this.statusBar.setValue(currentStatus);
-	}
+    /**
+     * Show status.
+     *
+     * @param currentStatus
+     *            the current status
+     */
+    public void showStatus(final int currentStatus) {
+        // Update Splash-Screen's status bar in AWT thread
+        this.statusBar.setValue(currentStatus);
+    }
 
-	/**
-	 * The Class CloseJNSplash.
-	 */
-	class CloseJNSplash implements Runnable {
+    /**
+     * The Class CloseJNSplash.
+     */
+    class CloseJNSplash implements Runnable {
 
-		/*
-		 * (non-Javadoc)
-		 *
-		 * @see java.lang.Runnable#run()
-		 */
-		@Override
-		public synchronized void run() {
-			JSplashScreen.this.setVisible(false);
-			JSplashScreen.this.dispose();
-		}
-	}
+        /*
+         * (non-Javadoc)
+         *
+         * @see java.lang.Runnable#run()
+         */
+        @Override
+        public synchronized void run() {
+            JSplashScreen.this.setVisible(false);
+            JSplashScreen.this.dispose();
+        }
+    }
 }

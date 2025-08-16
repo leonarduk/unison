@@ -197,20 +197,23 @@ public class PajekNetworkFile {
     }
 
     /**
-     * Save to file.
+     * Save graph data to a Pajek network file.
      *
-     * @param filename the filename
+     * @param filenameInput the base filename to save to
+     * @throws IllegalArgumentException if {@code filenameInput} is null or empty
      */
     public void saveToFile(final String filenameInput) {
+        if (filenameInput == null || filenameInput.trim().isEmpty()) {
+            throw new IllegalArgumentException("Filename must not be null or empty");
+        }
         this.filename = filenameInput;
         if (!filenameInput.endsWith(this.suffix)) {
             this.filename += this.suffix;
         }
-        // Create a new file output stream
+        // Use try-with-resources to ensure the stream is always closed
         try (FileOutputStream out = new FileOutputStream(this.filename);
-             // Connect print stream to the output stream
-             PrintStream p = new PrintStream(out)) {
-            this.writeData(p);
+             PrintStream printStream = new PrintStream(out)) {
+            this.writeData(printStream);
             log.info("Saved to {}", this.filename);
         } catch (final IOException e) {
             log.error("Failed to save Pajek network file", e);

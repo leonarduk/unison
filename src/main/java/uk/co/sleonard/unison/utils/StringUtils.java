@@ -23,6 +23,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -71,15 +72,15 @@ public class StringUtils {
      * @return the list
      */
     static List<String> convertCommasToList(final String commaSeparatedString) {
-        final Vector<String> words = new Vector<>();
+        final List<String> words = new ArrayList<>();
 
         if (commaSeparatedString == null || commaSeparatedString.isEmpty()) {
             return words;
         }
 
-        final StringTokenizer tok = new StringTokenizer(commaSeparatedString, ",");
-        while (tok.hasMoreTokens()) {
-            words.add(tok.nextToken());
+        final String[] tokens = commaSeparatedString.split(",");
+        for (final String token : tokens) {
+            words.add(token);
         }
         return words;
     }
@@ -111,17 +112,21 @@ public class StringUtils {
      *
      * @param field      the field
      * @param delimiters the delimiters
-     * @return the vector
+     * @return the list
      */
-    public static Vector<String> convertStringToList(final String field, final String delimiters) {
-        final Vector<String> list = new Vector<>();
+    public static List<String> convertStringToList(final String field, final String delimiters) {
+        final List<String> list = new ArrayList<>();
         if (null == field) {
             return list;
         }
-        final StringTokenizer fields = new StringTokenizer(field, delimiters);
+        if (delimiters == null || delimiters.isEmpty()) {
+            list.add(field);
+            return list;
+        }
+        final String regex = "[" + Pattern.quote(delimiters) + "]";
+        final String[] fields = field.split(regex);
 
-        while (fields.hasMoreElements()) {
-            final String nextToken = fields.nextToken();
+        for (final String nextToken : fields) {
             list.add(nextToken);
             // System.out.println("Adding " + nextToken);
         }

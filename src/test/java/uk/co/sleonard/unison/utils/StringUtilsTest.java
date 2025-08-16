@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 
 import static org.junit.Assert.*;
 
@@ -27,7 +26,7 @@ public class StringUtilsTest {
      */
     @Test
     public void testConvertStringToList() {
-        Vector<String> list = StringUtils.convertStringToList("string-to-list-test", "-");
+        List<String> list = StringUtils.convertStringToList("string-to-list-test", "-");
         assertEquals(4, list.size());
     }
 
@@ -36,9 +35,8 @@ public class StringUtilsTest {
      */
     @Test
     public void testConvertStringToListIfNull() {
-        final Vector<String> listEmpty = new Vector<String>();
-        Vector<String> list = StringUtils.convertStringToList(null, "");
-        assertEquals(listEmpty, list);
+        List<String> list = StringUtils.convertStringToList(null, "");
+        assertTrue(list.isEmpty());
     }
 
     /**

@@ -983,7 +983,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer {
         final UNISoNController controller = UNISoNController.getInstance();
         final NewsGroup selectedNewsgroup = controller.getFilter().getSelectedNewsgroup();
         if (null != selectedNewsgroup) {
-            this.topicRoot.setName(selectedNewsgroup.getFullName());
+            this.topicRoot.setNodeName(selectedNewsgroup.getFullName());
 
             final Set<Topic> topicsFilter = controller.getFilter().getTopicsFilter();
             final Set<Topic> candidateTopics = new HashSet<>();
@@ -1005,7 +1005,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer {
             }
 
         } else {
-            this.topicRoot.setName("No group selected");
+            this.topicRoot.setNodeName("No group selected");
         }
 
         // This actually refreshes the tree

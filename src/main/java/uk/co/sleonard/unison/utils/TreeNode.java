@@ -1,9 +1,11 @@
 package uk.co.sleonard.unison.utils;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
- * The Class TreeNode.
+ * Represents a node in the application's GUI hierarchy.
  *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
@@ -15,9 +17,9 @@ public class TreeNode extends DefaultMutableTreeNode {
      */
     private static final long serialVersionUID = -8471464838090837440L;
 
-    /**
-     * The node name.
-     */
+    /** The node name. */
+    @Getter
+    @Setter
     private String nodeName;
 
     /**
@@ -28,15 +30,6 @@ public class TreeNode extends DefaultMutableTreeNode {
      */
     public TreeNode(final Object childObject, final String name) {
         super(childObject);
-        this.nodeName = name;
-    }
-
-    /**
-     * Sets the name.
-     *
-     * @param name the new name
-     */
-    public void setName(final String name) {
         this.nodeName = name;
     }
 

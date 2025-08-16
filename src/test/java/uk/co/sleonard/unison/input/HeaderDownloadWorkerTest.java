@@ -57,7 +57,7 @@ public class HeaderDownloadWorkerTest {
      * Test fullStop
      */
     @Test
-    public void testFullstop() {
+    public void testFullStop() {
         System.out.println("Wait 2 secs and stop");
         try {
             Thread.sleep(2000);
@@ -65,7 +65,7 @@ public class HeaderDownloadWorkerTest {
             e.printStackTrace();
         }
         System.out.println("Stop");
-        this.worker.fullstop();
+        this.worker.fullStop();
     }
 
     /**
@@ -127,7 +127,7 @@ public class HeaderDownloadWorkerTest {
     public void testQueueMessagesAbort() throws IOException, UNISoNException {
         final LinkedBlockingQueue<NewsArticle> queue1 = new LinkedBlockingQueue<>();
         final String messages = "sdsds";
-        this.worker.fullstop();
+        this.worker.fullStop();
         try (Reader reader = new StringReader(messages);) {
             this.worker.queueMessages(queue1, reader);
         }

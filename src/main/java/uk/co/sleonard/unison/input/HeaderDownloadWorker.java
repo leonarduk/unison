@@ -6,6 +6,8 @@
  */
 package uk.co.sleonard.unison.input;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.nntp.Article;
 import org.apache.commons.net.nntp.NNTPClient;
@@ -22,6 +24,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Class to create a separate Thread for downloading messages.
@@ -31,75 +35,29 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 @Slf4j
 public class HeaderDownloadWorker extends SwingWorker {
-
-    /**
-     * The end index.
-     */
     private int endIndex;
-
-    /**
-     * The news reader.
-     */
     private NewsGroupReader newsReader = null;
-
-    /**
-     * The start index.
-     */
     private int startIndex;
-
-    /**
-     * The from date.
-     */
     private Date fromDate;
-
-    /**
-     * The to date.
-     */
     private Date toDate;
 
 
-    /**
-     * The downloading.
-     */
+    @Getter
     private boolean downloading = false;
-
-    /**
-     * The running.
-     */
     private boolean running = true;
-
-    /**
-     * The log tally.
-     */
+    private final ReentrantLock pauseLock = new ReentrantLock();
+    private final Condition notPaused = pauseLock.newCondition();
     private int logTally = 0;
-
-    /**
-     * The index.
-     */
     private int index = 0;
-
-    /**
-     * The skipped.
-     */
     private int skipped = 0;
-
-    /**
-     * The kept.
-     */
     private int kept = 0;
 
-    /**
-     * The mode.
-     */
+    @Setter
     private DownloadMode mode;
-
     private final LinkedBlockingQueue<NewsArticle> queue;
-
     private final Downloader downloader;
 
-    /**
-     * Instantiates a new header download worker.
-     */
+
     public HeaderDownloadWorker(final LinkedBlockingQueue<NewsArticle> inputQueue,
                                 final Downloader downloader1) {
         super(HeaderDownloadWorker.class.getCanonicalName());
@@ -125,8 +83,7 @@ public class HeaderDownloadWorker extends SwingWorker {
                     this.storeArticleInfo(this.queue);
                     log.debug("Completed storeArticleInfo; queue size {}", this.queue.size());
                 } catch (final UNISoNException e) {
-                    log.error("Error", e);
-                    e.printStackTrace();
+                    log.error("Error in storeArticleInfo", e);
                     return "FAIL";
                 }
                 this.downloading = false;
@@ -138,11 +95,6 @@ public class HeaderDownloadWorker extends SwingWorker {
         return "Completed";
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see uk.co.sleonard.unison.input.SwingWorker#finished()
-     */
     @Override
     public void finished() {
         this.downloading = false;
@@ -152,8 +104,8 @@ public class HeaderDownloadWorker extends SwingWorker {
     /**
      * Method to stop all downloading and end the thread.
      */
-    public void fullstop() {
-        log.debug("Fullstop invoked on HeaderDownloadWorker");
+    public void fullStop() {
+        log.debug("FullStop invoked on HeaderDownloadWorker");
         this.running = false;
         this.downloading = false;
         try {
@@ -162,20 +114,13 @@ public class HeaderDownloadWorker extends SwingWorker {
                 newsReader2.client.quit();
             }
         } catch (final IOException e) {
-            e.printStackTrace();
+            log.error("Error stopping NNTP client", e);
         }
         this.notifyObservers();
     }
 
 
-    /**
-     * In date range.
-     *
-     * @param fromDate1 the from date
-     * @param toDate1   the to date
-     * @param date      the date
-     * @return true, if successful
-     */
+
     private boolean inDateRange(final Date fromDate1, final Date toDate1, final Date date) {
         if (null == date) {
             return false;
@@ -186,7 +131,6 @@ public class HeaderDownloadWorker extends SwingWorker {
         if (null != fromDate1) {
             final Calendar from = Calendar.getInstance();
             from.setTime(fromDate1);
-            // zeroHours(from);
 
             if (cal.before(from)) {
                 return false;
@@ -198,11 +142,8 @@ public class HeaderDownloadWorker extends SwingWorker {
 
             // add a day to allow for time past midnight
             to.add(Calendar.DAY_OF_MONTH, 1);
-            // zeroHours(to);
 
-            if (cal.after(to)) {
-                return false;
-            }
+            return !cal.after(to);
         }
         return true;
     }
@@ -213,22 +154,14 @@ public class HeaderDownloadWorker extends SwingWorker {
         this.start();
     }
 
-    /**
-     * Initialise.
-     *
-     * @param reader      the reader
-     * @param startIndex1 the start index
-     * @param endIndex1   the end index
-     * @param server      the server
-     * @param newsgroup1  the newsgroup
-     * @param mode1       the mode
-     * @param from        the from
-     * @param to          the to
-     * @throws UNISoNException the UNI so n exception
-     */
-    public void initialise(final NewsGroupReader reader, final int startIndex1, final int endIndex1,
-                           final String server, final String newsgroup1,
-                           final DownloadMode mode1, final Date from, final Date to) throws UNISoNException {
+    public void initialise(final NewsGroupReader reader,
+                           final int startIndex1,
+                           final int endIndex1,
+                           final String server,
+                           final String newsgroup1,
+                           final DownloadMode mode1,
+                           final Date from,
+                           final Date to) throws UNISoNException {
         this.mode = mode1;
         this.startIndex = startIndex1;
         this.endIndex = endIndex1;
@@ -236,7 +169,7 @@ public class HeaderDownloadWorker extends SwingWorker {
         this.fromDate = from;
         this.toDate = to;
 
-        log.info(" Server: " + server + " Newsgroup: " + newsgroup1);
+        log.info(" Server: {} Newsgroup: {}", server, newsgroup1);
         try {
             reader.client.connect(server);
             reader.client.selectNewsgroup(newsgroup1);
@@ -246,17 +179,7 @@ public class HeaderDownloadWorker extends SwingWorker {
         }
 
         this.downloading = true;
-        log.info("Creating " + this.getClass() + " " + newsgroup1 + "["
-                + reader.getMessageCount() + "]");
-    }
-
-    /**
-     * Checks if is downloading.
-     *
-     * @return true, if is downloading
-     */
-    public boolean isDownloading() {
-        return this.downloading;
+        log.info("Creating {} {}[{}]", this.getClass(), newsgroup1, reader.getMessageCount());
     }
 
     /*
@@ -274,7 +197,12 @@ public class HeaderDownloadWorker extends SwingWorker {
      * Pause.
      */
     public void pause() {
-        this.downloading = false;
+        pauseLock.lock();
+        try {
+            this.downloading = false;
+        } finally {
+            pauseLock.unlock();
+        }
     }
 
     void processMessage(final LinkedBlockingQueue<NewsArticle> queue1, final String line)
@@ -330,21 +258,30 @@ public class HeaderDownloadWorker extends SwingWorker {
                     this.notifyObservers();
                     throw new UNISoNException("Download aborted");
                 }
-                // If told to pause or queue is getting a bit full wait
-                boolean pausedForQueue = false;
-                while (!this.downloading || (queue1.size() > 1000)) {
-                    if ((queue1.size() > 1000) && !pausedForQueue) {
-                        log.info("Pausing as queue size {} exceeds 1000", queue1.size());
-                        pausedForQueue = true;
+                // Handle pause state
+                pauseLock.lock();
+                try {
+                    while (!this.downloading) {
+                        notPaused.await();
                     }
-                    try {
-                        Thread.sleep(1000);
-                    } catch (final InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                } catch (final InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    throw new UNISoNException("Download interrupted", e);
+                } finally {
+                    pauseLock.unlock();
                 }
-                if (pausedForQueue) {
-                    log.info("Resuming processing; queue size {}", queue1.size());
+
+                // Handle queue full condition using blocking put with timeout
+                if (queue1.size() > 1000) {
+                    log.info("Queue size {} exceeds 1000, waiting for consumers", queue1.size());
+                    try {
+                        // Wait for queue to have some space
+                        Thread.sleep(100); // Short sleep to avoid tight loop, but not busy-waiting
+                        continue; // Skip to next iteration to recheck conditions
+                    } catch (final InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        throw new UNISoNException("Download interrupted", e);
+                    }
                 }
 
                 this.processMessage(queue1, line);
@@ -374,12 +311,15 @@ public class HeaderDownloadWorker extends SwingWorker {
      * Resume.
      */
     public void resume() {
-        this.downloading = true;
+        pauseLock.lock();
+        try {
+            this.downloading = true;
+            notPaused.signalAll();
+        } finally {
+            pauseLock.unlock();
+        }
     }
 
-    public void setMode(final DownloadMode headers) {
-        this.mode = headers;
-    }
 
     /**
      * Given an {@link NNTPClient} instance, and an integer range of messages, return an array of
@@ -390,25 +330,26 @@ public class HeaderDownloadWorker extends SwingWorker {
      */
     boolean storeArticleInfo(final LinkedBlockingQueue<NewsArticle> queue1) throws UNISoNException {
 
-        try {
-            this.logTally = 0;
-            this.index = 0;
-            this.skipped = 0;
-            this.kept = 0;
+        this.logTally = 0;
+        this.index = 0;
+        this.skipped = 0;
+        this.kept = 0;
 
-            // fetch back 500 messages at a time
-            for (int i = this.startIndex; i < this.endIndex; i += 500) {
-                final int batchEndIndex = Math.min(i + 499, this.endIndex);
+        // fetch back 500 messages at a time
+        int batchEndIndex = 0;
+        int i = this.startIndex;
+        try {
+            for (; i < this.endIndex; i += 500) {
+                batchEndIndex = Math.min(i + 499, this.endIndex);
                 log.debug("Starting batch {}-{}", i, batchEndIndex);
                 try (final Reader reader = this.newsReader.client.retrieveArticleInfo(
-                        Long.valueOf(i).longValue(), Long.valueOf(i + 500).longValue());) {
+                        i, batchEndIndex);) {
                     this.queueMessages(queue1, reader);
                 }
                 log.debug("Finished batch {}-{}", i, batchEndIndex);
             }
         } catch (final IOException e1) {
-            log.error("Error", e1);
-            e1.printStackTrace();
+            log.error("Error processing batch {}-{}", i, batchEndIndex, e1);
             return false;
         }
 

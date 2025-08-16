@@ -13,6 +13,11 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
 import uk.co.sleonard.unison.utils.StringUtils;
 
+import javax.swing.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.Serial;
+import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
@@ -26,122 +31,40 @@ import java.util.Set;
 @Slf4j
 @SuppressWarnings("rawtypes")
 public class DownloadNewsPanel extends javax.swing.JPanel
-        implements Observer, StatusMonitor {
+        implements PropertyChangeListener, StatusMonitor, Observer {
+        
+    @Override
+    public void update(Observable o, Object arg) {
+        // Handle the update from the observed object
+        if (arg != null) {
+            log.info("Received update from {}: {}", o.getClass().getSimpleName(), arg);
+        }
+    }
 
-    /**
-     * The Constant serialVersionUID.
-     */
+    @Serial
     private static final long serialVersionUID = 6581138636992116397L;
 
-    /**
-     * The available newsgroups.
-     */
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<NewsGroup> availableNewsgroups;
 
-    /**
-     * The cancel button.
-     */
     private javax.swing.JButton cancelButton;
-
-    /**
-     * The download button.
-     */
     private javax.swing.JButton downloadButton;
-
-    /**
-     * The find button.
-     */
-    private javax.swing.JButton findButton;
-
-    /**
-     * The from date field.
-     */
     private javax.swing.JTextField fromDateField;
-
-    /**
-     * The from date label.
-     */
     private javax.swing.JLabel fromDateLabel;
-
-    /**
-     * The get location check.
-     */
     private javax.swing.JCheckBox getLocationCheck;
-
-
-    /**
-     * The host combo.
-     */
     private javax.swing.JComboBox hostCombo;
-
-    /**
-     * The host label.
-     */
-    private javax.swing.JLabel hostLabel;
-
-    /**
-     * The j scroll pane1.
-     */
-    private javax.swing.JScrollPane jScrollPane1;
-
-    /**
-     * The j scroll pane3.
-     */
-    private javax.swing.JScrollPane jScrollPane3;
-
-    /**
-     * The newsgroup field.
-     */
     private javax.swing.JTextField newsgroupField;
-
-    /**
-     * The newsgroup label.
-     */
-    private javax.swing.JLabel newsgroupLabel;
-
-    /**
-     * The notes area.
-     */
     private javax.swing.JTextArea notesArea;
-
-    /**
-     * The pause button.
-     */
     private javax.swing.JButton pauseButton;
-
-    /**
-     * The progress bar.
-     */
     private javax.swing.JProgressBar progressBar;
-
-    /**
-     * The to date field.
-     */
+    private static final String DATE_FORMAT_TOOLTIP = "In YYYYMMDD format eg 20071201";
     private javax.swing.JTextField toDateField;
-    /**
-     * The to date label.
-     */
     private javax.swing.JLabel toDateLabel;
-
-    /**
-     * The available groups.
-     */
     private Set<NewsGroup> availableGroups;
+    private final transient UNISoNController controller;
+    private StringBuilder logText;
 
-    /**
-     * The controller.
-     */
-    private final UNISoNController controller;
-
-    private StringBuffer logText;
-
-    /**
-     * The main method.
-     *
-     * @param args the command line arguments
-     */
-    public static void main(final String args[]) {
+    public static void main(final String[] args) {
         java.awt.EventQueue.invokeLater(() -> {
             UNISoNTabbedFrame frame;
             try {
@@ -153,19 +76,18 @@ public class DownloadNewsPanel extends javax.swing.JPanel
                 frame.add(panel);
                 panel.setVisible(true);
             } catch (final Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(null,
+                    "Failed to initialize UNISoN: " + e.getMessage(),
+                    "Initialization Error",
+                    JOptionPane.ERROR_MESSAGE);
+                log.error("Failed to initialize UNISoN: {}", e.getMessage(), e);
+                System.exit(1);
             }
         });
     }
 
     // End of variables declaration//GEN-END:variables
 
-    /**
-     * Creates new form DownloadNewsPanel.
-     *
-     * @param unisonController
-     */
     public DownloadNewsPanel(final UNISoNController unisonController) {
         this.controller = unisonController;
 
@@ -193,33 +115,18 @@ public class DownloadNewsPanel extends javax.swing.JPanel
      *
      */
     private void appendNote(final String message) {
-        this.logText.append(message + "\n");
+        this.logText.append(message).append("\n");
         this.notesArea.setText(this.logText.toString());
     }
 
-    /**
-     * Available newsgroups value changed.
-     *
-     * @param evt the evt
-     */
     private void availableNewsgroupsValueChanged(final javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_availableNewsgroupsValueChanged
 
     }// GEN-LAST:event_availableNewsgroupsValueChanged
 
-    /**
-     * Cancel button action performed.
-     *
-     * @param evt the evt
-     */
     private void cancelButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cancelButtonActionPerformed
         this.controller.cancel();
     }// GEN-LAST:event_cancelButtonActionPerformed
 
-    /**
-     * Download button action performed.
-     *
-     * @param evt the evt
-     */
     private void downloadButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_downloadButtonActionPerformed
         final NewsGroup[] selected = this.availableNewsgroups.getSelectedValuesList()
                 .toArray(new NewsGroup[0]);
@@ -237,11 +144,6 @@ public class DownloadNewsPanel extends javax.swing.JPanel
         }
     }// GEN-LAST:event_downloadButtonActionPerformed
 
-    /**
-     * Download enabled.
-     *
-     * @param enabled the enabled
-     */
     @Override
     public void downloadEnabled(final boolean enabled) {
         this.downloadButton.setEnabled(enabled);
@@ -256,24 +158,13 @@ public class DownloadNewsPanel extends javax.swing.JPanel
         this.pauseButton.setEnabled(!enabled);
     }
 
-    /**
-     * Find button action performed.
-     *
-     * @param evt the evt
-     */
     private void findButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_findButtonActionPerformed
         this.controller.requestDownload(this.newsgroupField.getText(),
-                this.hostCombo.getSelectedItem().toString().trim(), this,
+                Objects.requireNonNull(this.hostCombo.getSelectedItem()).toString().trim(), this,
                 this.controller.getNntpReader().getClient());
     }// GEN-LAST:event_findButtonActionPerformed
 
-    /**
-     * Form mouse pressed.
-     *
-     * @param evt the evt
-     */
     void formMousePressed(final java.awt.event.MouseEvent evt) {// GEN-FIRST:event_formMousePressed
-        // TODO add your handling code here:
     }// GEN-LAST:event_formMousePressed
 
     /**
@@ -286,9 +177,16 @@ public class DownloadNewsPanel extends javax.swing.JPanel
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     @SuppressWarnings("unchecked")
     private void initComponents() {
-        this.newsgroupLabel = new javax.swing.JLabel();
+        javax.swing.JLabel newsgroupLabel;
+        javax.swing.JScrollPane jScrollPane3;
+        javax.swing.JScrollPane jScrollPane1;
+        javax.swing.JLabel hostLabel;
+        newsgroupLabel = new javax.swing.JLabel();
         this.newsgroupField = new javax.swing.JTextField();
-        this.findButton = new javax.swing.JButton();
+        /**
+         * The find button.
+         */
+        javax.swing.JButton findButton = new javax.swing.JButton();
         this.fromDateLabel = new javax.swing.JLabel();
         this.toDateLabel = new javax.swing.JLabel();
         this.toDateField = new javax.swing.JTextField();
@@ -296,13 +194,13 @@ public class DownloadNewsPanel extends javax.swing.JPanel
         this.downloadButton = new javax.swing.JButton();
         this.pauseButton = new javax.swing.JButton();
         this.cancelButton = new javax.swing.JButton();
-        this.jScrollPane3 = new javax.swing.JScrollPane();
+        jScrollPane3 = new javax.swing.JScrollPane();
         this.notesArea = new javax.swing.JTextArea();
-        this.logText = new StringBuffer();
-        this.hostLabel = new javax.swing.JLabel();
+        this.logText = new StringBuilder();
+        hostLabel = new javax.swing.JLabel();
         this.getLocationCheck = new javax.swing.JCheckBox();
         this.hostCombo = new javax.swing.JComboBox();
-        this.jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
         this.availableNewsgroups = new javax.swing.JList<>();
         this.progressBar = new javax.swing.JProgressBar();
         this.progressBar.setStringPainted(true);
@@ -314,47 +212,45 @@ public class DownloadNewsPanel extends javax.swing.JPanel
             }
         });
 
-        this.newsgroupLabel.setText("Newsgroup ");
-        this.newsgroupLabel.setToolTipText(
+        newsgroupLabel.setText("Newsgroup ");
+        newsgroupLabel.setToolTipText(
                 "Type in full or part name (use * for wild character, e.g. *senior* for all groups with \"senior\" in the name)");
 
         this.newsgroupField.setToolTipText(
                 "Type in full or part name (use * for wild character, e.g. *senior* for all groups with \"senior\" in the name)");
 
-        this.findButton.setText("Find groups");
-        this.findButton
+        findButton.setText("Find groups");
+        findButton
                 .setToolTipText("Enter name or part name (* for wild chararcter) the n click here");
-        this.findButton
-                .addActionListener(evt -> DownloadNewsPanel.this.findButtonActionPerformed(evt));
+        findButton
+                .addActionListener(DownloadNewsPanel.this::findButtonActionPerformed);
 
         this.fromDateLabel.setText("Date from");
-        this.fromDateLabel.setToolTipText("In YYYYMMDD format eg 20071201");
+        this.fromDateLabel.setToolTipText(DATE_FORMAT_TOOLTIP);
 
         this.toDateLabel.setText("Date To");
-        this.toDateLabel.setToolTipText("In YYYYMMDD format eg 20071201");
-
-        this.toDateField.setToolTipText("In YYYYMMDD format eg 20071201");
-
-        this.fromDateField.setToolTipText("In YYYYMMDD format eg 20071201");
+        this.toDateLabel.setToolTipText(DATE_FORMAT_TOOLTIP);
+        this.toDateField.setToolTipText(DATE_FORMAT_TOOLTIP);
+        this.fromDateField.setToolTipText(DATE_FORMAT_TOOLTIP);
 
         this.downloadButton.setText("Download");
         this.downloadButton.addActionListener(
-                evt -> DownloadNewsPanel.this.downloadButtonActionPerformed(evt));
+                DownloadNewsPanel.this::downloadButtonActionPerformed);
 
         this.pauseButton.setText("Pause");
         this.pauseButton
-                .addActionListener(evt -> DownloadNewsPanel.this.pauseButtonActionPerformed(evt));
+                .addActionListener(DownloadNewsPanel.this::pauseButtonActionPerformed);
 
         this.cancelButton.setText("Cancel");
         this.cancelButton
-                .addActionListener(evt -> DownloadNewsPanel.this.cancelButtonActionPerformed(evt));
+                .addActionListener(DownloadNewsPanel.this::cancelButtonActionPerformed);
 
         this.notesArea.setColumns(20);
         this.notesArea.setRows(5);
-        this.jScrollPane3.setViewportView(this.notesArea);
+        jScrollPane3.setViewportView(this.notesArea);
 
-        this.hostLabel.setText(" Server");
-        this.hostLabel.setToolTipText(
+        hostLabel.setText(" Server");
+        hostLabel.setToolTipText(
                 "Look at http://freeusenetnews.com/newspage.html?sortby=articles for other hosts if these are broken. Can enter name here.");
 
         this.getLocationCheck.setText("Get Location");
@@ -370,9 +266,9 @@ public class DownloadNewsPanel extends javax.swing.JPanel
         this.availableNewsgroups.setToolTipText(
                 "The number in brackets is an estimate (provided by the server) which is likely to be higher than actual number of messages as many messages are deleted.");
         this.availableNewsgroups.addListSelectionListener(
-                evt -> DownloadNewsPanel.this.availableNewsgroupsValueChanged(evt));
+                DownloadNewsPanel.this::availableNewsgroupsValueChanged);
 
-        this.jScrollPane1.setViewportView(this.availableNewsgroups);
+        jScrollPane1.setViewportView(this.availableNewsgroups);
 
         final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -381,15 +277,15 @@ public class DownloadNewsPanel extends javax.swing.JPanel
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(this.jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 262,
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 262,
                                                 Short.MAX_VALUE)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addComponent(this.newsgroupLabel)
+                                                .addComponent(newsgroupLabel)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(this.newsgroupField,
                                                         javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE))
                                         .addGroup(layout.createSequentialGroup()
-                                                .addComponent(this.hostLabel)
+                                                .addComponent(hostLabel)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
                                                         17, Short.MAX_VALUE)
                                                 .addComponent(this.hostCombo,
@@ -415,17 +311,17 @@ public class DownloadNewsPanel extends javax.swing.JPanel
                                                         .addComponent(this.toDateLabel)
                                                         .addComponent(this.cancelButton)
                                                         .addComponent(this.pauseButton))
-                                                .addComponent(this.findButton))
+                                                .addComponent(findButton))
                                         .addComponent(this.getLocationCheck))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(this.jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 193,
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 193,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap())
                         .addComponent(this.progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL,
-                new java.awt.Component[]{this.cancelButton, this.downloadButton, this.findButton,
-                        this.fromDateField, this.pauseButton, this.toDateField});
+                this.cancelButton, this.downloadButton, findButton,
+                this.fromDateField, this.pauseButton, this.toDateField);
 
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -471,9 +367,9 @@ public class DownloadNewsPanel extends javax.swing.JPanel
                                                                 .addPreferredGap(
                                                                         javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                                 .addComponent(this.cancelButton))
-                                                        .addComponent(this.findButton)))
+                                                        .addComponent(findButton)))
                                         .addGroup(layout.createSequentialGroup().addContainerGap()
-                                                .addComponent(this.jScrollPane3,
+                                                .addComponent(jScrollPane3,
                                                         javax.swing.GroupLayout.DEFAULT_SIZE, 325,
                                                         Short.MAX_VALUE))
                                         .addGroup(layout.createSequentialGroup()
@@ -482,7 +378,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel
                                                         .addGroup(layout.createSequentialGroup().addGap(46, 46, 46)
                                                                 .addGroup(layout.createParallelGroup(
                                                                                 javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                        .addComponent(this.hostLabel)
+                                                                        .addComponent(hostLabel)
                                                                         .addComponent(this.hostCombo,
                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
@@ -490,14 +386,14 @@ public class DownloadNewsPanel extends javax.swing.JPanel
                                                         .addGroup(layout.createSequentialGroup().addContainerGap()
                                                                 .addGroup(layout.createParallelGroup(
                                                                                 javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                        .addComponent(this.newsgroupLabel)
+                                                                        .addComponent(newsgroupLabel)
                                                                         .addComponent(this.newsgroupField,
                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE))))
                                                 .addPreferredGap(
                                                         javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(this.jScrollPane1,
+                                                .addComponent(jScrollPane1,
                                                         javax.swing.GroupLayout.DEFAULT_SIZE, 220,
                                                         Short.MAX_VALUE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -538,17 +434,15 @@ public class DownloadNewsPanel extends javax.swing.JPanel
     /*
      * (non-Javadoc)
      *
-     * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+     * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
      */
     @Override
-    public void update(final Observable observable, final Object arg1) {
-        if (observable instanceof HeaderDownloadWorker) {
-            final HeaderDownloadWorker headerDownloader = (HeaderDownloadWorker) observable;
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("downloadState")) {
+            final HeaderDownloadWorker headerDownloader = (HeaderDownloadWorker) evt.getSource();
             if (!headerDownloader.isDownloading()) {
                 this.downloadEnabled(true);
             }
-            // } else if (observable instanceof UNISoNController) {
-            // UNISoNController controller = (UNISoNController) observable;
         }
     }
 

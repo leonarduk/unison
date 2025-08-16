@@ -45,7 +45,7 @@ public class HeaderDownloadWorkerIT {
 
             final String line = bufReader.readLine();
             worker.processMessage(queue, line);
-            worker.fullstop();
+            worker.fullStop();
         }
         return queue;
     }

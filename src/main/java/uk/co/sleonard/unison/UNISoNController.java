@@ -138,7 +138,7 @@ public class UNISoNController {
 
     public void cancel() {
         log.debug("Cancel requested");
-        this.getHeaderDownloader().fullstop();
+        this.getHeaderDownloader().fullStop();
         this.stopDownload();
     }
 
@@ -333,7 +333,7 @@ public class UNISoNController {
                         group.getLastMessage(), nntpHost2, group.getName(), mode, fromDate1,
                         toDate1);
             } catch (final IOException e) {
-                e.printStackTrace();
+                log.error("Error downloading messages for group {}", group.getName(), e);
                 throw new UNISoNException(
                         "Error downloading messages. Check your internet connection: ", e);
             }

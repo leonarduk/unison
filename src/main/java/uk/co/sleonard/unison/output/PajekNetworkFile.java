@@ -207,8 +207,8 @@ public class PajekNetworkFile {
         }
         // Create a new file output stream
         try (FileOutputStream out = new FileOutputStream(this.filename);
-             PrintStream p = new PrintStream(out)) {
-            this.writeData(p);
+            // Connect print stream to the output stream
+            PrintStream p = new PrintStream(out)) {
         } catch (final FileNotFoundException e) {
             e.printStackTrace();
         }

@@ -130,7 +130,8 @@ public class UNISoNController {
             throw e;
         }
 
-        this.nntpReader = new NewsGroupReader(this);
+        this.client = new NewsClientImpl();
+        this.nntpReader = new NewsGroupReader(this.client);
     }
 
     public void cancel() {

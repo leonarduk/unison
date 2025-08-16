@@ -6,6 +6,7 @@
  */
 package uk.co.sleonard.unison.output;
 
+import lombok.extern.slf4j.Slf4j;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.gui.GraphPreviewPanel;
 
@@ -23,6 +24,7 @@ import java.util.Vector;
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  */
+@Slf4j
 public class PajekNetworkFile {
 
     /**
@@ -205,13 +207,12 @@ public class PajekNetworkFile {
         }
         // Create a new file output stream
         try (FileOutputStream out = new FileOutputStream(this.filename);
-                PrintStream p = new PrintStream(out)) {
             // Connect print stream to the output stream
-            this.writeData(p);
+            PrintStream p = new PrintStream(out)) {
         } catch (final FileNotFoundException e) {
             e.printStackTrace();
         }
-        System.out.println("Saved to " + this.filename);
+        log.info("Saved to {}", this.filename);
     }
 
     /**

@@ -6,11 +6,13 @@
  */
 package uk.co.sleonard.unison.output;
 
+import lombok.extern.slf4j.Slf4j;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.gui.GraphPreviewPanel;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -23,6 +25,7 @@ import java.util.Vector;
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  */
+@Slf4j
 public class PajekNetworkFile {
 
     /**
@@ -203,22 +206,14 @@ public class PajekNetworkFile {
         if (!filenameInput.endsWith(this.suffix)) {
             this.filename += this.suffix;
         }
-        FileOutputStream out; // declare a file output object
-        PrintStream p; // declare a print stream object
-
         // Create a new file output stream
-        try {
-            out = new FileOutputStream(this.filename);
-
+        try (FileOutputStream out = new FileOutputStream(this.filename);
             // Connect print stream to the output stream
-            p = new PrintStream(out);
-            this.writeData(p);
-
-            p.close();
-        } catch (final FileNotFoundException e) {
+            PrintStream p = new PrintStream(out)) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Saved to " + this.filename);
+        log.info("Saved to {}", this.filename);
     }
 
     /**

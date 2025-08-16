@@ -193,6 +193,53 @@ public class HeaderDownloadWorkerTest {
     }
 
     /**
+     * Ensure the worker thread waits when idle and resumes on demand.
+     */
+    @Test
+    public void testWorkerSleepsAndResumes() throws Exception {
+        final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
+        final Downloader downloader = Mockito.mock(Downloader.class);
+        final HeaderDownloadWorker spyWorker = Mockito.spy(new HeaderDownloadWorker(queue, downloader));
+
+        final java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(1);
+        Mockito.doAnswer(invocation -> {
+            latch.countDown();
+            return true;
+        }).when(spyWorker).storeArticleInfo(Mockito.any());
+
+        spyWorker.initialise();
+
+        Thread workerThread = null;
+        for (int i = 0; i < 100 && workerThread == null; i++) {
+            for (final Thread t : Thread.getAllStackTraces().keySet()) {
+                if (t.getName().equals(HeaderDownloadWorker.class.getCanonicalName())) {
+                    workerThread = t;
+                    break;
+                }
+            }
+            if (workerThread == null) {
+                Thread.sleep(10);
+            }
+        }
+        Assert.assertNotNull("Worker thread not started", workerThread);
+
+        for (int i = 0; i < 100 && workerThread.getState() != Thread.State.WAITING; i++) {
+            Thread.sleep(10);
+        }
+        Assert.assertEquals("Worker should be waiting when idle", Thread.State.WAITING,
+                workerThread.getState());
+
+        final long start = System.currentTimeMillis();
+        spyWorker.resume();
+        Assert.assertTrue("Worker did not resume promptly", latch.await(1, java.util.concurrent.TimeUnit.SECONDS));
+        final long duration = System.currentTimeMillis() - start;
+        Assert.assertTrue("Resume took too long", duration < 1000);
+
+        spyWorker.fullStop();
+        workerThread.join(1000);
+    }
+
+    /**
      * Test sToreArticleInfo
      *
      * @throws UNISoNException Signals that an exception has occurred.

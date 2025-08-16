@@ -77,19 +77,40 @@ public class HeaderDownloadWorker extends SwingWorker {
                 this.downloading, this.queue.size());
 
         while (this.running) {
-            if (this.downloading) {
-                log.debug("Starting storeArticleInfo from {} to {}", this.startIndex, this.endIndex);
-                try {
-                    this.storeArticleInfo(this.queue);
-                    log.debug("Completed storeArticleInfo; queue size {}", this.queue.size());
-                } catch (final UNISoNException e) {
-                    log.error("Error in storeArticleInfo", e);
-                    return "FAIL";
+            pauseLock.lock();
+            try {
+                while (!this.downloading && this.running) {
+                    try {
+                        notPaused.await();
+                    } catch (final InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        log.warn("Download worker interrupted while waiting", e);
+                        return "Interrupted";
+                    }
                 }
-                this.downloading = false;
-                this.notifyObservers();
+                if (!this.running) {
+                    break;
+                }
+            } finally {
+                pauseLock.unlock();
             }
 
+            log.debug("Starting storeArticleInfo from {} to {}", this.startIndex, this.endIndex);
+            try {
+                this.storeArticleInfo(this.queue);
+                log.debug("Completed storeArticleInfo; queue size {}", this.queue.size());
+            } catch (final UNISoNException e) {
+                log.error("Error in storeArticleInfo", e);
+                return "FAIL";
+            }
+
+            pauseLock.lock();
+            try {
+                this.downloading = false;
+            } finally {
+                pauseLock.unlock();
+            }
+            this.notifyObservers();
         }
         log.debug("HeaderDownloadWorker construct exiting");
         return "Completed";
@@ -106,8 +127,14 @@ public class HeaderDownloadWorker extends SwingWorker {
      */
     public void fullStop() {
         log.debug("FullStop invoked on HeaderDownloadWorker");
-        this.running = false;
-        this.downloading = false;
+        pauseLock.lock();
+        try {
+            this.running = false;
+            this.downloading = false;
+            notPaused.signalAll();
+        } finally {
+            pauseLock.unlock();
+        }
         try {
             final NewsGroupReader newsReader2 = this.newsReader;
             if ((null != newsReader2) && (null != newsReader2.client)) {
@@ -149,8 +176,14 @@ public class HeaderDownloadWorker extends SwingWorker {
     }
 
     public void initialise() {
-        this.running = true;
-        this.downloading = false;
+        pauseLock.lock();
+        try {
+            this.running = true;
+            this.downloading = false;
+            notPaused.signalAll();
+        } finally {
+            pauseLock.unlock();
+        }
         this.start();
     }
 
@@ -178,7 +211,13 @@ public class HeaderDownloadWorker extends SwingWorker {
             throw new UNISoNException("Failed to initialise downloader", e);
         }
 
-        this.downloading = true;
+        pauseLock.lock();
+        try {
+            this.downloading = true;
+            notPaused.signalAll();
+        } finally {
+            pauseLock.unlock();
+        }
         log.info("Creating {} {}[{}]", this.getClass(), newsgroup1, reader.getMessageCount());
     }
 
@@ -200,6 +239,7 @@ public class HeaderDownloadWorker extends SwingWorker {
         pauseLock.lock();
         try {
             this.downloading = false;
+            notPaused.signalAll();
         } finally {
             pauseLock.unlock();
         }

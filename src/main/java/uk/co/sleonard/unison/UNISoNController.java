@@ -6,6 +6,7 @@
  */
 package uk.co.sleonard.unison;
 
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
@@ -32,6 +33,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  */
+@Slf4j
 public class UNISoNController {
 
     /**
@@ -74,7 +76,7 @@ public class UNISoNController {
     /**
      * The download panel.
      */
-    private UNISoNLogger downloadPanel;
+    private DownloadNewsPanel downloadPanel;
 
     private final UNISoNAnalysis analysis;
 
@@ -137,9 +139,9 @@ public class UNISoNController {
     }
 
     public void download(final StatusMonitor monitor, final NewsGroup[] items,
-                         final String fromDateString, final String toDateString, final UNISoNLogger logger,
+                         final String fromDateString, final String toDateString,
                          final boolean locationSelected, final boolean getTextSelected) {
-        if ((monitor == null) || (logger == null)) {
+        if (monitor == null) {
             return;
         }
         monitor.downloadEnabled(false);
@@ -154,7 +156,7 @@ public class UNISoNController {
         }
         if (groups.size() == 0) {
             monitor.downloadEnabled(true);
-            logger.log("No groups selected for download");
+            log.info("No groups selected for download");
             return;
         }
 
@@ -165,7 +167,7 @@ public class UNISoNController {
             if (locationSelected) {
                 mode = DownloadMode.HEADERS;
                 if ((this.getHeaderDownloader() == null) || (this.getNntpReader() == null)) {
-                    logger.alert("Extras requested but downloader not initialised");
+                    log.warn("Extras requested but downloader not initialised");
                     monitor.downloadEnabled(true);
                     return;
                 }
@@ -174,16 +176,16 @@ public class UNISoNController {
             }
         }
         try {
-            logger.log("Download : " + groups);
+            log.info("Download : {}", groups);
             final Date fromDate = StringUtils.stringToDate(fromDateString);
             final Date toDate = StringUtils.stringToDate(toDateString);
-            this.quickDownload(groups, fromDate, toDate, logger, mode);
-            logger.log("Done.");
+            this.quickDownload(groups, fromDate, toDate, mode);
+            log.info("Done.");
         } catch (final UNISoNException e) {
-            logger.alert("Failed to download. Check your internet connection" + e.getMessage());
+            log.error("Failed to download. Check your internet connection", e);
             monitor.downloadEnabled(true);
         } catch (final DateTimeParseException e) {
-            logger.alert("Failed to parse date : " + e.getMessage());
+            log.error("Failed to parse date", e);
             monitor.downloadEnabled(true);
         }
     }
@@ -217,7 +219,7 @@ public class UNISoNController {
      *
      * @return the download panel
      */
-    public UNISoNLogger getDownloadPanel() {
+    public DownloadNewsPanel getDownloadPanel() {
         return this.downloadPanel;
     }
 
@@ -304,12 +306,11 @@ public class UNISoNController {
      * @param groups    the groups
      * @param fromDate1 the from date
      * @param toDate1   the to date
-     * @param log       the log
      * @param mode      the mode
      * @throws UNISoNException the UNI so n exception
      */
     public void quickDownload(final Set<NewsGroup> groups, final Date fromDate1, final Date toDate1,
-                              final UNISoNLogger log, final DownloadMode mode) throws UNISoNException {
+                              final DownloadMode mode) throws UNISoNException {
         final NewsGroupReader reader = this.getNntpReader();
         this.client = reader.getClient();
         final HeaderDownloadWorker headerDownloader2 = this.getHeaderDownloader();
@@ -321,7 +322,7 @@ public class UNISoNController {
                 this.client.selectNewsgroup(group.getName());
                 reader.setMessageCount(group.getArticleCount());
                 headerDownloader2.initialise(reader, group.getFirstMessage(),
-                        group.getLastMessage(), nntpHost2, group.getName(), log, mode, fromDate1,
+                        group.getLastMessage(), nntpHost2, group.getName(), mode, fromDate1,
                         toDate1);
             } catch (final IOException e) {
                 e.printStackTrace();
@@ -332,24 +333,22 @@ public class UNISoNController {
     }
 
     public void requestDownload(final String group, final String host, final StatusMonitor monitor,
-                                final UNISoNLogger logger, final NewsClient client2) {
+                                final NewsClient client2) {
         this.setNntpHost(host);
-        logger.log("Find groups matching : " + group + " on " + host);
+        log.info("Find groups matching : {} on {}", group, host);
         monitor.downloadEnabled(false);
 
         if (null != group) {
             try {
                 final Set<NewsGroup> availableGroups2 = this.listNewsgroups(group, host, client2);
                 if ((null == availableGroups2) || (availableGroups2.size() == 0)) {
-                    logger.alert("No groups found for string : " + group + " on " + host
-                            + ".\nPerhaps another host?");
-
+                    log.warn("No groups found for string : {} on {}.\nPerhaps another host?", group, host);
                 } else {
                     monitor.downloadEnabled(true);
                 }
                 monitor.updateAvailableGroups(availableGroups2);
             } catch (final UNISoNException e) {
-                logger.alert("Problem downloading: " + e.getMessage());
+                log.error("Problem downloading", e);
             }
         }
     }
@@ -373,8 +372,8 @@ public class UNISoNController {
      */
     public void setDownloadingState(final int progress) {
         this.setButtonState(false, false, true, true);
-        if (this.downloadPanel instanceof DownloadNewsPanel) {
-            ((DownloadNewsPanel) this.downloadPanel).setProgress(progress);
+        if (this.downloadPanel != null) {
+            this.downloadPanel.setProgress(progress);
         }
     }
 
@@ -383,7 +382,7 @@ public class UNISoNController {
      *
      * @param downloadPanel the new download panel
      */
-    public void setDownloadPanel(final UNISoNLogger downloadPanel) {
+    public void setDownloadPanel(final DownloadNewsPanel downloadPanel) {
         this.downloadPanel = downloadPanel;
     }
 

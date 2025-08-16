@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.nntp.Article;
 import org.apache.commons.net.nntp.NNTPClient;
 import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.utils.Downloader;
 import uk.co.sleonard.unison.utils.StringUtils;
@@ -58,10 +57,6 @@ public class HeaderDownloadWorker extends SwingWorker {
      */
     private Date toDate;
 
-    /**
-     * The log.
-     */
-    private UNISoNLogger unisonLog;
 
     /**
      * The downloading.
@@ -125,7 +120,7 @@ public class HeaderDownloadWorker extends SwingWorker {
                 try {
                     this.storeArticleInfo(this.queue);
                 } catch (final UNISoNException e) {
-                    this.getLog().alert("ERROR:" + e);
+                    LOGGER.error("Error", e);
                     e.printStackTrace();
                     return "FAIL";
                 }
@@ -165,9 +160,6 @@ public class HeaderDownloadWorker extends SwingWorker {
         this.notifyObservers();
     }
 
-    private UNISoNLogger getLog() {
-        return this.unisonLog;
-    }
 
     /**
      * In date range.
@@ -222,16 +214,14 @@ public class HeaderDownloadWorker extends SwingWorker {
      * @param endIndex1   the end index
      * @param server      the server
      * @param newsgroup1  the newsgroup
-     * @param log1        the log
      * @param mode1       the mode
      * @param from        the from
      * @param to          the to
      * @throws UNISoNException the UNI so n exception
      */
     public void initialise(final NewsGroupReader reader, final int startIndex1, final int endIndex1,
-                           final String server, final String newsgroup1, final UNISoNLogger log1,
+                           final String server, final String newsgroup1,
                            final DownloadMode mode1, final Date from, final Date to) throws UNISoNException {
-        this.setLog(log1);
         this.mode = mode1;
         this.startIndex = startIndex1;
         this.endIndex = endIndex1;
@@ -307,7 +297,7 @@ public class HeaderDownloadWorker extends SwingWorker {
                     references));
             this.kept++;
             if (!this.mode.equals(DownloadMode.BASIC)) {
-                this.downloader.addDownloadRequest(articleId, this.mode, this.getLog());
+                this.downloader.addDownloadRequest(articleId, this.mode);
             }
         } else {
             this.skipped++;
@@ -329,7 +319,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 
             for (String line = bufReader.readLine(); line != null; line = bufReader.readLine()) {
                 if (!this.running) {
-                    this.getLog().alert("Download aborted");
+                    LOGGER.warn("Download aborted");
                     this.notifyObservers();
                     throw new UNISoNException("Download aborted");
                 }
@@ -358,10 +348,8 @@ public class HeaderDownloadWorker extends SwingWorker {
                     if (!this.mode.equals(DownloadMode.BASIC)) {
                         size += FullDownloadWorker.queueSize();
                     }
-                    this.getLog()
-                            .log("Downloaded " + this.index + " kept " + this.kept + " skipped "
-                                    + this.skipped + " to process: " + size + " [" + new Date()
-                                    + "]");
+                    LOGGER.info("Downloaded {} kept {} skipped {} to process: {} [{}]", this.index, this.kept,
+                            this.skipped, size, new Date());
                     this.logTally = 0;
                 }
             }
@@ -370,8 +358,7 @@ public class HeaderDownloadWorker extends SwingWorker {
             if (!this.mode.equals(DownloadMode.BASIC)) {
                 size += FullDownloadWorker.queueSize();
             }
-            this.getLog().log(
-                    "Downloaded " + this.index + " kept " + this.kept + " to process: " + size);
+            LOGGER.info("Downloaded {} kept {} to process: {}", this.index, this.kept, size);
         }
         return true;
     }
@@ -381,10 +368,6 @@ public class HeaderDownloadWorker extends SwingWorker {
      */
     public void resume() {
         this.downloading = true;
-    }
-
-    void setLog(final UNISoNLogger log) {
-        this.unisonLog = log;
     }
 
     public void setMode(final DownloadMode headers) {
@@ -417,7 +400,7 @@ public class HeaderDownloadWorker extends SwingWorker {
                 log.debug("Finished batch {}-{}", i, batchEndIndex);
             }
         } catch (final IOException e1) {
-            this.getLog().alert("ERROR: " + e1);
+            LOGGER.error("Error", e1);
             e1.printStackTrace();
             return false;
         }

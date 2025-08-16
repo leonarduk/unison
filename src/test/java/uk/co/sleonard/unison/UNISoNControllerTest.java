@@ -37,9 +37,8 @@ public class UNISoNControllerTest {
     public void doDownload(final boolean locationSelected, final boolean getTextSelected,
                            final NewsGroup[] items, final String fromDateString) {
         final StatusMonitor monitor = Mockito.mock(StatusMonitor.class);
-        final UNISoNLogger logger = new UNISoNCLI();
         final String toDateString = "2016-09-09";
-        this.controller.download(monitor, items, fromDateString, toDateString, logger,
+        this.controller.download(monitor, items, fromDateString, toDateString,
                 locationSelected, getTextSelected);
     }
 
@@ -113,23 +112,21 @@ public class UNISoNControllerTest {
     @Test
     public final void testDownloadWithExtrasNullItems() {
         final StatusMonitor monitor = Mockito.mock(StatusMonitor.class);
-        final UNISoNLogger logger = new UNISoNCLI();
-        this.controller.download(monitor, null, "2016-06-06", "2016-09-09", logger, true,
+        this.controller.download(monitor, null, "2016-06-06", "2016-09-09", true,
                 false);
     }
 
     @Test
     public final void testDownloadWithExtrasUsesHeadersMode() throws Exception {
         final StatusMonitor monitor = Mockito.mock(StatusMonitor.class);
-        final UNISoNLogger logger = new UNISoNCLI();
         final NewsGroup[] items = {new NewsGroup("alt,news", null, new HashSet<>(),
                 new HashSet<>(), 1, 2, 1, 2, "alt.news", true)};
         final UNISoNController spy = Mockito.spy(this.controller);
         Mockito.doNothing().when(spy).quickDownload(Mockito.anySet(), Mockito.any(),
-                Mockito.any(), Mockito.any(), Mockito.any());
-        spy.download(monitor, items, "2016-06-06", "2016-09-09", logger, true, false);
+                Mockito.any(), Mockito.any());
+        spy.download(monitor, items, "2016-06-06", "2016-09-09", true, false);
         Mockito.verify(spy).quickDownload(Mockito.anySet(), Mockito.any(), Mockito.any(),
-                Mockito.any(), Mockito.eq(DownloadMode.HEADERS));
+                Mockito.eq(DownloadMode.HEADERS));
     }
 
     @Test
@@ -148,9 +145,8 @@ public class UNISoNControllerTest {
                 lastMessageTotal, firstMessage, lastMessage, fullName, lastNode));
         final Date fromDate1 = null;
         final Date toDate1 = null;
-        final UNISoNLogger log = new UNISoNCLI();
         final DownloadMode mode = DownloadMode.ALL;
-        this.controller.quickDownload(groups, fromDate1, toDate1, log, mode);
+        this.controller.quickDownload(groups, fromDate1, toDate1, mode);
 
     }
 
@@ -159,9 +155,8 @@ public class UNISoNControllerTest {
         final String group = "group";
         final String host = "host";
         final StatusMonitor monitor = Mockito.mock(StatusMonitor.class);
-        final UNISoNLogger logger = new UNISoNCLI();
         final NewsClient client = Mockito.mock(NewsClient.class);
-        this.controller.requestDownload(group, host, monitor, logger, client);
+        this.controller.requestDownload(group, host, monitor, client);
     }
 
     @Test

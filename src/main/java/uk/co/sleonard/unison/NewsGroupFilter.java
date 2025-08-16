@@ -175,7 +175,9 @@ public class NewsGroupFilter {
     public void setSelectedNewsgroup(final String groupName) {
         if (!StringUtils.isEmpty(groupName)) {
             NewsGroup group = this.helper.getNewsgroupByFullName(groupName, this.session);
-            this.setSelectedNewsgroup(group.getName());
+            this.selectedNewsgroup = group;
+        } else {
+            this.selectedNewsgroup = null;
         }
     }
 }

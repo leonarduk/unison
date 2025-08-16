@@ -208,12 +208,13 @@ public class PajekNetworkFile {
         }
         // Create a new file output stream
         try (FileOutputStream out = new FileOutputStream(this.filename);
-            // Connect print stream to the output stream
-            PrintStream p = new PrintStream(out)) {
+             // Connect print stream to the output stream
+             PrintStream p = new PrintStream(out)) {
+            this.writeData(p);
+            log.info("Saved to {}", this.filename);
         } catch (final IOException e) {
-            e.printStackTrace();
+            log.error("Failed to save Pajek network file", e);
         }
-        log.info("Saved to {}", this.filename);
     }
 
     /**

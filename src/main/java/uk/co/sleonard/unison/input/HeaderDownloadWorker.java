@@ -120,7 +120,7 @@ public class HeaderDownloadWorker extends SwingWorker {
                 try {
                     this.storeArticleInfo(this.queue);
                 } catch (final UNISoNException e) {
-                    LOGGER.error("Error", e);
+                    log.error("Error", e);
                     e.printStackTrace();
                     return "FAIL";
                 }
@@ -319,7 +319,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 
             for (String line = bufReader.readLine(); line != null; line = bufReader.readLine()) {
                 if (!this.running) {
-                    LOGGER.warn("Download aborted");
+                    log.warn("Download aborted");
                     this.notifyObservers();
                     throw new UNISoNException("Download aborted");
                 }
@@ -348,7 +348,7 @@ public class HeaderDownloadWorker extends SwingWorker {
                     if (!this.mode.equals(DownloadMode.BASIC)) {
                         size += FullDownloadWorker.queueSize();
                     }
-                    LOGGER.info("Downloaded {} kept {} skipped {} to process: {} [{}]", this.index, this.kept,
+                    log.info("Downloaded {} kept {} skipped {} to process: {} [{}]", this.index, this.kept,
                             this.skipped, size, new Date());
                     this.logTally = 0;
                 }
@@ -358,7 +358,7 @@ public class HeaderDownloadWorker extends SwingWorker {
             if (!this.mode.equals(DownloadMode.BASIC)) {
                 size += FullDownloadWorker.queueSize();
             }
-            LOGGER.info("Downloaded {} kept {} to process: {}", this.index, this.kept, size);
+            log.info("Downloaded {} kept {} to process: {}", this.index, this.kept, size);
         }
         return true;
     }
@@ -400,7 +400,7 @@ public class HeaderDownloadWorker extends SwingWorker {
                 log.debug("Finished batch {}-{}", i, batchEndIndex);
             }
         } catch (final IOException e1) {
-            LOGGER.error("Error", e1);
+            log.error("Error", e1);
             e1.printStackTrace();
             return false;
         }

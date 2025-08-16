@@ -6,6 +6,7 @@
 
 package uk.co.sleonard.unison.gui.generated;
 
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import uk.co.sleonard.unison.UNISoNController;
@@ -33,6 +34,7 @@ import java.util.List;
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  */
+@Slf4j
 class MessageStoreViewer extends javax.swing.JPanel implements Observer {
 
     /**

@@ -288,8 +288,8 @@ public class FullDownloadWorker extends SwingWorker {
         }
 
         if (null == article) {
-            LOGGER.info("Skipped message {}", request.getUsenetID());
-            LOGGER.warn("Article {} returned null", request.getUsenetID());
+            log.info("Skipped message {}", request.getUsenetID());
+            log.warn("Article {} returned null", request.getUsenetID());
         } else {
             log.debug("Retrieved article {} ({}) queue size {}", request.getUsenetID(),
                     article.getSubject(), FullDownloadWorker.downloadQueue.size());
@@ -348,7 +348,7 @@ public class FullDownloadWorker extends SwingWorker {
     public void finished() {
         FullDownloadWorker.downloaders.remove(this);
         if (FullDownloadWorker.downloaders.size() == 0) {
-            LOGGER.info("Download of extra fields complete");
+            log.info("Download of extra fields complete");
         }
     }
 
@@ -402,7 +402,7 @@ public class FullDownloadWorker extends SwingWorker {
         if (null != article) {
             log.debug("Retrieved article {} - subject '{}' queue size before add {}", request.getUsenetID(),
                     article.getSubject(), queue.size());
-            LOGGER.info("Got:{} {} {} to q: {}[{}]", article.getSubject(), article.getFrom(),
+            log.info("Got:{} {} {} to q: {}[{}]", article.getSubject(), article.getFrom(),
                     article.getArticleID(), queue.size(), new Date());
 
             queue.add(article);

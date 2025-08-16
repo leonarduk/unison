@@ -10,8 +10,6 @@ package uk.co.sleonard.unison.input;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 
 import java.util.ArrayList;
@@ -78,7 +76,6 @@ public class DataHibernatorWorker extends SwingWorker {
      * @param reader
      *            the reader
      * @param helper2
-     * @param session
      */
     private DataHibernatorWorker(final NewsGroupReader reader, final HibernateHelper helper2,
                                  final LinkedBlockingQueue<NewsArticle> queue, final Session session2) {
@@ -113,7 +110,7 @@ public class DataHibernatorWorker extends SwingWorker {
             }
             DataHibernatorWorker.workers.remove(this);
             if (DataHibernatorWorker.workers.size() == 0) {
-              LOGGER.info("Download complete");
+              log.info("Download complete");
             }
         } catch (@SuppressWarnings("unused") final InterruptedException e) {
             return "Interrupted";

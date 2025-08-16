@@ -1,22 +1,18 @@
 package uk.co.sleonard.unison.datahandling;
 
-import static org.junit.Assert.*;
-
-import java.util.Map;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Vector;
-import java.util.Date;
-
 import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
+
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class HibernateHelperRunQueryTest {
 

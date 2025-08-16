@@ -9,7 +9,6 @@ package uk.co.sleonard.unison.input;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-
 import uk.co.sleonard.unison.datahandling.DAO.Location;
 
 public class LocationFinderImplIT {

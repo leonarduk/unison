@@ -6,20 +6,19 @@
  */
 package uk.co.sleonard.unison.input;
 
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Assert;
+import org.junit.Ignore;
+import org.junit.Test;
+import uk.co.sleonard.unison.UNISoNException;
+import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
+import uk.co.sleonard.unison.utils.StringUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Set;
-
-import lombok.extern.slf4j.Slf4j;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
-import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
  *

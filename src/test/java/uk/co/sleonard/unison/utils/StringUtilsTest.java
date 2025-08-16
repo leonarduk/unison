@@ -1,9 +1,7 @@
 package uk.co.sleonard.unison.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+import uk.co.sleonard.unison.UNISoNException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -14,9 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
-import org.junit.Test;
-
-import uk.co.sleonard.unison.UNISoNException;
+import static org.junit.Assert.*;
 
 /**
  * The Class StringUtilsTest.

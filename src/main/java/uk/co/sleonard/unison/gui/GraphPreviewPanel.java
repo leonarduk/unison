@@ -8,38 +8,23 @@
  */
 package uk.co.sleonard.unison.gui;
 
-import java.awt.Color;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 import edu.uci.ics.jung.graph.ArchetypeVertex;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Vertex;
-import edu.uci.ics.jung.graph.decorators.DefaultToolTipFunction;
-import edu.uci.ics.jung.graph.decorators.EdgeShape;
-import edu.uci.ics.jung.graph.decorators.EllipseVertexShapeFunction;
-import edu.uci.ics.jung.graph.decorators.PickableVertexPaintFunction;
-import edu.uci.ics.jung.graph.decorators.VertexIconAndShapeFunction;
-import edu.uci.ics.jung.graph.decorators.VertexStringer;
+import edu.uci.ics.jung.graph.decorators.*;
 import edu.uci.ics.jung.graph.impl.DirectedSparseEdge;
 import edu.uci.ics.jung.graph.impl.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.impl.DirectedSparseVertex;
-import edu.uci.ics.jung.visualization.DefaultGraphLabelRenderer;
-import edu.uci.ics.jung.visualization.FRLayout;
-import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.PluggableRenderer;
-import edu.uci.ics.jung.visualization.ShapePickSupport;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.*;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.output.Relationship;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 /**
  * Demonstrates the use of <code>GraphZoomScrollPane</code>. This class shows off the

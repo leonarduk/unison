@@ -1,17 +1,16 @@
 package uk.co.sleonard.unison.datahandling;
 
-import static org.junit.Assert.assertThrows;
+import org.hibernate.Session;
+import org.junit.Test;
+import org.mockito.Mockito;
+import uk.co.sleonard.unison.UNISoNException;
+import uk.co.sleonard.unison.input.NewsArticle;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
 
-import org.hibernate.Session;
-import org.junit.Test;
-import org.mockito.Mockito;
-
-import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.input.NewsArticle;
+import static org.junit.Assert.assertThrows;
 
 /**
  * Tests for {@link HibernateHelper#findOrCreateUsenetUser(NewsArticle, Session, String)}.

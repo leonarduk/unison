@@ -6,6 +6,9 @@
  */
 package uk.co.sleonard.unison.output;
 
+import uk.co.sleonard.unison.UNISoNException;
+import uk.co.sleonard.unison.gui.GraphPreviewPanel;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -13,9 +16,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
-
-import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.gui.GraphPreviewPanel;
 
 /**
  * The Class PajekNetworkFile.

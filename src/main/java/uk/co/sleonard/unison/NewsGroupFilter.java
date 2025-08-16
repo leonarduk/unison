@@ -6,19 +6,18 @@
  */
 package uk.co.sleonard.unison;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Vector;
-
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Session;
-
-import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
+import uk.co.sleonard.unison.datahandling.HibernateHelper;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Vector;
 
 public class NewsGroupFilter {
 	/** The selected messages. */

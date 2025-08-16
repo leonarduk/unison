@@ -6,13 +6,13 @@
  */
 package uk.co.sleonard.unison.input;
 
+import uk.co.sleonard.unison.UNISoNException;
+import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Set;
-
-import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 
 public interface NewsClient {
 

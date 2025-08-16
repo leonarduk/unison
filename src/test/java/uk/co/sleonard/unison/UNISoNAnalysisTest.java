@@ -6,13 +6,6 @@
  */
 package uk.co.sleonard.unison;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.Vector;
-
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
@@ -24,16 +17,11 @@ import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.slf4j.LoggerFactory;
-
+import uk.co.sleonard.unison.datahandling.DAO.*;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
-import uk.co.sleonard.unison.datahandling.DAO.GUIItem;
-import uk.co.sleonard.unison.datahandling.DAO.Location;
-import uk.co.sleonard.unison.datahandling.DAO.Message;
-import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
-import uk.co.sleonard.unison.datahandling.DAO.ResultRow;
-import uk.co.sleonard.unison.datahandling.DAO.Topic;
-import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.gui.UNISoNGUI;
+
+import java.util.*;
 
 public class UNISoNAnalysisTest {
 

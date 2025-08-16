@@ -7,7 +7,6 @@
 package uk.co.sleonard.unison.datahandling;
 
 import lombok.extern.slf4j.Slf4j;
-
 import uk.co.sleonard.unison.datahandling.DAO.EmailAddress;
 import uk.co.sleonard.unison.input.NewsArticle;
 

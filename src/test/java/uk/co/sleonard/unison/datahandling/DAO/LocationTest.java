@@ -6,12 +6,12 @@
  */
 package uk.co.sleonard.unison.datahandling.DAO;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Class LocationTest.

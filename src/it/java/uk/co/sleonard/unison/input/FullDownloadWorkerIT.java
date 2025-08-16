@@ -6,17 +6,16 @@
  */
 package uk.co.sleonard.unison.input;
 
-import java.util.concurrent.LinkedBlockingQueue;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.utils.StringUtils;
+
+import java.util.concurrent.LinkedBlockingQueue;
 
 @Ignore("Requires a live NNTP server and is disabled to avoid external network calls")
 public class FullDownloadWorkerIT {

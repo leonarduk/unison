@@ -6,20 +6,15 @@
  */
 package uk.co.sleonard.unison.utils;
 
-import java.util.concurrent.LinkedBlockingQueue;
-
 import org.hibernate.Session;
-
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
-import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
-import uk.co.sleonard.unison.input.FullDownloadWorker;
-import uk.co.sleonard.unison.input.NewsArticle;
-import uk.co.sleonard.unison.input.NewsClient;
-import uk.co.sleonard.unison.input.NewsClientImpl;
-import uk.co.sleonard.unison.input.NewsGroupReader;
+import uk.co.sleonard.unison.datahandling.HibernateHelper;
+import uk.co.sleonard.unison.input.*;
+
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class DownloaderImpl implements Downloader {
 

@@ -6,10 +6,10 @@
  */
 package uk.co.sleonard.unison.datahandling.DAO;
 
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * The Class EmailAddressTest.

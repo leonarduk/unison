@@ -3,24 +3,23 @@
  */
 package uk.co.sleonard.unison.gui.generated;
 
-import static org.junit.Assert.assertEquals;
+import org.hibernate.Session;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+import uk.co.sleonard.unison.NewsGroupFilter;
+import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
+import uk.co.sleonard.unison.datahandling.DAO.Topic;
+import uk.co.sleonard.unison.datahandling.HibernateHelper;
+import uk.co.sleonard.unison.gui.UNISoNGUI;
+import uk.co.sleonard.unison.utils.TreeNode;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.hibernate.Session;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
-
-import uk.co.sleonard.unison.UNISoNController;
-import uk.co.sleonard.unison.NewsGroupFilter;
-import uk.co.sleonard.unison.datahandling.HibernateHelper;
-import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
-import uk.co.sleonard.unison.datahandling.DAO.Topic;
-import uk.co.sleonard.unison.gui.UNISoNGUI;
-import uk.co.sleonard.unison.utils.TreeNode;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for {@link MessageStoreViewer}.

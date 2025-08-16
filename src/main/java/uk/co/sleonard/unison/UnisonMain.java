@@ -1,9 +1,8 @@
 package uk.co.sleonard.unison;
 
-import javax.swing.SwingUtilities;
-import uk.co.sleonard.unison.UNISoNException;
-
 import uk.co.sleonard.unison.gui.generated.UNISoNTabbedFrame;
+
+import javax.swing.*;
 
 /**
  * Application entry point for the Unison UI.

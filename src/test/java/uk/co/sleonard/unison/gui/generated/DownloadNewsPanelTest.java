@@ -1,18 +1,15 @@
 package uk.co.sleonard.unison.gui.generated;
 
-import static org.junit.Assert.assertEquals;
-
-import java.lang.reflect.Field;
-
-import javax.swing.JProgressBar;
-import javax.swing.JFrame;
-
 import org.junit.Test;
 import org.mockito.Mockito;
-
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.input.DataHibernatorPool;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
+
+import javax.swing.*;
+import java.lang.reflect.Field;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for {@link DownloadNewsPanel}.

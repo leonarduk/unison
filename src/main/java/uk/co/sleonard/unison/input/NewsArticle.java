@@ -7,15 +7,16 @@
 package uk.co.sleonard.unison.input;
 
 // Import Commons/NET clases
-import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.utils.StringUtils;
+
+import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
 
 /**
  * The Class NewsArticle.

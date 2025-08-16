@@ -6,14 +6,14 @@
  */
 package uk.co.sleonard.unison.datahandling.DAO;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.commons.net.nntp.NewsgroupInfo;
 import org.apache.commons.net.nntp.NewsgroupInfoFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The Class MessageTest.

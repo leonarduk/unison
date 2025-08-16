@@ -6,15 +6,13 @@
  */
 package uk.co.sleonard.unison.input;
 
+import org.junit.Assert;
+import org.junit.Test;
+import uk.co.sleonard.unison.UNISoNException;
+
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.List;
-
-import org.junit.Assert;
-import org.junit.Test;
-
-
-import uk.co.sleonard.unison.UNISoNException;
 
 /**
  * The Class NewsArticleTest.

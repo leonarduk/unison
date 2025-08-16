@@ -6,6 +6,12 @@
  */
 package uk.co.sleonard.unison.input;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.net.nntp.NNTPClient;
+import org.apache.commons.net.nntp.NewsgroupInfo;
+import uk.co.sleonard.unison.UNISoNException;
+import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -14,13 +20,6 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Set;
 import java.util.TreeSet;
-
-import org.apache.commons.net.nntp.NNTPClient;
-import org.apache.commons.net.nntp.NewsgroupInfo;
-import lombok.extern.slf4j.Slf4j;
-
-import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 
 /**
  * The Class NewsClient.

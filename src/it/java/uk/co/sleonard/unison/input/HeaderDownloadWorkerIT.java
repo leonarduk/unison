@@ -6,21 +6,20 @@
  */
 package uk.co.sleonard.unison.input;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.concurrent.LinkedBlockingQueue;
-
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-
 import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
+import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.utils.DownloaderImpl;
 import uk.co.sleonard.unison.utils.StringUtils;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.concurrent.LinkedBlockingQueue;
 
 @Ignore("Requires a live NNTP server and is disabled to avoid external network calls")
 public class HeaderDownloadWorkerIT {

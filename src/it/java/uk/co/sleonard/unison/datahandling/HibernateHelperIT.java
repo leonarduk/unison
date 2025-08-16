@@ -6,18 +6,16 @@
  */
 package uk.co.sleonard.unison.datahandling;
 
-import java.io.IOException;
-import java.util.concurrent.LinkedBlockingQueue;
-
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Test;
-
 import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.input.HeaderDownloadWorkerIT;
 import uk.co.sleonard.unison.input.NewsArticle;
+
+import java.io.IOException;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class HibernateHelperIT {
 

@@ -1,10 +1,8 @@
 package uk.co.sleonard.unison.utils;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
-import uk.co.sleonard.unison.utils.TreeNode;
+import static org.junit.Assert.assertEquals;
 
 /**
  * The Class TreeNodeTest.

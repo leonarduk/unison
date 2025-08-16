@@ -6,28 +6,15 @@
  */
 package uk.co.sleonard.unison;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.Vector;
-
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-
+import uk.co.sleonard.unison.datahandling.DAO.*;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
-import uk.co.sleonard.unison.datahandling.DAO.GUIItem;
-import uk.co.sleonard.unison.datahandling.DAO.Location;
-import uk.co.sleonard.unison.datahandling.DAO.Message;
-import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
-import uk.co.sleonard.unison.datahandling.DAO.ResultRow;
-import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 
 

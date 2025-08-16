@@ -6,22 +6,21 @@
  */
 package uk.co.sleonard.unison.datahandling;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Vector;
-
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
-
 import uk.co.sleonard.unison.NewsGroupFilter;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Vector;
 
 public class UNISoNDatabaseTest {
 

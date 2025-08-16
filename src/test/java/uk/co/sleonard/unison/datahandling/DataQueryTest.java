@@ -1,29 +1,19 @@
 package uk.co.sleonard.unison.datahandling;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.Vector;
-
 import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
-
-import uk.co.sleonard.unison.datahandling.DataQuery;
-import uk.co.sleonard.unison.datahandling.HibernateHelper;
-import uk.co.sleonard.unison.datahandling.DAO.Location;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
+
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * The Class DataQueryTest.

@@ -6,15 +6,15 @@
  */
 package uk.co.sleonard.unison.datahandling.DAO;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.net.nntp.NewsgroupInfo;
+
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Represents a news group e.g. soc.senior.issues

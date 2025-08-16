@@ -6,29 +6,24 @@
  */
 package uk.co.sleonard.unison.input;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.concurrent.LinkedBlockingQueue;
-
 import org.apache.commons.net.MalformedServerReplyException;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
-import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
+import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.utils.StringUtils;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.time.format.DateTimeParseException;
+import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Class to create a separate Thread for downloading messages.

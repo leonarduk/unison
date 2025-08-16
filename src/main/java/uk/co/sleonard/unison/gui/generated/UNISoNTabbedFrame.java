@@ -6,21 +6,18 @@
 
 package uk.co.sleonard.unison.gui.generated;
 
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.util.Observable;
-import java.util.Observer;
-
-import javax.swing.JOptionPane;
-import javax.swing.KeyStroke;
-
 import org.hsqldb.util.DatabaseManagerSwing;
-
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
 import uk.co.sleonard.unison.gui.JSplashScreen;
 import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
+
+import javax.swing.*;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * The Class UNISoNTabbedFrame.

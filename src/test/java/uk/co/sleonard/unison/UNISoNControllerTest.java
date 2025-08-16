@@ -6,26 +6,20 @@
  */
 package uk.co.sleonard.unison;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.swing.JFrame;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
-import uk.co.sleonard.unison.input.DataHibernatorPool;
-import uk.co.sleonard.unison.input.HeaderDownloadWorker;
-import uk.co.sleonard.unison.input.NewsClient;
-import uk.co.sleonard.unison.input.NewsGroupReader;
-import uk.co.sleonard.unison.input.UNISoNCLI;
+import uk.co.sleonard.unison.input.*;
+
+import javax.swing.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UNISoNControllerTest {
 

@@ -6,11 +6,11 @@
  */
 package uk.co.sleonard.unison.datahandling.DAO;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Extends Topic to change setId(protected)

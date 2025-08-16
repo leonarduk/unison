@@ -1,17 +1,16 @@
 package uk.co.sleonard.unison.datahandling;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Date;
-
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.junit.Test;
 import org.mockito.Mockito;
-
 import uk.co.sleonard.unison.datahandling.DAO.Location;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.input.NewsArticle;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class HibernateHelperSetLocationTest {
 

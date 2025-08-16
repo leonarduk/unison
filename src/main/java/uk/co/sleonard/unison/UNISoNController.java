@@ -6,34 +6,25 @@
  */
 package uk.co.sleonard.unison;
 
+import org.hibernate.Session;
+import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
+import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
+import uk.co.sleonard.unison.datahandling.DataQuery;
+import uk.co.sleonard.unison.datahandling.HibernateHelper;
+import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
+import uk.co.sleonard.unison.gui.UNISoNGUI;
+import uk.co.sleonard.unison.gui.generated.DownloadNewsPanel;
+import uk.co.sleonard.unison.input.*;
+import uk.co.sleonard.unison.utils.DownloaderImpl;
+import uk.co.sleonard.unison.utils.StringUtils;
+
+import javax.swing.*;
 import java.io.IOException;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
-import javax.swing.ListModel;
-
-import org.hibernate.Session;
-
-import uk.co.sleonard.unison.datahandling.DataQuery;
-import uk.co.sleonard.unison.datahandling.HibernateHelper;
-import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
-import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
-import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
-import uk.co.sleonard.unison.gui.UNISoNGUI;
-import uk.co.sleonard.unison.gui.generated.DownloadNewsPanel;
-import uk.co.sleonard.unison.input.DataHibernatorPool;
-import uk.co.sleonard.unison.input.DataHibernatorWorker;
-import uk.co.sleonard.unison.input.HeaderDownloadWorker;
-import uk.co.sleonard.unison.input.NewsArticle;
-import uk.co.sleonard.unison.input.NewsClient;
-import uk.co.sleonard.unison.input.NewsGroupReader;
-import uk.co.sleonard.unison.utils.DownloaderImpl;
-import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
  * The Class UNISoNController.

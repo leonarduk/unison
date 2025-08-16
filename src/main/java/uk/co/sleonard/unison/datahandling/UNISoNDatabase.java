@@ -6,19 +6,18 @@
  */
 package uk.co.sleonard.unison.datahandling;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Observable;
-import java.util.Set;
-
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
-
 import uk.co.sleonard.unison.NewsGroupFilter;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Observable;
+import java.util.Set;
 
 @Slf4j
 public class UNISoNDatabase extends Observable {

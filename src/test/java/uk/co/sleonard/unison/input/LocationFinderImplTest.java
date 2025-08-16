@@ -6,13 +6,12 @@
  */
 package uk.co.sleonard.unison.input;
 
-import java.net.URL;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import uk.co.sleonard.unison.datahandling.DAO.Location;
+
+import java.net.URL;
 
 public class LocationFinderImplTest {
 

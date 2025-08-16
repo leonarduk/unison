@@ -6,9 +6,9 @@
  */
 package uk.co.sleonard.unison;
 
-import java.util.Set;
-
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
+
+import java.util.Set;
 
 public interface StatusMonitor {
 	void downloadEnabled(final boolean enabled);

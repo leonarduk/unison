@@ -1,10 +1,8 @@
 package uk.co.sleonard.unison.datahandling.DAO;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
-import uk.co.sleonard.unison.datahandling.DAO.ResultRow;
+import static org.junit.Assert.assertEquals;
 
 /**
  * The Class ResultRowTest.

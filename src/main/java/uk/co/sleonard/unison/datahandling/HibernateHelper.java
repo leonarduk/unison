@@ -6,67 +6,41 @@
  */
 package uk.co.sleonard.unison.datahandling;
 
-import lombok.extern.slf4j.Slf4j;
-import java.io.File;
-import java.io.IOException;
-import java.sql.BatchUpdateException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.Vector;
-import java.util.Collections;
-import java.util.EnumSet;
-
-import javax.naming.NamingException;
-import javax.swing.JOptionPane;
-
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
-import org.slf4j.LoggerFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.MappingException;
-import org.hibernate.NonUniqueResultException;
-import org.hibernate.ObjectNotFoundException;
-import org.hibernate.query.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
+import lombok.extern.slf4j.Slf4j;
+import org.ehcache.Cache;
+import org.ehcache.CacheManager;
+import org.ehcache.config.builders.CacheConfigurationBuilder;
+import org.ehcache.config.builders.CacheManagerBuilder;
+import org.ehcache.config.builders.ResourcePoolsBuilder;
+import org.hibernate.*;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.exception.GenericJDBCException;
+import org.hibernate.query.Query;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.schema.TargetType;
 import org.hsqldb.util.DatabaseManagerSwing;
-
+import org.slf4j.LoggerFactory;
 import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.datahandling.DAO.EmailAddress;
-import uk.co.sleonard.unison.datahandling.DAO.IpAddress;
-import uk.co.sleonard.unison.datahandling.DAO.Location;
-import uk.co.sleonard.unison.datahandling.DAO.Message;
-import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
-import uk.co.sleonard.unison.datahandling.DAO.ResultRow;
-import uk.co.sleonard.unison.datahandling.DAO.Topic;
-import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
+import uk.co.sleonard.unison.datahandling.DAO.*;
 import uk.co.sleonard.unison.gui.UNISoNGUI;
 import uk.co.sleonard.unison.input.LocationFinder;
 import uk.co.sleonard.unison.input.LocationFinderImpl;
 import uk.co.sleonard.unison.input.NewsArticle;
 import uk.co.sleonard.unison.utils.StringUtils;
 
-import org.ehcache.Cache;
-import org.ehcache.CacheManager;
-import org.ehcache.config.builders.CacheConfigurationBuilder;
-import org.ehcache.config.builders.CacheManagerBuilder;
-import org.ehcache.config.builders.ResourcePoolsBuilder;
+import javax.naming.NamingException;
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.sql.BatchUpdateException;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * This is one of the most important classes as it helps persist the data to the HSQL database.

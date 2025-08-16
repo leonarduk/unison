@@ -8,16 +8,15 @@
 
 package uk.co.sleonard.unison.input;
 
+import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uk.co.sleonard.unison.UNISoNLogger;
+import uk.co.sleonard.unison.datahandling.HibernateHelper;
+
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.hibernate.Session;
-
-import uk.co.sleonard.unison.UNISoNLogger;
-import uk.co.sleonard.unison.datahandling.HibernateHelper;
 
 /**
  * The Class DataHibernatorWorker.

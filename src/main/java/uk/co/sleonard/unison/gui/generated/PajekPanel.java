@@ -6,38 +6,31 @@
 
 package uk.co.sleonard.unison.gui.generated;
 
-import java.awt.FileDialog;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Vector;
-
-import javax.swing.JFrame;
-import javax.swing.table.DefaultTableModel;
-
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
+import uk.co.sleonard.unison.datahandling.DAO.Message;
+import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.datahandling.DataQuery;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
-import uk.co.sleonard.unison.datahandling.DAO.Message;
-import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.gui.GraphPreviewPanel;
 import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
 import uk.co.sleonard.unison.output.ExportToCSV;
 import uk.co.sleonard.unison.output.PajekNetworkFile;
 import uk.co.sleonard.unison.utils.StringUtils;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.*;
+import java.util.List;
 
 /**
  * The Class PajekPanel.

@@ -6,46 +6,27 @@
 
 package uk.co.sleonard.unison.gui.generated;
 
-import java.awt.Dimension;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Set;
-import java.util.Vector;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
-import javax.swing.ListModel;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
-
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
-
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
-import uk.co.sleonard.unison.datahandling.DAO.GUIItem;
-import uk.co.sleonard.unison.datahandling.DAO.Location;
-import uk.co.sleonard.unison.datahandling.DAO.Message;
-import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
-import uk.co.sleonard.unison.datahandling.DAO.ResultRow;
-import uk.co.sleonard.unison.datahandling.DAO.Topic;
-import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
+import uk.co.sleonard.unison.datahandling.DAO.*;
 import uk.co.sleonard.unison.input.FullDownloadWorker;
 import uk.co.sleonard.unison.input.NewsClientImpl;
 import uk.co.sleonard.unison.utils.StringUtils;
 import uk.co.sleonard.unison.utils.TreeNode;
+
+import javax.swing.*;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
+import java.awt.*;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeParseException;
+import java.util.*;
+import java.util.List;
 
 /**
  * The Class MessageStoreViewer.

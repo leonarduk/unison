@@ -6,6 +6,13 @@
  */
 package uk.co.sleonard.unison.input;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import uk.co.sleonard.unison.datahandling.DAO.IpAddress;
+import uk.co.sleonard.unison.datahandling.DAO.Location;
+import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,14 +21,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Vector;
 import java.util.regex.Pattern;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import uk.co.sleonard.unison.datahandling.DAO.IpAddress;
-import uk.co.sleonard.unison.datahandling.DAO.Location;
-import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 
 /**
  * The Class LocationFinderImpl.

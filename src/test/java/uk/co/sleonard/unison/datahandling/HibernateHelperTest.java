@@ -1,17 +1,17 @@
 package uk.co.sleonard.unison.datahandling;
 
-import static org.junit.Assert.*;
-
-import java.util.Date;
-
 import org.junit.Test;
-
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.input.NewsArticle;
+
+import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for {@link HibernateHelper}.

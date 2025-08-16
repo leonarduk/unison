@@ -6,20 +6,18 @@
  */
 package uk.co.sleonard.unison.output;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import uk.co.sleonard.unison.UNISoNException;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Vector;
-
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import uk.co.sleonard.unison.UNISoNException;
 
 /**
  * The Class ExportToCSV.

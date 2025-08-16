@@ -6,9 +6,8 @@
  */
 package uk.co.sleonard.unison.input;
 
+import javax.swing.*;
 import java.util.Observable;
-
-import javax.swing.SwingUtilities;
 
 /**
  * from http://java.sun.com/products/jfc/tsc/articles/threads/threads2.html

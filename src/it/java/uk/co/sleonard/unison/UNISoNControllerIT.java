@@ -6,19 +6,17 @@
  */
 package uk.co.sleonard.unison;
 
-import java.util.Set;
-
-import javax.swing.ListModel;
-
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
 import uk.co.sleonard.unison.utils.StringUtils;
+
+import javax.swing.*;
+import java.util.Set;
 
 @Slf4j
 @Ignore("Requires a live NNTP server and is disabled to avoid external network calls")

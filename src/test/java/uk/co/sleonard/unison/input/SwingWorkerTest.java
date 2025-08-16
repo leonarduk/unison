@@ -1,12 +1,13 @@
 package uk.co.sleonard.unison.input;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Test;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for {@link SwingWorker}.

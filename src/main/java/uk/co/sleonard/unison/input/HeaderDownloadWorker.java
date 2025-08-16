@@ -6,6 +6,16 @@
  */
 package uk.co.sleonard.unison.input;
 
+import org.apache.commons.net.nntp.Article;
+import org.apache.commons.net.nntp.NNTPClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uk.co.sleonard.unison.UNISoNException;
+import uk.co.sleonard.unison.UNISoNLogger;
+import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
+import uk.co.sleonard.unison.utils.Downloader;
+import uk.co.sleonard.unison.utils.StringUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -14,17 +24,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import org.apache.commons.net.nntp.Article;
-import org.apache.commons.net.nntp.NNTPClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.UNISoNLogger;
-import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
-import uk.co.sleonard.unison.utils.Downloader;
-import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
  * Class to create a separate Thread for downloading messages.

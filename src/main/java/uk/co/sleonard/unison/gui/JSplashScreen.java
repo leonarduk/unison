@@ -22,17 +22,9 @@ package uk.co.sleonard.unison.gui;
  * 02111-1307 USA
  */
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.border.BevelBorder;
+import java.awt.*;
 
 /**
  * The Class JSplashScreen.

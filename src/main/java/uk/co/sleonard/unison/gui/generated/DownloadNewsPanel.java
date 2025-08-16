@@ -6,12 +6,7 @@
 
 package uk.co.sleonard.unison.gui.generated;
 
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Set;
-
 import lombok.extern.slf4j.Slf4j;
-
 import uk.co.sleonard.unison.StatusMonitor;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNLogger;
@@ -19,6 +14,10 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.input.DataHibernatorWorker;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
 import uk.co.sleonard.unison.utils.StringUtils;
+
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Set;
 
 /**
  * The Class DownloadNewsPanel.

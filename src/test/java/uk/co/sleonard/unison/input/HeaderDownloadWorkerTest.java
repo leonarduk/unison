@@ -6,24 +6,23 @@
  */
 package uk.co.sleonard.unison.input;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import uk.co.sleonard.unison.UNISoNException;
+import uk.co.sleonard.unison.UNISoNLogger;
+import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
+import uk.co.sleonard.unison.utils.Downloader;
+import uk.co.sleonard.unison.utils.StringUtils;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-
-import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.UNISoNLogger;
-import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
-import uk.co.sleonard.unison.utils.Downloader;
-import uk.co.sleonard.unison.utils.StringUtils;
 
 /**
  * The Class HeaderDownloadWorker.

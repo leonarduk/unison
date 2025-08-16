@@ -6,18 +6,15 @@
  */
 package uk.co.sleonard.unison.output;
 
-import java.awt.FileDialog;
+import uk.co.sleonard.unison.UNISoNException;
+
+import javax.swing.*;
+import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Vector;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-
-import uk.co.sleonard.unison.UNISoNException;
 
 /**
  * The Class ExportToCSV.

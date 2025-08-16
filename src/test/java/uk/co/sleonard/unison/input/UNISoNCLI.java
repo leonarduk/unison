@@ -6,22 +6,21 @@
  */
 package uk.co.sleonard.unison.input;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Optional;
-import java.util.Set;
-
 import lombok.extern.slf4j.Slf4j;
 import org.hsqldb.util.DatabaseManagerSwing;
 import org.junit.Assert;
 import org.junit.Ignore;
-
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
-import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
+import uk.co.sleonard.unison.datahandling.HibernateHelper;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * The Class UNISoNCLI.

@@ -16,7 +16,6 @@
         <mockito.version>5.12.0</mockito.version>
         <lombok.version>1.18.30</lombok.version>
         <maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
-        <jacoco.version>0.8.12</jacoco.version>
         <jms.version>3.1.0</jms.version>
         <javassist.version>3.30.2-GA</javassist.version>
         <commons-net>3.11.1</commons-net>
@@ -117,6 +116,25 @@
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.9.1</version>
+                <executions>
+                    <execution>
+                        <id>add-integration-test-source-as-test-sources</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/it/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -278,12 +296,6 @@
             <version>2.3.7</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>${jacoco.version}</version>
-            <type>maven-plugin</type>
-        </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>

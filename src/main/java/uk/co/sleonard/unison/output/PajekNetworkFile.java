@@ -203,18 +203,11 @@ public class PajekNetworkFile {
         if (!filenameInput.endsWith(this.suffix)) {
             this.filename += this.suffix;
         }
-        FileOutputStream out; // declare a file output object
-        PrintStream p; // declare a print stream object
-
         // Create a new file output stream
-        try {
-            out = new FileOutputStream(this.filename);
-
+        try (FileOutputStream out = new FileOutputStream(this.filename);
+                PrintStream p = new PrintStream(out)) {
             // Connect print stream to the output stream
-            p = new PrintStream(out);
             this.writeData(p);
-
-            p.close();
         } catch (final FileNotFoundException e) {
             e.printStackTrace();
         }

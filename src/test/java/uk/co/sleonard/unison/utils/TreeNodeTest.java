@@ -23,13 +23,13 @@ public class TreeNodeTest {
     }
 
     /**
-     * Test setName
+     * Test setNodeName
      */
     @Test
-    public void testSetName() {
+    public void testSetNodeName() {
         String expected = "othernode";
         TreeNode actual = new TreeNode(new Object(), "mytreenode");
-        actual.setName(expected);
+        actual.setNodeName(expected);
         assertEquals(expected, actual.toString());
 
     }

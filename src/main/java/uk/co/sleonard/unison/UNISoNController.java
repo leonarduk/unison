@@ -147,7 +147,7 @@ public class UNISoNController {
                          final boolean locationSelected, final boolean getTextSelected) {
         log.debug("Download invoked with fromDate {} toDate {} locationSelected {} getText {}", fromDateString,
                 toDateString, locationSelected, getTextSelected);
-        if ((monitor == null) || (logger == null)) {
+        if ((monitor == null) || (log == null)) {
             log.debug("Monitor or logger is null - aborting download");
             return;
         }
@@ -184,20 +184,16 @@ public class UNISoNController {
             }
         }
         try {
-            logger.log("Download : " + groups);
             log.debug("Starting quickDownload for {} groups", groups.size());
             final Date fromDate = StringUtils.stringToDate(fromDateString);
             final Date toDate = StringUtils.stringToDate(toDateString);
-            this.quickDownload(groups, fromDate, toDate, logger, mode);
-            logger.log("Done.");
+            this.quickDownload(groups, fromDate, toDate, mode);
             log.debug("quickDownload completed");
         } catch (final UNISoNException e) {
             log.warn("Failed to download", e);
-            logger.alert("Failed to download. Check your internet connection" + e.getMessage());
             monitor.downloadEnabled(true);
         } catch (final DateTimeParseException e) {
             log.warn("Failed to parse date", e);
-            logger.alert("Failed to parse date : " + e.getMessage());
             monitor.downloadEnabled(true);
         }
     }

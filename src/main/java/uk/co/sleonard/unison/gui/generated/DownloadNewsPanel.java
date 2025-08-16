@@ -9,9 +9,7 @@ package uk.co.sleonard.unison.gui.generated;
 import lombok.extern.slf4j.Slf4j;
 import uk.co.sleonard.unison.StatusMonitor;
 import uk.co.sleonard.unison.UNISoNController;
-import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
-import uk.co.sleonard.unison.input.DataHibernatorWorker;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
 import uk.co.sleonard.unison.utils.StringUtils;
 
@@ -28,7 +26,7 @@ import java.util.Set;
 @Slf4j
 @SuppressWarnings("rawtypes")
 public class DownloadNewsPanel extends javax.swing.JPanel
-        implements UNISoNLogger, Observer, StatusMonitor {
+        implements Observer, StatusMonitor {
 
     /**
      * The Constant serialVersionUID.
@@ -186,7 +184,6 @@ public class DownloadNewsPanel extends javax.swing.JPanel
         this.cancelButton.setEnabled(false);
         this.pauseButton.setEnabled(false);
 
-        DataHibernatorWorker.setLogger(this);
         this.controller.setDownloadPanel(this);
 
     }
@@ -194,16 +191,10 @@ public class DownloadNewsPanel extends javax.swing.JPanel
     /*
      * (non-Javadoc)
      *
-     * @see uk.co.sleonard.unison.gui.UNISoNLogger#alert(java.lang.String)
      */
-    @Override
-    public void alert(final String message) {
-        log.warn(message);
+    private void appendNote(final String message) {
         this.logText.append(message + "\n");
         this.notesArea.setText(this.logText.toString());
-        if (this.controller.getGui() != null) {
-            this.controller.getGui().showAlert(message);
-        }
     }
 
     /**
@@ -234,10 +225,15 @@ public class DownloadNewsPanel extends javax.swing.JPanel
                 .toArray(new NewsGroup[0]);
         try {
             this.controller.download(this, selected, this.fromDateField.getText(),
-                    this.toDateField.getText(), this, this.getLocationCheck.isSelected(),
+                    this.toDateField.getText(), this.getLocationCheck.isSelected(),
                     false);
         } catch (final Exception e) {
-            this.alert("Failed to start download: " + e.getMessage());
+            final String message = "Failed to start download: " + e.getMessage();
+            log.warn(message, e);
+            this.appendNote(message);
+            if (this.controller.getGui() != null) {
+                this.controller.getGui().showAlert(message);
+            }
         }
     }// GEN-LAST:event_downloadButtonActionPerformed
 
@@ -267,7 +263,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel
      */
     private void findButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_findButtonActionPerformed
         this.controller.requestDownload(this.newsgroupField.getText(),
-                this.hostCombo.getSelectedItem().toString().trim(), this, this,
+                this.hostCombo.getSelectedItem().toString().trim(), this,
                 this.controller.getNntpReader().getClient());
     }// GEN-LAST:event_findButtonActionPerformed
 
@@ -512,14 +508,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel
     /*
      * (non-Javadoc)
      *
-     * @see uk.co.sleonard.unison.gui.UNISoNLogger#log(java.lang.String)
      */
-    @Override
-    public void log(final String message) {
-        log.info(message);
-        this.logText.append(message + "\n");
-        this.notesArea.setText(this.logText.toString());
-    }
 
     /**
      * Updates the download progress bar.

@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.utils.Downloader;
 import uk.co.sleonard.unison.utils.StringUtils;
@@ -41,7 +40,6 @@ public class HeaderDownloadWorkerTest {
     public void setUp() throws Exception {
         this.worker = new HeaderDownloadWorker(new LinkedBlockingQueue<>(),
                 Mockito.mock(Downloader.class));
-        this.worker.setLog(new UNISoNCLI());
     }
 
     /**
@@ -82,7 +80,6 @@ public class HeaderDownloadWorkerTest {
         final NewsGroupReader ngr = Mockito.mock(NewsGroupReader.class);
         final NewsClient nc = PowerMockito.mock(NewsClient.class);
         ngr.client = nc;
-        final UNISoNLogger uniLog = Mockito.mock(UNISoNLogger.class);
         final Date fromAndTo = Calendar.getInstance().getTime();
         Assert.assertFalse(this.worker.isDownloading());
 
@@ -90,7 +87,7 @@ public class HeaderDownloadWorkerTest {
         Assert.assertTrue("No servers configured", servers.length > 0);
         final String server = servers[0];
 
-        this.worker.initialise(ngr, 0, 1, server, "newsgroup", uniLog, DownloadMode.ALL, fromAndTo,
+        this.worker.initialise(ngr, 0, 1, server, "newsgroup", DownloadMode.ALL, fromAndTo,
                 fromAndTo);
         ;
 

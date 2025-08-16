@@ -9,7 +9,6 @@ package uk.co.sleonard.unison.utils;
 import org.hibernate.Session;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.input.*;
@@ -45,9 +44,8 @@ public class DownloaderImpl implements Downloader {
     }
 
     @Override
-    public void addDownloadRequest(final String usenetID, final DownloadMode mode,
-                                   final UNISoNLogger log1) throws UNISoNException {
-        FullDownloadWorker.addDownloadRequest(usenetID, mode, log1, this.nntpHost, this.queue,
+    public void addDownloadRequest(final String usenetID, final DownloadMode mode) throws UNISoNException {
+        FullDownloadWorker.addDownloadRequest(usenetID, mode, this.nntpHost, this.queue,
                 this.newsClient, this.nntpReader, this.helper, this.session);
     }
 

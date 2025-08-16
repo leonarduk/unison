@@ -96,7 +96,6 @@ public class NewsGroupReaderTest {
         this.newsGroup.incrementMessagesSkipped();
         this.newsGroup.incrementMessagesSkipped();
         Assert.assertEquals(2, this.newsGroup.getMessagesSkipped());
-        this.newsGroup.alert("Number messages skipped: " + this.newsGroup.getMessagesSkipped());
     }
 
     /**
@@ -107,7 +106,6 @@ public class NewsGroupReaderTest {
         this.newsGroup.incrementMessagesStored();
         this.newsGroup.incrementMessagesStored();
         Assert.assertEquals(2, this.newsGroup.getMessagesStored());
-        this.newsGroup.log("Number messages stored: " + this.newsGroup.getMessagesStored());
     }
 
     /**

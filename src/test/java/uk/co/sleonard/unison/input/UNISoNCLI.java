@@ -12,7 +12,6 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
@@ -30,7 +29,7 @@ import java.util.Set;
  */
 @Slf4j
 @Ignore("Command line entry point - not a unit test")
-public class UNISoNCLI implements UNISoNLogger {
+public class UNISoNCLI {
 
     /**
      * The main method.
@@ -83,15 +82,6 @@ public class UNISoNCLI implements UNISoNLogger {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see uk.co.sleonard.unison.gui.UNISoNLogger#alert(java.lang.String)
-     */
-    @Override
-    public void alert(final String message) {
-        log.warn(message);
-    }
 
     /**
      * Download all.
@@ -104,7 +94,7 @@ public class UNISoNCLI implements UNISoNLogger {
         final UNISoNController instance = UNISoNController.getInstance();
         final Set<NewsGroup> listNewsgroups = instance.listNewsgroups(searchString, host,
                 instance.getNntpReader().getClient());
-        instance.quickDownload(listNewsgroups, null, null, this, DownloadMode.ALL);
+        instance.quickDownload(listNewsgroups, null, null, DownloadMode.ALL);
     }
 
     /**
@@ -157,15 +147,6 @@ public class UNISoNCLI implements UNISoNLogger {
         Assert.assertTrue(listNewsgroups.size() > 0);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see uk.co.sleonard.unison.gui.UNISoNLogger#log(java.lang.String)
-     */
-    @Override
-    public void log(final String message) {
-        log.info(message);
-    }
 
     /**
      * Quick download.
@@ -184,7 +165,7 @@ public class UNISoNCLI implements UNISoNLogger {
         // HibernateHelper.generateSchema();
 
         try {
-            instance.quickDownload(listNewsgroups, fromDate, toDate, this, DownloadMode.BASIC);
+            instance.quickDownload(listNewsgroups, fromDate, toDate, DownloadMode.BASIC);
         } catch (final UNISoNException e) {
             log.error("Error downloading messages", e);
         }

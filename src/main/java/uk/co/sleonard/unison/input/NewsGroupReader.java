@@ -41,10 +41,10 @@ public class NewsGroupReader {
     /**
      * Instantiates a new news group reader.
      *
-     * @param controller the controller
+     * @param client the {@link NewsClient} to use
      */
-    public NewsGroupReader(final UNISoNController controller) {
-        this.client = new NewsClientImpl();
+    public NewsGroupReader(final NewsClient client) {
+        this.client = client;
     }
 
 

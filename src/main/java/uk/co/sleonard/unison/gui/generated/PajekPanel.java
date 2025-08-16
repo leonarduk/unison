@@ -30,6 +30,9 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.*;
 import java.util.List;
+import java.beans.PropertyChangeEvent;
+
+import uk.co.sleonard.unison.DataChangeListener;
 
 /**
  * The Class PajekPanel.
@@ -38,7 +41,7 @@ import java.util.List;
  * @since v1.0.0
  */
 @Slf4j
-class PajekPanel extends javax.swing.JPanel implements Observer {
+class PajekPanel extends javax.swing.JPanel implements DataChangeListener {
 
     /**
      * The Constant PAJEK_NETWORK_FILE_SUFFIX.
@@ -467,7 +470,7 @@ class PajekPanel extends javax.swing.JPanel implements Observer {
      * @param evt the evt
      */
     private void previewButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_previewButtonActionPerformed
-        UNISoNController.getInstance().getDatabase().notifyObservers();
+        UNISoNController.getInstance().getDatabase().notifyListeners();
     }// GEN-LAST:event_previewButtonActionPerformed
 
     /**
@@ -561,12 +564,11 @@ class PajekPanel extends javax.swing.JPanel implements Observer {
     /*
      * (non-Javadoc)
      *
-     * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+     * @see uk.co.sleonard.unison.DataChangeListener#dataChanged(java.beans.PropertyChangeEvent)
      */
     @Override
-    public void update(final Observable observable, final Object arg1) {
-        if (observable instanceof UNISoNDatabase) {
-            // UNISoNController controller = (UNISoNController) observable;
+    public void dataChanged(final PropertyChangeEvent evt) {
+        if (evt.getSource() instanceof UNISoNDatabase) {
             try {
                 this.refreshPajekMatrixTable();
             } catch (final UNISoNException e) {

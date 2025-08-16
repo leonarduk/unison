@@ -25,6 +25,7 @@ import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * The Class HeaderDownloadWorker.
@@ -108,11 +109,14 @@ public class HeaderDownloadWorkerTest {
     }
 
     /**
-     * Test NotifyObservers.
+     * Test listener notification.
      */
     @Test
-    public void testNotifyObservers() {
-        this.worker.notifyObservers();
+    public void testNotifyListeners() {
+        final AtomicInteger counter = new AtomicInteger(0);
+        this.worker.addDataChangeListener(evt -> counter.incrementAndGet());
+        this.worker.notifyListeners();
+        Assert.assertEquals(1, counter.get());
     }
 
     /**

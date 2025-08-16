@@ -23,6 +23,9 @@ import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import java.beans.PropertyChangeSupport;
+import uk.co.sleonard.unison.DataChangeListener;
+
 /**
  * Class to create a separate Thread for downloading messages.
  *
@@ -78,6 +81,8 @@ public class HeaderDownloadWorker extends SwingWorker {
      */
     private int index = 0;
 
+    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+
     /**
      * The skipped.
      */
@@ -125,7 +130,7 @@ public class HeaderDownloadWorker extends SwingWorker {
                     return "FAIL";
                 }
                 this.downloading = false;
-                this.notifyObservers();
+                this.notifyListeners();
             }
 
         }
@@ -140,7 +145,7 @@ public class HeaderDownloadWorker extends SwingWorker {
     @Override
     public void finished() {
         this.downloading = false;
-        this.notifyObservers();
+        this.notifyListeners();
     }
 
     /**
@@ -157,7 +162,7 @@ public class HeaderDownloadWorker extends SwingWorker {
         } catch (final IOException e) {
             e.printStackTrace();
         }
-        this.notifyObservers();
+        this.notifyListeners();
     }
 
 
@@ -252,15 +257,29 @@ public class HeaderDownloadWorker extends SwingWorker {
         return this.downloading;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Register a listener for download progress.
      *
-     * @see java.util.Observable#notifyObservers()
+     * @param listener the listener to add
      */
-    @Override
-    public void notifyObservers() {
-        this.setChanged();
-        super.notifyObservers();
+    public void addDataChangeListener(final DataChangeListener listener) {
+        this.pcs.addPropertyChangeListener(listener);
+    }
+
+    /**
+     * Remove a previously registered listener.
+     *
+     * @param listener the listener to remove
+     */
+    public void removeDataChangeListener(final DataChangeListener listener) {
+        this.pcs.removePropertyChangeListener(listener);
+    }
+
+    /**
+     * Notify listeners that the worker state has changed.
+     */
+    public void notifyListeners() {
+        this.pcs.firePropertyChange("download", null, null);
     }
 
     /**
@@ -320,7 +339,7 @@ public class HeaderDownloadWorker extends SwingWorker {
             for (String line = bufReader.readLine(); line != null; line = bufReader.readLine()) {
                 if (!this.running) {
                     log.warn("Download aborted");
-                    this.notifyObservers();
+                    this.notifyListeners();
                     throw new UNISoNException("Download aborted");
                 }
                 // If told to pause or queue is getting a bit full wait
@@ -353,7 +372,7 @@ public class HeaderDownloadWorker extends SwingWorker {
                     this.logTally = 0;
                 }
             }
-            this.notifyObservers();
+            this.notifyListeners();
             int size = queue1.size();
             if (!this.mode.equals(DownloadMode.BASIC)) {
                 size += FullDownloadWorker.queueSize();

@@ -13,8 +13,8 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
 import uk.co.sleonard.unison.utils.StringUtils;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.beans.PropertyChangeEvent;
+import uk.co.sleonard.unison.DataChangeListener;
 import java.util.Set;
 
 /**
@@ -26,7 +26,7 @@ import java.util.Set;
 @Slf4j
 @SuppressWarnings("rawtypes")
 public class DownloadNewsPanel extends javax.swing.JPanel
-        implements Observer, StatusMonitor {
+        implements DataChangeListener, StatusMonitor {
 
     /**
      * The Constant serialVersionUID.
@@ -172,7 +172,7 @@ public class DownloadNewsPanel extends javax.swing.JPanel
         this.initComponents();
 
         this.controller.setNntpHost(StringUtils.loadServerList()[0]);
-        this.controller.getHeaderDownloader().addObserver(this);
+        this.controller.getHeaderDownloader().addDataChangeListener(this);
 
         this.controller.setNntpHost(this.hostCombo.getSelectedItem().toString());
         this.downloadEnabled(false);
@@ -538,17 +538,16 @@ public class DownloadNewsPanel extends javax.swing.JPanel
     /*
      * (non-Javadoc)
      *
-     * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+     * @see uk.co.sleonard.unison.DataChangeListener#dataChanged(java.beans.PropertyChangeEvent)
      */
     @Override
-    public void update(final Observable observable, final Object arg1) {
-        if (observable instanceof HeaderDownloadWorker) {
-            final HeaderDownloadWorker headerDownloader = (HeaderDownloadWorker) observable;
+    public void dataChanged(final PropertyChangeEvent evt) {
+        final Object source = evt.getSource();
+        if (source instanceof HeaderDownloadWorker) {
+            final HeaderDownloadWorker headerDownloader = (HeaderDownloadWorker) source;
             if (!headerDownloader.isDownloading()) {
                 this.downloadEnabled(true);
             }
-            // } else if (observable instanceof UNISoNController) {
-            // UNISoNController controller = (UNISoNController) observable;
         }
     }
 

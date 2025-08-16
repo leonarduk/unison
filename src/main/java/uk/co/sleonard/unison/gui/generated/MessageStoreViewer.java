@@ -27,6 +27,9 @@ import java.text.SimpleDateFormat;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.List;
+import java.beans.PropertyChangeEvent;
+
+import uk.co.sleonard.unison.DataChangeListener;
 
 /**
  * The Class MessageStoreViewer.
@@ -35,7 +38,7 @@ import java.util.List;
  * @since v1.0.0
  */
 @Slf4j
-class MessageStoreViewer extends javax.swing.JPanel implements Observer {
+class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListener {
 
     /**
      * The Constant serialVersionUID.
@@ -1142,10 +1145,10 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer {
     /*
      * (non-Javadoc)
      *
-     * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+     * @see uk.co.sleonard.unison.DataChangeListener#dataChanged(java.beans.PropertyChangeEvent)
      */
     @Override
-    public void update(final Observable observable, final Object arg1) {
+    public void dataChanged(final PropertyChangeEvent evt) {
         this.refreshGUIData();
     }
 

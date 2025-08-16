@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.nntp.NNTPClient;
+import org.apache.commons.net.nntp.NNTPConnectionClosedException;
 import org.apache.commons.net.nntp.NewsgroupInfo;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
@@ -173,8 +174,21 @@ public class NewsClientImpl implements NewsClient {
 
         try {
             this.connect(nntpserver);
+            // Attempt a simple command to keep the connection alive before listing
+            try {
+                this.client.listHelp();
+            } catch (final IOException e) {
+                log.debug("Keep-alive command failed", e);
+            }
 
-            final NewsgroupInfo[] groups = this.client.listNewsgroups(wildcard.toLowerCase());
+            NewsgroupInfo[] groups;
+            try {
+                groups = this.client.listNewsgroups(wildcard.toLowerCase());
+            } catch (final NNTPConnectionClosedException e) {
+                log.warn("NNTP connection closed, attempting to reopen", e);
+                this.connect(nntpserver);
+                groups = this.client.listNewsgroups(wildcard.toLowerCase());
+            }
             log.info("Number of Groups matching " + wildcard + " on " + nntpserver
                     + ": " + (null != groups ? groups.length : 0));
             if (null != groups) {

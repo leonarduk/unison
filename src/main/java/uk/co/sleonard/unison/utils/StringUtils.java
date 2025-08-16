@@ -85,15 +85,19 @@ public class StringUtils {
 	 *            the comma separated string
 	 * @return the list
 	 */
-	static List<String> convertCommasToList(final String commaSeparatedString) {
-		final Vector<String> words = new Vector<>();
+        static List<String> convertCommasToList(final String commaSeparatedString) {
+                final Vector<String> words = new Vector<>();
 
-		final StringTokenizer tok = new StringTokenizer(commaSeparatedString, ",");
-		while (tok.hasMoreTokens()) {
-			words.add(tok.nextToken());
-		}
-		return words;
-	}
+                if (commaSeparatedString == null || commaSeparatedString.isEmpty()) {
+                        return words;
+                }
+
+                final StringTokenizer tok = new StringTokenizer(commaSeparatedString, ",");
+                while (tok.hasMoreTokens()) {
+                        words.add(tok.nextToken());
+                }
+                return words;
+        }
 
 	/**
 	 * Convert date to string.

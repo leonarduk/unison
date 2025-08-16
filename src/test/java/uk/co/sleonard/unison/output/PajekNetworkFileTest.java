@@ -114,6 +114,14 @@ public class PajekNetworkFileTest {
     }
 
     /**
+     * saveToFile should reject a null or empty filename.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testSaveToFileWithInvalidFilename() {
+        this.file.saveToFile(" ");
+    }
+
+    /**
      * test writeData.
      */
     @Test

@@ -49,11 +49,20 @@ public class StringUtilsTest {
 	/**
 	 * Test convert commas to list.
 	 */
-	@Test
-	public void testConvertCommasToList() {
-		List<String> list = StringUtils.convertCommasToList("comma, separated, string");
-		assertEquals(3, list.size());
-	}
+        @Test
+        public void testConvertCommasToList() {
+                List<String> list = StringUtils.convertCommasToList("comma, separated, string");
+                assertEquals(3, list.size());
+        }
+
+       /**
+        * Test convert commas to list if null.
+        */
+       @Test
+       public void testConvertCommasToListIfNull() {
+               List<String> list = StringUtils.convertCommasToList(null);
+               assertTrue(list.isEmpty());
+       }
 
 	/**
 	 * Test compress decompress.

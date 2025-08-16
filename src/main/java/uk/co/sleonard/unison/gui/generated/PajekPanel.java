@@ -6,9 +6,8 @@
 
 package uk.co.sleonard.unison.gui.generated;
 
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
@@ -38,6 +37,7 @@ import java.util.List;
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  */
+@Slf4j
 class PajekPanel extends javax.swing.JPanel implements Observer {
 
     /**
@@ -49,11 +49,6 @@ class PajekPanel extends javax.swing.JPanel implements Observer {
      * The Constant serialVersionUID.
      */
     private static final long serialVersionUID = 84102596787648747L;
-
-    /**
-     * Logger for this class.
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(PajekPanel.class);
 
     /**
      * The pajek file.
@@ -234,7 +229,7 @@ class PajekPanel extends javax.swing.JPanel implements Observer {
         try {
             this.csvExporter.exportTableToCSV(this.resultsMatrixTable, this.pajekHeader);
         } catch (final UNISoNException e) {
-            LOG.error("Error exporting CSV", e);
+            log.error("Error exporting CSV", e);
             if (this.controller.getGui() != null) {
                 this.controller.getGui().showAlert("Error: " + e.getMessage());
             }

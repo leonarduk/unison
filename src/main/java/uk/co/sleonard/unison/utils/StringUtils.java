@@ -6,8 +6,7 @@
  */
 package uk.co.sleonard.unison.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import uk.co.sleonard.unison.UNISoNException;
 
 import java.io.ByteArrayInputStream;
@@ -37,12 +36,8 @@ import java.util.zip.ZipOutputStream;
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  */
+@Slf4j
 public class StringUtils {
-
-    /**
-     * Logger for this class.
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(StringUtils.class);
 
     /**
      * Default server list used when no properties file is found.
@@ -199,10 +194,10 @@ public class StringUtils {
             if (resources != null) {
                 return loadServerList(resources);
             }
-            LOG.warn("Server list file '{}' not found, using default server list", file);
+            log.warn("Server list file '{}' not found, using default server list", file);
             return DEFAULT_SERVERS;
         } catch (final IOException io) {
-            LOG.error("Unable to load server list", io);
+            log.error("Unable to load server list", io);
             return DEFAULT_SERVERS;
         }
     }

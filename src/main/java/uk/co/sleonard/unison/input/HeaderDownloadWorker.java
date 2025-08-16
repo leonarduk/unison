@@ -6,10 +6,9 @@
  */
 package uk.co.sleonard.unison.input;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.nntp.Article;
 import org.apache.commons.net.nntp.NNTPClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
@@ -31,12 +30,8 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  */
+@Slf4j
 public class HeaderDownloadWorker extends SwingWorker {
-
-    /**
-     * The logger.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(HeaderDownloadWorker.class);
 
     /**
      * The end index.
@@ -66,7 +61,7 @@ public class HeaderDownloadWorker extends SwingWorker {
     /**
      * The log.
      */
-    private UNISoNLogger log;
+    private UNISoNLogger unisonLog;
 
     /**
      * The downloading.
@@ -171,7 +166,7 @@ public class HeaderDownloadWorker extends SwingWorker {
     }
 
     private UNISoNLogger getLog() {
-        return this.log;
+        return this.unisonLog;
     }
 
     /**
@@ -244,17 +239,17 @@ public class HeaderDownloadWorker extends SwingWorker {
         this.fromDate = from;
         this.toDate = to;
 
-        LOGGER.info(" Server: " + server + " Newsgroup: " + newsgroup1);
+        log.info(" Server: " + server + " Newsgroup: " + newsgroup1);
         try {
             reader.client.connect(server);
             reader.client.selectNewsgroup(newsgroup1);
         } catch (final Exception e) {
-            LOGGER.warn(e.getMessage(), e);
+            log.warn(e.getMessage(), e);
             throw new UNISoNException("Failed to initialise downloader", e);
         }
 
         this.downloading = true;
-        LOGGER.info("Creating " + this.getClass() + " " + newsgroup1 + "["
+        log.info("Creating " + this.getClass() + " " + newsgroup1 + "["
                 + reader.getMessageCount() + "]");
     }
 
@@ -342,7 +337,7 @@ public class HeaderDownloadWorker extends SwingWorker {
                 boolean pausedForQueue = false;
                 while (!this.downloading || (queue1.size() > 1000)) {
                     if ((queue1.size() > 1000) && !pausedForQueue) {
-                        LOGGER.info("Pausing as queue size {} exceeds 1000", queue1.size());
+                        log.info("Pausing as queue size {} exceeds 1000", queue1.size());
                         pausedForQueue = true;
                     }
                     try {
@@ -352,7 +347,7 @@ public class HeaderDownloadWorker extends SwingWorker {
                     }
                 }
                 if (pausedForQueue) {
-                    LOGGER.info("Resuming processing; queue size {}", queue1.size());
+                    log.info("Resuming processing; queue size {}", queue1.size());
                 }
 
                 this.processMessage(queue1, line);
@@ -389,7 +384,7 @@ public class HeaderDownloadWorker extends SwingWorker {
     }
 
     void setLog(final UNISoNLogger log) {
-        this.log = log;
+        this.unisonLog = log;
     }
 
     public void setMode(final DownloadMode headers) {
@@ -414,12 +409,12 @@ public class HeaderDownloadWorker extends SwingWorker {
             // fetch back 500 messages at a time
             for (int i = this.startIndex; i < this.endIndex; i += 500) {
                 final int batchEndIndex = Math.min(i + 499, this.endIndex);
-                LOGGER.debug("Starting batch {}-{}", i, batchEndIndex);
+                log.debug("Starting batch {}-{}", i, batchEndIndex);
                 try (final Reader reader = this.newsReader.client.retrieveArticleInfo(
                         Long.valueOf(i).longValue(), Long.valueOf(i + 500).longValue());) {
                     this.queueMessages(queue1, reader);
                 }
-                LOGGER.debug("Finished batch {}-{}", i, batchEndIndex);
+                log.debug("Finished batch {}-{}", i, batchEndIndex);
             }
         } catch (final IOException e1) {
             this.getLog().alert("ERROR: " + e1);

@@ -8,9 +8,8 @@
 
 package uk.co.sleonard.unison.input;
 
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 
@@ -25,16 +24,14 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @since v1.0.0
  *
  */
+@Slf4j
 public class DataHibernatorWorker extends SwingWorker {
-
-    /** The logger. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(DataHibernatorWorker.class);
 
     /** The number of hibernators. */
     private static int numberofHibernators = 20;
 
     /** The log. */
-    private static UNISoNLogger log;
+    private static UNISoNLogger unisonLog;
 
     /** The workers. */
     private static ArrayList<DataHibernatorWorker> workers = new ArrayList<>();
@@ -58,7 +55,7 @@ public class DataHibernatorWorker extends SwingWorker {
      *            the new logger
      */
     public static void setLogger(final UNISoNLogger logger) {
-        DataHibernatorWorker.log = logger;
+        DataHibernatorWorker.unisonLog = logger;
     }
 
     /**
@@ -102,7 +99,7 @@ public class DataHibernatorWorker extends SwingWorker {
         this.reader = reader;
         this.queue = queue;
         this.session = session2;
-        LOGGER.debug("Creating " + this.getClass() + " " + reader.getNumberOfMessages());
+        log.debug("Creating " + this.getClass() + " " + reader.getNumberOfMessages());
         this.start();
     }
 
@@ -113,7 +110,7 @@ public class DataHibernatorWorker extends SwingWorker {
      */
     @Override
     public Object construct() {
-        LOGGER.debug("construct : " + this.saveToDatabase + " queue " + this.queue.size());
+        log.debug("construct : " + this.saveToDatabase + " queue " + this.queue.size());
 
         try {
             // HAve one session per worker rather than per message
@@ -128,7 +125,7 @@ public class DataHibernatorWorker extends SwingWorker {
             }
             DataHibernatorWorker.workers.remove(this);
             if (DataHibernatorWorker.workers.size() == 0) {
-                DataHibernatorWorker.log.alert("Download complete");
+                DataHibernatorWorker.unisonLog.alert("Download complete");
             }
         } catch (@SuppressWarnings("unused") final InterruptedException e) {
             return "Interrupted";
@@ -158,7 +155,7 @@ public class DataHibernatorWorker extends SwingWorker {
 
             final NewsArticle article = this.pollForMessage(queue);
             if (null != article) {
-                LOGGER.debug("Hibernating " + article.getArticleID() + " " + queue.size());
+                log.debug("Hibernating " + article.getArticleID() + " " + queue.size());
 
                 if (this.helper.hibernateData(article, session)) {
                     this.reader.incrementMessagesStored();
@@ -174,7 +171,7 @@ public class DataHibernatorWorker extends SwingWorker {
      * Stop hibernating data.
      */
     private void stopHibernatingData() {
-        LOGGER.warn("StopHibernatingData");
+        log.warn("StopHibernatingData");
         this.saveToDatabase = false;
     }
 }

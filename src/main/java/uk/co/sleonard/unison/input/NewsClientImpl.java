@@ -6,6 +6,8 @@
  */
 package uk.co.sleonard.unison.input;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.nntp.NNTPClient;
 import org.apache.commons.net.nntp.NewsgroupInfo;
@@ -38,6 +40,8 @@ public class NewsClientImpl implements NewsClient {
     /**
      * The message count.
      */
+    @Getter(onMethod_ = @Override)
+    @Setter(onMethod_ = @Override)
     private int messageCount;
     private final NNTPClient client;
 
@@ -141,16 +145,6 @@ public class NewsClientImpl implements NewsClient {
         } catch (final Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Gets the message count.
-     *
-     * @return the message count
-     */
-    @Override
-    public int getMessageCount() {
-        return this.messageCount;
     }
 
     @Override
@@ -259,13 +253,4 @@ public class NewsClientImpl implements NewsClient {
         return this.client.selectNewsgroup(newsgroup);
     }
 
-    /**
-     * Sets the message count.
-     *
-     * @param messageCount the new message count
-     */
-    @Override
-    public void setMessageCount(final int messageCount) {
-        this.messageCount = messageCount;
-    }
 }

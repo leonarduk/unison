@@ -6,6 +6,7 @@
  */
 package uk.co.sleonard.unison;
 
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
@@ -32,6 +33,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  */
+@Slf4j
 public class UNISoNController {
 
     /**
@@ -88,6 +90,7 @@ public class UNISoNController {
 
     public static UNISoNController create(final JFrame frame, final DataHibernatorPool pool)
             throws UNISoNException {
+        log.debug("Creating UNISoNController with frame {} and pool {}", frame, pool);
         UNISoNController.instance = new UNISoNController(frame, pool);
         return UNISoNController.instance;
     }
@@ -112,6 +115,8 @@ public class UNISoNController {
         this.pool = hibernatorPool;
         this.gui = (frame != null) ? new UNISoNGUI(frame) : null;
 
+        log.debug("Initialising UNISoNController with GUI {}", this.gui);
+
         this.messageQueue = new LinkedBlockingQueue<>();
         this.helper = new HibernateHelper(this.gui);
         try {
@@ -132,6 +137,7 @@ public class UNISoNController {
     }
 
     public void cancel() {
+        log.debug("Cancel requested");
         this.getHeaderDownloader().fullstop();
         this.stopDownload();
     }
@@ -139,7 +145,10 @@ public class UNISoNController {
     public void download(final StatusMonitor monitor, final NewsGroup[] items,
                          final String fromDateString, final String toDateString, final UNISoNLogger logger,
                          final boolean locationSelected, final boolean getTextSelected) {
+        log.debug("Download invoked with fromDate {} toDate {} locationSelected {} getText {}", fromDateString,
+                toDateString, locationSelected, getTextSelected);
         if ((monitor == null) || (logger == null)) {
+            log.debug("Monitor or logger is null - aborting download");
             return;
         }
         monitor.downloadEnabled(false);
@@ -153,6 +162,7 @@ public class UNISoNController {
             }
         }
         if (groups.size() == 0) {
+            log.debug("No groups selected for download");
             monitor.downloadEnabled(true);
             logger.log("No groups selected for download");
             return;
@@ -175,14 +185,18 @@ public class UNISoNController {
         }
         try {
             logger.log("Download : " + groups);
+            log.debug("Starting quickDownload for {} groups", groups.size());
             final Date fromDate = StringUtils.stringToDate(fromDateString);
             final Date toDate = StringUtils.stringToDate(toDateString);
             this.quickDownload(groups, fromDate, toDate, logger, mode);
             logger.log("Done.");
+            log.debug("quickDownload completed");
         } catch (final UNISoNException e) {
+            log.warn("Failed to download", e);
             logger.alert("Failed to download. Check your internet connection" + e.getMessage());
             monitor.downloadEnabled(true);
         } catch (final DateTimeParseException e) {
+            log.warn("Failed to parse date", e);
             logger.alert("Failed to parse date : " + e.getMessage());
             monitor.downloadEnabled(true);
         }
@@ -428,6 +442,7 @@ public class UNISoNController {
      * Stop download.
      */
     public void stopDownload() {
+        log.debug("Stopping all downloads");
         this.pool.stopAllDownloads();
         this.setIdleState();
     }

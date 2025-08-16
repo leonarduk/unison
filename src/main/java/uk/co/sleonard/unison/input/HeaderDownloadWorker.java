@@ -110,6 +110,7 @@ public class HeaderDownloadWorker extends SwingWorker {
         super(HeaderDownloadWorker.class.getCanonicalName());
         this.queue = inputQueue;
         this.downloader = downloader1;
+        log.debug("Created HeaderDownloadWorker with queue size {}", inputQueue.size());
     }
 
     /*
@@ -119,11 +120,15 @@ public class HeaderDownloadWorker extends SwingWorker {
      */
     @Override
     public Object construct() {
+        log.debug("HeaderDownloadWorker construct starting. running={} downloading={} queue={}", this.running,
+                this.downloading, this.queue.size());
 
         while (this.running) {
             if (this.downloading) {
+                log.debug("Starting storeArticleInfo from {} to {}", this.startIndex, this.endIndex);
                 try {
                     this.storeArticleInfo(this.queue);
+                    log.debug("Completed storeArticleInfo; queue size {}", this.queue.size());
                 } catch (final UNISoNException e) {
                     this.getLog().alert("ERROR:" + e);
                     e.printStackTrace();
@@ -134,6 +139,7 @@ public class HeaderDownloadWorker extends SwingWorker {
             }
 
         }
+        log.debug("HeaderDownloadWorker construct exiting");
         return "Completed";
     }
 
@@ -152,6 +158,7 @@ public class HeaderDownloadWorker extends SwingWorker {
      * Method to stop all downloading and end the thread.
      */
     public void fullstop() {
+        log.debug("Fullstop invoked on HeaderDownloadWorker");
         this.running = false;
         this.downloading = false;
         try {

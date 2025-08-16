@@ -9,6 +9,7 @@ package uk.co.sleonard.unison.input;
 import org.apache.commons.net.nntp.NNTPClient;
 import org.apache.commons.net.nntp.NewsgroupInfo;
 import org.apache.commons.net.nntp.NewsgroupInfoFactory;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
@@ -16,7 +17,10 @@ import org.mockito.Mockito;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.utils.StringUtils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.util.Date;
@@ -161,6 +165,74 @@ public class NewsClientTest {
     public final void testSetMessageCount() {
         final int messageCount = 10;
         this.client.setMessageCount(messageCount);
+    }
+
+    @Test
+    public void testQuitReturnsDelegateValue() throws IOException {
+        final int expected = 205;
+        Mockito.when(this.mock.quit()).thenReturn(expected);
+        final int actual = this.client.quit();
+        Assert.assertEquals(expected, actual);
+        Mockito.verify(this.mock).quit();
+    }
+
+    @Test(expected = IOException.class)
+    public void testQuitThrowsIOException() throws IOException {
+        Mockito.when(this.mock.quit()).thenThrow(new IOException());
+        this.client.quit();
+    }
+
+    @Test
+    public void testRetrieveArticleForwardsCall() throws IOException {
+        final String articleId = "id";
+        final Reader reader = new StringReader("content");
+        Mockito.when(this.mock.retrieveArticle(articleId)).thenReturn(reader);
+        final Reader actual = this.client.retrieveArticle(articleId);
+        Assert.assertSame(reader, actual);
+        Mockito.verify(this.mock).retrieveArticle(articleId);
+    }
+
+    @Test(expected = IOException.class)
+    public void testRetrieveArticleThrowsIOException() throws IOException {
+        final String articleId = "id";
+        Mockito.when(this.mock.retrieveArticle(articleId)).thenThrow(new IOException());
+        this.client.retrieveArticle(articleId);
+    }
+
+    @Test
+    public void testRetrieveArticleHeaderForwardsCall() throws IOException {
+        final String articleId = "id";
+        final Reader header = new StringReader("header");
+        Mockito.when(this.mock.retrieveArticleHeader(articleId)).thenReturn(header);
+        final Reader actual = this.client.retrieveArticleHeader(articleId);
+        Assert.assertSame(header, actual);
+        Mockito.verify(this.mock).retrieveArticleHeader(articleId);
+    }
+
+    @Test(expected = IOException.class)
+    public void testRetrieveArticleHeaderThrowsIOException() throws IOException {
+        final String articleId = "id";
+        Mockito.when(this.mock.retrieveArticleHeader(articleId)).thenThrow(new IOException());
+        this.client.retrieveArticleHeader(articleId);
+    }
+
+    @Test
+    public void testRetrieveArticleInfoForwardsCall() throws IOException {
+        final long low = 1L;
+        final long high = 2L;
+        final BufferedReader reader = new BufferedReader(new StringReader("info"));
+        Mockito.when(this.mock.retrieveArticleInfo(low, high)).thenReturn(reader);
+        final BufferedReader actual = this.client.retrieveArticleInfo(low, high);
+        Assert.assertSame(reader, actual);
+        Mockito.verify(this.mock).retrieveArticleInfo(low, high);
+    }
+
+    @Test(expected = IOException.class)
+    public void testRetrieveArticleInfoThrowsIOException() throws IOException {
+        final long low = 1L;
+        final long high = 2L;
+        Mockito.when(this.mock.retrieveArticleInfo(low, high)).thenThrow(new IOException());
+        this.client.retrieveArticleInfo(low, high);
     }
 
 }

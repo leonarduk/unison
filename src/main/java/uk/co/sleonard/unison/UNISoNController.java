@@ -343,7 +343,7 @@ public class UNISoNController {
         if (null != group) {
             try {
                 final Set<NewsGroup> availableGroups2 = this.listNewsgroups(group, host, client2);
-                log.debug("listNewsgroups returned {} groups", availableGroups2.size());
+                log.debug("listNewsgroups returned {} groups", (availableGroups2 == null) ? 0 : availableGroups2.size());
                 if ((null == availableGroups2) || (availableGroups2.size() == 0)) {
                     log.warn("No groups found for string : {} on {}.\nPerhaps another host?", group, host);
                 } else {

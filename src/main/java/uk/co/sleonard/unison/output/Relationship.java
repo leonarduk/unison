@@ -6,12 +6,15 @@
  */
 package uk.co.sleonard.unison.output;
 
+import lombok.EqualsAndHashCode;
+
 /**
  * The Class Relationship.
  *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  */
+@EqualsAndHashCode
 public class Relationship {
 
     /**
@@ -45,30 +48,6 @@ public class Relationship {
         this.target = target;
     }
 
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (this.getClass() != obj.getClass()) {
-            return false;
-        }
-        final Relationship other = (Relationship) obj;
-        if (this.owner != other.owner) {
-            return false;
-        }
-        if (this.target != other.target) {
-            return false;
-        }
-        if (this.value != other.value) {
-            return false;
-        }
-        return true;
-    }
-
     /**
      * Gets the owner.
      *
@@ -94,16 +73,6 @@ public class Relationship {
      */
     public int getValue() {
         return this.value;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = (prime * result) + this.owner;
-        result = (prime * result) + this.target;
-        result = (prime * result) + this.value;
-        return result;
     }
 
     /**

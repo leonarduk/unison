@@ -32,8 +32,13 @@ public class RelationshipTest {
      */
     @Test
     public void testEquals() {
-        Assert.assertEquals(new Relationship(10, 10), new Relationship(10, 10));
-        Assert.assertFalse(new Relationship(10, 10).equals(new Object()));
+        final Relationship r1 = new Relationship(10, 10);
+        final Relationship r2 = new Relationship(10, 10);
+        final Relationship r3 = new Relationship(10, 11);
+
+        Assert.assertEquals(r1, r2);
+        Assert.assertEquals(r2, r1);
+        Assert.assertNotEquals(r1, r3);
     }
 
     /**
@@ -71,10 +76,11 @@ public class RelationshipTest {
      */
     @Test
     public void testHashCode() {
-        final Relationship test = new Relationship(10, 20);
-        Assert.assertEquals(40022, test.hashCode());
-        test.incrementValue();
-        Assert.assertEquals(40023, test.hashCode());
+        final Relationship r1 = new Relationship(10, 20);
+        final Relationship r2 = new Relationship(10, 20);
+        Assert.assertEquals(r1.hashCode(), r2.hashCode());
+        r2.incrementValue();
+        Assert.assertNotEquals(r1.hashCode(), r2.hashCode());
     }
 
     /**

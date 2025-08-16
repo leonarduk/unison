@@ -312,6 +312,8 @@ public class UNISoNController {
      */
     public void quickDownload(final Set<NewsGroup> groups, final Date fromDate1, final Date toDate1,
                               final DownloadMode mode) throws UNISoNException {
+        log.debug("Starting quick download of {} groups (mode={}, from={}, to={})", groups.size(),
+                mode, fromDate1, toDate1);
         final NewsGroupReader reader = this.getNntpReader();
         this.client = reader.getClient();
         final HeaderDownloadWorker headerDownloader2 = this.getHeaderDownloader();
@@ -319,12 +321,15 @@ public class UNISoNController {
 
         for (final NewsGroup group : groups) {
             try {
+                log.debug("Preparing group {} (first={}, last={})", group.getName(),
+                        group.getFirstMessage(), group.getLastMessage());
                 this.client.reconnect();
                 this.client.selectNewsgroup(group.getName());
                 reader.setMessageCount(group.getArticleCount());
                 headerDownloader2.initialise(reader, group.getFirstMessage(),
                         group.getLastMessage(), nntpHost2, group.getName(), mode, fromDate1,
                         toDate1);
+                log.debug("Initialised header downloader for {}", group.getName());
             } catch (final IOException e) {
                 e.printStackTrace();
                 throw new UNISoNException(

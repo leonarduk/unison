@@ -100,11 +100,11 @@ public class RelationshipTest {
      */
     @Test
     public void testToString() {
-        String expected = "1 0 1";
+        String expected = "Relationship(owner=1, target=0, value=1)";
         final Relationship actual = new Relationship(1, 0);
         Assert.assertEquals(expected, actual.toString());
         actual.incrementValue();
-        expected = "1 0 2";
+        expected = "Relationship(owner=1, target=0, value=2)";
         Assert.assertEquals(expected, actual.toString());
     }
 

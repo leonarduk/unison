@@ -7,6 +7,8 @@
 package uk.co.sleonard.unison.output;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 /**
  * The Class Relationship.
@@ -14,65 +16,23 @@ import lombok.EqualsAndHashCode;
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  */
+@Getter
+@ToString
 @EqualsAndHashCode
 public class Relationship {
 
-    /**
-     * The directed.
-     */
-    private final static boolean directed = true;
+    @Getter
+    private static final boolean directed = true;
 
-    /**
-     * The owner.
-     */
     private final int owner;
 
-    /**
-     * The target.
-     */
     private final int target;
 
-    /**
-     * The value.
-     */
     private int value = 1;
 
-    /**
-     * Instantiates a new relationship.
-     *
-     * @param owner  the owner
-     * @param target the target
-     */
     public Relationship(final int owner, final int target) {
         this.owner = owner;
         this.target = target;
-    }
-
-    /**
-     * Gets the owner.
-     *
-     * @return the owner
-     */
-    public int getOwner() {
-        return this.owner;
-    }
-
-    /**
-     * Gets the target.
-     *
-     * @return the target
-     */
-    public int getTarget() {
-        return this.target;
-    }
-
-    /**
-     * Gets the value.
-     *
-     * @return the value
-     */
-    public int getValue() {
-        return this.value;
     }
 
     /**
@@ -82,24 +42,5 @@ public class Relationship {
      */
     int incrementValue() {
         return ++this.value;
-    }
-
-    /**
-     * Checks if is directed.
-     *
-     * @return true, if is directed
-     */
-    public boolean isDirected() {
-        return Relationship.directed;
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return this.owner + " " + this.target + " " + this.value;
     }
 }

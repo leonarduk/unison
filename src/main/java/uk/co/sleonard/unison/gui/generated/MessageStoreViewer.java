@@ -6,11 +6,11 @@
 
 package uk.co.sleonard.unison.gui.generated;
 
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.UNISoNLogger;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.DAO.*;
 import uk.co.sleonard.unison.input.FullDownloadWorker;
@@ -34,7 +34,8 @@ import java.util.List;
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  */
-class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNLogger {
+@Slf4j
+class MessageStoreViewer extends javax.swing.JPanel implements Observer {
 
     /**
      * The Constant serialVersionUID.
@@ -279,14 +280,8 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
         return child;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see uk.co.sleonard.unison.gui.UNISoNLogger#alert(java.lang.String)
-     */
-    @Override
-    public void alert(final String message) {
-        this.log(message);
+    private void showAlert(final String message) {
+        log.warn(message);
         if (this.controller.getGui() != null) {
             this.controller.getGui().showAlert(message);
         }
@@ -456,13 +451,13 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
                 if (null == message.getPoster().getLocation()) {
                     final String nntpHost = instance.getNntpHost();
                     FullDownloadWorker.addDownloadRequest(message.getUsenetMessageID(),
-                            DownloadMode.HEADERS, instance.getDownloadPanel(), nntpHost,
-                            instance.getQueue(), new NewsClientImpl(), instance.getNntpReader(),
-                            instance.getHelper(), instance.getSession());
+                            DownloadMode.HEADERS, nntpHost, instance.getQueue(), new NewsClientImpl(),
+                            instance.getNntpReader(), instance.getHelper(), instance.getSession());
                 }
             }
         } catch (final UNISoNException e) {
-            this.alert("Failed to download extra fields: " + e.getMessage());
+            final String message = "Failed to download extra fields: " + e.getMessage();
+            this.showAlert(message);
         }
     }// GEN-LAST:event_headersButtonActionPerformed
 
@@ -808,12 +803,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
     /*
      * (non-Javadoc)
      *
-     * @see uk.co.sleonard.unison.gui.UNISoNLogger#log(java.lang.String)
      */
-    @Override
-    public void log(final String message) {
-        // notesArea.append(message + "\n");
-    }
 
     /**
      * Missing messages check item state changed.
@@ -1088,7 +1078,8 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
             this.toDateField.setEditable(!on);
             controller.switchFiltered(on);
         } catch (final DateTimeParseException e) {
-            this.alert("Failed to parse date : " + e.getMessage());
+            final String message = "Failed to parse date : " + e.getMessage();
+            this.showAlert(message);
             this.filterToggle.setSelected(false);
         }
     }

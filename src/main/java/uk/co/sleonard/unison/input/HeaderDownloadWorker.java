@@ -234,12 +234,14 @@ public class HeaderDownloadWorker extends SwingWorker {
         this.fromDate = from;
         this.toDate = to;
 
-        log.info(" Server: " + server + " Newsgroup: " + newsgroup1);
+        log.info("Initialising: server={}, group={}, start={}, end={}, mode={}, from={}, to={}",
+                server, newsgroup1, startIndex1, endIndex1, mode1, from, to);
         try {
             reader.client.connect(server);
             reader.client.selectNewsgroup(newsgroup1);
         } catch (final Exception e) {
-            log.warn(e.getMessage(), e);
+            log.warn("Initialisation failed for group {} on {}: {}", newsgroup1, server,
+                    e.getMessage(), e);
             throw new UNISoNException("Failed to initialise downloader", e);
         }
 

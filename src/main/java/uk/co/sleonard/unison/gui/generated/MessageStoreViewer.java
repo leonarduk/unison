@@ -1130,7 +1130,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
         final Object datanode = root.getUserObject();
         if (datanode instanceof Message) {
             final Message msg = (Message) datanode;
-            UNISoNController.getInstance().getFilter().setSelectedMessage(msg);
+            UNISoNController.getInstance().getFilter().setMessage(msg);
             this.notifySelectedMessageObservers();
         } else {
             this.expandNode(root, this.missingMessagesCheck.isSelected());

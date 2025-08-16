@@ -349,7 +349,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
     private void crosspostComboBoxActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_crosspostComboBoxActionPerformed
         final UNISoNController controller = UNISoNController.getInstance();
         final NewsGroup selectedGroup = (NewsGroup) this.crosspostComboBox.getSelectedItem();
-        controller.getFilter().setSelectedNewsgroup(selectedGroup);
+        controller.getFilter().setSelectedNewsgroup(selectedGroup.getName());
         this.refreshTopicHierarchy();
         // controller.showAlert("You chose " + selectedGroup);
     }// GEN-LAST:event_crosspostComboBoxActionPerformed
@@ -431,8 +431,9 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
 
         // as root is not a newsgroup
         if (root.getUserObject() instanceof NewsGroup) {
+            NewsGroup newsGroup = (NewsGroup) root.getUserObject();
             UNISoNController.getInstance().getFilter()
-                    .setSelectedNewsgroup((NewsGroup) root.getUserObject());
+                    .setSelectedNewsgroup(newsGroup.getName());
         } else {
             UNISoNController.getInstance().getFilter()
                     .setSelectedNewsgroup((String) root.getUserObject());
@@ -1111,7 +1112,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements Observer, UNISoNL
             if (null != selectedItem) {
                 final ResultRow selectedItemObject = selectedItem.getObject();
                 if (selectedItemObject.getKey() instanceof NewsGroup group) {
-                    UNISoNController.getInstance().getFilter().setSelectedNewsgroup(group);
+                    UNISoNController.getInstance().getFilter().setSelectedNewsgroup(group.getName());
                     this.notifySelectedNewsGroupObservers();
                 }
             }

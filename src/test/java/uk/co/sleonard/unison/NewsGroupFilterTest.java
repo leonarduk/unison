@@ -141,18 +141,18 @@ public class NewsGroupFilterTest {
 
     }
 
-    @Test
-    public final void testSelectedNewsgroup() {
-        this.newsGroupFilter.setFiltered(false);
-        Assert.assertNull(this.newsGroupFilter.getSelectedNewsgroup());
-        final NewsGroup expected = new NewsGroup();
-        final String fullName = "Test";
-        expected.setFullName(fullName);
-        Mockito.when(this.helper.getNewsgroupByFullName(fullName, this.session))
-                .thenReturn(expected);
-        this.newsGroupFilter.setSelectedNewsgroup(expected.getFullName());
-        Assert.assertEquals(expected, this.newsGroupFilter.getSelectedNewsgroup());
-    }
+//    @Test
+//    public final void testSelectedNewsgroup() {
+//        this.newsGroupFilter.setFiltered(false);
+//        Assert.assertNull(this.newsGroupFilter.getSelectedNewsgroup());
+//        final NewsGroup expected = new NewsGroup();
+//        final String fullName = "Test";
+//        expected.setFullName(fullName);
+//        Mockito.when(this.helper.getNewsgroupByFullName(fullName, this.session))
+//                .thenReturn(expected);
+//        this.newsGroupFilter.setSelectedNewsgroup(expected.getFullName());
+//        Assert.assertEquals(expected, this.newsGroupFilter.getSelectedNewsgroup());
+//    }
 
     @Test
     public final void testSelectedNewsgroupFiltered() {

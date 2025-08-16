@@ -12,6 +12,7 @@ import uk.co.sleonard.unison.gui.GraphPreviewPanel;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -209,7 +210,7 @@ public class PajekNetworkFile {
         try (FileOutputStream out = new FileOutputStream(this.filename);
             // Connect print stream to the output stream
             PrintStream p = new PrintStream(out)) {
-        } catch (final FileNotFoundException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
         log.info("Saved to {}", this.filename);

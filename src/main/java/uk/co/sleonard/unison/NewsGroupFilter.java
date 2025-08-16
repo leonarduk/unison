@@ -19,6 +19,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
 
+import lombok.Data;
+
+@Data
 public class NewsGroupFilter {
     /**
      * The selected messages.
@@ -110,60 +113,11 @@ public class NewsGroupFilter {
         this.selectedNewsgroups = new Vector<>();
         this.selectedMessages = new Vector<>();
     }
-
-    public Set<String> getCountriesFilter() {
-        return this.countriesFilter;
-    }
-
-    public Date getFromDate() {
-        return this.fromDate;
-    }
-
-    public Message getMessage() {
-        return this.message;
-    }
-
-    /**
-     * Gets the messages filter.
-     *
-     * @return the messages filter
-     */
-    public Vector<Message> getMessagesFilter() {
-        return this.messagesFilter;
-    }
-
-    /**
-     * Gets the newsgroup filter.
-     *
-     * @return the newsgroup filter
-     */
-    public Set<NewsGroup> getNewsgroupFilter() {
-        return this.newsgroupFilter;
-    }
-
-    /**
-     * Gets the selected countries.
-     *
-     * @return the selected countries
-     */
-    public Set<String> getSelectedCountries() {
-        return this.selectedCountries;
-    }
-
-    /**
-     * Gets the selected message.
-     *
-     * @return the selected message
-     */
     public Message getSelectedMessage() {
         if (this.isFiltered() && !this.getMessagesFilter().contains(this.message)) {
             return null;
         }
         return this.message;
-    }
-
-    public Vector<Message> getSelectedMessages() {
-        return this.selectedMessages;
     }
 
     /**
@@ -202,54 +156,6 @@ public class NewsGroupFilter {
         return this.selectedPosters;
     }
 
-    public Date getToDate() {
-        return this.toDate;
-    }
-
-    /**
-     * Gets the topics filter.
-     *
-     * @return the topics filter
-     */
-    public Set<Topic> getTopicsFilter() {
-        return this.topicsFilter;
-    }
-
-    /**
-     * Gets the top news groups.
-     *
-     * @return the top news groups
-     */
-    public Set<NewsGroup> getTopNewsGroups() {
-        return this.getTopsNewsgroups();
-    }
-
-    public Set<NewsGroup> getTopsNewsgroups() {
-        return this.topsNewsgroups;
-    }
-
-    /**
-     * Gets the usenet users filter.
-     *
-     * @return the usenet users filter
-     */
-    public Vector<UsenetUser> getUsenetUsersFilter() {
-        return this.usenetUsersFilter;
-    }
-
-    /**
-     * Checks if is filtered.
-     *
-     * @return true, if is filtered
-     */
-    public boolean isFiltered() {
-        return this.filtered;
-    }
-
-    public void setCountriesFilter(final Set<String> countriesFilter) {
-        this.countriesFilter = countriesFilter;
-    }
-
     /**
      * Sets the dates.
      *
@@ -259,58 +165,6 @@ public class NewsGroupFilter {
     public void setDates(final Date fromDate2, final Date toDate2) {
         this.setToDate(toDate2);
         this.setFromDate(fromDate2);
-    }
-
-    public void setFiltered(final boolean on) {
-        this.filtered = on;
-    }
-
-    public void setFromDate(final Date fromDate) {
-        this.fromDate = fromDate;
-    }
-
-    public void setMessage(final Message message) {
-        this.message = message;
-    }
-
-    public void setMessagesFilter(final Vector<Message> messagesFilter) {
-        this.messagesFilter = messagesFilter;
-    }
-
-    public void setNewsgroupFilter(final Set<NewsGroup> newsgroupFilter) {
-        this.newsgroupFilter = newsgroupFilter;
-    }
-
-    /**
-     * Sets the selected countries.
-     *
-     * @param countries the new selected countries
-     */
-    public void setSelectedCountries(final Set<String> countries) {
-        this.selectedCountries = countries;
-    }
-
-    /**
-     * Sets the selected message.
-     *
-     * @param message the new selected message
-     */
-    public void setSelectedMessage(final Message message) {
-        this.message = message;
-    }
-
-    public void setSelectedMessages(final Vector<Message> selectedMessages2) {
-        this.selectedMessages = selectedMessages2;
-    }
-
-    /**
-     * Sets the selected newsgroup.
-     *
-     * @param group the new selected newsgroup
-     */
-    public void setSelectedNewsgroup(final NewsGroup group) {
-        this.selectedNewsgroup = group;
-        // this.frame.setSelectedNewsgroup(group);
     }
 
     /**
@@ -324,39 +178,5 @@ public class NewsGroupFilter {
             group = this.helper.getNewsgroupByFullName(groupName, this.session);
         }
         this.setSelectedNewsgroup(group);
-    }
-
-    /**
-     * Sets the selected newsgroups.
-     *
-     * @param groups the new selected newsgroups
-     */
-    public void setSelectedNewsgroups(final Vector<NewsGroup> groups) {
-        this.selectedNewsgroups = groups;
-    }
-
-    /**
-     * Sets the selected posters.
-     *
-     * @param posters the new selected posters
-     */
-    public void setSelectedPosters(final Vector<UsenetUser> posters) {
-        this.selectedPosters = posters;
-    }
-
-    public void setToDate(final Date toDate) {
-        this.toDate = toDate;
-    }
-
-    public void setTopicsFilter(final Set<Topic> topicsFilter) {
-        this.topicsFilter = topicsFilter;
-    }
-
-    public void setTopsNewsgroups(final Set<NewsGroup> topsNewsgroups) {
-        this.topsNewsgroups = topsNewsgroups;
-    }
-
-    public void setUsenetUsersFilter(final Vector<UsenetUser> usenetUsersFilter) {
-        this.usenetUsersFilter = usenetUsersFilter;
     }
 }

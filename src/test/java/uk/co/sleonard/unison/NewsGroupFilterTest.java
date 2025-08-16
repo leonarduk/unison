@@ -118,7 +118,7 @@ public class NewsGroupFilterTest {
         Assert.assertNull(this.newsGroupFilter.getSelectedMessage());
         final Message expected = new Message();
         expected.setSubject("test");
-        this.newsGroupFilter.setSelectedMessage(expected);
+        this.newsGroupFilter.setMessage(expected);
         Assert.assertEquals(expected, this.newsGroupFilter.getSelectedMessage());
     }
 
@@ -210,13 +210,13 @@ public class NewsGroupFilterTest {
 
     @Test
     public final void testTopsNewsgroups() {
-        Assert.assertEquals(0, this.newsGroupFilter.getTopNewsGroups().size());
+        Assert.assertEquals(0, this.newsGroupFilter.getTopsNewsgroups().size());
         final Set<NewsGroup> topsNewsgroups = new HashSet<>();
         topsNewsgroups.add(Mockito.mock(NewsGroup.class));
         this.newsGroupFilter.setTopsNewsgroups(topsNewsgroups);
-        Assert.assertEquals(1, this.newsGroupFilter.getTopNewsGroups().size());
+        Assert.assertEquals(1, this.newsGroupFilter.getTopsNewsgroups().size());
         this.newsGroupFilter.clear();
-        Assert.assertEquals(0, this.newsGroupFilter.getTopNewsGroups().size());
+        Assert.assertEquals(0, this.newsGroupFilter.getTopsNewsgroups().size());
     }
 
     @Test

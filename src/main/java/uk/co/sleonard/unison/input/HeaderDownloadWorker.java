@@ -43,8 +43,8 @@ public class HeaderDownloadWorker extends SwingWorker {
 
 
     @Getter
-    private boolean downloading = false;
-    private boolean running = true;
+    private volatile boolean downloading = false;
+    private volatile boolean running = true;
     private final ReentrantLock pauseLock = new ReentrantLock();
     private final Condition notPaused = pauseLock.newCondition();
     private int logTally = 0;

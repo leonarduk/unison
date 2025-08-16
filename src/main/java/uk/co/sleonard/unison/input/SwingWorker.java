@@ -7,7 +7,6 @@
 package uk.co.sleonard.unison.input;
 
 import javax.swing.*;
-import java.util.Observable;
 
 /**
  * from http://java.sun.com/products/jfc/tsc/articles/threads/threads2.html
@@ -24,7 +23,7 @@ import java.util.Observable;
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  */
-abstract class SwingWorker extends Observable implements Runnable {
+abstract class SwingWorker implements Runnable {
     /**
      * The thread var.
      */

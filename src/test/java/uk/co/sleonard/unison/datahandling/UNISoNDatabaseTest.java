@@ -65,12 +65,12 @@ public class UNISoNDatabaseTest {
     }
 
     @Test
-    public final void testNotifyObservers() {
+    public final void testNotifyListeners() {
         Assert.assertEquals(0, this.i);
-        this.database.addObserver((o, arg) -> {
+        this.database.addDataChangeListener(evt -> {
             this.i++;
         });
-        this.database.notifyObservers();
+        this.database.notifyListeners();
         Assert.assertEquals(1, this.i);
     }
 

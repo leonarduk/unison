@@ -16,8 +16,8 @@ import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
 import javax.swing.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.util.Observable;
-import java.util.Observer;
+import java.beans.PropertyChangeEvent;
+import uk.co.sleonard.unison.DataChangeListener;
 
 /**
  * The Class UNISoNTabbedFrame.
@@ -25,7 +25,7 @@ import java.util.Observer;
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  */
-public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
+public class UNISoNTabbedFrame extends javax.swing.JFrame implements DataChangeListener {
 
     /**
      * The Constant serialVersionUID.
@@ -154,10 +154,10 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
         splash.setProgress(80);
 
         final UNISoNDatabase database = this.controller.getDatabase();
-        database.addObserver(this.downloadNewsPanel1);
-        database.addObserver(this.messageStoreViewer1);
-        database.addObserver(this.pajekPanel1);
-        database.addObserver(this);
+        database.addDataChangeListener(this.downloadNewsPanel1);
+        database.addDataChangeListener(this.messageStoreViewer1);
+        database.addDataChangeListener(this.pajekPanel1);
+        database.addDataChangeListener(this);
 
         this.aboutDialog = new AboutDialog(this, false);
 
@@ -348,11 +348,11 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements Observer {
     /*
      * (non-Javadoc)
      *
-     * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+     * @see uk.co.sleonard.unison.DataChangeListener#dataChanged(java.beans.PropertyChangeEvent)
      */
     @Override
-    public void update(final Observable observable, final Object arg1) {
-        if (observable instanceof UNISoNDatabase) {
+    public void dataChanged(final PropertyChangeEvent evt) {
+        if (evt.getSource() instanceof UNISoNDatabase) {
             this.showAlert("GUI has been refreshed from the database");
         }
     }

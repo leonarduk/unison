@@ -14,17 +14,21 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DAO.Topic;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 
+import java.beans.PropertyChangeSupport;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Observable;
 import java.util.Set;
 
+import uk.co.sleonard.unison.DataChangeListener;
+
 @Slf4j
-public class UNISoNDatabase extends Observable {
+public class UNISoNDatabase {
     private final Session session;
     private final NewsGroupFilter filter;
     private final HibernateHelper helper;
     private final DataQuery dataQuery;
+
+    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
     public UNISoNDatabase(final NewsGroupFilter filter2, final Session session2,
                           final HibernateHelper helper2, final DataQuery dataQuery) {
@@ -71,15 +75,29 @@ public class UNISoNDatabase extends Observable {
         return returnVal;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Register a listener to be notified when the database data changes.
      *
-     * @see java.util.Observable#notifyObservers()
+     * @param listener the listener to register
      */
-    @Override
-    public void notifyObservers() {
-        this.setChanged();
-        super.notifyObservers();
+    public void addDataChangeListener(final DataChangeListener listener) {
+        this.pcs.addPropertyChangeListener(listener);
+    }
+
+    /**
+     * Remove a previously registered listener.
+     *
+     * @param listener the listener to remove
+     */
+    public void removeDataChangeListener(final DataChangeListener listener) {
+        this.pcs.removePropertyChangeListener(listener);
+    }
+
+    /**
+     * Notify all registered listeners that the data has changed.
+     */
+    public void notifyListeners() {
+        this.pcs.firePropertyChange("database", null, null);
     }
 
     /**
@@ -149,7 +167,7 @@ public class UNISoNDatabase extends Observable {
                 }
             }
         }
-        this.notifyObservers();
+        this.notifyListeners();
     }
 
     @Override

@@ -337,17 +337,21 @@ public class UNISoNController {
                                 final NewsClient client2) {
         this.setNntpHost(host);
         log.info("Find groups matching : {} on {}", group, host);
+        log.debug("Request download: group={}, host={}, disabling download button", group, host);
         monitor.downloadEnabled(false);
 
         if (null != group) {
             try {
                 final Set<NewsGroup> availableGroups2 = this.listNewsgroups(group, host, client2);
+                log.debug("listNewsgroups returned {} groups", availableGroups2.size());
                 if ((null == availableGroups2) || (availableGroups2.size() == 0)) {
                     log.warn("No groups found for string : {} on {}.\nPerhaps another host?", group, host);
                 } else {
                     monitor.downloadEnabled(true);
                 }
+                log.debug("Updating monitor with retrieved groups");
                 monitor.updateAvailableGroups(availableGroups2);
+                log.debug("Download request flow complete; monitor enabled = {}", availableGroups2.size() > 0);
             } catch (final UNISoNException e) {
                 log.error("Problem downloading", e);
             }

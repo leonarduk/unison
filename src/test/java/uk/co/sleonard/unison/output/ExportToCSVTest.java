@@ -17,7 +17,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The Class ExportToCSV.
@@ -36,13 +38,13 @@ public class ExportToCSVTest {
      *
      * @return JTable filled.
      */
-    private JTable generateJTableToTest() {
-        DefaultTableModel model;
-        model = new DefaultTableModel();
+    private @NotNull JTable generateJTableToTest(@NotNull Vector<String> columnNames) {
+        Objects.requireNonNull(columnNames, "columnNames");
+        final DefaultTableModel model = new DefaultTableModel();
         final JTable jTable = new JTable(model);
-        model.addColumn(null);
-        model.addColumn(null);
-        model.addColumn(null);
+        for (String column : columnNames) {
+            model.addColumn(column);
+        }
         model.addRow(new Object[]{"element1", "element2", "test"});
         model.addRow(new Object[]{"element3", "element4", "test"});
         return jTable;
@@ -71,7 +73,8 @@ public class ExportToCSVTest {
         fieldNames.addElement("column2");
         fieldNames.addElement("test");
         try {
-            this.export.exportTable(archiveName, this.generateJTableToTest(), fieldNames);
+            final JTable table = this.generateJTableToTest(fieldNames);
+            this.export.exportTable(archiveName, table, fieldNames);
             final File file = new File(archiveName);
             final FileReader fileReader = new FileReader(file.getCanonicalPath());
             final BufferedReader reader = new BufferedReader(fileReader);

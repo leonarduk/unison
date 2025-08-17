@@ -402,19 +402,17 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
      */
     private ListModel<GUIItem<ResultRow>> getListModel(final List<ResultRow> results) {
         final DefaultListModel<GUIItem<ResultRow>> model = new DefaultListModel<>();
-        for (final ListIterator<ResultRow> iter = results.listIterator(); iter.hasNext(); ) {
-            final ResultRow row = iter.next();
-            final Object key = row.getKey();
+        results.forEach(row -> {
+            final Object key = row.key();
             String name = (key == null) ? null : key.toString();
-            if (key instanceof UsenetUser) {
-                final UsenetUser user = (UsenetUser) key;
+            if (key instanceof UsenetUser user) {
                 name = user.getName() + "<" + user.getEmail() + ">";
             } else if (key instanceof Location) {
                 name = ((Location) key).getCountry();
             }
 
             model.addElement(new GUIItem<>(name, row));
-        }
+        });
         return model;
     }
 
@@ -898,7 +896,8 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
                     new Vector<>(message.getNewsgroups()));
             this.crosspostComboBox.setModel(aModel);
             try {
-                this.bodyPane.setText(StringUtils.decompress(message.getMessageBody()));
+                this.bodyPane.setText(
+                        StringUtils.decompress(message.getMessageBody()).orElse(""));
             } catch (final IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -1044,28 +1043,25 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
                 final List<GUIItem<ResultRow>> selectedCountries = this.topCountriesList
                         .getSelectedValuesList();
                 final Set<String> countries = new HashSet<>();
-                for (final GUIItem<ResultRow> row : selectedCountries) {
-                    final String selectedcountry = (String) row.getObject().getKey();
-                    countries.add(selectedcountry);
-                }
+                selectedCountries.stream()
+                        .map(row -> (String) row.object().key())
+                        .forEach(countries::add);
                 controller.getFilter().setSelectedCountries(countries);
 
                 final List<GUIItem<ResultRow>> selectedNewsgroups = this.topGroupsList
                         .getSelectedValuesList();
                 final Vector<NewsGroup> groups = new Vector<>();
-                for (final GUIItem<ResultRow> row : selectedNewsgroups) {
-                    final NewsGroup selectedgroup = (NewsGroup) row.getObject().getKey();
-                    groups.add(selectedgroup);
-                }
+                selectedNewsgroups.stream()
+                        .map(row -> (NewsGroup) row.object().key())
+                        .forEach(groups::add);
                 controller.getFilter().setSelectedNewsgroups(groups);
 
                 final List<GUIItem<ResultRow>> selectedPosters = this.topPostersList
                         .getSelectedValuesList();
                 final Vector<UsenetUser> posters = new Vector<>();
-                for (final GUIItem<ResultRow> row : selectedPosters) {
-                    final UsenetUser selectedUser = (UsenetUser) row.getObject().getKey();
-                    posters.add(selectedUser);
-                }
+                selectedPosters.stream()
+                        .map(row -> (UsenetUser) row.object().key())
+                        .forEach(posters::add);
                 controller.getFilter().setSelectedPosters(posters);
                 this.filterToggle.setText("Filtered");
                 this.filterToggle.setToolTipText("Click again to remove filter");
@@ -1104,8 +1100,8 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
         if (!evt.getValueIsAdjusting()) {
             final GUIItem<ResultRow> selectedItem = this.topGroupsList.getSelectedValue();
             if (null != selectedItem) {
-                final ResultRow selectedItemObject = selectedItem.getObject();
-                if (selectedItemObject.getKey() instanceof NewsGroup group) {
+                final ResultRow selectedItemObject = selectedItem.object();
+                if (selectedItemObject.key() instanceof NewsGroup group) {
                     UNISoNController.getInstance().getFilter().setSelectedNewsgroup(group.getName());
                     this.notifySelectedNewsGroupObservers();
                 }

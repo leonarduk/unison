@@ -85,13 +85,13 @@ public class UserFactory {
         } catch (final IllegalArgumentException e) {
             throw new UNISoNException("Failed to parse From field: " + article.getFrom(), e);
         }
-        if ((emailAddress == null) || (emailAddress.getEmail() == null)) {
+        if ((emailAddress == null) || (emailAddress.email() == null)) {
             throw new UNISoNException("Missing email address in From field: " + article.getFrom());
         }
         UsenetUser poster = this.findUsenetUser(emailAddress, session, helper);
         if (null == poster) {
-            poster = new UsenetUser(emailAddress.getName(), emailAddress.getEmail(),
-                    emailAddress.getIpAddress(), gender, null);
+            poster = new UsenetUser(emailAddress.name(), emailAddress.email(),
+                    emailAddress.ipAddress(), gender, null);
             session.saveOrUpdate(poster);
         }
         return poster;
@@ -99,10 +99,10 @@ public class UserFactory {
 
     synchronized UsenetUser findUsenetUser(final EmailAddress emailAddress, final Session session,
                                            final HibernateHelper helper) {
-        if ((emailAddress == null) || (emailAddress.getEmail() == null)) {
+        if ((emailAddress == null) || (emailAddress.email() == null)) {
             return null;
         }
-        return (UsenetUser) helper.findByKey(emailAddress.getEmail(), session, UsenetUser.class);
+        return (UsenetUser) helper.findByKey(emailAddress.email(), session, UsenetUser.class);
     }
 }
 

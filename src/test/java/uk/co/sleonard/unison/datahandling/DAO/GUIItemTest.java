@@ -27,7 +27,7 @@ public class GUIItemTest {
         final NewsGroup expected = new NewsGroup();
         this.guiItem = new GUIItem<>("name", expected);
         Assert.assertEquals("name", this.guiItem.toString());
-        Assert.assertNotNull(this.guiItem.getObject());
+        Assert.assertNotNull(this.guiItem.object());
     }
 
 }

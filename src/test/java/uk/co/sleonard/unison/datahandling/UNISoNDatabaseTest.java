@@ -7,9 +7,9 @@
 package uk.co.sleonard.unison.datahandling;
 
 import org.hibernate.Session;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import uk.co.sleonard.unison.NewsGroupFilter;
@@ -31,7 +31,7 @@ public class UNISoNDatabaseTest {
     private HibernateHelper helper2;
     private int i;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.filter2 = Mockito.mock(NewsGroupFilter.class);
         final Vector<Message> mesgs = new Vector<>();
@@ -60,18 +60,18 @@ public class UNISoNDatabaseTest {
         Mockito.when(this.helper2.runQuery(ArgumentMatchers.anyString(), ArgumentMatchers.nullable(Session.class),
                 ArgumentMatchers.any(Class.class))).thenReturn(messages);
         final Set<Message> result = this.database.getMessages(topic, this.session2);
-        Assert.assertEquals(1, result.size());
-        Assert.assertTrue(result.contains(msg));
+        Assertions.assertEquals(1, result.size());
+        Assertions.assertTrue(result.contains(msg));
     }
 
     @Test
     public final void testNotifyListeners() {
-        Assert.assertEquals(0, this.i);
+        Assertions.assertEquals(0, this.i);
         this.database.addDataChangeListener(evt -> {
             this.i++;
         });
         this.database.notifyListeners();
-        Assert.assertEquals(1, this.i);
+        Assertions.assertEquals(1, this.i);
     }
 
     @Test

@@ -6,7 +6,6 @@
  */
 package uk.co.sleonard.unison.input;
 
-import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -35,7 +34,6 @@ public class HeaderDownloadWorkerIT {
             final LinkedBlockingQueue<NewsArticle> queue1 = new LinkedBlockingQueue<>();
             final NewsClient newsClient1 = new NewsClientImpl();
             final HibernateHelper helper2 = null;
-            final Session session2 = null;
             final NewsGroupReader groupReader = null;
             final HeaderDownloadWorker worker = new HeaderDownloadWorker(
                     new LinkedBlockingQueue<>(), new DownloaderImpl(nntpHost, queue1, newsClient1,

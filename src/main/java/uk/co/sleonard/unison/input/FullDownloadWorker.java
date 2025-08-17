@@ -267,10 +267,10 @@ public class FullDownloadWorker extends SwingWorker {
      * @throws UNISoNException the UNI so n exception
      */
     NewsArticle downloadArticle(final DownloadRequest request) throws UNISoNException {
-        log.debug("Fetching article {}", request.getUsenetID());
+        log.debug("Fetching article {}", request.usenetID());
         NewsArticle article = null;
         try {
-            switch (request.getMode()) {
+            switch (request.mode()) {
                 case HEADERS:
                     article = this.downloadHeader(request);
                     break;
@@ -289,10 +289,10 @@ public class FullDownloadWorker extends SwingWorker {
         }
 
         if (null == article) {
-            log.info("Skipped message {}", request.getUsenetID());
-            log.warn("Article {} returned null", request.getUsenetID());
+            log.info("Skipped message {}", request.usenetID());
+            log.warn("Article {} returned null", request.usenetID());
         } else {
-            log.debug("Retrieved article {} ({}) queue size {}", request.getUsenetID(),
+            log.debug("Retrieved article {} ({}) queue size {}", request.usenetID(),
                     article.getSubject(), FullDownloadWorker.downloadQueue.size());
         }
         return article;
@@ -308,12 +308,12 @@ public class FullDownloadWorker extends SwingWorker {
      */
     NewsArticle downloadFullMessage(final DownloadRequest request)
             throws IOException, UNISoNException {
-        try (Reader reader = this.client.retrieveArticle(request.getUsenetID());) {
+        try (Reader reader = this.client.retrieveArticle(request.usenetID());) {
             NewsArticle article = null;
             if (null != reader) {
                 article = this.convertReaderToArticle(reader);
             } else {
-                log.warn("No message returned for {}", request.getUsenetID());
+                log.warn("No message returned for {}", request.usenetID());
             }
             return article;
         }
@@ -329,12 +329,12 @@ public class FullDownloadWorker extends SwingWorker {
      */
     private NewsArticle downloadHeader(final DownloadRequest request)
             throws IOException, UNISoNException {
-        try (Reader reader = this.client.retrieveArticleHeader(request.getUsenetID());) {
+        try (Reader reader = this.client.retrieveArticleHeader(request.usenetID());) {
             NewsArticle article = null;
             if (null != reader) {
                 article = this.convertReaderToArticle(reader);
             } else {
-                log.warn("No message returned for {}", request.getUsenetID());
+                log.warn("No message returned for {}", request.usenetID());
             }
             return article;
         }
@@ -397,11 +397,11 @@ public class FullDownloadWorker extends SwingWorker {
      */
     private boolean storeNextMessage(final LinkedBlockingQueue<NewsArticle> queue)
             throws UNISoNException {
-        final DownloadRequest request = this.pollQueue();
+        var request = this.pollQueue();
 
-        final NewsArticle article = this.downloadArticle(request);
+        var article = this.downloadArticle(request);
         if (null != article) {
-            log.debug("Retrieved article {} - subject '{}' queue size before add {}", request.getUsenetID(),
+            log.debug("Retrieved article {} - subject '{}' queue size before add {}", request.usenetID(),
                     article.getSubject(), queue.size());
             log.info("Got:{} {} {} to q: {}[{}]", article.getSubject(), article.getFrom(),
                     article.getArticleID(), queue.size(), new Date());
@@ -411,7 +411,7 @@ public class FullDownloadWorker extends SwingWorker {
                     FullDownloadWorker.downloadQueue.size());
             return true;
         }
-        log.warn("No article to store for {}", request.getUsenetID());
+        log.warn("No article to store for {}", request.usenetID());
         return false;
     }
 }

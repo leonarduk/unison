@@ -1,12 +1,12 @@
 package uk.co.sleonard.unison.datahandling;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 
 import java.util.Date;
 import java.util.HashSet;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link MessageCacheService}.

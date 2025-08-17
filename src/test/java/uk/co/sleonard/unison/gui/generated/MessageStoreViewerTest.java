@@ -4,8 +4,8 @@
 package uk.co.sleonard.unison.gui.generated;
 
 import org.hibernate.Session;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import uk.co.sleonard.unison.NewsGroupFilter;
 import uk.co.sleonard.unison.UNISoNController;
@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.lang.reflect.Field;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for {@link MessageStoreViewer}.
@@ -29,7 +29,7 @@ public class MessageStoreViewerTest {
     private UNISoNController controller;
     private NewsGroupFilter filter;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.controller = Mockito.mock(UNISoNController.class);
         this.filter = Mockito.mock(NewsGroupFilter.class);

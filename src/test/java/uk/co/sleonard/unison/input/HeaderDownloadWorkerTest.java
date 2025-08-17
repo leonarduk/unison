@@ -6,9 +6,9 @@
  */
 package uk.co.sleonard.unison.input;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import uk.co.sleonard.unison.UNISoNController;
@@ -39,7 +39,7 @@ public class HeaderDownloadWorkerTest {
     /**
      * Setup.
      */
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.worker = new HeaderDownloadWorker(new LinkedBlockingQueue<>(),
                 Mockito.mock(Downloader.class));
@@ -51,9 +51,9 @@ public class HeaderDownloadWorkerTest {
     @Test
     public void testFinished() {
         this.worker.resume();
-        Assert.assertTrue(this.worker.isDownloading());
+        Assertions.assertTrue(this.worker.isDownloading());
         this.worker.finished();
-        Assert.assertFalse(this.worker.isDownloading());
+        Assertions.assertFalse(this.worker.isDownloading());
     }
 
     /**
@@ -83,12 +83,12 @@ public class HeaderDownloadWorkerTest {
         final NewsClient nc = Mockito.mock(NewsClient.class);
         final NewsGroupReader ngr = new NewsGroupReader(nc, Mockito.mock(UNISoNController.class));
         final Date fromAndTo = Calendar.getInstance().getTime();
-        Assert.assertFalse(this.worker.isDownloading());
+        Assertions.assertFalse(this.worker.isDownloading());
 
         this.worker.initialise(ngr, 0, 1, "server", "newsgroup", DownloadMode.ALL,
                 fromAndTo, fromAndTo);
 
-        Assert.assertTrue(this.worker.isDownloading());
+        Assertions.assertTrue(this.worker.isDownloading());
     }
 
     /**
@@ -96,9 +96,9 @@ public class HeaderDownloadWorkerTest {
      */
     @Test
     public void testIsDownloading() {
-        Assert.assertFalse(this.worker.isDownloading());
+        Assertions.assertFalse(this.worker.isDownloading());
         this.worker.resume();
-        Assert.assertTrue(this.worker.isDownloading());
+        Assertions.assertTrue(this.worker.isDownloading());
     }
 
     /**
@@ -109,7 +109,7 @@ public class HeaderDownloadWorkerTest {
         final AtomicInteger counter = new AtomicInteger(0);
         this.worker.addDataChangeListener(evt -> counter.incrementAndGet());
         this.worker.notifyListeners();
-        Assert.assertEquals(1, counter.get());
+        Assertions.assertEquals(1, counter.get());
     }
 
     /**
@@ -118,9 +118,9 @@ public class HeaderDownloadWorkerTest {
     @Test
     public void testPause() {
         this.worker.resume();
-        Assert.assertTrue(this.worker.isDownloading());
+        Assertions.assertTrue(this.worker.isDownloading());
         this.worker.pause();
-        Assert.assertFalse(this.worker.isDownloading());
+        Assertions.assertFalse(this.worker.isDownloading());
     }
 
     @Test(expected = UNISoNException.class)
@@ -179,7 +179,7 @@ public class HeaderDownloadWorkerTest {
     @Test
     public void testQueueMessagesNullReader()
             throws InterruptedException, IOException, UNISoNException {
-        Assert.assertTrue(this.worker.queueMessages(new LinkedBlockingQueue<>(), null));
+        Assertions.assertTrue(this.worker.queueMessages(new LinkedBlockingQueue<>(), null));
     }
 
     /**
@@ -187,9 +187,9 @@ public class HeaderDownloadWorkerTest {
      */
     @Test
     public void testResume() {
-        Assert.assertFalse(this.worker.isDownloading());
+        Assertions.assertFalse(this.worker.isDownloading());
         this.worker.resume();
-        Assert.assertTrue(this.worker.isDownloading());
+        Assertions.assertTrue(this.worker.isDownloading());
     }
 
     /**
@@ -201,7 +201,7 @@ public class HeaderDownloadWorkerTest {
     public void testStoreArticleInfo() throws UNISoNException {
         final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
         final boolean actual = this.worker.storeArticleInfo(queue);
-        Assert.assertTrue(actual);
+        Assertions.assertTrue(actual);
     }
 
     @Test
@@ -219,6 +219,9 @@ public class HeaderDownloadWorkerTest {
         setField(this.worker, "endIndex", 600);
         setField(this.worker, "newsReader", reader);
 
+        // ensure complete article information is downloaded
+        this.worker.setMode(DownloadMode.ALL);
+
         this.worker.storeArticleInfo(queue);
 
         final ArgumentCaptor<Long> endCaptor = ArgumentCaptor.forClass(Long.class);
@@ -226,7 +229,7 @@ public class HeaderDownloadWorkerTest {
                 .retrieveArticleInfo(Mockito.anyLong(), endCaptor.capture());
 
         for (final Long end : endCaptor.getAllValues()) {
-            Assert.assertTrue("Requested message beyond end index", end <= 600L);
+            Assertions.assertTrue("Requested message beyond end index", end <= 600L);
         }
     }
 

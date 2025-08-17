@@ -11,9 +11,9 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,7 @@ public class UNISoNAnalysisTest {
     private Topic topic;
     private NewsGroup newsgroup;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.session = Mockito.mock(Session.class);
         final UNISoNGUI gui = Mockito.mock(UNISoNGUI.class);
@@ -66,25 +66,30 @@ public class UNISoNAnalysisTest {
     @Test
     public final void testGetTopCountriesList() {
         final List<ResultRow> results = this.analysis.getTopCountriesList();
-        Assert.assertEquals(1, results.size());
-        Assert.assertEquals("UK", results.get(0).getKey());
-        Assert.assertEquals(2, results.get(0).getCount());
+        Assertions.assertEquals(1, results.size());
+        Assertions.assertEquals("UK", results.get(0).getKey());
+        Assertions.assertEquals(2, results.get(0).getCount());
+      
     }
 
     @Test
     public final void testGetTopGroupsList() {
         final List<ResultRow> results = this.analysis.getTopGroupsList();
-        Assert.assertEquals(1, results.size());
-        Assert.assertEquals(this.newsgroup, results.get(0).getKey());
-        Assert.assertEquals(2, results.get(0).getCount());
+
+      Assertions.assertEquals(1, results.size());
+        Assertions.assertEquals(this.newsgroup, results.get(0).getKey());
+        Assertions.assertEquals(2, results.get(0).getCount());
+
     }
 
     @Test
     public final void testGetTopPosters() {
         final Vector<ResultRow> results = this.analysis.getTopPosters();
-        Assert.assertEquals(1, results.size());
-        Assert.assertEquals(this.poster, results.get(0).getKey());
-        Assert.assertEquals(2, results.get(0).getCount());
+
+      Assertions.assertEquals(1, results.size());
+        Assertions.assertEquals(this.poster, results.get(0).getKey());
+        Assertions.assertEquals(2, results.get(0).getCount());
+
     }
 
 }

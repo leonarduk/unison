@@ -1,8 +1,8 @@
 package uk.co.sleonard.unison.datahandling;
 
 import org.hibernate.Session;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
@@ -10,8 +10,8 @@ import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -29,7 +29,7 @@ public class DataQueryTest {
     /**
      * Setup.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         this.helper = mock(HibernateHelper.class);
         this.dataQuery = new DataQuery(this.helper);

@@ -12,6 +12,7 @@ import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DataQuery;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
+import uk.co.sleonard.unison.datahandling.SessionManager;
 import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
 import uk.co.sleonard.unison.gui.UNISoNGUI;
 import uk.co.sleonard.unison.gui.generated.DownloadNewsPanel;
@@ -102,7 +103,8 @@ public class UNISoNController {
         this.messageQueue = messageQueue;
         this.helper = helper;
         this.client = client;
-        try {
+
+       try {
             this.session = this.helper.getHibernateSession();
             this.filter = new NewsGroupFilter(this.session, this.helper);
             this.analysis = new UNISoNAnalysis(this.filter, this.session, this.helper);
@@ -400,7 +402,8 @@ public class UNISoNController {
         this.headerDownloader = new HeaderDownloadWorker(this.messageQueue,
                 new DownloaderImpl(this.nntpHost, this.messageQueue, this.client, this.nntpReader,
                         this.helper, this));
-        this.headerDownloader.initialise();
+
+      this.headerDownloader.initialise();
 
     }
 

@@ -8,8 +8,8 @@ package uk.co.sleonard.unison.input;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hsqldb.util.DatabaseManagerSwing;
-import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNControllerFactory;
 import uk.co.sleonard.unison.UNISoNException;
@@ -30,7 +30,7 @@ import java.util.Set;
  * @since v1.0.0
  */
 @Slf4j
-@Ignore("Command line entry point - not a unit test")
+@Disabled("Command line entry point - not a unit test")
 public class UNISoNCLI {
 
     /**

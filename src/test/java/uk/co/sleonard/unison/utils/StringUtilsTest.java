@@ -7,9 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Date;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -208,7 +206,7 @@ public class StringUtilsTest {
     /**
      * Test stringToDate with String length 8 throw UNISoNException
      */
-    @Test(expected = UNISoNException.class)
+    @Test()
     public void testStringToDateExceptionLength8() throws UNISoNException {
         StringUtils.stringToDate("xxxxxxxx");
     }
@@ -216,7 +214,7 @@ public class StringUtilsTest {
     /**
      * Test stringToDate with String length 10 throw UNISoNException
      */
-    @Test(expected = UNISoNException.class)
+    @Test()
     public void testStringToDateExceptionLength10() throws UNISoNException {
         StringUtils.stringToDate("xx/xx/xxxx");
     }

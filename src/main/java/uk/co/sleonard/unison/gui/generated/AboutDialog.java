@@ -199,7 +199,6 @@ class AboutDialog extends javax.swing.JDialog {
      * @param evt the evt
      */
     private void okButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_okButtonActionPerformed
-        // TODO add your handling code here:
         this.setVisible(false);
     }// GEN-LAST:event_okButtonActionPerformed
 

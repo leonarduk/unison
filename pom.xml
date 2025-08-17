@@ -12,8 +12,8 @@
         <logback.version>1.5.6</logback.version>
         <junit.version>4.13.2</junit.version>
         <java.version>17</java.version>
-        <powermock.version>2.0.9</powermock.version>
         <mockito.version>5.12.0</mockito.version>
+        <byte-buddy.version>1.14.10</byte-buddy.version>
         <lombok.version>1.18.30</lombok.version>
         <maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
         <jms.version>3.1.0</jms.version>
@@ -40,13 +40,23 @@
                 <artifactId>jaxb-api</artifactId>
                 <version>2.3.1</version>
             </dependency>
-            <dependency>
-                <groupId>org.glassfish.jaxb</groupId>
-                <artifactId>jaxb-runtime</artifactId>
-                <version>2.3.7</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+          <dependency>
+              <groupId>org.glassfish.jaxb</groupId>
+              <artifactId>jaxb-runtime</artifactId>
+              <version>2.3.7</version>
+          </dependency>
+          <dependency>
+              <groupId>net.bytebuddy</groupId>
+              <artifactId>byte-buddy</artifactId>
+              <version>${byte-buddy.version}</version>
+          </dependency>
+          <dependency>
+              <groupId>net.bytebuddy</groupId>
+              <artifactId>byte-buddy-agent</artifactId>
+              <version>${byte-buddy.version}</version>
+          </dependency>
+          </dependencies>
+      </dependencyManagement>
 
 
     <build>
@@ -237,11 +247,17 @@
             <version>${junit.version}</version>
         </dependency>
 
-        <!-- remove mockito-inline -->
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>5.10.2</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>${mockito.version}</version> <!-- or whatever your BOM manages -->
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -249,21 +265,6 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>${mockito.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito2</artifactId>
-            <version>${powermock.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-            <version>${powermock.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -279,7 +280,6 @@
             <version>${swing-layout.version}</version>
         </dependency>
 
-
         <!-- Jakarta Mail API and implementation -->
         <dependency>
             <groupId>jakarta.mail</groupId>
@@ -292,19 +292,6 @@
             <version>2.0.1</version>
         </dependency>
 
-        <!-- Replace legacy JAXB reference that required an HTTP repository with a
-             version available on Maven Central over HTTPS -->
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-runtime</artifactId>
-            <version>2.3.7</version>
-        </dependency>
 
         <dependency>
             <groupId>com.google.code.gson</groupId>

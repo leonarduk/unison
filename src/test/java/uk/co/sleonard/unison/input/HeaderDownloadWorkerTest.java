@@ -11,6 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.utils.Downloader;
@@ -34,6 +36,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class HeaderDownloadWorkerTest {
 
     private HeaderDownloadWorker worker;
+    private static final Logger log = LoggerFactory.getLogger(HeaderDownloadWorkerTest.class);
 
     /**
      * Setup.
@@ -60,13 +63,13 @@ public class HeaderDownloadWorkerTest {
      */
     @Test
     public void testFullstop() {
-        System.out.println("Wait 2 secs and stop");
+        log.info("Wait 2 secs and stop");
         try {
             Thread.sleep(2000);
         } catch (final InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("Stop");
+        log.info("Stop");
         this.worker.fullstop();
     }
 

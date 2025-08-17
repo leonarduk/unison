@@ -1,10 +1,9 @@
 package uk.co.sleonard.unison.datahandling;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.sleonard.unison.UNISoNException;
 
@@ -16,6 +15,7 @@ import uk.co.sleonard.unison.UNISoNException;
  */
 public final class SessionManager {
 
+    private static final Logger log = LoggerFactory.getLogger(SessionManager.class);
     private static SessionFactory sessionFactory;
 
     private SessionManager() {
@@ -32,13 +32,9 @@ public final class SessionManager {
     public static synchronized Session openSession() throws UNISoNException {
         if (sessionFactory == null) {
             try {
-                Logger root = (Logger) LoggerFactory
-                        .getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
-                Level level = root.getLevel();
-                root.setLevel(Level.ERROR);
                 sessionFactory = new Configuration().configure().buildSessionFactory();
-                root.setLevel(level);
             } catch (Throwable e) {
+                log.error("Failed to connect to DB", e);
                 throw new UNISoNException("Failed to connect to DB", e);
             }
         }

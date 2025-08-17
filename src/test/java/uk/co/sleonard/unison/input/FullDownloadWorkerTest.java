@@ -11,6 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
@@ -36,6 +38,7 @@ public class FullDownloadWorkerTest {
     private FullDownloadWorker worker;
     private NewsClient newsClient;
     private LinkedBlockingQueue outQueue;
+    private static final Logger log = LoggerFactory.getLogger(FullDownloadWorkerTest.class);
 
     /**
      * Setup.
@@ -190,7 +193,7 @@ public class FullDownloadWorkerTest {
                 DownloadMode.ALL);
         try {
             final NewsArticle article = worker.downloadFullMessage(request);
-            System.out.println("Downloaded: " + article);
+            log.debug("Downloaded: {}", article);
         } catch (final IOException e) {
             e.printStackTrace();
         } catch (final UNISoNException e) {

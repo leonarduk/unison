@@ -128,7 +128,7 @@ public class StringUtils {
 
         for (final String nextToken : fields) {
             list.add(nextToken);
-            // System.out.println("Adding " + nextToken);
+            log.debug("Adding {}", nextToken);
         }
         return list;
     }

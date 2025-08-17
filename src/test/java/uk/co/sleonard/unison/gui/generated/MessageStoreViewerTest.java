@@ -15,9 +15,9 @@ import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.gui.UNISoNGUI;
 import uk.co.sleonard.unison.utils.TreeNode;
 
-import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
+import java.lang.reflect.Field;
 
 import static org.junit.Assert.assertEquals;
 
@@ -42,9 +42,7 @@ public class MessageStoreViewerTest {
         Mockito.when(this.controller.getFilter()).thenReturn(this.filter);
         Mockito.when(this.controller.getGui()).thenReturn(gui);
 
-        final Field instance = UNISoNController.class.getDeclaredField("instance");
-        instance.setAccessible(true);
-        instance.set(null, this.controller);
+        UNISoNController.setInstance(this.controller);
     }
 
     @Test

@@ -2,7 +2,7 @@ package uk.co.sleonard.unison.datahandling;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import uk.co.sleonard.unison.datahandling.DAO.Location;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;

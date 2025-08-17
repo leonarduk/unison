@@ -170,6 +170,22 @@ class HeaderDownloadWorkerTest {
         }
     }
 
+    @Test
+    void testProcessMessageSetsNewsgroup() throws Exception {
+        final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
+        final NewsClient nc = Mockito.mock(NewsClient.class);
+        final NewsGroupReader ngr = new NewsGroupReader(nc, Mockito.mock(UNISoNController.class));
+
+        this.worker.initialise(ngr, 0, 1, "server", "alt.test", DownloadMode.BASIC, null, null);
+
+        final String line = "1\tSubject\tfrom@example.com\t2016-04-01\t<id>\t<ref>";
+        this.worker.processMessage(queue, line);
+
+        final NewsArticle article = queue.poll();
+        Assertions.assertNotNull(article);
+        Assertions.assertEquals("alt.test", article.getNewsgroups());
+    }
+
     /**
      * Test construct
      *

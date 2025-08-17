@@ -219,6 +219,9 @@ public class HeaderDownloadWorkerTest {
         setField(this.worker, "endIndex", 600);
         setField(this.worker, "newsReader", reader);
 
+        // ensure complete article information is downloaded
+        this.worker.setMode(DownloadMode.ALL);
+
         this.worker.storeArticleInfo(queue);
 
         final ArgumentCaptor<Long> endCaptor = ArgumentCaptor.forClass(Long.class);

@@ -90,11 +90,15 @@ public class UNISoNController {
 
     private final DataHibernatorPool pool;
 
-    private NewsClient client;
+    private final NewsClient client;
 
     public static UNISoNController create(final JFrame frame, final DataHibernatorPool pool)
             throws UNISoNException {
-        UNISoNController.instance = new UNISoNController(frame, pool);
+        UNISoNGUI gui = (frame != null) ? new UNISoNGUI(frame) : null;
+        HibernateHelper helper = new HibernateHelper(gui);
+        LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
+        NewsClient client = new NewsClientImpl();
+        UNISoNController.instance = new UNISoNController(client, helper, queue, pool, gui);
         return UNISoNController.instance;
     }
     // private static UNISoNController instance;
@@ -109,14 +113,33 @@ public class UNISoNController {
     }
 
     /**
-     * Instantiates a new UNI so n controller.
+     * Set the global instance (intended for tests).
      *
-     * @throws UNISoNException
+     * @param controller the controller to set as the singleton instance
      */
-    private UNISoNController(final JFrame frame, final DataHibernatorPool hibernatorPool)
+    public static void setInstance(final UNISoNController controller) {
+        UNISoNController.instance = controller;
+    }
+
+    /**
+     * Public constructor allowing explicit dependency injection.
+     *
+     * @param client         the NNTP client implementation
+     * @param helper         the hibernate helper
+     * @param messageQueue   queue used for downloaded articles
+     * @param hibernatorPool pool controlling download threads
+     * @param gui            optional GUI reference
+     * @throws UNISoNException if the hibernate session cannot be created
+     */
+    public UNISoNController(final NewsClient client, final HibernateHelper helper,
+                            final LinkedBlockingQueue<NewsArticle> messageQueue,
+                            final DataHibernatorPool hibernatorPool, final UNISoNGUI gui)
             throws UNISoNException {
         this.pool = hibernatorPool;
-        this.gui = (frame != null) ? new UNISoNGUI(frame) : null;
+        this.gui = gui;
+        this.messageQueue = messageQueue;
+        this.helper = helper;
+        this.client = client;
 
         this.messageQueue = new LinkedBlockingQueue<>();
         MessageCacheService cacheService = new MessageCacheService();
@@ -137,7 +160,6 @@ public class UNISoNController {
             throw e;
         }
 
-        this.client = new NewsClientImpl();
         this.nntpReader = new NewsGroupReader(this.client);
     }
 
@@ -322,7 +344,6 @@ public class UNISoNController {
         log.debug("Starting quick download of {} groups (mode={}, from={}, to={})", groups.size(),
                 mode, fromDate1, toDate1);
         final NewsGroupReader reader = this.getNntpReader();
-        this.client = reader.getClient();
         final HeaderDownloadWorker headerDownloader2 = this.getHeaderDownloader();
         final String nntpHost2 = this.getNntpHost();
 

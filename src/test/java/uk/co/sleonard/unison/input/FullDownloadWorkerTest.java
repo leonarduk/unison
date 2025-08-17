@@ -15,7 +15,6 @@ import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
-import uk.co.sleonard.unison.utils.StringUtils;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -47,9 +46,7 @@ public class FullDownloadWorkerTest {
     public void setUp() throws Exception {
         this.newsClient = Mockito.mock(NewsClient.class);
         this.outQueue = new LinkedBlockingQueue<>();
-        final String[] servers = StringUtils.loadServerList();
-        Assert.assertTrue("No servers configured", servers.length > 0);
-        this.worker = new FullDownloadWorker(servers[0], this.outQueue, this.newsClient);
+        this.worker = new FullDownloadWorker("server", this.outQueue, this.newsClient);
     }
 
     /**
@@ -110,9 +107,7 @@ public class FullDownloadWorkerTest {
     public void testConstruct() {
         FullDownloadWorker actual;
         try {
-            final String[] servers = StringUtils.loadServerList();
-            Assert.assertTrue("No servers configured", servers.length > 0);
-            actual = new FullDownloadWorker(servers[0], new LinkedBlockingQueue(),
+            actual = new FullDownloadWorker("server", new LinkedBlockingQueue(),
                     this.newsClient);
             Assert.assertNotNull(actual);
         } catch (final UNISoNException e) {

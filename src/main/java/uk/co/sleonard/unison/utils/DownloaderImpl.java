@@ -7,6 +7,7 @@
 package uk.co.sleonard.unison.utils;
 
 import uk.co.sleonard.unison.UNISoNController;
+import org.hibernate.Session;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;

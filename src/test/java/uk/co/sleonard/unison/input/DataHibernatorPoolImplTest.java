@@ -7,24 +7,20 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-/**
- * Tests for {@link DataHibernatorPoolImpl}.
- */
+/** Tests for {@link DataHibernatorPoolImpl}. */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(DataHibernatorWorker.class)
 public class DataHibernatorPoolImplTest {
 
-    /**
-     * Verifies stopAllDownloads delegates to DataHibernatorWorker.stopDownload().
-     */
-    @Test
-    public void testStopAllDownloadsDelegates() {
-        PowerMockito.mockStatic(DataHibernatorWorker.class);
+  /** Verifies stopAllDownloads delegates to DataHibernatorWorker.stopDownload(). */
+  @Test
+  public void testStopAllDownloadsDelegates() {
+    PowerMockito.mockStatic(DataHibernatorWorker.class);
 
-        DataHibernatorPool pool = new DataHibernatorPoolImpl();
-        pool.stopAllDownloads();
+    DataHibernatorPool pool = new DataHibernatorPoolImpl();
+    pool.stopAllDownloads();
 
-        PowerMockito.verifyStatic(DataHibernatorWorker.class, Mockito.times(1));
-        DataHibernatorWorker.stopDownload();
-    }
+    PowerMockito.verifyStatic(DataHibernatorWorker.class, Mockito.times(1));
+    DataHibernatorWorker.stopDownload();
+  }
 }

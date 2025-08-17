@@ -1,163 +1,162 @@
 /**
  * DataHibernatorWorker.java
- * <p>
- * Created on 24 October 2007, 18:10
- * <p>
- * To change this template, choose Tools | Template Manager and open the template in the editor.
+ *
+ * <p>Created on 24 October 2007, 18:10
+ *
+ * <p>To change this template, choose Tools | Template Manager and open the template in the editor.
  */
-
 package uk.co.sleonard.unison.input;
-
-import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Session;
-import uk.co.sleonard.unison.datahandling.HibernateHelper;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.concurrent.LinkedBlockingQueue;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Session;
+import uk.co.sleonard.unison.datahandling.HibernateHelper;
 
 /**
  * The Class DataHibernatorWorker.
  *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
- *
  */
 @Slf4j
 public class DataHibernatorWorker extends SwingWorker {
 
-    /** The number of hibernators. */
-    private static int numberofHibernators = 20;
+  /** The number of hibernators. */
+  private static int numberofHibernators = 20;
 
-    /** The workers. */
-    private static ArrayList<DataHibernatorWorker> workers = new ArrayList<>();
+  /** The workers. */
+  private static ArrayList<DataHibernatorWorker> workers = new ArrayList<>();
 
-    /** The reader. */
-    private final NewsGroupReader reader;
+  /** The reader. */
+  private final NewsGroupReader reader;
 
-    /** The save to database. */
-    private boolean saveToDatabase = true;
+  /** The save to database. */
+  private boolean saveToDatabase = true;
 
-    private final HibernateHelper helper;
+  private final HibernateHelper helper;
 
-    private final LinkedBlockingQueue<NewsArticle> queue;
+  private final LinkedBlockingQueue<NewsArticle> queue;
 
-    private final Session session;
+  private final Session session;
 
-    /**
-     * Start hibernators.
-     *
-     * @param helper2
-     * @param queue2
-     * @param session2
-     */
-    public synchronized static void startHibernators(final NewsGroupReader nntpReader,
-                                                     final HibernateHelper helper2, final LinkedBlockingQueue<NewsArticle> queue2,
-                                                     final Session session2) {
-        while (DataHibernatorWorker.workers.size() < DataHibernatorWorker.numberofHibernators) {
-            DataHibernatorWorker.workers
-                    .add(new DataHibernatorWorker(nntpReader, helper2, queue2, session2));
+  /**
+   * Start hibernators.
+   *
+   * @param helper2
+   * @param queue2
+   * @param session2
+   */
+  public static synchronized void startHibernators(
+      final NewsGroupReader nntpReader,
+      final HibernateHelper helper2,
+      final LinkedBlockingQueue<NewsArticle> queue2,
+      final Session session2) {
+    while (DataHibernatorWorker.workers.size() < DataHibernatorWorker.numberofHibernators) {
+      DataHibernatorWorker.workers.add(
+          new DataHibernatorWorker(nntpReader, helper2, queue2, session2));
+    }
+  }
+
+  /** Stop download. */
+  static void stopDownload() {
+    for (final ListIterator<DataHibernatorWorker> iter =
+            DataHibernatorWorker.workers.listIterator();
+        iter.hasNext(); ) {
+      iter.next().interrupt();
+    }
+  }
+
+  /**
+   * Creates a new instance of DataHibernatorWorker.
+   *
+   * @param reader the reader
+   * @param helper2
+   */
+  private DataHibernatorWorker(
+      final NewsGroupReader reader,
+      final HibernateHelper helper2,
+      final LinkedBlockingQueue<NewsArticle> queue,
+      final Session session2) {
+    super("DataHibernatorWorker");
+    this.helper = helper2;
+    this.reader = reader;
+    this.queue = queue;
+    this.session = session2;
+    log.debug("Creating " + this.getClass() + " " + reader.getNumberOfMessages());
+    this.start();
+  }
+
+  /*
+   * (non-Javadoc)
+   *
+   * @see uk.co.sleonard.unison.input.SwingWorker#construct()
+   */
+  @Override
+  public Object construct() {
+    log.debug("construct : " + this.saveToDatabase + " queue " + this.queue.size());
+
+    try {
+      // HAve one session per worker rather than per message
+      while (this.saveToDatabase) {
+        this.pollQueue(this.queue, this.session);
+        // wait a second
+        Thread.sleep(5000);
+        // completed save so close down
+        if (this.queue.isEmpty()) {
+          this.saveToDatabase = false;
         }
+      }
+      DataHibernatorWorker.workers.remove(this);
+      if (DataHibernatorWorker.workers.size() == 0) {
+        log.info("Download complete");
+      }
+    } catch (
+        @SuppressWarnings("unused")
+        final InterruptedException e) {
+      Thread.currentThread().interrupt();
+      return "Interrupted";
     }
+    return "Completed";
+  }
 
-    /**
-     * Stop download.
-     */
-    static void stopDownload() {
-        for (final ListIterator<DataHibernatorWorker> iter = DataHibernatorWorker.workers
-                .listIterator(); iter.hasNext(); ) {
-            iter.next().interrupt();
+  /**
+   * Poll for message.
+   *
+   * @param queue the queue
+   * @return the news article
+   */
+  private synchronized NewsArticle pollForMessage(final LinkedBlockingQueue<NewsArticle> queue) {
+    final NewsArticle article = queue.poll();
+    return article;
+  }
+
+  private void pollQueue(final LinkedBlockingQueue<NewsArticle> queue, final Session session)
+      throws InterruptedException {
+    while (!queue.isEmpty()) {
+      if (Thread.currentThread().isInterrupted()) {
+        this.stopHibernatingData();
+        throw new InterruptedException();
+      }
+
+      final NewsArticle article = this.pollForMessage(queue);
+      if (null != article) {
+        log.debug("Hibernating " + article.getArticleID() + " " + queue.size());
+
+        if (this.helper.hibernateData(article, session)) {
+          this.reader.incrementMessagesStored();
+        } else {
+          this.reader.incrementMessagesSkipped();
         }
+        this.reader.showDownloadStatus();
+      }
     }
+  }
 
-    /**
-     * Creates a new instance of DataHibernatorWorker.
-     *
-     * @param reader
-     *            the reader
-     * @param helper2
-     */
-    private DataHibernatorWorker(final NewsGroupReader reader, final HibernateHelper helper2,
-                                 final LinkedBlockingQueue<NewsArticle> queue, final Session session2) {
-        super("DataHibernatorWorker");
-        this.helper = helper2;
-        this.reader = reader;
-        this.queue = queue;
-        this.session = session2;
-        log.debug("Creating " + this.getClass() + " " + reader.getNumberOfMessages());
-        this.start();
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see uk.co.sleonard.unison.input.SwingWorker#construct()
-     */
-    @Override
-    public Object construct() {
-        log.debug("construct : " + this.saveToDatabase + " queue " + this.queue.size());
-
-        try {
-            // HAve one session per worker rather than per message
-            while (this.saveToDatabase) {
-                this.pollQueue(this.queue, this.session);
-                // wait a second
-                Thread.sleep(5000);
-                // completed save so close down
-                if (this.queue.isEmpty()) {
-                    this.saveToDatabase = false;
-                }
-            }
-            DataHibernatorWorker.workers.remove(this);
-            if (DataHibernatorWorker.workers.size() == 0) {
-              log.info("Download complete");
-            }
-        } catch (@SuppressWarnings("unused") final InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return "Interrupted";
-        }
-        return "Completed";
-    }
-
-    /**
-     * Poll for message.
-     *
-     * @param queue
-     *            the queue
-     * @return the news article
-     */
-    private synchronized NewsArticle pollForMessage(final LinkedBlockingQueue<NewsArticle> queue) {
-        final NewsArticle article = queue.poll();
-        return article;
-    }
-
-    private void pollQueue(final LinkedBlockingQueue<NewsArticle> queue, final Session session)
-            throws InterruptedException {
-        while (!queue.isEmpty()) {
-            if (Thread.currentThread().isInterrupted()) {
-                this.stopHibernatingData();
-                throw new InterruptedException();
-            }
-
-            final NewsArticle article = this.pollForMessage(queue);
-            if (null != article) {
-                log.debug("Hibernating " + article.getArticleID() + " " + queue.size());
-
-                if (this.helper.hibernateData(article, session)) {
-                    this.reader.incrementMessagesStored();
-                } else {
-                    this.reader.incrementMessagesSkipped();
-                }
-                this.reader.showDownloadStatus();
-            }
-        }
-    }
-
-    /**
-     * Stop hibernating data.
-     */
-    private void stopHibernatingData() {
-        log.warn("StopHibernatingData");
-        this.saveToDatabase = false;
-    }
+  /** Stop hibernating data. */
+  private void stopHibernatingData() {
+    log.warn("StopHibernatingData");
+    this.saveToDatabase = false;
+  }
 }

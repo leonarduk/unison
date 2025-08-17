@@ -15,8 +15,7 @@ import org.junit.Test;
  * @author Elton <elton_12_nunes@hotmail.com>
  */
 @SuppressWarnings("serial")
-class TestUsenetUser extends UsenetUser {
-}
+class TestUsenetUser extends UsenetUser {}
 
 /**
  * The Class IpAddressTest.
@@ -26,132 +25,112 @@ class TestUsenetUser extends UsenetUser {
  */
 public class UsenetUserTest {
 
-    /**
-     * Test Constructor
-     */
-    @Test
-    public void testConstructor() {
-        UsenetUser actual = null;
-        final String expected = "John";
-        final String expected2 = "john@java.com";
-        final String expected3 = "127.0.0.1";
-        final String expected4 = "Programming";
-        final Location expected5 = new Location();
-        actual = new UsenetUser(expected, expected2, expected3, expected4, expected5);
-        Assert.assertEquals(expected, actual.getName());
-        Assert.assertEquals(expected2, actual.getEmail());
-        Assert.assertEquals(expected3, actual.getIpaddress());
-        Assert.assertEquals(expected4, actual.getGender());
-        Assert.assertEquals(expected5, actual.getLocation());
-    }
+  /** Test Constructor */
+  @Test
+  public void testConstructor() {
+    UsenetUser actual = null;
+    final String expected = "John";
+    final String expected2 = "john@java.com";
+    final String expected3 = "127.0.0.1";
+    final String expected4 = "Programming";
+    final Location expected5 = new Location();
+    actual = new UsenetUser(expected, expected2, expected3, expected4, expected5);
+    Assert.assertEquals(expected, actual.getName());
+    Assert.assertEquals(expected2, actual.getEmail());
+    Assert.assertEquals(expected3, actual.getIpaddress());
+    Assert.assertEquals(expected4, actual.getGender());
+    Assert.assertEquals(expected5, actual.getLocation());
+  }
 
-    /**
-     * Test copy constructor.
-     */
-    @Test
-    public void testCopyConstructor() {
-        final Location location = new Location();
-        final UsenetUser original = new UsenetUser("John", "john@java.com", "127.0.0.1", "Programming", location);
-        original.setId(123);
+  /** Test copy constructor. */
+  @Test
+  public void testCopyConstructor() {
+    final Location location = new Location();
+    final UsenetUser original =
+        new UsenetUser("John", "john@java.com", "127.0.0.1", "Programming", location);
+    original.setId(123);
 
-        final UsenetUser copy = new UsenetUser(original);
-        Assert.assertEquals(original.getName(), copy.getName());
-        Assert.assertEquals(original.getEmail(), copy.getEmail());
-        Assert.assertEquals(original.getIpaddress(), copy.getIpaddress());
-        Assert.assertEquals(original.getGender(), copy.getGender());
-        Assert.assertEquals(original.getLocation(), copy.getLocation());
-        Assert.assertEquals(original.getId(), copy.getId());
-    }
+    final UsenetUser copy = new UsenetUser(original);
+    Assert.assertEquals(original.getName(), copy.getName());
+    Assert.assertEquals(original.getEmail(), copy.getEmail());
+    Assert.assertEquals(original.getIpaddress(), copy.getIpaddress());
+    Assert.assertEquals(original.getGender(), copy.getGender());
+    Assert.assertEquals(original.getLocation(), copy.getLocation());
+    Assert.assertEquals(original.getId(), copy.getId());
+  }
 
-    /**
-     * Test getEmail.
-     */
-    @Test
-    public void testGetEmail() {
-        final String expected = "user@email.com";
-        final UsenetUser actual = new UsenetUser();
-        Assert.assertNull(actual.getEmail());
-        actual.setEmail(expected);
-        Assert.assertEquals(expected, actual.getEmail());
-    }
+  /** Test getEmail. */
+  @Test
+  public void testGetEmail() {
+    final String expected = "user@email.com";
+    final UsenetUser actual = new UsenetUser();
+    Assert.assertNull(actual.getEmail());
+    actual.setEmail(expected);
+    Assert.assertEquals(expected, actual.getEmail());
+  }
 
-    /**
-     * Test getGender.
-     */
-    @Test
-    public void testGetGender() {
-        final String expected = "gender";
-        final UsenetUser actual = new UsenetUser();
-        Assert.assertNull(actual.getGender());
-        actual.setGender(expected);
-        Assert.assertEquals(expected, actual.getGender());
-    }
+  /** Test getGender. */
+  @Test
+  public void testGetGender() {
+    final String expected = "gender";
+    final UsenetUser actual = new UsenetUser();
+    Assert.assertNull(actual.getGender());
+    actual.setGender(expected);
+    Assert.assertEquals(expected, actual.getGender());
+  }
 
-    /**
-     * Test getId.
-     */
-    @Test
-    public void testGetId() {
-        Assert.assertEquals(0, new UsenetUser().getId());
-    }
+  /** Test getId. */
+  @Test
+  public void testGetId() {
+    Assert.assertEquals(0, new UsenetUser().getId());
+  }
 
-    /**
-     * Test getIpAddress.
-     */
-    @Test
-    public void testGetIpaddress() {
-        final String expected = "127.0.0.1";
-        final UsenetUser actual = new UsenetUser();
-        Assert.assertNull(actual.getIpaddress());
-        actual.setIpaddress(expected);
-        Assert.assertEquals(expected, actual.getIpaddress());
-    }
+  /** Test getIpAddress. */
+  @Test
+  public void testGetIpaddress() {
+    final String expected = "127.0.0.1";
+    final UsenetUser actual = new UsenetUser();
+    Assert.assertNull(actual.getIpaddress());
+    actual.setIpaddress(expected);
+    Assert.assertEquals(expected, actual.getIpaddress());
+  }
 
-    /**
-     * Test getLocation.
-     */
-    @Test
-    public void testGetLocation() {
-        final Location expected = new Location(null, null, "BR", false, null, null);
-        final UsenetUser actual = new UsenetUser();
-        Assert.assertNull(actual.getLocation());
-        actual.setLocation(expected);
-        Assert.assertEquals(expected.getCountryCode(), actual.getLocation().getCountryCode());
-    }
+  /** Test getLocation. */
+  @Test
+  public void testGetLocation() {
+    final Location expected = new Location(null, null, "BR", false, null, null);
+    final UsenetUser actual = new UsenetUser();
+    Assert.assertNull(actual.getLocation());
+    actual.setLocation(expected);
+    Assert.assertEquals(expected.getCountryCode(), actual.getLocation().getCountryCode());
+  }
 
-    /**
-     * Test getName.
-     */
-    @Test
-    public void testGetName() {
-        final String expected = "name";
-        final UsenetUser actual = new UsenetUser();
-        Assert.assertNull(actual.getName());
-        actual.setName(expected);
-        Assert.assertEquals(expected, actual.getName());
-    }
+  /** Test getName. */
+  @Test
+  public void testGetName() {
+    final String expected = "name";
+    final UsenetUser actual = new UsenetUser();
+    Assert.assertNull(actual.getName());
+    actual.setName(expected);
+    Assert.assertEquals(expected, actual.getName());
+  }
 
-    /**
-     * Test hashCode
-     */
-    @Test
-    public void testHashCode() {
-        final TestUsenetUser actual1 = new TestUsenetUser();
-        final TestUsenetUser actual2 = new TestUsenetUser();
-        actual1.setEmail("a@2");
-        actual2.setEmail("a@22");
-        Assert.assertTrue(actual1.hashCode() != actual2.hashCode());
-    }
+  /** Test hashCode */
+  @Test
+  public void testHashCode() {
+    final TestUsenetUser actual1 = new TestUsenetUser();
+    final TestUsenetUser actual2 = new TestUsenetUser();
+    actual1.setEmail("a@2");
+    actual2.setEmail("a@22");
+    Assert.assertTrue(actual1.hashCode() != actual2.hashCode());
+  }
 
-    /**
-     * Test toString.
-     */
-    @Test
-    public void testToString() {
-        final String expected = "elton(elton_12_nunes@hotmail.com)";
-        final UsenetUser actual = new UsenetUser("elton", "elton_12_nunes@hotmail.com", null,
-                expected, null);
-        Assert.assertEquals(expected, actual.toString());
-    }
-
+  /** Test toString. */
+  @Test
+  public void testToString() {
+    final String expected = "elton(elton_12_nunes@hotmail.com)";
+    final UsenetUser actual =
+        new UsenetUser("elton", "elton_12_nunes@hotmail.com", null, expected, null);
+    Assert.assertEquals(expected, actual.toString());
+  }
 }

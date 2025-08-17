@@ -21,26 +21,25 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class Relationship {
 
-    @Getter
-    private static final boolean directed = true;
+  @Getter private static final boolean directed = true;
 
-    private final int owner;
+  private final int owner;
 
-    private final int target;
+  private final int target;
 
-    private int value = 1;
+  private int value = 1;
 
-    public Relationship(final int owner, final int target) {
-        this.owner = owner;
-        this.target = target;
-    }
+  public Relationship(final int owner, final int target) {
+    this.owner = owner;
+    this.target = target;
+  }
 
-    /**
-     * Increment value.
-     *
-     * @return the int
-     */
-    int incrementValue() {
-        return ++this.value;
-    }
+  /**
+   * Increment value.
+   *
+   * @return the int
+   */
+  int incrementValue() {
+    return ++this.value;
+  }
 }

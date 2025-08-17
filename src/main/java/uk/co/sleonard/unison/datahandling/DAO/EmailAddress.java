@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class EmailAddress {
-    private final String name;
-    private final String email;
-    private final String ipAddress;
+  private final String name;
+  private final String email;
+  private final String ipAddress;
 }

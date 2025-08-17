@@ -17,17 +17,14 @@ import org.junit.Test;
  */
 public class GUIItemTest {
 
-    private GUIItem<NewsGroup> guiItem;
+  private GUIItem<NewsGroup> guiItem;
 
-    /**
-     * Test getItem and toString
-     */
-    @Test
-    public void testGetItemAndToString() {
-        final NewsGroup expected = new NewsGroup();
-        this.guiItem = new GUIItem<>("name", expected);
-        Assert.assertEquals("name", this.guiItem.toString());
-        Assert.assertNotNull(this.guiItem.getObject());
-    }
-
+  /** Test getItem and toString */
+  @Test
+  public void testGetItemAndToString() {
+    final NewsGroup expected = new NewsGroup();
+    this.guiItem = new GUIItem<>("name", expected);
+    Assert.assertEquals("name", this.guiItem.toString());
+    Assert.assertNotNull(this.guiItem.getObject());
+  }
 }

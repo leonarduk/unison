@@ -12,34 +12,30 @@ import lombok.Setter;
  */
 public class TreeNode extends DefaultMutableTreeNode {
 
-    /**
-     * The Constant serialVersionUID.
-     */
-    private static final long serialVersionUID = -8471464838090837440L;
+  /** The Constant serialVersionUID. */
+  private static final long serialVersionUID = -8471464838090837440L;
 
-    /** The node name. */
-    @Getter
-    @Setter
-    private String nodeName;
+  /** The node name. */
+  @Getter @Setter private String nodeName;
 
-    /**
-     * Instantiates a new tree node.
-     *
-     * @param childObject the child object
-     * @param name        the name
-     */
-    public TreeNode(final Object childObject, final String name) {
-        super(childObject);
-        this.nodeName = name;
-    }
+  /**
+   * Instantiates a new tree node.
+   *
+   * @param childObject the child object
+   * @param name the name
+   */
+  public TreeNode(final Object childObject, final String name) {
+    super(childObject);
+    this.nodeName = name;
+  }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see javax.swing.tree.DefaultMutableTreeNode#toString()
-     */
-    @Override
-    public String toString() {
-        return this.nodeName;
-    }
+  /*
+   * (non-Javadoc)
+   *
+   * @see javax.swing.tree.DefaultMutableTreeNode#toString()
+   */
+  @Override
+  public String toString() {
+    return this.nodeName;
+  }
 }

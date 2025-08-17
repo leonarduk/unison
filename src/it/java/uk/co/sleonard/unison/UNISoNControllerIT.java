@@ -6,6 +6,8 @@
  */
 package uk.co.sleonard.unison;
 
+import java.util.Set;
+import javax.swing.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,40 +16,34 @@ import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
 import uk.co.sleonard.unison.utils.StringUtils;
 
-import javax.swing.*;
-import java.util.Set;
-
 @Slf4j
 public class UNISoNControllerIT {
-    private UNISoNController controller;
+  private UNISoNController controller;
 
-    @Before
-    public void setUp() throws Exception {
-        this.controller = UNISoNController.create(null, new DataHibernatorPoolImpl());
-    }
+  @Before
+  public void setUp() throws Exception {
+    this.controller = UNISoNController.create(null, new DataHibernatorPoolImpl());
+  }
 
-    @Test
-    public final void testGetAvailableGroupsModel() throws UNISoNException {
-        final String[] servers = StringUtils.loadServerList();
-        Assert.assertTrue("No servers configured", servers.length > 0);
-        final Set<NewsGroup> groups = this.controller.listNewsgroups("", servers[0],
-                this.controller.getNntpReader().getClient());
-        final ListModel<NewsGroup> model = this.controller.getAvailableGroupsModel(groups);
-        final NewsGroup firstGroup = model.getElementAt(0);
-        Assert.assertNotNull(firstGroup);
-        Assert.assertTrue(org.apache.commons.lang3.StringUtils.isNotEmpty(firstGroup.getFullName()));
+  @Test
+  public final void testGetAvailableGroupsModel() throws UNISoNException {
+    final String[] servers = StringUtils.loadServerList();
+    Assert.assertTrue("No servers configured", servers.length > 0);
+    final Set<NewsGroup> groups =
+        this.controller.listNewsgroups("", servers[0], this.controller.getNntpReader().getClient());
+    final ListModel<NewsGroup> model = this.controller.getAvailableGroupsModel(groups);
+    final NewsGroup firstGroup = model.getElementAt(0);
+    Assert.assertNotNull(firstGroup);
+    Assert.assertTrue(org.apache.commons.lang3.StringUtils.isNotEmpty(firstGroup.getFullName()));
+  }
 
-    }
-
-    @Test
-    public final void testListnewsgroups() throws UNISoNException {
-        final String[] servers = StringUtils.loadServerList();
-        Assert.assertTrue("No servers configured", servers.length > 0);
-        final Set<NewsGroup> groups = this.controller.listNewsgroups("", servers[0],
-                this.controller.getNntpReader().getClient());
-        Assert.assertTrue(groups.size() > 0);
-        log.info("Found " + groups.size());
-
-    }
-
+  @Test
+  public final void testListnewsgroups() throws UNISoNException {
+    final String[] servers = StringUtils.loadServerList();
+    Assert.assertTrue("No servers configured", servers.length > 0);
+    final Set<NewsGroup> groups =
+        this.controller.listNewsgroups("", servers[0], this.controller.getNntpReader().getClient());
+    Assert.assertTrue(groups.size() > 0);
+    log.info("Found " + groups.size());
+  }
 }

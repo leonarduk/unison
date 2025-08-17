@@ -1,20 +1,17 @@
 package uk.co.sleonard.unison.datahandling;
 
+import static org.junit.Assert.assertNotNull;
+
 import org.hibernate.Session;
 import org.junit.Test;
 
-import static org.junit.Assert.assertNotNull;
-
-/**
- * Tests for {@link SessionManager}.
- */
+/** Tests for {@link SessionManager}. */
 public class SessionManagerTest {
 
-    @Test
-    public void testOpenSession() throws Exception {
-        try (Session session = SessionManager.openSession()) {
-            assertNotNull(session);
-        }
+  @Test
+  public void testOpenSession() throws Exception {
+    try (Session session = SessionManager.openSession()) {
+      assertNotNull(session);
     }
+  }
 }
-

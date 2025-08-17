@@ -19,12 +19,11 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class GUIItem<T> {
-    private final String name;
-    private final T object;
+  private final String name;
+  private final T object;
 
-    @Override
-    public String toString() {
-        return this.name;
-    }
-
+  @Override
+  public String toString() {
+    return this.name;
+  }
 }

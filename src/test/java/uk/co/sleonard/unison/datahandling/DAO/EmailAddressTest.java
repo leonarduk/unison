@@ -6,10 +6,10 @@
  */
 package uk.co.sleonard.unison.datahandling.DAO;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * The Class EmailAddressTest.
@@ -27,7 +27,7 @@ public class EmailAddressTest {
     public void testGetEmail() {
         final String expected = "email";
         final EmailAddress actual = new EmailAddress(null, expected, null);
-        Assert.assertEquals(expected, actual.getEmail());
+        Assertions.assertEquals(expected, actual.getEmail());
     }
 
     /**
@@ -37,7 +37,7 @@ public class EmailAddressTest {
     public void testGetIpAddress() {
         final String expected = "ipAddress";
         final EmailAddress actual = new EmailAddress(null, null, expected);
-        Assert.assertEquals(expected, actual.getIpAddress());
+        Assertions.assertEquals(expected, actual.getIpAddress());
     }
 
     /**
@@ -47,7 +47,7 @@ public class EmailAddressTest {
     public void testGetName() {
         final String expected = "name";
         final EmailAddress actual = new EmailAddress(expected, null, null);
-        Assert.assertEquals(expected, actual.getName());
+      Assertions.assertEquals(expected, actual.getName());
     }
 
     /**

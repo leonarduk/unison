@@ -109,7 +109,7 @@ public class PajekNetworkFile {
             link.incrementValue();
         } else {
 
-            // System.out.println("Create " + link);
+            log.debug("Create {}", link);
             links.add(link);
         }
         return link;
@@ -143,7 +143,7 @@ public class PajekNetworkFile {
             final String key = row.get(2);
             final String value = row.get(3);
 
-            // System.out.println(key + " " + value);
+            log.debug("{} {}", key, value);
 
             if ((null != value) && !value.equals("")) {
                 this.addRelationship(key, value, links);

@@ -6,8 +6,8 @@
  */
 package uk.co.sleonard.unison.datahandling.DAO;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -39,8 +39,8 @@ public class TopicTest {
         final Set<NewsGroup> expected2 = new HashSet<>();
 
         actual = new Topic(expected, expected2);
-        Assert.assertEquals(expected, actual.getSubject());
-        Assert.assertEquals(expected2, actual.getNewsgroups());
+        Assertions.assertEquals(expected, actual.getSubject());
+        Assertions.assertEquals(expected2, actual.getNewsgroups());
     }
 
     /**
@@ -48,7 +48,7 @@ public class TopicTest {
      */
     @Test
     public void testGetId() {
-        Assert.assertEquals(0, new Topic().getId());
+        Assertions.assertEquals(0, new Topic().getId());
     }
 
     /**
@@ -58,10 +58,10 @@ public class TopicTest {
     public void testGetNewsgroups() {
         final Set<NewsGroup> expected = new HashSet<>(0);
         final Topic actual = new Topic();
-        Assert.assertEquals(expected.size(), actual.getNewsgroups().size());
+        Assertions.assertEquals(expected.size(), actual.getNewsgroups().size());
         expected.add(new NewsGroup());
         actual.setNewsgroups(expected);
-        Assert.assertEquals(expected.size(), actual.getNewsgroups().size());
+        Assertions.assertEquals(expected.size(), actual.getNewsgroups().size());
     }
 
     /**
@@ -71,9 +71,9 @@ public class TopicTest {
     public void testGetSubject() {
         final String expected = "subject";
         final Topic actual = new Topic();
-        Assert.assertNull(actual.getSubject());
+        Assertions.assertNull(actual.getSubject());
         actual.setSubject(expected);
-        Assert.assertEquals(expected, actual.getSubject());
+        Assertions.assertEquals(expected, actual.getSubject());
     }
 
     /**
@@ -85,7 +85,7 @@ public class TopicTest {
         final TestTopic actual2 = new TestTopic();
         actual1.setSubject("abc");
         actual2.setSubject("def");
-        Assert.assertTrue(actual1.hashCode() != actual2.hashCode());
+        Assertions.assertTrue(actual1.hashCode() != actual2.hashCode());
     }
 
     /**
@@ -95,6 +95,6 @@ public class TopicTest {
     public void testToString() {
         final String expected = new String("subject");
         final Topic actual = new Topic(expected, null);
-        Assert.assertEquals(expected, actual.toString());
+        Assertions.assertEquals(expected, actual.toString());
     }
 }

@@ -119,25 +119,6 @@ public class NewsArticle {
      */
     public List<String> getNewsgroupsList() {
         return StringUtils.convertStringToList(this.getNewsgroups(), ",");
-
-        // final StringTokenizer fields = new StringTokenizer(
-        // this.getNewsgroups(), " ");
-        // final Vector<String> crosspostGroups = new Vector<String>();
-        //
-        // while (fields.hasMoreElements()) {
-        // String nextToken = fields.nextToken();
-        //
-        // // in case group is listed with its message number
-        // // e.g. de.soc.senioren:56345
-        // if (nextToken.contains(":")) {
-        // nextToken = nextToken.substring(0, nextToken.indexOf(":"));
-        // }
-        //
-        // crosspostGroups.add(nextToken);
-        // // System.out.println("Adding " + nextToken);
-        //
-        // }
-        // return crosspostGroups;
     }
 
 

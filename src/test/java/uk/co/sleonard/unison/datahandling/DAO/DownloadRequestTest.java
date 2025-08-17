@@ -1,9 +1,9 @@
 package uk.co.sleonard.unison.datahandling.DAO;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * The Class DownloadRequestTest.
@@ -18,9 +18,9 @@ public class DownloadRequestTest {
      */
     @Test
     public void testGetUsenetID() {
-        String expected = new String("usenet");
-        DownloadRequest actual = new DownloadRequest(expected, DownloadMode.ALL);
-        assertEquals(expected, actual.getUsenetID());
+        var expected = new String("usenet");
+        var actual = new DownloadRequest(expected, DownloadMode.ALL);
+        assertEquals(expected, actual.usenetID());
     }
 
     /**
@@ -28,9 +28,9 @@ public class DownloadRequestTest {
      */
     @Test
     public void testGetMode() {
-        DownloadMode expected = DownloadMode.ALL;
-        DownloadRequest actual = new DownloadRequest("usenet", expected);
-        assertEquals(expected, actual.getMode());
+        var expected = DownloadMode.ALL;
+        var actual = new DownloadRequest("usenet", expected);
+        assertEquals(expected, actual.mode());
     }
 
 }

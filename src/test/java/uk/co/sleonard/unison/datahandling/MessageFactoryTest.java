@@ -1,6 +1,6 @@
 package uk.co.sleonard.unison.datahandling;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
@@ -8,7 +8,7 @@ import uk.co.sleonard.unison.input.NewsArticle;
 
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link MessageFactory}.

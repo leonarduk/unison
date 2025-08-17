@@ -2,13 +2,13 @@ package uk.co.sleonard.unison.datahandling;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import uk.co.sleonard.unison.datahandling.DAO.Location;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.input.NewsArticle;
+import uk.co.sleonard.unison.datahandling.UserFactory;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -30,9 +30,8 @@ public class HibernateHelperSetLocationTest {
 
         NewsArticle article = new NewsArticle("id", 1, new Date(), "name@example.com", "subject", "refs", "content", "group", null);
 
-        Method method = HibernateHelper.class.getDeclaredMethod("createUsenetUser", NewsArticle.class, Session.class, Location.class, String.class);
-        method.setAccessible(true);
-        method.invoke(helper, article, session, newLocation, null);
+        UserFactory userFactory = new UserFactory();
+        userFactory.createUsenetUser(article, session, newLocation, null, helper);
 
         Mockito.verify(poster, Mockito.times(1)).setLocation(newLocation);
     }

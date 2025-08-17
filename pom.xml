@@ -14,6 +14,8 @@
         <java.version>21</java.version>
         <mockito.version>5.19.0</mockito.version>
         <lombok.version>1.18.38</lombok.version>
+        <junit.jupiter.version>5.10.2</junit.jupiter.version>
+        <jacoco.version>0.8.11</jacoco.version>
         <maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
         <jms.version>3.1.0</jms.version>
         <javassist.version>3.30.2-GA</javassist.version>
@@ -29,6 +31,7 @@
         <swing-layout.version>1.0.3</swing-layout.version>
         <h2.version>2.2.224</h2.version>
         <it.includes></it.includes>
+        <jacoco.version>0.8.11</jacoco.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -145,11 +148,59 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
                 <configuration>
+                    <argLine>${argLine}</argLine>
                     <includes>
                         <include>**/*Test.java</include>
                         <include>${it.includes}</include>
                     </includes>
+                    <useModulePath>false</useModulePath>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.80</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>uk/co/sleonard/unison/gui/*.class</exclude>
+                        <exclude>uk/co/sleonard/unison/gui/generated/*.class</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
@@ -204,6 +255,7 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
+            <scope>runtime</scope>
         </dependency>
 
         <!-- Caused by: java.lang.ClassNotFoundException: javassist.util.proxy.MethodFilter -->
@@ -255,9 +307,22 @@
         </dependency>
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -324,6 +389,12 @@
             <version>${lombok.version}</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>26.0.2</version>
+        </dependency>
     </dependencies>
 
     <reporting>
@@ -382,38 +453,6 @@
         </developer>
     </developers><!-- to get to sona type and onto maven central -->
     <profiles>
-        <profile>
-            <id>coverage</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.jacoco</groupId>
-                        <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>${jacoco.version}</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>prepare-agent</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>report</id>
-                                <phase>test</phase>
-                                <goals>
-                                    <goal>report</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <excludes>
-                                <exclude>uk/co/sleonard/unison/gui/*.class</exclude>
-                                <exclude>uk/co/sleonard/unison/gui/generated/*.class</exclude>
-                            </excludes>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <profile>
             <id>release</id>
             <build>

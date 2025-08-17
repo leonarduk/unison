@@ -27,6 +27,8 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The Class StringUtils. </br>
@@ -72,17 +74,12 @@ public class StringUtils {
      * @return the list
      */
     static List<String> convertCommasToList(final String commaSeparatedString) {
-        final List<String> words = new ArrayList<>();
-
         if (commaSeparatedString == null || commaSeparatedString.isEmpty()) {
-            return words;
+            return new ArrayList<>();
         }
 
-        final String[] tokens = commaSeparatedString.split(",");
-        for (final String token : tokens) {
-            words.add(token);
-        }
-        return words;
+        var tokens = commaSeparatedString.split(",");
+        return Stream.of(tokens).collect(Collectors.toList());
     }
 
     /**
@@ -115,20 +112,20 @@ public class StringUtils {
      * @return the list
      */
     public static List<String> convertStringToList(final String field, final String delimiters) {
-        final List<String> list = new ArrayList<>();
-        if (null == field) {
+        var list = new ArrayList<String>();
+        if (field == null) {
             return list;
         }
         if (delimiters == null || delimiters.isEmpty()) {
             list.add(field);
             return list;
         }
-        final String regex = "[" + Pattern.quote(delimiters) + "]";
-        final String[] fields = field.split(regex);
+        var regex = "[" + Pattern.quote(delimiters) + "]";
+        var fields = field.split(regex);
 
-        for (final String nextToken : fields) {
+       for (final String nextToken : fields) {
             list.add(nextToken);
-            // System.out.println("Adding " + nextToken);
+            log.debug("Adding {}", nextToken);
         }
         return list;
     }
@@ -140,25 +137,23 @@ public class StringUtils {
      * @return the string
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    public static final String decompress(final byte[] compressed) throws IOException {
-        if (null == compressed) {
-            return null;
+    public static Optional<String> decompress(final byte[] compressed) throws IOException {
+        if (compressed == null) {
+            return Optional.empty();
         }
-        try (final ByteArrayOutputStream out = new ByteArrayOutputStream();
-             final ByteArrayInputStream in = new ByteArrayInputStream(compressed);
-             final ZipInputStream zin = new ZipInputStream(in);) {
-            final ZipEntry entry = zin.getNextEntry();
+        try (var out = new ByteArrayOutputStream();
+             var in = new ByteArrayInputStream(compressed);
+             var zin = new ZipInputStream(in)) {
+            var entry = zin.getNextEntry();
             entry.getName();
-            final byte[] buffer = new byte[1024];
-            int offset = zin.read(buffer);
-            while (offset != -1) {
+            var buffer = new byte[1024];
+            for (var offset = zin.read(buffer); offset != -1; offset = zin.read(buffer)) {
                 out.write(buffer, 0, offset);
-                offset = zin.read(buffer);
             }
-            final String decompressed = out.toString();
+            var decompressed = out.toString();
             out.close();
             zin.close();
-            return decompressed;
+            return Optional.of(decompressed);
         }
     }
 
@@ -170,18 +165,10 @@ public class StringUtils {
      * @return the string
      */
     public static String join(final String[] strings, final String delimiter) {
-        if ((strings == null) || (strings.length == 0)) {
+        if (strings == null || strings.length == 0) {
             return "";
         }
-        final StringBuilder buf = new StringBuilder();
-        for (int i = 0; i < strings.length; i++) {
-            if (i > 0) {
-                buf.append(delimiter);
-            }
-            buf.append(strings[i]);
-        }
-
-        return buf.toString();
+        return Stream.of(strings).collect(Collectors.joining(delimiter));
     }
 
     /**

@@ -23,7 +23,7 @@ public class UNISoNControllerIT {
 
     @Before
     public void setUp() throws Exception {
-        this.controller = UNISoNController.create(null, new DataHibernatorPoolImpl());
+        this.controller = new UNISoNControllerFactory().create(null, new DataHibernatorPoolImpl());
     }
 
     @Test

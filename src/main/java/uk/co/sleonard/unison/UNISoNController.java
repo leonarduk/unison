@@ -8,14 +8,11 @@ package uk.co.sleonard.unison;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
-import uk.co.sleonard.unison.datahandling.MessageCacheService;
-import uk.co.sleonard.unison.datahandling.MessageFactory;
-import uk.co.sleonard.unison.datahandling.SessionManager;
-import uk.co.sleonard.unison.datahandling.UserFactory;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DataQuery;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
+import uk.co.sleonard.unison.datahandling.SessionManager;
 import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
 import uk.co.sleonard.unison.gui.UNISoNGUI;
 import uk.co.sleonard.unison.gui.generated.DownloadNewsPanel;
@@ -141,11 +138,6 @@ public class UNISoNController {
         this.helper = helper;
         this.client = client;
 
-        this.messageQueue = new LinkedBlockingQueue<>();
-        MessageCacheService cacheService = new MessageCacheService();
-        MessageFactory messageFactory = new MessageFactory();
-        UserFactory userFactory = new UserFactory();
-        this.helper = new HibernateHelper(this.gui, cacheService, messageFactory, userFactory);
         try {
             final Session hibernateSession = SessionManager.openSession();
             this.setSession(hibernateSession);
@@ -446,9 +438,13 @@ public class UNISoNController {
      */
     public void setNntpHost(final String nntpHost) {
         this.nntpHost = nntpHost;
-        this.headerDownloader = new HeaderDownloadWorker(this.messageQueue,
-                new DownloaderImpl(this.nntpHost, this.messageQueue, this.client, this.nntpReader,
-                        this.helper, this.session));
+        this.headerDownloader = new HeaderDownloadWorker(
+                this.messageQueue,
+                new DownloaderImpl(this.nntpHost,
+                        this.messageQueue,
+                        this.client,
+                        this.nntpReader,
+                        this.helper));
         this.headerDownloader.initialise();
 
     }

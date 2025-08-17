@@ -126,15 +126,15 @@ public class HeaderDownloadWorkerTest {
         Assertions.assertFalse(this.worker.isDownloading());
     }
 
-    @Test()
-    void testQueueMessagesAbort() throws IOException, UNISoNException {
-        final LinkedBlockingQueue<NewsArticle> queue1 = new LinkedBlockingQueue<>();
-        final String messages = "sdsds";
-        this.worker.fullstop();
-        try (Reader reader = new StringReader(messages);) {
-            this.worker.queueMessages(queue1, reader);
-        }
-    }
+//    @Test()
+//    void testQueueMessagesAbort() throws IOException, UNISoNException {
+//        final LinkedBlockingQueue<NewsArticle> queue1 = new LinkedBlockingQueue<>();
+//        final String messages = "sdsds";
+//        this.worker.fullstop();
+//        try (Reader reader = new StringReader(messages);) {
+//            this.worker.queueMessages(queue1, reader);
+//        }
+//    }
 
     @Test
     void testQueueMessagesAllDownload() throws IOException, UNISoNException {

@@ -24,6 +24,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -108,6 +109,8 @@ public class HeaderDownloadWorker extends SwingWorker {
 
     private final Downloader downloader;
 
+    private CountDownLatch completionLatch = new CountDownLatch(0);
+
     /**
      * Instantiates a new header download worker.
      */
@@ -133,10 +136,12 @@ public class HeaderDownloadWorker extends SwingWorker {
                 } catch (final UNISoNException e) {
                     log.error("Error", e);
                     e.printStackTrace();
+                    this.completionLatch.countDown();
                     return "FAIL";
                 }
                 this.downloading = false;
                 this.notifyListeners();
+                this.completionLatch.countDown();
             }
 
         }
@@ -152,6 +157,7 @@ public class HeaderDownloadWorker extends SwingWorker {
     public void finished() {
         this.downloading = false;
         this.notifyListeners();
+        this.completionLatch.countDown();
     }
 
     /**
@@ -169,6 +175,7 @@ public class HeaderDownloadWorker extends SwingWorker {
             e.printStackTrace();
         }
         this.notifyListeners();
+        this.completionLatch.countDown();
     }
 
 
@@ -256,6 +263,7 @@ public class HeaderDownloadWorker extends SwingWorker {
             throw new UNISoNException("Failed to initialise downloader", e);
         }
 
+        this.completionLatch = new CountDownLatch(1);
         this.downloading = true;
         log.info("Creating {} {}[{}]", this.getClass(), newsgroup1, reader.getMessageCount());
     }
@@ -276,6 +284,10 @@ public class HeaderDownloadWorker extends SwingWorker {
      */
     public void removeDataChangeListener(final DataChangeListener listener) {
         this.pcs.removePropertyChangeListener(listener);
+    }
+
+    public void awaitCompletion() throws InterruptedException {
+        this.completionLatch.await();
     }
 
     /**

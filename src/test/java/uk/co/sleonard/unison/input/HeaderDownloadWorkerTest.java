@@ -249,6 +249,38 @@ class HeaderDownloadWorkerTest {
         spyWorker.fullstop();
     }
 
+    @Test
+    void testAwaitCompletion() throws Exception {
+        class TestWorker extends HeaderDownloadWorker {
+            TestWorker(LinkedBlockingQueue<NewsArticle> q, Downloader d) {
+                super(q, d);
+            }
+
+            @Override
+            boolean storeArticleInfo(final LinkedBlockingQueue<NewsArticle> q1) {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                return true;
+            }
+        }
+
+        final TestWorker worker = new TestWorker(new LinkedBlockingQueue<>(),
+                Mockito.mock(Downloader.class));
+        final NewsClient client = Mockito.mock(NewsClient.class);
+        final NewsGroupReader ngr = new NewsGroupReader(client,
+                Mockito.mock(UNISoNController.class));
+        worker.initialise();
+        worker.initialise(ngr, 0, 1, "server", "group", DownloadMode.BASIC, null, null);
+        final long start = System.currentTimeMillis();
+        worker.awaitCompletion();
+        final long elapsed = System.currentTimeMillis() - start;
+        Assertions.assertTrue(elapsed >= 200, () -> "Elapsed " + elapsed);
+        worker.fullstop();
+    }
+
     private void setField(final Object target, final String fieldName, final Object value) throws Exception {
         final Field field = target.getClass().getDeclaredField(fieldName);
         field.setAccessible(true);

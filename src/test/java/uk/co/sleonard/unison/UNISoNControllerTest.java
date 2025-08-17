@@ -1,6 +1,8 @@
 package uk.co.sleonard.unison;
 
 import org.junit.Test;
+import uk.co.sleonard.unison.UNISoNControllerFactory;
+import org.junit.jupiter.api.Test;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
 
@@ -8,7 +10,7 @@ import javax.swing.ListModel;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link UNISoNController} that operate fully in memory.
@@ -17,7 +19,7 @@ public class UNISoNControllerTest {
 
     @Test
     public void testGetAvailableGroupsModelUsesSuppliedGroups() throws UNISoNException {
-        UNISoNController controller = UNISoNController.create(null, new DataHibernatorPoolImpl());
+        UNISoNController controller = new UNISoNControllerFactory().create(null, new DataHibernatorPoolImpl());
 
         Set<NewsGroup> groups = new HashSet<>();
         NewsGroup group = new NewsGroup();

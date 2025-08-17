@@ -1,10 +1,10 @@
 package uk.co.sleonard.unison.input;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link UNISoNCLI} argument parsing.

@@ -9,6 +9,7 @@ package uk.co.sleonard.unison.gui.generated;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNControllerFactory;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
@@ -145,7 +146,7 @@ class PajekPanel extends javax.swing.JPanel implements DataChangeListener {
      */
     private final Vector<String> pajekHeader;
 
-    private UNISoNController controller;
+    private final UNISoNController controller;
 
     /**
      * The main method.
@@ -155,9 +156,9 @@ class PajekPanel extends javax.swing.JPanel implements DataChangeListener {
      */
     public static void main(final String[] args) throws UNISoNException {
         final JFrame frame = new JFrame();
-        UNISoNController.create(frame, new DataHibernatorPoolImpl());
-
-        final PajekPanel panel = new PajekPanel(frame);
+        UNISoNController controller = new UNISoNControllerFactory()
+                .create(frame, new DataHibernatorPoolImpl());
+        final PajekPanel panel = new PajekPanel(frame, controller);
         frame.add(panel);
         panel.setVisible(true);
         frame.setVisible(true);
@@ -170,13 +171,12 @@ class PajekPanel extends javax.swing.JPanel implements DataChangeListener {
      *
      * @param frame the frame
      */
-    PajekPanel(final JFrame frame) {
+    PajekPanel(final JFrame frame, final UNISoNController controller) {
         this.pajekHeader = new Vector<>(
                 Arrays.asList(new String[]{"Subject", "Date", "FROM", "TO"}));
         try {
-
             this.frame = frame;
-            this.controller = UNISoNController.getInstance();
+            this.controller = controller;
             this.session = this.controller.helper().getHibernateSession();
             this.initComponents();
 
@@ -250,11 +250,10 @@ class PajekPanel extends javax.swing.JPanel implements DataChangeListener {
      */
     private Vector<Vector<String>> getLatestPajekMatrixVector() {
         Vector<Vector<String>> tableData;
-        final List<Message> messages = UNISoNController.getInstance().getFilter()
-                .getMessagesFilter();
+        final List<Message> messages = this.controller.getFilter().getMessagesFilter();
         final HashMap<String, Message> msgMap = new HashMap<>();
 
-        final HibernateHelper helper = UNISoNController.getInstance().getHelper();
+        final HibernateHelper helper = this.controller.getHelper();
         // Load ALL messages into map so can get complete referemce
         final Vector<Message> allMessages = new DataQuery(helper).getMessages(null, null,
                 this.session, null, null, false, null, null);
@@ -470,7 +469,7 @@ class PajekPanel extends javax.swing.JPanel implements DataChangeListener {
      * @param evt the evt
      */
     private void previewButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_previewButtonActionPerformed
-        UNISoNController.getInstance().getDatabase().notifyListeners();
+        this.controller.getDatabase().notifyListeners();
     }// GEN-LAST:event_previewButtonActionPerformed
 
     /**

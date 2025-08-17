@@ -4,8 +4,8 @@
 package uk.co.sleonard.unison.gui.generated;
 
 import org.hibernate.Session;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import uk.co.sleonard.unison.NewsGroupFilter;
 import uk.co.sleonard.unison.UNISoNController;
@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.lang.reflect.Field;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for {@link MessageStoreViewer}.
@@ -29,7 +29,7 @@ public class MessageStoreViewerTest {
     private UNISoNController controller;
     private NewsGroupFilter filter;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.controller = Mockito.mock(UNISoNController.class);
         this.filter = Mockito.mock(NewsGroupFilter.class);
@@ -42,7 +42,6 @@ public class MessageStoreViewerTest {
         Mockito.when(this.controller.getFilter()).thenReturn(this.filter);
         Mockito.when(this.controller.getGui()).thenReturn(gui);
 
-        UNISoNController.setInstance(this.controller);
     }
 
     @Test
@@ -69,7 +68,7 @@ public class MessageStoreViewerTest {
         Mockito.when(this.filter.getSelectedNewsgroup()).thenReturn(selected);
         Mockito.when(this.filter.getTopicsFilter()).thenReturn(topics);
 
-        final MessageStoreViewer viewer = new MessageStoreViewer();
+        final MessageStoreViewer viewer = new MessageStoreViewer(this.controller);
         viewer.notifySelectedNewsGroupObservers();
 
         final Field rootField = MessageStoreViewer.class.getDeclaredField("topicRoot");

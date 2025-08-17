@@ -8,6 +8,7 @@ package uk.co.sleonard.unison.gui.generated;
 
 import org.hsqldb.util.DatabaseManagerSwing;
 import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNControllerFactory;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.UNISoNDatabase;
 import uk.co.sleonard.unison.gui.JSplashScreen;
@@ -147,7 +148,8 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements DataChangeL
         final JSplashScreen splash = new JSplashScreen("Loading ...", this);
         splash.setProgress(10);
 
-        this.controller = UNISoNController.create(this, new DataHibernatorPoolImpl());
+        UNISoNControllerFactory factory = new UNISoNControllerFactory();
+        this.controller = factory.create(this, new DataHibernatorPoolImpl());
 
         splash.setProgress(50);
         this.initComponents();
@@ -234,9 +236,9 @@ public class UNISoNTabbedFrame extends javax.swing.JFrame implements DataChangeL
     private void initComponents() {
         this.tabbedPane = new javax.swing.JTabbedPane();
         this.downloadNewsPanel1 = new uk.co.sleonard.unison.gui.generated.DownloadNewsPanel(
-                UNISoNController.getInstance());
-        this.messageStoreViewer1 = new uk.co.sleonard.unison.gui.generated.MessageStoreViewer();
-        this.pajekPanel1 = new uk.co.sleonard.unison.gui.generated.PajekPanel(this);
+                this.controller);
+        this.messageStoreViewer1 = new uk.co.sleonard.unison.gui.generated.MessageStoreViewer(this.controller);
+        this.pajekPanel1 = new uk.co.sleonard.unison.gui.generated.PajekPanel(this, this.controller);
         this.jMenuBar1 = new javax.swing.JMenuBar();
         this.fileMenu = new javax.swing.JMenu();
         this.refreshDBMenuItem = new javax.swing.JMenuItem();

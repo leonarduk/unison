@@ -4,8 +4,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
@@ -18,12 +18,14 @@ public class UsenetUserPersistenceTest {
     public void testPersistAndLoad() {
         Configuration cfg = new Configuration().configure();
         cfg.setProperty("hibernate.connection.url", "jdbc:hsqldb:mem:usenetuser;DB_CLOSE_DELAY=-1");
+        cfg.setProperty("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
+        cfg.setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
         cfg.setProperty("hibernate.hbm2ddl.auto", "create-drop");
 
         try (SessionFactory sf = cfg.buildSessionFactory();
              Session session = sf.openSession()) {
-            Assert.assertNotNull(sf.getClassMetadata(Location.class));
-            Assert.assertNotNull(sf.getClassMetadata(IpAddress.class));
+            Assertions.assertNotNull(sf.getClassMetadata(Location.class));
+            Assertions.assertNotNull(sf.getClassMetadata(IpAddress.class));
             Transaction tx = session.beginTransaction();
             Location location = new Location("City", "Country", "CC", false,
                     Collections.emptyList(), Collections.emptyList());
@@ -37,9 +39,9 @@ public class UsenetUserPersistenceTest {
 
             session.clear();
             UsenetUser fromDb = session.get(UsenetUser.class, user.getId());
-            Assert.assertNotNull(fromDb);
-            Assert.assertEquals("test@example.com", fromDb.getEmail());
-            Assert.assertEquals("City", fromDb.getLocation().getCity());
+            Assertions.assertNotNull(fromDb);
+            Assertions.assertEquals("test@example.com", fromDb.getEmail());
+            Assertions.assertEquals("City", fromDb.getLocation().getCity());
         }
     }
 }

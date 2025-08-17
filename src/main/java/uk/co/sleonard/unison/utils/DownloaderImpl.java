@@ -23,13 +23,7 @@ public class DownloaderImpl implements Downloader {
     private final NewsClient newsClient;
     private final NewsGroupReader nntpReader;
     private final HibernateHelper helper;
-
-    public DownloaderImpl() {
-        this(UNISoNController.getInstance().getNntpHost(),
-                UNISoNController.getInstance().getQueue(), new NewsClientImpl(),
-                UNISoNController.getInstance().getNntpReader(),
-                UNISoNController.getInstance().getHelper());
-    }
+    private final UNISoNController controller;
 
     public DownloaderImpl(final @NotNull String nntpHost,
                           final @NotNull LinkedBlockingQueue<NewsArticle> queue1,

@@ -6,9 +6,9 @@
  */
 package uk.co.sleonard.unison.output;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import uk.co.sleonard.unison.UNISoNException;
 
 import javax.swing.*;
@@ -56,7 +56,7 @@ public class ExportToCSVTest {
      * @throws Exception
      *             the exception
      */
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.export = new ExportToCSV();
 
@@ -80,13 +80,13 @@ public class ExportToCSVTest {
             final BufferedReader reader = new BufferedReader(fileReader);
             String currentLine = reader.readLine();
             while (currentLine != null) {
-                Assert.assertTrue(currentLine.contains("test"));
+                Assertions.assertTrue(currentLine.contains("test"));
                 currentLine = reader.readLine();
             }
             reader.close();
             file.delete();
         } catch (UNISoNException | IOException f) {
-            Assert.fail("ERROR: " + f.getMessage());
+            Assertions.fail("ERROR: " + f.getMessage());
         }
     }
 }

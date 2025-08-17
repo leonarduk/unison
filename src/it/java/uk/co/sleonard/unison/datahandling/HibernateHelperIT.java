@@ -10,7 +10,6 @@ import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Test;
 import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.input.HeaderDownloadWorkerIT;
 import uk.co.sleonard.unison.input.NewsArticle;
 
@@ -31,8 +30,8 @@ public class HibernateHelperIT {
         Assert.assertNotNull(article);
         // Assert.assertNotNull(helper.findUsenetUser(article, session));
 //		Assert.assertTrue(helper.hibernateData(article, session));
-        final UsenetUser user = helper
-                .findUsenetUser(UsenetUserHelper.parseFromField(article), session);
+//        final UsenetUser user = helper
+//                .findUsenetUser(UsenetUserHelper.parseFromField(article), session);
 //		Assert.assertNotNull(user);
 //		final Message message = helper.createMessage(article, null, user);
 //		final Message findMessage = helper.findMessage(message, session);

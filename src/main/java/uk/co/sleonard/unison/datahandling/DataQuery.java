@@ -12,6 +12,7 @@ import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The Class DataQuery.
@@ -52,13 +53,10 @@ public class DataQuery {
                                         final Vector<String> whereClauses) {
         log.debug("addWhereClause");
 
-        if (whereClauses.size() > 0) {
-            sqlBuffer.append(" WHERE " + whereClauses.get(0));
-            if (whereClauses.size() > 1) {
-                for (int i = 1; i < whereClauses.size(); i++) {
-                    sqlBuffer.append(" AND " + whereClauses.get(i));
-                }
-            }
+        if (!whereClauses.isEmpty()) {
+            sqlBuffer.append(" WHERE ").append(whereClauses.firstElement());
+            whereClauses.stream().skip(1)
+                    .forEach(clause -> sqlBuffer.append(" AND ").append(clause));
         }
         return sqlBuffer;
     }
@@ -80,16 +78,12 @@ public class DataQuery {
      * @return the locations sql
      */
     StringBuffer getLocationsSQL(final Vector<String> countries) {
-        final StringBuffer sqlBuffer = this.getBaseQuery(Location.class);
-        if (null != countries) {
+        var sqlBuffer = this.getBaseQuery(Location.class);
+        if (countries != null && !countries.isEmpty()) {
             sqlBuffer.append(" where country in ( ");
-            sqlBuffer.append("'" + countries.get(0) + "'");
-            if (countries.size() > 1) {
-                for (int i = 1; i < countries.size(); i++) {
-                    sqlBuffer.append(", '" + countries.get(i) + "'");
-                }
-            }
-            sqlBuffer.append(") ");
+            sqlBuffer.append(
+                    countries.stream().collect(Collectors.joining("','", "'", "'")));
+            sqlBuffer.append(" ) ");
         }
         return sqlBuffer;
     }
@@ -103,14 +97,12 @@ public class DataQuery {
     StringBuffer getMessageIdsString(final Vector<Message> users) {
         log.debug("getMessageIdsString");
 
-        final StringBuffer buf = new StringBuffer();
-        if ((users != null) && (users.size() > 0)) {
-            buf.append("'" + users.get(0).getId() + "'");
-            if (users.size() > 1) {
-                for (int i = 1; i < users.size(); i++) {
-                    buf.append(", '" + users.get(i).getId() + "'");
-                }
-            }
+        var buf = new StringBuffer();
+        if (users != null && !users.isEmpty()) {
+            var joined = users.stream()
+                    .map(user -> "'" + user.getId() + "'")
+                    .collect(Collectors.joining(", "));
+            buf.append(joined);
         }
         return buf;
     }
@@ -187,14 +179,12 @@ public class DataQuery {
      * @return the news group ids string
      */
     private String getNewsGroupIdsString(final List<NewsGroup> newsgroups) {
-        final StringBuffer buf = new StringBuffer();
-        if ((newsgroups != null) && (newsgroups.size() > 0)) {
-            buf.append("'" + newsgroups.get(0).getId() + "'");
-            if (newsgroups.size() > 1) {
-                for (int i = 1; i < newsgroups.size(); i++) {
-                    buf.append(", '" + newsgroups.get(i).getId() + "'");
-                }
-            }
+        var buf = new StringBuffer();
+        if (newsgroups != null && !newsgroups.isEmpty()) {
+            var joined = newsgroups.stream()
+                    .map(group -> "'" + group.getId() + "'")
+                    .collect(Collectors.joining(", "));
+            buf.append(joined);
         }
         return buf.toString();
     }
@@ -208,14 +198,12 @@ public class DataQuery {
     StringBuffer getUsenetUserIdsString(final Vector<UsenetUser> users) {
         log.debug("getUsenetUserIdsString");
 
-        final StringBuffer buf = new StringBuffer();
-        if ((users != null) && (users.size() > 0)) {
-            buf.append("'" + users.get(0).getId() + "'");
-            if (users.size() > 1) {
-                for (int i = 1; i < users.size(); i++) {
-                    buf.append(", '" + users.get(i).getId() + "'");
-                }
-            }
+        var buf = new StringBuffer();
+        if (users != null && !users.isEmpty()) {
+            var joined = users.stream()
+                    .map(user -> "'" + user.getId() + "'")
+                    .collect(Collectors.joining(", "));
+            buf.append(joined);
         }
 
         return buf;
@@ -229,14 +217,6 @@ public class DataQuery {
      * @return the string
      */
     String join(final Collection<String> s, final String delimiter) {
-        final StringBuffer buffer = new StringBuffer();
-        final Iterator<String> iter = s.iterator();
-        while (iter.hasNext()) {
-            buffer.append(iter.next());
-            if (iter.hasNext()) {
-                buffer.append(delimiter);
-            }
-        }
-        return buffer.toString();
+        return s.stream().collect(Collectors.joining(delimiter));
     }
 }

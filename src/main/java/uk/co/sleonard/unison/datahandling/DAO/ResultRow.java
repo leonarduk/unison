@@ -1,13 +1,4 @@
-/**
- * ResultRow
- *
- * @author ${author}
- * @since 20-Jun-2016
- */
 package uk.co.sleonard.unison.datahandling.DAO;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
 /**
  * The Class ResultRow.
@@ -16,13 +7,7 @@ import lombok.Data;
  * @since v1.0.0
  *
  */
-@Data
-@AllArgsConstructor
-public class ResultRow implements Comparable<ResultRow> {
-    private final Object key;
-    private final int count;
-    private final Class<?> type;
-
+public record ResultRow(Object key, int count, Class<?> type) implements Comparable<ResultRow> {
     /*
      * (non-Javadoc)
      *
@@ -36,6 +21,6 @@ public class ResultRow implements Comparable<ResultRow> {
 
     @Override
     public String toString() {
-        return this.getCount() + " " + this.getKey();
+        return this.count + " " + this.key;
     }
 }

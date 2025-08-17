@@ -26,7 +26,7 @@ public class StringUtilsTest {
      */
     @Test
     public void testConvertStringToList() {
-        List<String> list = StringUtils.convertStringToList("string-to-list-test", "-");
+        var list = StringUtils.convertStringToList("string-to-list-test", "-");
         assertEquals(4, list.size());
     }
 
@@ -35,7 +35,7 @@ public class StringUtilsTest {
      */
     @Test
     public void testConvertStringToListIfNull() {
-        List<String> list = StringUtils.convertStringToList(null, "");
+        var list = StringUtils.convertStringToList(null, "");
         assertTrue(list.isEmpty());
     }
 
@@ -44,7 +44,7 @@ public class StringUtilsTest {
      */
     @Test
     public void testConvertCommasToList() {
-        List<String> list = StringUtils.convertCommasToList("comma, separated, string");
+        var list = StringUtils.convertCommasToList("comma, separated, string");
         assertEquals(3, list.size());
     }
 
@@ -53,7 +53,7 @@ public class StringUtilsTest {
      */
     @Test
     public void testConvertCommasToListIfNull() {
-        List<String> list = StringUtils.convertCommasToList(null);
+        var list = StringUtils.convertCommasToList(null);
         assertTrue(list.isEmpty());
     }
 
@@ -64,10 +64,10 @@ public class StringUtilsTest {
      */
     @Test
     public void testCompressDecompress() throws IOException {
-        byte[] compress = StringUtils.compress("message");
+        var compress = StringUtils.compress("message");
         assertTrue(compress.length > 0);
-        String decompress = StringUtils.decompress(compress);
-        assertEquals("message", decompress);
+        var decompress = StringUtils.decompress(compress);
+        assertEquals("message", decompress.orElse(""));
     }
 
     /**
@@ -77,8 +77,8 @@ public class StringUtilsTest {
      */
     @Test
     public void testDecompressIfNull() throws IOException {
-        String decompress = StringUtils.decompress(null);
-        assertNull(decompress);
+        var decompress = StringUtils.decompress(null);
+        assertTrue(decompress.isEmpty());
     }
 
     /**
@@ -86,8 +86,8 @@ public class StringUtilsTest {
      */
     @Test
     public void testJoin() {
-        String[] stringArray = {"string", "array", "test", "join"};
-        String stringJoined = StringUtils.join(stringArray, ".");
+        var stringArray = new String[]{"string", "array", "test", "join"};
+        var stringJoined = StringUtils.join(stringArray, ".");
         assertEquals("string.array.test.join", stringJoined);
     }
 
@@ -97,7 +97,7 @@ public class StringUtilsTest {
     @Test
     public void testLoadServerList() {
         assertNotNull(StringUtils.class.getClassLoader().getResource("servers.properties"));
-        String[] actual = StringUtils.loadServerList();
+        var actual = StringUtils.loadServerList();
         assertNotNull(actual);
         assertTrue(actual.length > 0);
     }
@@ -111,7 +111,7 @@ public class StringUtilsTest {
     public void testLoadServerListFromStream() throws IOException {
         try (ByteArrayInputStream in = new ByteArrayInputStream(
                 "servers=host1,host2".getBytes(StandardCharsets.UTF_8))) {
-            String[] servers = StringUtils.loadServerList(in);
+            var servers = StringUtils.loadServerList(in);
             assertEquals(2, servers.length);
             assertEquals("host1", servers[0]);
             assertEquals("host2", servers[1]);
@@ -125,10 +125,10 @@ public class StringUtilsTest {
      */
     @Test
     public void testLoadServerListFromPath() throws IOException {
-        Path temp = Files.createTempFile("servers", ".properties");
+        var temp = Files.createTempFile("servers", ".properties");
         Files.write(temp, "servers=a,b".getBytes(StandardCharsets.UTF_8));
         try {
-            String[] servers = StringUtils.loadServerList(temp);
+            var servers = StringUtils.loadServerList(temp);
             assertEquals(2, servers.length);
         } finally {
             Files.deleteIfExists(temp);

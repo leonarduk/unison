@@ -47,7 +47,7 @@ public class EmailAddressTest {
     public void testGetName() {
         final String expected = "name";
         final EmailAddress actual = new EmailAddress(expected, null, null);
-        Assertions.assertEquals(expected, actual.getName());
+      Assertions.assertEquals(expected, actual.getName());
     }
 
     /**

@@ -69,22 +69,27 @@ public class UNISoNAnalysisTest {
         Assertions.assertEquals(1, results.size());
         Assertions.assertEquals("UK", results.get(0).getKey());
         Assertions.assertEquals(2, results.get(0).getCount());
+      
     }
 
     @Test
     public final void testGetTopGroupsList() {
         final List<ResultRow> results = this.analysis.getTopGroupsList();
-        Assertions.assertEquals(1, results.size());
+
+      Assertions.assertEquals(1, results.size());
         Assertions.assertEquals(this.newsgroup, results.get(0).getKey());
         Assertions.assertEquals(2, results.get(0).getCount());
+
     }
 
     @Test
     public final void testGetTopPosters() {
         final Vector<ResultRow> results = this.analysis.getTopPosters();
-        Assertions.assertEquals(1, results.size());
+
+      Assertions.assertEquals(1, results.size());
         Assertions.assertEquals(this.poster, results.get(0).getKey());
         Assertions.assertEquals(2, results.get(0).getCount());
+
     }
 
 }

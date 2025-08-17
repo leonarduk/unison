@@ -184,25 +184,31 @@ public class FullDownloadWorkerTest {
     // <1146149630.481616.212070@i39g2000cwa.googlegroups.com>
     // 4 mult-sclerosis 3 -1 -1 -1 -1 uk.people.support.mult-sclerosis true
     @Test
-    public void testFullDownloadWorker() {
+    public void testFullDownloadWorker() throws Exception {
         final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
-        FullDownloadWorker worker = null;
-        try {
-            final String nntpHost = "testserver";
-            worker = new FullDownloadWorker(nntpHost, queue, this.newsClient);
-        } catch (final UNISoNException e1) {
-            e1.printStackTrace();
-        }
-        final DownloadRequest request = new DownloadRequest("<Baf4g.374$Lj1.115@fe10.lga>",
+        final String nntpHost = "testserver";
+        final FullDownloadWorker worker = new FullDownloadWorker(nntpHost, queue, this.newsClient);
 
+        final String message = "Message-ID: <Baf4g.374$Lj1.115@fe10.lga>\n" +
+                "From: test@test.com\n" +
+                "Subject: Test subject\n" +
+                "Date: Sun, 18 Jan 2015 23:40:56 +0000\n" +
+                "Newsgroups: alt.test\n" +
+                "X-Received-Date: Sun, 18 Jan 2015 23:40:56 +0000\n" +
+                "Test body";
+
+        final Reader reader = new StringReader(message);
+        Mockito.when(this.newsClient.retrieveArticle(ArgumentMatchers.anyString())).thenReturn(reader);
+
+        final DownloadRequest request = new DownloadRequest("<Baf4g.374$Lj1.115@fe10.lga>",
                 DownloadMode.ALL);
-        try {
-            final NewsArticle article = worker.downloadFullMessage(request);
-            System.out.println("Downloaded: " + article);
-        } catch (final IOException e) {
-            e.printStackTrace();
-        } catch (final UNISoNException e) {
-            e.printStackTrace();
-        }
+
+        final NewsArticle article = worker.downloadFullMessage(request);
+
+        Assert.assertNotNull(article);
+        Assert.assertEquals("Test subject", article.getSubject());
+        Assert.assertEquals("test@test.com", article.getFrom());
+        Assert.assertEquals("<Baf4g.374$Lj1.115@fe10.lga>", article.getArticleID());
+        Assert.assertTrue(article.getContent().contains("Test body"));
     }
 }

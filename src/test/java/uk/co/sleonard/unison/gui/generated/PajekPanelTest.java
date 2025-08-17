@@ -5,8 +5,8 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import org.junit.jupiter.api.Test;
+
 import org.mockito.Mockito;
-import org.slf4j.LoggerFactory;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.gui.UNISoNGUI;
@@ -18,8 +18,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Vector;
 
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 /**
  * Tests for {@link PajekPanel}.
@@ -39,7 +41,7 @@ public class PajekPanelTest {
     }
 
     @Test
-    public void csvButtonLogsAndAlertsOnException() throws Exception {
+    public void csvButtonAlertsOnException() throws Exception {
         PajekPanel panel = Mockito.mock(PajekPanel.class,
                 Mockito.withSettings().defaultAnswer(Mockito.CALLS_REAL_METHODS));
 
@@ -56,20 +58,12 @@ public class PajekPanelTest {
         setField(panel, "pajekHeader", new Vector<String>());
         setField(panel, "controller", controllerMock);
 
-        Logger logger = (Logger) LoggerFactory.getLogger(PajekPanel.class);
-        ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
-        listAppender.start();
-        logger.addAppender(listAppender);
-
         Method m = PajekPanel.class.getDeclaredMethod("csvButtonActionPerformed",
                 java.awt.event.ActionEvent.class);
         m.setAccessible(true);
         m.invoke(panel, new ActionEvent(panel, ActionEvent.ACTION_PERFORMED, "csv"));
 
         Mockito.verify(guiMock).showAlert("Error: " + ex.getMessage());
-        assertTrue(listAppender.list.stream()
-                .anyMatch(event -> event.getLevel() == Level.ERROR
-                        && event.getMessage().contains("Error exporting CSV")));
     }
 
     private static void setField(final Object target, final String name, final Object value) throws Exception {

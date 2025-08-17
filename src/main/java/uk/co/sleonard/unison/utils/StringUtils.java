@@ -123,7 +123,11 @@ public class StringUtils {
         var regex = "[" + Pattern.quote(delimiters) + "]";
         var fields = field.split(regex);
 
-        return Stream.of(fields).collect(Collectors.toList());
+       for (final String nextToken : fields) {
+            list.add(nextToken);
+            log.debug("Adding {}", nextToken);
+        }
+        return list;
     }
 
     /**

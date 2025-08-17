@@ -6,9 +6,6 @@
  */
 package uk.co.sleonard.unison;
 
-import ch.qos.logback.classic.Logger;
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.core.read.ListAppender;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.junit.jupiter.api.Assertions;
@@ -16,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
-import org.slf4j.LoggerFactory;
 import uk.co.sleonard.unison.datahandling.DAO.*;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.gui.UNISoNGUI;

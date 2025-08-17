@@ -1,5 +1,5 @@
 /**
- * NewsClientTest
+ * NewsClientImplTest
  *
  * @author ${author}
  * @since 29-May-2016
@@ -25,7 +25,7 @@ import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.util.Date;
 
-public class NewsClientTest {
+public class NewsClientImplTest {
 
     private NewsClient client;
     private NNTPClient mock;

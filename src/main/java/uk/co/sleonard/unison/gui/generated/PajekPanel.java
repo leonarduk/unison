@@ -8,6 +8,7 @@ package uk.co.sleonard.unison.gui.generated;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
+import uk.co.sleonard.unison.DataChangeListener;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNControllerFactory;
 import uk.co.sleonard.unison.UNISoNException;
@@ -25,15 +26,13 @@ import uk.co.sleonard.unison.utils.StringUtils;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.*;
 import java.util.List;
-import java.beans.PropertyChangeEvent;
-
-import uk.co.sleonard.unison.DataChangeListener;
 
 /**
  * The Class PajekPanel.
@@ -173,10 +172,10 @@ class PajekPanel extends javax.swing.JPanel implements DataChangeListener {
      */
     PajekPanel(final JFrame frame, final UNISoNController controller) {
         this.pajekHeader = new Vector<>(
-                Arrays.asList(new String[]{"Subject", "Date", "FROM", "TO"}));
+                Arrays.asList("Subject", "Date", "FROM", "TO"));
+        this.controller = controller;
         try {
             this.frame = frame;
-            this.controller = controller;
             this.session = this.controller.helper().getHibernateSession();
             this.initComponents();
 
@@ -185,7 +184,7 @@ class PajekPanel extends javax.swing.JPanel implements DataChangeListener {
             this.previousRadio.setSelected(true);
             this.refreshPajekMatrixTable();
         } catch (final UNISoNException e) {
-            if (this.controller.getGui() != null) {
+            if (this.controller != null && this.controller.getGui() != null) {
                 this.controller.getGui().showAlert("Error: " + e.getMessage());
             }
         }
@@ -435,7 +434,7 @@ class PajekPanel extends javax.swing.JPanel implements DataChangeListener {
                         Short.MAX_VALUE));
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL,
-                new java.awt.Component[]{this.csvButton, this.previewButton, this.saveButton});
+                this.csvButton, this.previewButton, this.saveButton);
 
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -520,10 +519,7 @@ class PajekPanel extends javax.swing.JPanel implements DataChangeListener {
         final String initialValue = "*" + PajekPanel.PAJEK_NETWORK_FILE_SUFFIX;
         file.setFile(initialValue); // set initial filename filter
         file.setFilenameFilter((dir, name) -> {
-            if (name.endsWith(PajekPanel.PAJEK_NETWORK_FILE_SUFFIX)) {
-                return true;
-            }
-            return false;
+            return name.endsWith(PajekPanel.PAJEK_NETWORK_FILE_SUFFIX);
         });
         file.show(); // Blocks
         String curFile = null;

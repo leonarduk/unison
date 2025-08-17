@@ -6,10 +6,12 @@
  */
 package uk.co.sleonard.unison.input;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNControllerFactory;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
@@ -26,12 +28,15 @@ public class FullDownloadWorkerIT {
     @Before
     public void setUp() throws Exception {
         final String[] servers = StringUtils.loadServerList();
-        Assert.assertTrue("No servers configured", servers.length > 0);
+        Assertions.assertTrue(servers.length > 0);
         final String server = servers[0];
         this.outQueue = HeaderDownloadWorkerIT.populateQueueWithOneRealMessage();
 
         final NewsClient newsClient = new NewsClientImpl();
-        this.worker = new FullDownloadWorker(server, this.outQueue, newsClient);
+        UNISoNController controller = new UNISoNControllerFactory()
+                .create(null, new DataHibernatorPoolImpl());
+
+        this.worker = new FullDownloadWorker(server, this.outQueue, newsClient, controller);
     }
 
     @Test
@@ -40,7 +45,7 @@ public class FullDownloadWorkerIT {
         final String usenetID = header.getArticleID();
         final DownloadRequest request = new DownloadRequest(usenetID, DownloadMode.HEADERS);
         final NewsArticle article = this.worker.downloadArticle(request);
-        Assert.assertEquals(header.getArticleID(), article.getArticleID());
+        Assertions.assertEquals(header.getArticleID(), article.getArticleID());
     }
 
     @Test
@@ -49,7 +54,7 @@ public class FullDownloadWorkerIT {
         final String usenetID = header.getArticleID();
         final DownloadRequest request = new DownloadRequest(usenetID, DownloadMode.ALL);
         final NewsArticle article = this.worker.downloadArticle(request);
-        Assert.assertEquals(header.getArticleID(), article.getArticleID());
+        Assertions.assertEquals(header.getArticleID(), article.getArticleID());
     }
 
 }

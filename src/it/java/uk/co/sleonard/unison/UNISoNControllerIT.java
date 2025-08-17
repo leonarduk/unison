@@ -7,9 +7,9 @@
 package uk.co.sleonard.unison;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
 import uk.co.sleonard.unison.utils.StringUtils;
@@ -29,23 +29,23 @@ public class UNISoNControllerIT {
     @Test
     public final void testGetAvailableGroupsModel() throws UNISoNException {
         final String[] servers = StringUtils.loadServerList();
-        Assert.assertTrue("No servers configured", servers.length > 0);
+        Assertions.assertTrue(servers.length > 0);
         final Set<NewsGroup> groups = this.controller.listNewsgroups("", servers[0],
                 this.controller.getNntpReader().getClient());
         final ListModel<NewsGroup> model = this.controller.getAvailableGroupsModel(groups);
         final NewsGroup firstGroup = model.getElementAt(0);
-        Assert.assertNotNull(firstGroup);
-        Assert.assertTrue(org.apache.commons.lang3.StringUtils.isNotEmpty(firstGroup.getFullName()));
+        Assertions.assertNotNull(firstGroup);
+        Assertions.assertTrue(org.apache.commons.lang3.StringUtils.isNotEmpty(firstGroup.getFullName()));
 
     }
 
     @Test
     public final void testListnewsgroups() throws UNISoNException {
         final String[] servers = StringUtils.loadServerList();
-        Assert.assertTrue("No servers configured", servers.length > 0);
+        Assertions.assertTrue(servers.length > 0);
         final Set<NewsGroup> groups = this.controller.listNewsgroups("", servers[0],
                 this.controller.getNntpReader().getClient());
-        Assert.assertTrue(groups.size() > 0);
+        Assertions.assertTrue(groups.size() > 0);
         log.info("Found " + groups.size());
 
     }

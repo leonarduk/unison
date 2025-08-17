@@ -27,7 +27,7 @@ public class EmailAddressTest {
     public void testGetEmail() {
         final String expected = "email";
         final EmailAddress actual = new EmailAddress(null, expected, null);
-        Assertions.assertEquals(expected, actual.getEmail());
+        Assertions.assertEquals(expected, actual.email());
     }
 
     /**
@@ -37,7 +37,7 @@ public class EmailAddressTest {
     public void testGetIpAddress() {
         final String expected = "ipAddress";
         final EmailAddress actual = new EmailAddress(null, null, expected);
-        Assertions.assertEquals(expected, actual.getIpAddress());
+        Assertions.assertEquals(expected, actual.ipAddress());
     }
 
     /**
@@ -47,7 +47,7 @@ public class EmailAddressTest {
     public void testGetName() {
         final String expected = "name";
         final EmailAddress actual = new EmailAddress(expected, null, null);
-      Assertions.assertEquals(expected, actual.getName());
+      Assertions.assertEquals(expected, actual.name());
     }
 
     /**

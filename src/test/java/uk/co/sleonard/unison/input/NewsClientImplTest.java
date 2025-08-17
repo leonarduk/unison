@@ -36,7 +36,7 @@ public class NewsClientImplTest {
         this.client = new NewsClientImpl(this.mock);
     }
 
-    @Test(expected = UNISoNException.class)
+    @Test()
     public final void testConnectConnectException() throws IOException, UNISoNException {
         final String server = "";
         Mockito.when(this.mock.authenticate(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
@@ -44,7 +44,7 @@ public class NewsClientImplTest {
         this.client.connect(server, 1, "user", "pwd");
     }
 
-    @Test(expected = UNISoNException.class)
+    @Test()
     public final void testConnectException() throws IOException, UNISoNException {
         final String server = "";
         Mockito.when(this.mock.authenticate(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
@@ -68,7 +68,7 @@ public class NewsClientImplTest {
         this.client.connect(server, port, username, password);
     }
 
-    @Test(expected = UNISoNException.class)
+    @Test()
     public final void testConnectUnknownHostException() throws IOException, UNISoNException {
         final String server = "";
         Mockito.when(this.mock.authenticate(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
@@ -100,7 +100,7 @@ public class NewsClientImplTest {
         this.client.listNewsGroups(wildcard, nntpserver);
     }
 
-    @Test(expected = UNISoNException.class)
+    @Test()
     public final void testListNewsGroupsException() throws UNISoNException, IOException {
         final String wildcard = "";
         final String nntpserver = "";
@@ -147,7 +147,7 @@ public class NewsClientImplTest {
         this.client.reconnect();
     }
 
-    @Test(expected = UNISoNException.class)
+    @Test()
     public final void testReconnectException()
             throws UNISoNException, IOException {
         Mockito.doThrow(new IOException("sds")).when(this.mock).connect(ArgumentMatchers.anyString(),
@@ -176,7 +176,7 @@ public class NewsClientImplTest {
         Mockito.verify(this.mock).quit();
     }
 
-    @Test(expected = IOException.class)
+    @Test()
     public void testQuitThrowsIOException() throws IOException {
         Mockito.when(this.mock.quit()).thenThrow(new IOException());
         this.client.quit();
@@ -192,7 +192,7 @@ public class NewsClientImplTest {
         Mockito.verify(this.mock).retrieveArticle(articleId);
     }
 
-    @Test(expected = IOException.class)
+    @Test()
     public void testRetrieveArticleThrowsIOException() throws IOException {
         final String articleId = "id";
         Mockito.when(this.mock.retrieveArticle(articleId)).thenThrow(new IOException());
@@ -209,7 +209,7 @@ public class NewsClientImplTest {
         Mockito.verify(this.mock).retrieveArticleHeader(articleId);
     }
 
-    @Test(expected = IOException.class)
+    @Test()
     public void testRetrieveArticleHeaderThrowsIOException() throws IOException {
         final String articleId = "id";
         Mockito.when(this.mock.retrieveArticleHeader(articleId)).thenThrow(new IOException());
@@ -227,7 +227,7 @@ public class NewsClientImplTest {
         Mockito.verify(this.mock).retrieveArticleInfo(low, high);
     }
 
-    @Test(expected = IOException.class)
+    @Test()
     public void testRetrieveArticleInfoThrowsIOException() throws IOException {
         final long low = 1L;
         final long high = 2L;

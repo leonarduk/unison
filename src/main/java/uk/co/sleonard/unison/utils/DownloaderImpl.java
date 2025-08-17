@@ -32,12 +32,14 @@ public class DownloaderImpl implements Downloader {
                           final @NotNull LinkedBlockingQueue<NewsArticle> queue1,
                           final @NotNull NewsClient newsClient1,
                           final @NotNull NewsGroupReader reader,
-                          final @NotNull HibernateHelper helper2) {
+                          final @NotNull HibernateHelper helper2,
+                          final @NotNull UNISoNController controller) {
         this.nntpHost = Objects.requireNonNull(nntpHost, "nntpHost");
         this.queue = Objects.requireNonNull(queue1, "queue");
         this.newsClient = Objects.requireNonNull(newsClient1, "newsClient");
         this.nntpReader = Objects.requireNonNull(reader, "reader");
         this.helper = Objects.requireNonNull(helper2, "helper");
+        this.controller = Objects.requireNonNull(controller, "controller");
     }
 
     @Override

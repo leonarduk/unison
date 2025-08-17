@@ -16,7 +16,6 @@ import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
-import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -154,7 +153,7 @@ public class UNISoNCLI {
             throws UNISoNException {
         final Set<NewsGroup> listNewsgroups = this.controller.listNewsgroups(searchString, host,
                 this.controller.getNntpReader().getClient());
-        Assert.assertTrue(listNewsgroups.size() > 0);
+        Assertions.assertTrue(listNewsgroups.size() > 0);
     }
 
 
@@ -171,10 +170,9 @@ public class UNISoNCLI {
                                final String host) throws UNISoNException {
         final Set<NewsGroup> listNewsgroups = this.controller.listNewsgroups(arg, host,
                 this.controller.getNntpReader().getClient());
-        // HibernateHelper.generateSchema();
 
         try {
-            instance.quickDownload(listNewsgroups, fromDate, toDate, DownloadMode.BASIC);
+            this.controller.quickDownload(listNewsgroups, fromDate, toDate, DownloadMode.BASIC);
         } catch (final UNISoNException e) {
             log.error("Error downloading messages", e);
         }

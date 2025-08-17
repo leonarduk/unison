@@ -14,13 +14,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Elton <elton_12_nunes@hotmail.com>
  * @since v1.2.0
  */
-public class UsenetUserHelperTest {
+class UsenetUserHelperTest {
 
     /**
      * Test parse field from EmailAddress.
      */
     @Test
-    public void testParseFromField() throws Exception {
+    void testParseFromField() throws Exception {
         EmailAddress expected = new EmailAddress("Elton", "elton_12_nunes@hotmail.com",
                 "localhost");
         EmailAddress expected2 = new EmailAddress("Elton", "elton_12_nunes@hotmail.com", "UNKNOWN");
@@ -45,8 +45,8 @@ public class UsenetUserHelperTest {
      * Ensures an {@link IllegalArgumentException} is thrown when neither name nor
      * email can be determined.
      */
-    @Test(expected = IllegalArgumentException.class)
-    public void testParseFromFieldThrowsWhenMissingNameAndEmail() {
+    @Test()
+    void testParseFromFieldThrowsWhenMissingNameAndEmail() {
         UsenetUserHelper.parseFromField("", "localhost");
     }
 

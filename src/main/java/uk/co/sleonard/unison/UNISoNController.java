@@ -93,9 +93,11 @@ public class UNISoNController {
      * @param gui            optional GUI reference
      * @throws UNISoNException if the hibernate session cannot be created
      */
-    public UNISoNController(final NewsClient client, final HibernateHelper helper,
+    public UNISoNController(final NewsClient client,
+                            final HibernateHelper helper,
                             final LinkedBlockingQueue<NewsArticle> messageQueue,
-                            final DataHibernatorPool hibernatorPool, final UNISoNGUI gui)
+                            final DataHibernatorPool hibernatorPool,
+                            final UNISoNGUI gui)
             throws UNISoNException {
         this.pool = hibernatorPool;
         this.gui = gui;
@@ -400,7 +402,7 @@ public class UNISoNController {
         this.nntpHost = nntpHost;
         this.headerDownloader = new HeaderDownloadWorker(this.messageQueue,
                 new DownloaderImpl(this.nntpHost, this.messageQueue, this.client, this.nntpReader,
-                        this.helper));
+                        this.helper, this));
 
       this.headerDownloader.initialise();
 

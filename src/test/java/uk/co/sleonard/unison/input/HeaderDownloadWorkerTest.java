@@ -11,12 +11,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uk.co.sleonard.unison.UNISoNController;
-
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.utils.Downloader;
@@ -46,7 +43,7 @@ public class HeaderDownloadWorkerTest {
      * Setup.
      */
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         this.worker = new HeaderDownloadWorker(new LinkedBlockingQueue<>(),
                 Mockito.mock(Downloader.class));
     }
@@ -55,7 +52,7 @@ public class HeaderDownloadWorkerTest {
      * Test if download then finished.
      */
     @Test
-    public void testFinished() {
+    void testFinished() {
         this.worker.resume();
         Assertions.assertTrue(this.worker.isDownloading());
         this.worker.finished();
@@ -66,7 +63,7 @@ public class HeaderDownloadWorkerTest {
      * Test fullStop
      */
     @Test
-    public void testFullstop() {
+    void testFullstop() {
         log.info("Wait 2 secs and stop");
         try {
             Thread.sleep(2000);
@@ -84,7 +81,7 @@ public class HeaderDownloadWorkerTest {
      */
     @Test
 
-    public void testInitialise() throws UNISoNException {
+    void testInitialise() throws UNISoNException {
 
         final NewsClient nc = Mockito.mock(NewsClient.class);
         final NewsGroupReader ngr = new NewsGroupReader(nc, Mockito.mock(UNISoNController.class));
@@ -101,7 +98,7 @@ public class HeaderDownloadWorkerTest {
      * Test if in download
      */
     @Test
-    public void testIsDownloading() {
+    void testIsDownloading() {
         Assertions.assertFalse(this.worker.isDownloading());
         this.worker.resume();
         Assertions.assertTrue(this.worker.isDownloading());
@@ -111,7 +108,7 @@ public class HeaderDownloadWorkerTest {
      * Test listener notification.
      */
     @Test
-    public void testNotifyListeners() {
+    void testNotifyListeners() {
         final AtomicInteger counter = new AtomicInteger(0);
         this.worker.addDataChangeListener(evt -> counter.incrementAndGet());
         this.worker.notifyListeners();
@@ -122,15 +119,15 @@ public class HeaderDownloadWorkerTest {
      * Test Pause
      */
     @Test
-    public void testPause() {
+    void testPause() {
         this.worker.resume();
         Assertions.assertTrue(this.worker.isDownloading());
         this.worker.pause();
         Assertions.assertFalse(this.worker.isDownloading());
     }
 
-    @Test(expected = UNISoNException.class)
-    public void testQueueMessagesAbort() throws IOException, UNISoNException {
+    @Test()
+    void testQueueMessagesAbort() throws IOException, UNISoNException {
         final LinkedBlockingQueue<NewsArticle> queue1 = new LinkedBlockingQueue<>();
         final String messages = "sdsds";
         this.worker.fullstop();
@@ -140,7 +137,7 @@ public class HeaderDownloadWorkerTest {
     }
 
     @Test
-    public void testQueueMessagesAllDownload() throws IOException, UNISoNException {
+    void testQueueMessagesAllDownload() throws IOException, UNISoNException {
         final LinkedBlockingQueue<NewsArticle> queue1 = new LinkedBlockingQueue<>();
         final StringBuilder buffer = new StringBuilder();
         for (int i = 0; i < 500; i++) {
@@ -159,7 +156,7 @@ public class HeaderDownloadWorkerTest {
     }
 
     @Test
-    public void testQueueMessagesBasicDownload() throws IOException, UNISoNException {
+    void testQueueMessagesBasicDownload() throws IOException, UNISoNException {
         final LinkedBlockingQueue<NewsArticle> queue1 = new LinkedBlockingQueue<>();
         final StringBuilder buffer = new StringBuilder();
         buffer.append("300\t");
@@ -183,7 +180,7 @@ public class HeaderDownloadWorkerTest {
      */
 
     @Test
-    public void testQueueMessagesNullReader()
+    void testQueueMessagesNullReader()
             throws InterruptedException, IOException, UNISoNException {
         Assertions.assertTrue(this.worker.queueMessages(new LinkedBlockingQueue<>(), null));
     }
@@ -192,7 +189,7 @@ public class HeaderDownloadWorkerTest {
      * Test Resume
      */
     @Test
-    public void testResume() {
+    void testResume() {
         Assertions.assertFalse(this.worker.isDownloading());
         this.worker.resume();
         Assertions.assertTrue(this.worker.isDownloading());
@@ -204,14 +201,14 @@ public class HeaderDownloadWorkerTest {
      * @throws UNISoNException Signals that an exception has occurred.
      */
     @Test
-    public void testStoreArticleInfo() throws UNISoNException {
+    void testStoreArticleInfo() throws UNISoNException {
         final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
         final boolean actual = this.worker.storeArticleInfo(queue);
         Assertions.assertTrue(actual);
     }
 
     @Test
-    public void testStoreArticleInfoDoesNotRequestBeyondEndIndex() throws Exception {
+    void testStoreArticleInfoDoesNotRequestBeyondEndIndex() throws Exception {
         final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
 
         final NewsClient client = Mockito.mock(NewsClient.class);
@@ -235,7 +232,7 @@ public class HeaderDownloadWorkerTest {
                 .retrieveArticleInfo(Mockito.anyLong(), endCaptor.capture());
 
         for (final Long end : endCaptor.getAllValues()) {
-            Assertions.assertTrue("Requested message beyond end index", end <= 600L);
+            Assertions.assertTrue(end <= 600L);
         }
     }
 

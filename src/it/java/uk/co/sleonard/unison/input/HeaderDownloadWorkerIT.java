@@ -6,13 +6,13 @@
  */
 package uk.co.sleonard.unison.input;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
-import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.utils.DownloaderImpl;
 import uk.co.sleonard.unison.utils.StringUtils;
 
@@ -29,7 +29,7 @@ public class HeaderDownloadWorkerIT {
         final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
         try (final Reader reader = NewsClientIT.downloadFirstMessage();) {
             final String[] servers = StringUtils.loadServerList();
-            Assert.assertTrue("No servers configured", servers.length > 0);
+            Assertions.assertTrue(servers.length > 0);
             final String nntpHost = servers[0];
             final LinkedBlockingQueue<NewsArticle> queue1 = new LinkedBlockingQueue<>();
             final NewsClient newsClient1 = new NewsClientImpl();
@@ -54,9 +54,9 @@ public class HeaderDownloadWorkerIT {
             throws IOException, UNISoNException, InterruptedException {
         final LinkedBlockingQueue<NewsArticle> queue = HeaderDownloadWorkerIT
                 .populateQueueWithOneRealMessage();
-        Assert.assertEquals(1, queue.size());
+        Assertions.assertEquals(1, queue.size());
         final NewsArticle article = queue.take();
-        Assert.assertNotNull(article.getSubject());
+        Assertions.assertNotNull(article.getSubject());
 
     }
 

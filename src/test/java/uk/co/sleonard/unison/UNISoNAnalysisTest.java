@@ -6,12 +6,10 @@
  */
 package uk.co.sleonard.unison;
 
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import uk.co.sleonard.unison.datahandling.DAO.*;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
@@ -63,8 +61,8 @@ public class UNISoNAnalysisTest {
     public final void testGetTopCountriesList() {
         final List<ResultRow> results = this.analysis.getTopCountriesList();
         Assertions.assertEquals(1, results.size());
-        Assertions.assertEquals("UK", results.get(0).getKey());
-        Assertions.assertEquals(2, results.get(0).getCount());
+        Assertions.assertEquals("UK", results.get(0).key());
+        Assertions.assertEquals(2, results.get(0).count());
       
     }
 
@@ -73,8 +71,8 @@ public class UNISoNAnalysisTest {
         final List<ResultRow> results = this.analysis.getTopGroupsList();
 
       Assertions.assertEquals(1, results.size());
-        Assertions.assertEquals(this.newsgroup, results.get(0).getKey());
-        Assertions.assertEquals(2, results.get(0).getCount());
+        Assertions.assertEquals(this.newsgroup, results.get(0).key());
+        Assertions.assertEquals(2, results.get(0).count());
 
     }
 
@@ -83,8 +81,8 @@ public class UNISoNAnalysisTest {
         final Vector<ResultRow> results = this.analysis.getTopPosters();
 
       Assertions.assertEquals(1, results.size());
-        Assertions.assertEquals(this.poster, results.get(0).getKey());
-        Assertions.assertEquals(2, results.get(0).getCount());
+        Assertions.assertEquals(this.poster, results.get(0).key());
+        Assertions.assertEquals(2, results.get(0).count());
 
     }
 

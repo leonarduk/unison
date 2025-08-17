@@ -7,8 +7,8 @@
 package uk.co.sleonard.unison.datahandling;
 
 import org.hibernate.Session;
-import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.input.HeaderDownloadWorkerIT;
 import uk.co.sleonard.unison.input.NewsArticle;
@@ -27,16 +27,16 @@ public class HibernateHelperIT {
         final LinkedBlockingQueue<NewsArticle> queue = HeaderDownloadWorkerIT
                 .populateQueueWithOneRealMessage();
         final NewsArticle article = queue.poll();
-        Assert.assertNotNull(article);
-        // Assert.assertNotNull(helper.findUsenetUser(article, session));
-//		Assert.assertTrue(helper.hibernateData(article, session));
+        Assertions.assertNotNull(article);
+        // Assertions.assertNotNull(helper.findUsenetUser(article, session));
+//		Assertions.assertTrue(helper.hibernateData(article, session));
 //        final UsenetUser user = helper
 //                .findUsenetUser(UsenetUserHelper.parseFromField(article), session);
-//		Assert.assertNotNull(user);
+//		Assertions.assertNotNull(user);
 //		final Message message = helper.createMessage(article, null, user);
 //		final Message findMessage = helper.findMessage(message, session);
-//		Assert.assertNotNull(findMessage);
-//		Assert.assertEquals(message.getSubject(), findMessage.getSubject());
+//		Assertions.assertNotNull(findMessage);
+//		Assertions.assertEquals(message.getSubject(), findMessage.getSubject());
     }
 
 }

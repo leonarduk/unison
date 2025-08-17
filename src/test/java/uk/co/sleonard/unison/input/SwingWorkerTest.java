@@ -58,9 +58,9 @@ public class SwingWorkerTest {
         CountDownLatch finishedLatch = new CountDownLatch(1);
         TestSwingWorker worker = new TestSwingWorker(constructLatch, finishedLatch);
         worker.start();
-        assertTrue("Construct never started", constructLatch.await(1, TimeUnit.SECONDS));
-        assertTrue("Finished did not execute",
-                finishedLatch.await(2, TimeUnit.SECONDS) && worker.finishedCalled);
+        assertTrue(constructLatch.await(1, TimeUnit.SECONDS), "Construct never started");
+        assertTrue(finishedLatch.await(2, TimeUnit.SECONDS) && worker.finishedCalled,
+                "Finished did not execute");
     }
 
     @Test
@@ -69,9 +69,9 @@ public class SwingWorkerTest {
         CountDownLatch finishedLatch = new CountDownLatch(1);
         TestSwingWorker worker = new TestSwingWorker(constructLatch, finishedLatch);
         worker.start();
-        assertTrue("construct never started", constructLatch.await(1, TimeUnit.SECONDS));
+        assertTrue(constructLatch.await(1, TimeUnit.SECONDS));
         worker.interrupt();
-        assertNull("Thread reference not cleared after interrupt", worker.getThread());
+        assertNull(worker.getThread());
         finishedLatch.await(1, TimeUnit.SECONDS);
     }
 }

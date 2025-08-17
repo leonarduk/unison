@@ -7,9 +7,9 @@
 package uk.co.sleonard.unison.input;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.utils.StringUtils;
@@ -31,7 +31,7 @@ public class NewsClientIT {
 
     public static BufferedReader downloadFirstMessage() throws IOException, UNISoNException {
         final String[] servers = StringUtils.loadServerList();
-        Assert.assertTrue("No servers configured", servers.length > 0);
+        Assertions.assertTrue(servers.length > 0);
         return NewsClientIT.downloadFirstMessage(servers[0]);
     }
 
@@ -79,15 +79,15 @@ public class NewsClientIT {
     @Test
     public void testRetrieveArticleInfo() throws Exception {
         final String[] servers = StringUtils.loadServerList();
-        Assert.assertTrue("No servers configured", servers.length > 0);
+        Assertions.assertTrue(servers.length > 0);
         final String server = servers[0];
         final BufferedReader reader = NewsClientIT.downloadFirstMessage(server);
         try (final BufferedReader bufReader = new BufferedReader(reader);) {
             final String line = bufReader.readLine();
             log.info("Message: " + line);
-            Assert.assertNotNull(line);
-            Assert.assertTrue(line.length() > 0);
-            Assert.assertTrue(line.contains(server));
+            Assertions.assertNotNull(line);
+            Assertions.assertTrue(line.length() > 0);
+            Assertions.assertTrue(line.contains(server));
         }
     }
 }

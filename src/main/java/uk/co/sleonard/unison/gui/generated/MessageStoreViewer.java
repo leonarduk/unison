@@ -9,6 +9,7 @@ package uk.co.sleonard.unison.gui.generated;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
+import uk.co.sleonard.unison.DataChangeListener;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
@@ -22,14 +23,12 @@ import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.List;
-import java.beans.PropertyChangeEvent;
-
-import uk.co.sleonard.unison.DataChangeListener;
 
 /**
  * The Class MessageStoreViewer.
@@ -1076,7 +1075,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
             final List<GUIItem<ResultRow>> selected = this.topCountriesList.getSelectedValuesList();
             final Set<String> countries = new HashSet<>();
             for (final GUIItem<ResultRow> row : selected) {
-                countries.add((String) row.getObject().getKey());
+                countries.add(row.object().key().toString());
             }
             this.controller.getFilter().setSelectedCountries(countries);
             this.refreshTopGroups();
@@ -1092,8 +1091,8 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
         if (!evt.getValueIsAdjusting()) {
             final GUIItem<ResultRow> selectedItem = this.topGroupsList.getSelectedValue();
             if (null != selectedItem) {
-                final ResultRow selectedItemObject = selectedItem.getObject();
-                if (selectedItemObject.getKey() instanceof NewsGroup group) {
+                final ResultRow selectedItemObject = selectedItem.object();
+                if (selectedItemObject.key() instanceof NewsGroup group) {
                     this.controller.getFilter().setSelectedNewsgroup(group.getName());
                     this.notifySelectedNewsGroupObservers();
                 }
@@ -1111,8 +1110,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
         final TreeNode root = (TreeNode) tp.getLastPathComponent();
 
         final Object datanode = root.getUserObject();
-        if (datanode instanceof Message) {
-            final Message msg = (Message) datanode;
+        if (datanode instanceof Message msg) {
             this.controller.getFilter().setMessage(msg);
             this.notifySelectedMessageObservers();
         } else {
@@ -1129,9 +1127,9 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
     private void topPostersListValueChanged(final javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_topPostersListValueChanged
         if (!evt.getValueIsAdjusting()) {
             final List<GUIItem<ResultRow>> selected = this.topPostersList.getSelectedValuesList();
-            final Set<String> posters = new HashSet<>();
+            final Vector<UsenetUser> posters = new Vector<>();
             for (final GUIItem<ResultRow> row : selected) {
-                posters.add((String) row.getObject().getKey());
+                posters.add((UsenetUser) row.object().key());
             }
             this.controller.getFilter().setSelectedPosters(posters);
             this.refreshMessagePane();

@@ -121,9 +121,7 @@ public class DataHibernatorWorkerTest {
         thread.join(1000);
 
         int processed = stored.get();
-        Assertions.assertTrue("Worker should process at least one message before interrupt",
-                processed > 0);
-        Assertions.assertTrue("Worker should not process all messages after interrupt",
-                processed < 5);
+        Assertions.assertTrue(                processed > 0);
+        Assertions.assertTrue(processed < 5);
     }
 }

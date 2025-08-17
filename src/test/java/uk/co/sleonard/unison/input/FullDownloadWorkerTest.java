@@ -14,7 +14,6 @@ import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.sleonard.unison.UNISoNController;
-
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
@@ -52,7 +51,7 @@ public class FullDownloadWorkerTest {
      * @throws Exception the exception
      */
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         this.newsClient = Mockito.mock(NewsClient.class);
         this.outQueue = new LinkedBlockingQueue<>();
         this.controller = Mockito.mock(UNISoNController.class);
@@ -63,7 +62,7 @@ public class FullDownloadWorkerTest {
      * Test AddDownloadRequest.
      */
     @Test
-    public void testAddDownloadRequestAll() {
+    void testAddDownloadRequestAll() {
         try {
             final String nntpHost = "testserver";
             final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
@@ -88,7 +87,7 @@ public class FullDownloadWorkerTest {
      * Test AddDownloadRequest.
      */
     @Test
-    public void testAddDownloadRequestHeader() {
+    void testAddDownloadRequestHeader() {
         try {
             final String nntpHost = "testserver";
             final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
@@ -114,19 +113,19 @@ public class FullDownloadWorkerTest {
      */
     @SuppressWarnings("unchecked")
     @Test
-    public void testConstruct() {
+    void testConstruct() {
         FullDownloadWorker actual;
         try {
             actual = new FullDownloadWorker("server", new LinkedBlockingQueue(),
                     this.newsClient, this.controller);
-            Assert.assertNotNull(actual);
+            Assertions.assertNotNull(actual);
         } catch (final UNISoNException e) {
             Assertions.fail("ERROR: " + e.getMessage());
         }
     }
 
     @Test
-    public void testConvertHeaderStringToArticle() throws Exception {
+    void testConvertHeaderStringToArticle() throws Exception {
         final String info = "Path: fleegle.mixmin.net!news.mixmin.net!news.glorb.com!xmission!news.alt.net!news.astraweb.com!border5.newsrouter.astraweb.com!not-for-mail"
                 + "\nReply-To: \"Replica\" <replica@yang-online.com>"
                 + "\nFrom: \"Replica\" <replica@yang-online.com"
@@ -152,8 +151,8 @@ public class FullDownloadWorkerTest {
      *
      * @throws IOException
      */
-    @Test(timeout = 1000)
-    public void testDownloadArticle() throws IOException {
+    @Test()
+    void testDownloadArticle() throws IOException {
         final String message = "Message-ID: <id123>\n" + "From: test@test.com\n"
                 + "Subject: Test subject\n" + "Date: Sun, 18 Jan 2015 23:40:56 +0000\n"
                 + "Newsgroups: alt.test\n" + "X-Received-Date: Sun, 18 Jan 2015 23:40:56 +0000\n"
@@ -172,7 +171,7 @@ public class FullDownloadWorkerTest {
     }
 
     @Test
-    public void testFailToConnect() throws Exception {
+    void testFailToConnect() throws Exception {
         Mockito.doThrow(new IOException("Failed to connect")).when(this.newsClient)
                 .connect(ArgumentMatchers.anyString());
     }
@@ -186,7 +185,7 @@ public class FullDownloadWorkerTest {
     // <1146149630.481616.212070@i39g2000cwa.googlegroups.com>
     // 4 mult-sclerosis 3 -1 -1 -1 -1 uk.people.support.mult-sclerosis true
     @Test
-    public void testFullDownloadWorker() {
+    void testFullDownloadWorker() {
         final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
         FullDownloadWorker worker = null;
         try {

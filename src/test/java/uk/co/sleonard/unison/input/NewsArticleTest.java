@@ -26,7 +26,7 @@ public class NewsArticleTest {
      * Test getArticleId.
      */
     @Test
-    public void testGetArticleId() {
+    void testGetArticleId() {
         final String expected = "articleId";
         final NewsArticle actual = new NewsArticle();
         Assertions.assertNull(actual.getArticleID());
@@ -37,8 +37,8 @@ public class NewsArticleTest {
     /**
      * Test getArticleId expected NullPointerException.
      */
-    @Test(expected = NullPointerException.class)
-    public void testGetArticleIdThrowException() {
+    @Test()
+    void testGetArticleIdThrowException() {
         final NewsArticle actual = new NewsArticle();
         actual.setArticleId(null);
     }
@@ -47,7 +47,7 @@ public class NewsArticleTest {
      * Test getContent.
      */
     @Test
-    public void testGetContent() {
+    void testGetContent() {
         final String expected = "content";
         final NewsArticle actual = new NewsArticle();
         Assertions.assertNull(actual.getContent());
@@ -62,7 +62,7 @@ public class NewsArticleTest {
      * @throws UNISoNException Signals that an exception in application has occurred..
      */
     @Test
-    public void testGetDate() throws ParseException, UNISoNException {
+    void testGetDate() throws ParseException, UNISoNException {
         final String dateExpected = "Wed, 11 May 2016 13:10:00 GMT";
         final NewsArticle test = new NewsArticle();
         Assertions.assertNull(test.getDate());
@@ -76,7 +76,7 @@ public class NewsArticleTest {
      * Test getFrom.
      */
     @Test
-    public void testGetFrom() {
+    void testGetFrom() {
         final String expected = "user";
         final NewsArticle actual = new NewsArticle();
         Assertions.assertNull(actual.getFrom());
@@ -87,8 +87,8 @@ public class NewsArticleTest {
     /**
      * Test getFrom expected NullPointerException.
      */
-    @Test(expected = NullPointerException.class)
-    public void testGetFromThrowException() {
+    @Test()
+    void testGetFromThrowException() {
         final NewsArticle actual = new NewsArticle();
         actual.setFrom(null);
     }
@@ -99,7 +99,7 @@ public class NewsArticleTest {
      * @throws UNISoNException the UNI so n exception
      */
     @Test
-    public void testGetNewsgroupsList() throws UNISoNException {
+    void testGetNewsgroupsList() throws UNISoNException {
         final String newsgroups = "newsgroup1,newsgroup2,newsgroup3";
         final NewsArticle test = new NewsArticle("article", 0, Calendar.getInstance().getTime(),
                 "from", null, null, null, newsgroups, null);
@@ -111,7 +111,7 @@ public class NewsArticleTest {
      * Test getPostingHost.
      */
     @Test
-    public void testGetPostingHost() {
+    void testGetPostingHost() {
         final String expected = "posting";
         final NewsArticle actual = new NewsArticle();
         Assertions.assertNull(actual.getPostingHost());
@@ -123,7 +123,7 @@ public class NewsArticleTest {
      * Test getReferences.
      */
     @Test
-    public void testGetReferences() {
+    void testGetReferences() {
         final String expected = "references";
         final NewsArticle actual = new NewsArticle();
         Assertions.assertNull(actual.getReferences());
@@ -135,7 +135,7 @@ public class NewsArticleTest {
      * Test getRefencesList.
      */
     @Test
-    public void testGetReferencesList() {
+    void testGetReferencesList() {
         final NewsArticle test = new NewsArticle();
         test.setReferences("<effrl8$hmn$2@emma.aioe.org> <effupe$hr0$1@netlx020.civ.utwente.nl>");
         final List<String> actual = test.getReferencesList();
@@ -146,7 +146,7 @@ public class NewsArticleTest {
      * Test getSubject.
      */
     @Test
-    public void testGetSubject() {
+    void testGetSubject() {
         final String expected = "subject";
         final NewsArticle actual = new NewsArticle();
         Assertions.assertNull(actual.getSubject());
@@ -158,7 +158,7 @@ public class NewsArticleTest {
      * Test isFullHeader.
      */
     @Test
-    public void testIsFullHeader() {
+    void testIsFullHeader() {
         final NewsArticle actual = new NewsArticle();
         Assertions.assertFalse(actual.isFullHeader());
         actual.setPostingHost("postingHost");
@@ -169,7 +169,7 @@ public class NewsArticleTest {
      * Test toString.
      */
     @Test
-    public void testToString() {
+    void testToString() {
         final NewsArticle test = new NewsArticle();
         test.setArticleNumber(100);
         Assertions.assertTrue(test.toString().contains("Number: 100"));

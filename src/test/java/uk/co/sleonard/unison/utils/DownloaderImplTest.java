@@ -39,14 +39,10 @@ public class DownloaderImplTest {
             String usenetId = "<123>";
             DownloadMode mode = DownloadMode.ALL;
 
-        UNISoNController controller = Mockito.mock(UNISoNController.class);
-        DownloaderImpl downloader = new DownloaderImpl(nntpHost, queue, newsClient, reader, helper, controller);
-        String usenetId = "<123>";
-        DownloadMode mode = DownloadMode.ALL;
+            downloader.addDownloadRequest(usenetId, mode);
 
-        downloader.addDownloadRequest(usenetId, mode);
-
-        PowerMockito.verifyStatic(FullDownloadWorker.class, Mockito.times(1));
-        FullDownloadWorker.addDownloadRequest(usenetId, mode, nntpHost, queue, newsClient, reader, helper, controller);
+            mocked.verify(() -> FullDownloadWorker.addDownloadRequest(usenetId, mode, nntpHost, queue, newsClient, reader, helper),
+                    Mockito.times(1));
+        }
     }
 }

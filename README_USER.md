@@ -9,16 +9,16 @@
 ```bash
 mvn clean package
 ```
-This creates the application JAR in `target/`.
+This creates the standalone application JAR in `target/`.
 
 ## Launch Instructions
 ### Graphical Interface
 ```bash
-java -cp target/unison-1.3.0-SNAPSHOT.jar uk.co.sleonard.unison.UnisonMain
+java -jar target/unison-jar-with-dependencies.jar
 ```
 ### Command Line Interface
 ```bash
-java -cp target/unison-1.3.0-SNAPSHOT.jar uk.co.sleonard.unison.input.UNISoNCLI <COMMAND> <ARG>
+java -cp target/unison-jar-with-dependencies.jar uk.co.sleonard.unison.input.UNISoNCLI <COMMAND> <ARG>
 ```
 Available commands:
 - `FIND <pattern>` – list newsgroups matching a pattern

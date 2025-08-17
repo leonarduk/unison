@@ -33,4 +33,10 @@ public class TreeNodeTest {
         assertEquals(expected, actual.toString());
 
     }
+
+    @Test
+    public void testNullChildObject() {
+        TreeNode actual = new TreeNode(null, "root");
+        assertEquals("root", actual.toString());
+    }
 }

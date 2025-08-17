@@ -31,8 +31,8 @@ public class TreeNode extends DefaultMutableTreeNode {
      * @param childObject the child object
      * @param name        the name
      */
-    public TreeNode(final @NotNull Object childObject, final @NotNull String name) {
-        super(Objects.requireNonNull(childObject, "childObject"));
+    public TreeNode(final Object childObject, final @NotNull String name) {
+        super(childObject);
         this.nodeName = Objects.requireNonNull(name, "name");
     }
 

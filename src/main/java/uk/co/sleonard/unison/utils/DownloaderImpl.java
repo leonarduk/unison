@@ -7,7 +7,6 @@
 package uk.co.sleonard.unison.utils;
 
 import org.hibernate.Session;
-import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
@@ -23,14 +22,6 @@ public class DownloaderImpl implements Downloader {
     private final NewsGroupReader nntpReader;
     private final HibernateHelper helper;
     private final Session session;
-
-    public DownloaderImpl() {
-        this(UNISoNController.getInstance().getNntpHost(),
-                UNISoNController.getInstance().getQueue(), new NewsClientImpl(),
-                UNISoNController.getInstance().getNntpReader(),
-                UNISoNController.getInstance().getHelper(),
-                UNISoNController.getInstance().getSession());
-    }
 
     public DownloaderImpl(final String nntpHost, final LinkedBlockingQueue<NewsArticle> queue1,
                           final NewsClient newsClient1, final NewsGroupReader reader,

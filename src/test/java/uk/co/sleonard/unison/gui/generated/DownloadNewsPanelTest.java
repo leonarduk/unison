@@ -1,13 +1,15 @@
 package uk.co.sleonard.unison.gui.generated;
 
+import org.hibernate.Session;
 import org.junit.Test;
 import org.mockito.Mockito;
 import uk.co.sleonard.unison.UNISoNController;
-import uk.co.sleonard.unison.input.DataHibernatorPool;
-import uk.co.sleonard.unison.input.HeaderDownloadWorker;
+import uk.co.sleonard.unison.datahandling.HibernateHelper;
+import uk.co.sleonard.unison.input.*;
 
 import javax.swing.*;
 import java.lang.reflect.Field;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import static org.junit.Assert.assertEquals;
 
@@ -18,15 +20,22 @@ public class DownloadNewsPanelTest {
 
     @Test
     public void progressBarUpdatesViaController() throws Exception {
-        JFrame frame = Mockito.mock(JFrame.class);
+        NewsClient client = Mockito.mock(NewsClient.class);
+        HibernateHelper helper = Mockito.mock(HibernateHelper.class);
+        Session session = Mockito.mock(Session.class);
+        Mockito.when(helper.getHibernateSession()).thenReturn(session);
+        LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
         DataHibernatorPool pool = Mockito.mock(DataHibernatorPool.class);
-        UNISoNController controller = UNISoNController.create(frame, pool);
+
+        UNISoNController controller = new UNISoNController(client, helper, queue, pool, null);
+        UNISoNController controllerSpy = Mockito.spy(controller);
         HeaderDownloadWorker worker = Mockito.mock(HeaderDownloadWorker.class);
-        controller.setHeaderDownloader(worker);
+        controllerSpy.setHeaderDownloader(worker);
+        Mockito.doNothing().when(controllerSpy).setNntpHost(Mockito.anyString());
 
-        DownloadNewsPanel panel = new DownloadNewsPanel(controller);
+        DownloadNewsPanel panel = new DownloadNewsPanel(controllerSpy);
 
-        controller.setDownloadingState(42);
+        controllerSpy.setDownloadingState(42);
 
         Field barField = DownloadNewsPanel.class.getDeclaredField("progressBar");
         barField.setAccessible(true);

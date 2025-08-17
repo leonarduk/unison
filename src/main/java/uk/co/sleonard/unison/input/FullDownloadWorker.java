@@ -78,8 +78,10 @@ public class FullDownloadWorker extends SwingWorker {
                                                        final UNISoNController controller) throws UNISoNException {
         Session session = SessionManager.openSession();
         final DownloadRequest request = new DownloadRequest(usenetID, mode);
+        log.trace("Queueing download request {} in mode {}", usenetID, mode);
 
         FullDownloadWorker.downloadQueue.add(request);
+        log.trace("Download queue size now {}", FullDownloadWorker.downloadQueue.size());
         if (FullDownloadWorker.downloaders.size() < 1) {
             FullDownloadWorker.startDownloaders(1, nntpHost, queue, newsClient, controller);
         }
@@ -173,6 +175,7 @@ public class FullDownloadWorker extends SwingWorker {
      * @throws UNISoNException the UNI so n exception
      */
     NewsArticle convertHeaderStringToArticle(final String theInfo) throws UNISoNException {
+        log.trace("Converting header string to article");
         final HashMap<String, String> headerFields = new HashMap<>();
 
         final StringTokenizer st = new StringTokenizer(theInfo, "\n");
@@ -240,6 +243,7 @@ public class FullDownloadWorker extends SwingWorker {
         if (body) {
             article.setContent(bodyBuffer.toString());
         }
+        log.trace("Converted article {} with subject '{}'", article.getArticleID(), article.getSubject());
         return article;
     }
 
@@ -251,11 +255,15 @@ public class FullDownloadWorker extends SwingWorker {
      * @throws UNISoNException the UNI so n exception
      */
     NewsArticle convertReaderToArticle(final Reader reader) throws UNISoNException {
+        log.trace("Converting reader to article");
         if (reader != null) {
             final String theInfo = this.readerToString(reader);
-            return this.convertHeaderStringToArticle(theInfo);
+            final NewsArticle article = this.convertHeaderStringToArticle(theInfo);
+            log.trace("Created article {}", (article != null) ? article.getArticleID() : null);
+            return article;
 
         }
+        log.trace("Reader was null, no article created");
         return null;
     }
 
@@ -268,18 +276,23 @@ public class FullDownloadWorker extends SwingWorker {
      */
     NewsArticle downloadArticle(final DownloadRequest request) throws UNISoNException {
         log.debug("Fetching article {}", request.usenetID());
+        log.trace("Download mode {}", request.mode());
         NewsArticle article = null;
         try {
             switch (request.mode()) {
                 case HEADERS:
+                    log.trace("Downloading headers for {}", request.usenetID());
                     article = this.downloadHeader(request);
                     break;
                 case ALL:
+                    log.trace("Downloading full message for {}", request.usenetID());
                     article = this.downloadFullMessage(request);
                     break;
                 case BASIC:
+                    log.trace("BASIC mode requested for {} - no download performed", request.usenetID());
                     break;
                 default:
+                    log.trace("Unsupported mode {} for {}", request.mode(), request.usenetID());
                     break;
             }
         } catch (final MalformedServerReplyException e) {
@@ -294,6 +307,8 @@ public class FullDownloadWorker extends SwingWorker {
         } else {
             log.debug("Retrieved article {} ({}) queue size {}", request.usenetID(),
                     article.getSubject(), FullDownloadWorker.downloadQueue.size());
+            log.trace("Article {} content length {}", request.usenetID(),
+                    (article.getContent() != null) ? article.getContent().length() : 0);
         }
         return article;
     }
@@ -308,13 +323,16 @@ public class FullDownloadWorker extends SwingWorker {
      */
     NewsArticle downloadFullMessage(final DownloadRequest request)
             throws IOException, UNISoNException {
+        log.trace("Retrieving full message for {}", request.usenetID());
         try (Reader reader = this.client.retrieveArticle(request.usenetID());) {
             NewsArticle article = null;
             if (null != reader) {
+                log.trace("Reader returned for {}", request.usenetID());
                 article = this.convertReaderToArticle(reader);
             } else {
                 log.warn("No message returned for {}", request.usenetID());
             }
+            log.trace("Finished retrieving full message for {}", request.usenetID());
             return article;
         }
     }
@@ -329,13 +347,16 @@ public class FullDownloadWorker extends SwingWorker {
      */
     private NewsArticle downloadHeader(final DownloadRequest request)
             throws IOException, UNISoNException {
+        log.trace("Retrieving headers for {}", request.usenetID());
         try (Reader reader = this.client.retrieveArticleHeader(request.usenetID());) {
             NewsArticle article = null;
             if (null != reader) {
+                log.trace("Header reader returned for {}", request.usenetID());
                 article = this.convertReaderToArticle(reader);
             } else {
                 log.warn("No message returned for {}", request.usenetID());
             }
+            log.trace("Finished retrieving headers for {}", request.usenetID());
             return article;
         }
     }
@@ -359,7 +380,13 @@ public class FullDownloadWorker extends SwingWorker {
      * @return the download request
      */
     private synchronized DownloadRequest pollQueue() {
+        log.trace("Polling download queue - current size {}", FullDownloadWorker.downloadQueue.size());
         final DownloadRequest request = FullDownloadWorker.downloadQueue.poll();
+        if (request != null) {
+            log.trace("Polled request {} in mode {}", request.usenetID(), request.mode());
+        } else {
+            log.trace("No request available to poll");
+        }
         return request;
     }
 
@@ -370,6 +397,7 @@ public class FullDownloadWorker extends SwingWorker {
      * @return String
      */
     private String readerToString(final Reader reader) {
+        log.trace("Converting reader to string");
         String temp = null;
         StringBuffer sb = null;
         final BufferedReader bufReader = new BufferedReader(reader);
@@ -386,6 +414,7 @@ public class FullDownloadWorker extends SwingWorker {
             log.error("Failed to read from reader", e);
         }
 
+        log.trace("Finished converting reader to string of length {}", sb.length());
         return sb.toString();
     }
 
@@ -397,6 +426,8 @@ public class FullDownloadWorker extends SwingWorker {
      */
     private boolean storeNextMessage(final LinkedBlockingQueue<NewsArticle> queue)
             throws UNISoNException {
+        log.trace("storeNextMessage invoked - queue size {} pending requests {}", queue.size(),
+                FullDownloadWorker.downloadQueue.size());
         var request = this.pollQueue();
 
         var article = this.downloadArticle(request);

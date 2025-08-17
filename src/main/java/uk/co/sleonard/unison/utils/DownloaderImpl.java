@@ -6,6 +6,7 @@
  */
 package uk.co.sleonard.unison.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
@@ -19,6 +20,7 @@ import uk.co.sleonard.unison.input.NewsGroupReader;
 import java.util.Objects;
 import java.util.concurrent.LinkedBlockingQueue;
 
+@Slf4j
 public class DownloaderImpl implements Downloader {
 
     private final String nntpHost;
@@ -45,6 +47,7 @@ public class DownloaderImpl implements Downloader {
     @Override
     public void addDownloadRequest(final @NotNull String usenetID, final @NotNull DownloadMode mode)
             throws UNISoNException {
+        log.trace("Received request to download {} in mode {}", usenetID, mode);
         FullDownloadWorker.addDownloadRequest(Objects.requireNonNull(usenetID, "usenetID"),
                 Objects.requireNonNull(mode, "mode"), this.nntpHost, this.queue,
                 this.newsClient, this.nntpReader, this.helper, this.controller);

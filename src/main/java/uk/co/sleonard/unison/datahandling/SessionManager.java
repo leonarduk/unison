@@ -1,11 +1,9 @@
 package uk.co.sleonard.unison.datahandling;
 
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import uk.co.sleonard.unison.UNISoNException;
 
 /**
  * Utility class responsible for creating and providing Hibernate {@link Session}
@@ -13,9 +11,9 @@ import uk.co.sleonard.unison.UNISoNException;
  * configuration file on first use and the {@link SessionFactory} is cached for
  * subsequent calls.
  */
+@Slf4j
 public final class SessionManager {
 
-    private static final Logger log = LoggerFactory.getLogger(SessionManager.class);
     private static SessionFactory sessionFactory;
 
     private SessionManager() {
@@ -27,16 +25,11 @@ public final class SessionManager {
      * {@link SessionFactory}.
      *
      * @return a new Hibernate session
-     * @throws UNISoNException if the session factory could not be created
      */
-    public static synchronized Session openSession() throws UNISoNException {
+    public static synchronized Session openSession() {
         if (sessionFactory == null) {
-            try {
-                sessionFactory = new Configuration().configure().buildSessionFactory();
-            } catch (Throwable e) {
-                log.error("Failed to connect to DB", e);
-                throw new UNISoNException("Failed to connect to DB", e);
-            }
+            log.info("Configuring session factory");
+            sessionFactory = new Configuration().configure().buildSessionFactory();
         }
         return sessionFactory.openSession();
     }

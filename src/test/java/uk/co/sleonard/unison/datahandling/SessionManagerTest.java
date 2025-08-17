@@ -1,18 +1,17 @@
 package uk.co.sleonard.unison.datahandling;
 
 import org.junit.jupiter.api.Test;
-import uk.co.sleonard.unison.UNISoNException;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Tests for {@link SessionManager}.
  */
-public class SessionManagerTest {
+ class SessionManagerTest {
 
     @Test
-    public void testOpenSession() {
-        assertThrows(UNISoNException.class, SessionManager::openSession);
+    void testOpenSession() {
+        assertNotNull( SessionManager.openSession());
     }
 }
 

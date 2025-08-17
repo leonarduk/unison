@@ -71,7 +71,7 @@ public class FullDownloadWorker extends SwingWorker {
      * @Deprecated move to DownloaderImpl if we can
      */
 
-    public synchronized static void addDownloadRequest(final String usenetID,
+    public static synchronized void addDownloadRequest(final String usenetID,
                                                        final DownloadMode mode, final String nntpHost,
                                                        final LinkedBlockingQueue<NewsArticle> queue, final NewsClient newsClient,
                                                        final NewsGroupReader nntpReader, final HibernateHelper helper,
@@ -82,7 +82,7 @@ public class FullDownloadWorker extends SwingWorker {
 
         FullDownloadWorker.downloadQueue.add(request);
         log.trace("Download queue size now {}", FullDownloadWorker.downloadQueue.size());
-        if (FullDownloadWorker.downloaders.size() < 1) {
+        if (FullDownloadWorker.downloaders.isEmpty()) {
             FullDownloadWorker.startDownloaders(1, nntpHost, queue, newsClient, controller);
         }
         DataHibernatorWorker.startHibernators(nntpReader, helper, queue, session);

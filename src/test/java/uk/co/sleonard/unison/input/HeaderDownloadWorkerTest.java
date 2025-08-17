@@ -34,7 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  */
-public class HeaderDownloadWorkerTest {
+class HeaderDownloadWorkerTest {
 
     private HeaderDownloadWorker worker;
     private static final Logger log = LoggerFactory.getLogger(HeaderDownloadWorkerTest.class);
@@ -43,7 +43,7 @@ public class HeaderDownloadWorkerTest {
      * Setup.
      */
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         this.worker = new HeaderDownloadWorker(new LinkedBlockingQueue<>(),
                 Mockito.mock(Downloader.class));
     }

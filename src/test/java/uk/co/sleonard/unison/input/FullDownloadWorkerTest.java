@@ -6,12 +6,10 @@
  */
 package uk.co.sleonard.unison.input;
 
-import org.hibernate.Session;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
-import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +18,6 @@ import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
-import uk.co.sleonard.unison.datahandling.SessionManager;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -34,7 +31,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  */
-public class FullDownloadWorkerTest {
+class FullDownloadWorkerTest {
 
     /**
      * The worker.
@@ -43,11 +40,11 @@ public class FullDownloadWorkerTest {
     private NewsClient newsClient;
     private LinkedBlockingQueue outQueue;
 
-  private static final Logger log = LoggerFactory.getLogger(FullDownloadWorkerTest.class);
+    private static final Logger log = LoggerFactory.getLogger(FullDownloadWorkerTest.class);
 
-  private UNISoNController controller;
+    private UNISoNController controller;
 
-  
+
     /**
      * Setup.
      *
@@ -66,25 +63,20 @@ public class FullDownloadWorkerTest {
      */
     @Test
     void testAddDownloadRequestAll() {
-        try (MockedStatic<SessionManager> sessionManager = Mockito.mockStatic(SessionManager.class)) {
-            Session session = Mockito.mock(Session.class);
-            sessionManager.when(SessionManager::openSession).thenReturn(session);
-
-            try {
-                final String nntpHost = "testserver";
-                final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
-                final NewsGroupReader reader = Mockito.mock(NewsGroupReader.class);
-                final HibernateHelper helper = Mockito.mock(HibernateHelper.class);
-                FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
-                        DownloadMode.ALL, nntpHost, queue,
-                        this.newsClient, reader, helper, this.controller);
-                queue.add(new NewsArticle("123", 1, new Date(), "eg@mail.com", "Lets talk", "", "alt"));
-                FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
-                        DownloadMode.ALL, nntpHost, queue,
-                        this.newsClient, reader, helper, this.controller);
-            } catch (final UNISoNException e) {
-                Assertions.fail("ERROR: " + e.getMessage());
-            }
+        try {
+            final String nntpHost = "testserver";
+            final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
+            final NewsGroupReader reader = Mockito.mock(NewsGroupReader.class);
+            final HibernateHelper helper = Mockito.mock(HibernateHelper.class);
+            FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
+                    DownloadMode.ALL, nntpHost, queue,
+                    this.newsClient, reader, helper, this.controller);
+            queue.add(new NewsArticle("123", 1, new Date(), "eg@mail.com", "Lets talk", "", "alt"));
+            FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
+                    DownloadMode.ALL, nntpHost, queue,
+                    this.newsClient, reader, helper, this.controller);
+        } catch (final UNISoNException e) {
+            Assertions.fail("ERROR: " + e.getMessage());
         }
     }
 
@@ -93,25 +85,20 @@ public class FullDownloadWorkerTest {
      */
     @Test
     void testAddDownloadRequestHeader() {
-        try (MockedStatic<SessionManager> sessionManager = Mockito.mockStatic(SessionManager.class)) {
-            Session session = Mockito.mock(Session.class);
-            sessionManager.when(SessionManager::openSession).thenReturn(session);
-
-            try {
-                final String nntpHost = "testserver";
-                final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
-                final NewsGroupReader reader = Mockito.mock(NewsGroupReader.class);
-                final HibernateHelper helper = Mockito.mock(HibernateHelper.class);
-                FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
-                        DownloadMode.HEADERS, nntpHost, queue,
-                        this.newsClient, reader, helper, this.controller);
-                queue.add(new NewsArticle("123", 1, new Date(), "eg@mail.com", "Lets talk", "", "alt"));
-                FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
-                        DownloadMode.HEADERS, nntpHost, queue,
-                        this.newsClient, reader, helper, this.controller);
-            } catch (final UNISoNException e) {
-                Assertions.fail("ERROR: " + e.getMessage());
-            }
+        try {
+            final String nntpHost = "testserver";
+            final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
+            final NewsGroupReader reader = Mockito.mock(NewsGroupReader.class);
+            final HibernateHelper helper = Mockito.mock(HibernateHelper.class);
+            FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
+                    DownloadMode.HEADERS, nntpHost, queue,
+                    this.newsClient, reader, helper, this.controller);
+            queue.add(new NewsArticle("123", 1, new Date(), "eg@mail.com", "Lets talk", "", "alt"));
+            FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
+                    DownloadMode.HEADERS, nntpHost, queue,
+                    this.newsClient, reader, helper, this.controller);
+        } catch (final UNISoNException e) {
+            Assertions.fail("ERROR: " + e.getMessage());
         }
     }
 

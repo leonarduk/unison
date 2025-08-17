@@ -57,15 +57,18 @@ public class HeaderDownloadWorkerTest {
      * Test fullStop
      */
     @Test
-    public void testFullStop() {
-        System.out.println("Wait 2 secs and stop");
-        try {
-            Thread.sleep(2000);
-        } catch (final InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Stop");
-        this.worker.fullStop();
+    public void testFullStop() throws InterruptedException {
+        this.worker.initialise();
+        this.worker.resume();
+        Assert.assertTrue(this.worker.isDownloading());
+        final java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(1);
+        new Thread(() -> {
+            this.worker.fullStop();
+            latch.countDown();
+        }).start();
+        Assert.assertTrue("fullStop did not complete in time",
+                latch.await(1, java.util.concurrent.TimeUnit.SECONDS));
+        Assert.assertFalse(this.worker.isDownloading());
     }
 
     /**

@@ -6,15 +6,18 @@
  */
 package uk.co.sleonard.unison.utils;
 
+import org.jetbrains.annotations.NotNull;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
-import uk.co.sleonard.unison.input.*;
+import uk.co.sleonard.unison.input.FullDownloadWorker;
+import uk.co.sleonard.unison.input.NewsArticle;
+import uk.co.sleonard.unison.input.NewsClient;
+import uk.co.sleonard.unison.input.NewsGroupReader;
 
 import java.util.Objects;
 import java.util.concurrent.LinkedBlockingQueue;
-import org.jetbrains.annotations.NotNull;
 
 public class DownloaderImpl implements Downloader {
 
@@ -42,7 +45,7 @@ public class DownloaderImpl implements Downloader {
             throws UNISoNException {
         FullDownloadWorker.addDownloadRequest(Objects.requireNonNull(usenetID, "usenetID"),
                 Objects.requireNonNull(mode, "mode"), this.nntpHost, this.queue,
-                this.newsClient, this.nntpReader, this.helper);
+                this.newsClient, this.nntpReader, this.helper, this.controller);
     }
 
 }

@@ -9,11 +9,13 @@ package uk.co.sleonard.unison.input;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.nntp.Article;
 import org.apache.commons.net.nntp.NNTPClient;
+import uk.co.sleonard.unison.DataChangeListener;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.utils.Downloader;
 import uk.co.sleonard.unison.utils.StringUtils;
 
+import java.beans.PropertyChangeSupport;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -22,9 +24,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import java.beans.PropertyChangeSupport;
-import uk.co.sleonard.unison.DataChangeListener;
 
 /**
  * Class to create a separate Thread for downloading messages.
@@ -156,8 +155,8 @@ public class HeaderDownloadWorker extends SwingWorker {
         this.downloading = false;
         try {
             final NewsGroupReader newsReader2 = this.newsReader;
-            if ((null != newsReader2) && (null != newsReader2.client)) {
-                newsReader2.client.quit();
+            if ((null != newsReader2) && (null != newsReader2.getClient())) {
+                newsReader2.getClient().quit();
             }
         } catch (final IOException e) {
             e.printStackTrace();
@@ -237,8 +236,8 @@ public class HeaderDownloadWorker extends SwingWorker {
         log.info("Initialising: server={}, group={}, start={}, end={}, mode={}, from={}, to={}",
                 server, newsgroup1, startIndex1, endIndex1, mode1, from, to);
         try {
-            reader.client.connect(server);
-            reader.client.selectNewsgroup(newsgroup1);
+            reader.getClient().connect(server);
+            reader.getClient().selectNewsgroup(newsgroup1);
         } catch (final Exception e) {
             log.warn("Initialisation failed for group {} on {}: {}", newsgroup1, server,
                     e.getMessage(), e);
@@ -414,7 +413,7 @@ public class HeaderDownloadWorker extends SwingWorker {
             for (int i = this.startIndex; i < this.endIndex; i += 500) {
                 final int batchEndIndex = Math.min(i + 499, this.endIndex);
                 log.debug("Starting batch {}-{}", i, batchEndIndex);
-                try (final Reader reader = this.newsReader.client.retrieveArticleInfo(
+                try (final Reader reader = this.newsReader.getClient().retrieveArticleInfo(
                         i, batchEndIndex);) {
                     this.queueMessages(queue1, reader);
                 }

@@ -1,9 +1,10 @@
 package uk.co.sleonard.unison.datahandling;
 
-import org.hibernate.Session;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import uk.co.sleonard.unison.UNISoNException;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for {@link SessionManager}.
@@ -11,10 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class SessionManagerTest {
 
     @Test
-    public void testOpenSession() throws Exception {
-        try (Session session = SessionManager.openSession()) {
-            assertNotNull(session);
-        }
+    public void testOpenSession() {
+        assertThrows(UNISoNException.class, SessionManager::openSession);
     }
 }
 

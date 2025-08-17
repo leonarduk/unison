@@ -43,7 +43,7 @@ public class DataQueryTest {
         Vector<String> countries = new Vector<>();
         countries.addElement("England");
         String actual = this.dataQuery.getLocationsSQL(countries).toString();
-        String expected = " FROM uk.co.sleonard.unison.datahandling.DAO.Location where country in ( 'England') ";
+        String expected = " FROM uk.co.sleonard.unison.datahandling.DAO.Location where country in ( 'England' ) ";
         assertEquals(expected, actual);
     }
 

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
+import org.mockito.MockedStatic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.sleonard.unison.UNISoNController;
@@ -18,6 +19,8 @@ import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
+import uk.co.sleonard.unison.datahandling.SessionManager;
+import org.hibernate.Session;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -63,23 +66,25 @@ public class FullDownloadWorkerTest {
      */
     @Test
     void testAddDownloadRequestAll() {
-        try {
-            final String nntpHost = "testserver";
-            final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
-            final NewsGroupReader reader = Mockito.mock(NewsGroupReader.class);
-            final HibernateHelper helper = Mockito.mock(HibernateHelper.class);
-            FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
-                    DownloadMode.ALL, nntpHost, queue,
-                    this.newsClient, reader, helper, this.controller);
-            queue.add(new NewsArticle("123", 1, new Date(), "eg@mail.com", "Lets talk", "", "alt"));
-            FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
-                    DownloadMode.ALL, nntpHost, queue,
-                    this.newsClient, reader, helper, this.controller);
+        try (MockedStatic<SessionManager> sessionManager = Mockito.mockStatic(SessionManager.class)) {
+            Session session = Mockito.mock(Session.class);
+            sessionManager.when(SessionManager::openSession).thenReturn(session);
 
-            // Assertions.assertTrue(FullDownloadWorker.queueSize() >= 1);
-        } catch (final UNISoNException e) {
-            e.printStackTrace();
-            Assertions.fail("ERROR: " + e.getMessage());
+            try {
+                final String nntpHost = "testserver";
+                final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
+                final NewsGroupReader reader = Mockito.mock(NewsGroupReader.class);
+                final HibernateHelper helper = Mockito.mock(HibernateHelper.class);
+                FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
+                        DownloadMode.ALL, nntpHost, queue,
+                        this.newsClient, reader, helper, this.controller);
+                queue.add(new NewsArticle("123", 1, new Date(), "eg@mail.com", "Lets talk", "", "alt"));
+                FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
+                        DownloadMode.ALL, nntpHost, queue,
+                        this.newsClient, reader, helper, this.controller);
+            } catch (final UNISoNException e) {
+                Assertions.fail("ERROR: " + e.getMessage());
+            }
         }
     }
 
@@ -88,23 +93,25 @@ public class FullDownloadWorkerTest {
      */
     @Test
     void testAddDownloadRequestHeader() {
-        try {
-            final String nntpHost = "testserver";
-            final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
-            final NewsGroupReader reader = Mockito.mock(NewsGroupReader.class);
-            final HibernateHelper helper = Mockito.mock(HibernateHelper.class);
-            FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
-                    DownloadMode.HEADERS, nntpHost, queue,
-                    this.newsClient, reader, helper, this.controller);
-            queue.add(new NewsArticle("123", 1, new Date(), "eg@mail.com", "Lets talk", "", "alt"));
-            FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
-                    DownloadMode.HEADERS, nntpHost, queue,
-                    this.newsClient, reader, helper, this.controller);
+        try (MockedStatic<SessionManager> sessionManager = Mockito.mockStatic(SessionManager.class)) {
+            Session session = Mockito.mock(Session.class);
+            sessionManager.when(SessionManager::openSession).thenReturn(session);
 
-            // Assertions.assertTrue(FullDownloadWorker.queueSize() >= 1);
-        } catch (final UNISoNException e) {
-            e.printStackTrace();
-            Assertions.fail("ERROR: " + e.getMessage());
+            try {
+                final String nntpHost = "testserver";
+                final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
+                final NewsGroupReader reader = Mockito.mock(NewsGroupReader.class);
+                final HibernateHelper helper = Mockito.mock(HibernateHelper.class);
+                FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
+                        DownloadMode.HEADERS, nntpHost, queue,
+                        this.newsClient, reader, helper, this.controller);
+                queue.add(new NewsArticle("123", 1, new Date(), "eg@mail.com", "Lets talk", "", "alt"));
+                FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
+                        DownloadMode.HEADERS, nntpHost, queue,
+                        this.newsClient, reader, helper, this.controller);
+            } catch (final UNISoNException e) {
+                Assertions.fail("ERROR: " + e.getMessage());
+            }
         }
     }
 

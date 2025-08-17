@@ -18,6 +18,8 @@ public class UsenetUserPersistenceTest {
     public void testPersistAndLoad() {
         Configuration cfg = new Configuration().configure();
         cfg.setProperty("hibernate.connection.url", "jdbc:hsqldb:mem:usenetuser;DB_CLOSE_DELAY=-1");
+        cfg.setProperty("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
+        cfg.setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
         cfg.setProperty("hibernate.hbm2ddl.auto", "create-drop");
 
         try (SessionFactory sf = cfg.buildSessionFactory();

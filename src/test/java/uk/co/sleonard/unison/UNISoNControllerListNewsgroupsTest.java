@@ -51,6 +51,7 @@ class UNISoNControllerListNewsgroupsTest {
                 assertSame(expected, result);
                 assertEquals(host, controller.getNntpHost());
                 verify(client).listNewsGroups(group, host);
+                sessionManager.verify(() -> SessionManager.openSession(), Mockito.times(1));
             }
         }
     }

@@ -385,16 +385,6 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
     }// GEN-LAST:event_filterToggleActionPerformed
 
     /**
-     * Gets the body button action performed.
-     *
-     * @param evt the evt
-     * @return the body button action performed
-     */
-    private void getBodyButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_getBodyButtonActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_getBodyButtonActionPerformed
-
-    /**
      * Gets the list model.
      *
      * @param results the results
@@ -582,8 +572,6 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
                 evt -> MessageStoreViewer.this.refreshButtonActionPerformed(evt));
 
         this.getBodyButton.setText("Get Body");
-        this.getBodyButton.addActionListener(
-                evt -> MessageStoreViewer.this.getBodyButtonActionPerformed(evt));
 
         this.headersButton.setText("Get Extras");
         this.headersButton.setToolTipText(
@@ -811,7 +799,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
      * @param evt the evt
      */
     private void missingMessagesCheckItemStateChanged(final java.awt.event.ItemEvent evt) {// GEN-FIRST:event_missingMessagesCheckItemStateChanged
-        // TODO add your handling code here:
+        this.refreshTopicHierarchy();
     }// GEN-LAST:event_missingMessagesCheckItemStateChanged
 
     /**
@@ -899,8 +887,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
                 this.bodyPane.setText(
                         StringUtils.decompress(message.getMessageBody()).orElse(""));
             } catch (final IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                log.error("Failed to decompress message body", e);
             }
         }
     }
@@ -1088,7 +1075,15 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
      * @param evt the evt
      */
     private void topCountriesListValueChanged(final javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_topCountriesListValueChanged
-        // TODO add your handling code here:
+        if (!evt.getValueIsAdjusting()) {
+            final List<GUIItem<ResultRow>> selected = this.topCountriesList.getSelectedValuesList();
+            final Set<String> countries = new HashSet<>();
+            for (final GUIItem<ResultRow> row : selected) {
+                countries.add((String) row.getObject().getKey());
+            }
+            UNISoNController.getInstance().getFilter().setSelectedCountries(countries);
+            this.refreshTopGroups();
+        }
     }// GEN-LAST:event_topCountriesListValueChanged
 
     /**
@@ -1135,7 +1130,15 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
      * @param evt the evt
      */
     private void topPostersListValueChanged(final javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_topPostersListValueChanged
-        // TODO add your handling code here:
+        if (!evt.getValueIsAdjusting()) {
+            final List<GUIItem<ResultRow>> selected = this.topPostersList.getSelectedValuesList();
+            final Set<String> posters = new HashSet<>();
+            for (final GUIItem<ResultRow> row : selected) {
+                posters.add((String) row.getObject().getKey());
+            }
+            UNISoNController.getInstance().getFilter().setSelectedPosters(posters);
+            this.refreshMessagePane();
+        }
     }// GEN-LAST:event_topPostersListValueChanged
 
     /*

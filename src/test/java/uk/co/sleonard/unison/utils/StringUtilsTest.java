@@ -1,6 +1,6 @@
 package uk.co.sleonard.unison.utils;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.co.sleonard.unison.UNISoNException;
 
 import java.io.ByteArrayInputStream;
@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * The Class StringUtilsTest.

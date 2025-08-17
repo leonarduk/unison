@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Assertions;
 
 /**
  * The Class UsenetUserHelperTest
@@ -47,7 +48,8 @@ class UsenetUserHelperTest {
      */
     @Test()
     void testParseFromFieldThrowsWhenMissingNameAndEmail() {
-        UsenetUserHelper.parseFromField("", "localhost");
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> UsenetUserHelper.parseFromField("", "localhost"));
     }
 
     /**

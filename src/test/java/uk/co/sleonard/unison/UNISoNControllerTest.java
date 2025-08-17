@@ -3,6 +3,10 @@ package uk.co.sleonard.unison;
 import org.junit.jupiter.api.Test;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
+import uk.co.sleonard.unison.datahandling.HibernateHelper;
+import uk.co.sleonard.unison.input.NewsClient;
+import org.mockito.Mockito;
+import org.hibernate.Session;
 
 import javax.swing.*;
 import java.util.HashSet;
@@ -18,7 +22,12 @@ public class UNISoNControllerTest {
 
     @Test
     public void testGetAvailableGroupsModelUsesSuppliedGroups() throws UNISoNException {
-        UNISoNController controller = new UNISoNControllerFactory().create(null, new DataHibernatorPoolImpl());
+        NewsClient client = Mockito.mock(NewsClient.class);
+        HibernateHelper helper = Mockito.mock(HibernateHelper.class);
+        Session session = Mockito.mock(Session.class);
+        Mockito.when(helper.getHibernateSession()).thenReturn(session);
+
+        UNISoNController controller = new UNISoNController(client, helper, new java.util.concurrent.LinkedBlockingQueue<>(), new DataHibernatorPoolImpl(), null);
 
         Set<NewsGroup> groups = new HashSet<>();
         NewsGroup group = new NewsGroup();

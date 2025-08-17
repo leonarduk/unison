@@ -206,17 +206,17 @@ public class StringUtilsTest {
     /**
      * Test stringToDate with String length 8 throw UNISoNException
      */
-    @Test()
-    public void testStringToDateExceptionLength8() throws UNISoNException {
-        StringUtils.stringToDate("xxxxxxxx");
+    @Test
+    public void testStringToDateExceptionLength8() {
+        assertThrows(UNISoNException.class, () -> StringUtils.stringToDate("xxxxxxxx"));
     }
 
     /**
      * Test stringToDate with String length 10 throw UNISoNException
      */
-    @Test()
-    public void testStringToDateExceptionLength10() throws UNISoNException {
-        StringUtils.stringToDate("xx/xx/xxxx");
+    @Test
+    public void testStringToDateExceptionLength10() {
+        assertThrows(UNISoNException.class, () -> StringUtils.stringToDate("xx/xx/xxxx"));
     }
 
     /**

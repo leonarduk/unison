@@ -236,6 +236,20 @@ public class HeaderDownloadWorkerTest {
         }
     }
 
+    @Test
+    void testResumeTriggersStoreArticleInfo() throws Exception {
+        final HeaderDownloadWorker spyWorker = Mockito.spy(
+                new HeaderDownloadWorker(new LinkedBlockingQueue<>(),
+                        Mockito.mock(Downloader.class)));
+        Mockito.doReturn(true).when(spyWorker).storeArticleInfo(Mockito.any());
+
+        spyWorker.initialise();
+        spyWorker.resume();
+
+        Mockito.verify(spyWorker, Mockito.timeout(1000)).storeArticleInfo(Mockito.any());
+        spyWorker.fullstop();
+    }
+
     private void setField(final Object target, final String fieldName, final Object value) throws Exception {
         final Field field = target.getClass().getDeclaredField(fieldName);
         field.setAccessible(true);

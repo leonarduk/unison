@@ -63,12 +63,12 @@ public class HeaderDownloadWorker extends SwingWorker {
     /**
      * The downloading.
      */
-    private boolean downloading = false;
+    private volatile boolean downloading = false;
 
     /**
      * The running.
      */
-    private boolean running = true;
+    private volatile boolean running = true;
 
     /**
      * The log tally.

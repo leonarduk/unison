@@ -30,7 +30,7 @@ public class UserFactory {
             location = this.createLocation(article, session, helper);
         }
         final UsenetUser poster = this.findOrCreateUsenetUser(article, session, gender, helper);
-        if ((null == poster.getLocation()) || !poster.getLocation().equals(location)) {
+        if (location != null && (poster.getLocation() == null || !poster.getLocation().equals(location))) {
             poster.setLocation(location);
             session.saveOrUpdate(poster);
         }

@@ -1078,7 +1078,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
             for (final GUIItem<ResultRow> row : selected) {
                 countries.add((String) row.getObject().getKey());
             }
-            UNISoNController.getInstance().getFilter().setSelectedCountries(countries);
+            this.controller.getFilter().setSelectedCountries(countries);
             this.refreshTopGroups();
         }
     }// GEN-LAST:event_topCountriesListValueChanged
@@ -1133,7 +1133,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
             for (final GUIItem<ResultRow> row : selected) {
                 posters.add((String) row.getObject().getKey());
             }
-            UNISoNController.getInstance().getFilter().setSelectedPosters(posters);
+            this.controller.getFilter().setSelectedPosters(posters);
             this.refreshMessagePane();
         }
     }// GEN-LAST:event_topPostersListValueChanged

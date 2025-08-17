@@ -6,7 +6,8 @@ import uk.co.sleonard.unison.datahandling.DAO.Message;
 import java.util.Date;
 import java.util.HashSet;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Tests for {@link MessageCacheService}.

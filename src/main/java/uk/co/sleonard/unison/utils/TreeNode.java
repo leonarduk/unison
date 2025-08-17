@@ -1,10 +1,10 @@
 package uk.co.sleonard.unison.utils;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.Objects;
 
 /**

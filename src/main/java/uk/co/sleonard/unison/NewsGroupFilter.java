@@ -6,6 +6,7 @@
  */
 package uk.co.sleonard.unison;
 
+import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Session;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
@@ -18,8 +19,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
-
-import lombok.Data;
 
 @Data
 public class NewsGroupFilter {

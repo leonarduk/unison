@@ -8,6 +8,7 @@ package uk.co.sleonard.unison.datahandling;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
+import uk.co.sleonard.unison.DataChangeListener;
 import uk.co.sleonard.unison.NewsGroupFilter;
 import uk.co.sleonard.unison.datahandling.DAO.Message;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
@@ -18,8 +19,6 @@ import java.beans.PropertyChangeSupport;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import uk.co.sleonard.unison.DataChangeListener;
 
 @Slf4j
 public class UNISoNDatabase {

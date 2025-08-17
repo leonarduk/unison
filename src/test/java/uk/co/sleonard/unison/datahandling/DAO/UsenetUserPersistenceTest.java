@@ -2,12 +2,9 @@ package uk.co.sleonard.unison.datahandling.DAO;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
 
 /**
  * Regression test to ensure {@link UsenetUser} can be persisted using annotations.

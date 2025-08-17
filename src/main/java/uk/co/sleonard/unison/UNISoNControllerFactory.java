@@ -1,13 +1,13 @@
 package uk.co.sleonard.unison;
 
+import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.gui.UNISoNGUI;
 import uk.co.sleonard.unison.input.DataHibernatorPool;
 import uk.co.sleonard.unison.input.NewsArticle;
 import uk.co.sleonard.unison.input.NewsClient;
 import uk.co.sleonard.unison.input.NewsClientImpl;
-import uk.co.sleonard.unison.datahandling.HibernateHelper;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**

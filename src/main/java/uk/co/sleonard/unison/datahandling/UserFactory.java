@@ -2,7 +2,10 @@ package uk.co.sleonard.unison.datahandling;
 
 import org.hibernate.Session;
 import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.datahandling.DAO.*;
+import uk.co.sleonard.unison.datahandling.DAO.EmailAddress;
+import uk.co.sleonard.unison.datahandling.DAO.IpAddress;
+import uk.co.sleonard.unison.datahandling.DAO.Location;
+import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.input.LocationFinder;
 import uk.co.sleonard.unison.input.LocationFinderImpl;
 import uk.co.sleonard.unison.input.NewsArticle;

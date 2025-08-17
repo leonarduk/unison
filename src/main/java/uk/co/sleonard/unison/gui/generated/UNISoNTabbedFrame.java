@@ -7,6 +7,7 @@
 package uk.co.sleonard.unison.gui.generated;
 
 import org.hsqldb.util.DatabaseManagerSwing;
+import uk.co.sleonard.unison.DataChangeListener;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNControllerFactory;
 import uk.co.sleonard.unison.UNISoNException;
@@ -18,7 +19,6 @@ import javax.swing.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
-import uk.co.sleonard.unison.DataChangeListener;
 
 /**
  * The Class UNISoNTabbedFrame.

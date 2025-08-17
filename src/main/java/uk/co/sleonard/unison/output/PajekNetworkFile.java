@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.gui.GraphPreviewPanel;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;

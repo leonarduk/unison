@@ -11,10 +11,10 @@ import org.apache.commons.net.MalformedServerReplyException;
 import org.hibernate.Session;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
-import uk.co.sleonard.unison.datahandling.SessionManager;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
+import uk.co.sleonard.unison.datahandling.SessionManager;
 import uk.co.sleonard.unison.utils.StringUtils;
 
 import java.io.BufferedReader;

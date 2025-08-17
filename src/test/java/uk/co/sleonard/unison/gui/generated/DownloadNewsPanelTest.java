@@ -5,7 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
-import uk.co.sleonard.unison.input.*;
+import uk.co.sleonard.unison.input.DataHibernatorPool;
+import uk.co.sleonard.unison.input.HeaderDownloadWorker;
+import uk.co.sleonard.unison.input.NewsArticle;
+import uk.co.sleonard.unison.input.NewsClient;
 
 import javax.swing.*;
 import java.lang.reflect.Field;

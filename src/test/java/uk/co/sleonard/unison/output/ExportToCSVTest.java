@@ -6,6 +6,7 @@
  */
 package uk.co.sleonard.unison.output;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Vector;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * The Class ExportToCSV.

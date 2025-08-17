@@ -1,12 +1,12 @@
 package uk.co.sleonard.unison;
 
-import org.junit.jupiter.api.Test;
-import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
-import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
-import uk.co.sleonard.unison.datahandling.HibernateHelper;
-import uk.co.sleonard.unison.input.NewsClient;
-import org.mockito.Mockito;
 import org.hibernate.Session;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
+import uk.co.sleonard.unison.datahandling.HibernateHelper;
+import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
+import uk.co.sleonard.unison.input.NewsClient;
 
 import javax.swing.*;
 import java.util.HashSet;

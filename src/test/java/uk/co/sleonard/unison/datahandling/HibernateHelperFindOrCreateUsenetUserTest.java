@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.input.NewsArticle;
-import uk.co.sleonard.unison.datahandling.UserFactory;
 
 import java.util.Date;
 

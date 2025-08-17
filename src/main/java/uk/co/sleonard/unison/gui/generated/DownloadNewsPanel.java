@@ -7,16 +7,16 @@
 package uk.co.sleonard.unison.gui.generated;
 
 import lombok.extern.slf4j.Slf4j;
+import uk.co.sleonard.unison.DataChangeListener;
 import uk.co.sleonard.unison.StatusMonitor;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNControllerFactory;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
-import uk.co.sleonard.unison.input.HeaderDownloadWorker;
 import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
+import uk.co.sleonard.unison.input.HeaderDownloadWorker;
 import uk.co.sleonard.unison.utils.StringUtils;
 
 import java.beans.PropertyChangeEvent;
-import uk.co.sleonard.unison.DataChangeListener;
 import java.util.Set;
 
 /**

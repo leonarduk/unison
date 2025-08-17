@@ -1,7 +1,6 @@
 package uk.co.sleonard.unison.datahandling;
 
 import org.junit.jupiter.api.Test;
-
 import uk.co.sleonard.unison.UNISoNException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;

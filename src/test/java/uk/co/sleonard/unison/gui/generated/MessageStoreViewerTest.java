@@ -15,9 +15,9 @@ import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.gui.UNISoNGUI;
 import uk.co.sleonard.unison.utils.TreeNode;
 
+import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
-import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

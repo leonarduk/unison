@@ -7,7 +7,6 @@ import org.mockito.Mockito;
 import uk.co.sleonard.unison.datahandling.DAO.Location;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 import uk.co.sleonard.unison.input.NewsArticle;
-import uk.co.sleonard.unison.datahandling.UserFactory;
 
 import java.util.ArrayList;
 import java.util.Date;

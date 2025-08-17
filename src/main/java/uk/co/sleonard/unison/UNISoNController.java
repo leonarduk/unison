@@ -37,12 +37,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 @Slf4j
 public class UNISoNController {
 
-    /**
-     * The instance.
-     */
-    private static UNISoNController instance;
-
-    private UNISoNGUI gui;
+    private final UNISoNGUI gui;
 
     /**
      * The message queue.
@@ -52,7 +47,7 @@ public class UNISoNController {
     /**
      * The nntp reader.
      */
-    private NewsGroupReader nntpReader;
+    private final NewsGroupReader nntpReader;
 
     /**
      * The header downloader.
@@ -72,7 +67,7 @@ public class UNISoNController {
     /**
      * The session.
      */
-    private Session session;
+    private final Session session;
 
     /**
      * The download panel.
@@ -88,35 +83,6 @@ public class UNISoNController {
     private final DataHibernatorPool pool;
 
     private final NewsClient client;
-
-    public static UNISoNController create(final JFrame frame, final DataHibernatorPool pool)
-            throws UNISoNException {
-        UNISoNGUI gui = (frame != null) ? new UNISoNGUI(frame) : null;
-        HibernateHelper helper = new HibernateHelper(gui);
-        LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
-        NewsClient client = new NewsClientImpl();
-        UNISoNController.instance = new UNISoNController(client, helper, queue, pool, gui);
-        return UNISoNController.instance;
-    }
-    // private static UNISoNController instance;
-
-    /**
-     * Gets the single instance of UNISoNController.
-     *
-     * @return single instance of UNISoNController
-     */
-    public static UNISoNController getInstance() {
-        return UNISoNController.instance;
-    }
-
-    /**
-     * Set the global instance (intended for tests).
-     *
-     * @param controller the controller to set as the singleton instance
-     */
-    public static void setInstance(final UNISoNController controller) {
-        UNISoNController.instance = controller;
-    }
 
     /**
      * Public constructor allowing explicit dependency injection.
@@ -138,21 +104,20 @@ public class UNISoNController {
         this.helper = helper;
         this.client = client;
 
-        try {
-            final Session hibernateSession = SessionManager.openSession();
-            this.setSession(hibernateSession);
-            this.filter = new NewsGroupFilter(hibernateSession, this.helper);
-            this.analysis = new UNISoNAnalysis(this.filter, hibernateSession, this.helper);
-            this.database = new UNISoNDatabase(this.filter, hibernateSession, this.helper,
+       try {
+            this.session = this.helper.getHibernateSession();
+            this.filter = new NewsGroupFilter(this.session, this.helper);
+            this.analysis = new UNISoNAnalysis(this.filter, this.session, this.helper);
+            this.database = new UNISoNDatabase(this.filter, this.session, this.helper,
                     new DataQuery(this.helper));
         } catch (final UNISoNException e) {
-            if (this.getGui() != null) {
-                this.getGui().showAlert("Error:" + e.getMessage());
+            if (this.gui != null) {
+                this.gui.showAlert("Error:" + e.getMessage());
             }
             throw e;
         }
 
-        this.nntpReader = new NewsGroupReader(this.client);
+        this.nntpReader = new NewsGroupReader(this.client, this);
     }
 
     public void cancel() {
@@ -416,10 +381,6 @@ public class UNISoNController {
         this.downloadPanel = downloadPanel;
     }
 
-    private void setGui(final UNISoNGUI gui) {
-        this.gui = gui;
-    }
-
     public void setHeaderDownloader(final HeaderDownloadWorker downloadWorker) {
         this.headerDownloader = downloadWorker;
     }
@@ -438,23 +399,12 @@ public class UNISoNController {
      */
     public void setNntpHost(final String nntpHost) {
         this.nntpHost = nntpHost;
-        this.headerDownloader = new HeaderDownloadWorker(
-                this.messageQueue,
-                new DownloaderImpl(this.nntpHost,
-                        this.messageQueue,
-                        this.client,
-                        this.nntpReader,
-                        this.helper));
-        this.headerDownloader.initialise();
+        this.headerDownloader = new HeaderDownloadWorker(this.messageQueue,
+                new DownloaderImpl(this.nntpHost, this.messageQueue, this.client, this.nntpReader,
+                        this.helper, this));
 
-    }
+      this.headerDownloader.initialise();
 
-    public void setNntpReader(final NewsGroupReader reader) {
-        this.nntpReader = reader;
-    }
-
-    public void setSession(final Session session) {
-        this.session = session;
     }
 
     /**

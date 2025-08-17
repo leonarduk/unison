@@ -12,6 +12,7 @@ import org.junit.Test;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
+import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.utils.DownloaderImpl;
 import uk.co.sleonard.unison.utils.StringUtils;
 
@@ -36,7 +37,7 @@ public class HeaderDownloadWorkerIT {
             final NewsGroupReader groupReader = null;
             final HeaderDownloadWorker worker = new HeaderDownloadWorker(
                     new LinkedBlockingQueue<>(), new DownloaderImpl(nntpHost, queue1, newsClient1,
-                    groupReader, helper2));
+                    groupReader, helper2, (UNISoNController) null));
             worker.setMode(DownloadMode.BASIC);
 
             final BufferedReader bufReader = new BufferedReader(reader);

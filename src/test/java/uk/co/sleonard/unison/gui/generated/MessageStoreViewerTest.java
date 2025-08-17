@@ -42,7 +42,6 @@ public class MessageStoreViewerTest {
         Mockito.when(this.controller.getFilter()).thenReturn(this.filter);
         Mockito.when(this.controller.getGui()).thenReturn(gui);
 
-        UNISoNController.setInstance(this.controller);
     }
 
     @Test
@@ -69,7 +68,7 @@ public class MessageStoreViewerTest {
         Mockito.when(this.filter.getSelectedNewsgroup()).thenReturn(selected);
         Mockito.when(this.filter.getTopicsFilter()).thenReturn(topics);
 
-        final MessageStoreViewer viewer = new MessageStoreViewer();
+        final MessageStoreViewer viewer = new MessageStoreViewer(this.controller);
         viewer.notifySelectedNewsGroupObservers();
 
         final Field rootField = MessageStoreViewer.class.getDeclaredField("topicRoot");

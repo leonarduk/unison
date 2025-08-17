@@ -3,6 +3,11 @@ package uk.co.sleonard.unison.utils;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import uk.co.sleonard.unison.UNISoNController;
+
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
@@ -34,9 +39,14 @@ public class DownloaderImplTest {
             String usenetId = "<123>";
             DownloadMode mode = DownloadMode.ALL;
 
-            downloader.addDownloadRequest(usenetId, mode);
+        UNISoNController controller = Mockito.mock(UNISoNController.class);
+        DownloaderImpl downloader = new DownloaderImpl(nntpHost, queue, newsClient, reader, helper, controller);
+        String usenetId = "<123>";
+        DownloadMode mode = DownloadMode.ALL;
 
-            mocked.verify(() -> FullDownloadWorker.addDownloadRequest(usenetId, mode, nntpHost, queue, newsClient, reader, helper), Mockito.times(1));
-        }
+        downloader.addDownloadRequest(usenetId, mode);
+
+        PowerMockito.verifyStatic(FullDownloadWorker.class, Mockito.times(1));
+        FullDownloadWorker.addDownloadRequest(usenetId, mode, nntpHost, queue, newsClient, reader, helper, controller);
     }
 }

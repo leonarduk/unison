@@ -322,11 +322,15 @@ public class UNISoNController {
                         mode,
                         fromDate1,
                         toDate1);
-                log.debug("Initialised header downloader for {}", group.getName());
+                headerDownloader2.awaitCompletion();
+                log.debug("Completed header download for {}", group.getName());
             } catch (final IOException e) {
                 e.printStackTrace();
                 throw new UNISoNException(
                         "Error downloading messages. Check your internet connection: ", e);
+            } catch (final InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new UNISoNException("Header download interrupted", e);
             }
         }
     }

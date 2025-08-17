@@ -143,6 +143,12 @@ public class FullDownloadWorkerTest {
                 + "\nYang's servers are also down, suggest you Duke at www.dukematches.net" + "\n"
                 + "\nRep'";
         final NewsArticle actual = this.worker.convertHeaderStringToArticle(info);
+        Assert.assertNotNull(actual);
+        Assert.assertEquals("Duke Nukem Hall of Shame (update)", actual.getSubject());
+        Assert.assertEquals("\"Replica\" <replica@yang-online.com", actual.getFrom());
+        Assert.assertEquals("ab.general,alt.games.duke3d.binaries", actual.getNewsgroups());
+        Assert.assertEquals("<53cb84f9$0$29973$c3e8da3$5496439d@news.astraweb.com>",
+                actual.getArticleID());
     }
 
     /**

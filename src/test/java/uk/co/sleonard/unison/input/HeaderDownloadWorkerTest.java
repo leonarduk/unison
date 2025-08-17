@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.utils.Downloader;
@@ -80,7 +81,7 @@ public class HeaderDownloadWorkerTest {
     public void testInitialise() throws UNISoNException {
 
         final NewsClient nc = Mockito.mock(NewsClient.class);
-        final NewsGroupReader ngr = new NewsGroupReader(nc);
+        final NewsGroupReader ngr = new NewsGroupReader(nc, Mockito.mock(UNISoNController.class));
         final Date fromAndTo = Calendar.getInstance().getTime();
         Assert.assertFalse(this.worker.isDownloading());
 
@@ -207,11 +208,10 @@ public class HeaderDownloadWorkerTest {
     public void testStoreArticleInfoDoesNotRequestBeyondEndIndex() throws Exception {
         final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
 
-        final NewsGroupReader reader = new NewsGroupReader(null);
         final NewsClient client = Mockito.mock(NewsClient.class);
+        final NewsGroupReader reader = new NewsGroupReader(client, Mockito.mock(UNISoNController.class));
         Mockito.when(client.retrieveArticleInfo(Mockito.anyLong(), Mockito.anyLong()))
                 .thenReturn(new BufferedReader(new StringReader("")));
-        reader.setClient(client);
 
         // configure worker
         this.worker.resume();

@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import uk.co.sleonard.unison.UNISoNController;
 
 /**
  * The Class NewsGroupReaderTest.
@@ -31,7 +32,7 @@ public class NewsGroupReaderTest {
      */
     @Before
     public void setUp() {
-        this.newsGroup = new NewsGroupReader(new NewsClientImpl());
+        this.newsGroup = new NewsGroupReader(new NewsClientImpl(), Mockito.mock(UNISoNController.class));
     }
 
     /**
@@ -81,7 +82,7 @@ public class NewsGroupReaderTest {
     @Test
     public void testSuppliedNewsClientIsUsed() {
         final NewsClient mockClient = Mockito.mock(NewsClient.class);
-        final NewsGroupReader reader = new NewsGroupReader(mockClient);
+        final NewsGroupReader reader = new NewsGroupReader(mockClient, Mockito.mock(UNISoNController.class));
         reader.getNumberOfMessages();
         Mockito.verify(mockClient).getMessageCount();
     }

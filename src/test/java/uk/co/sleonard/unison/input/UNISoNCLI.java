@@ -11,10 +11,12 @@ import org.hsqldb.util.DatabaseManagerSwing;
 import org.junit.Assert;
 import org.junit.Ignore;
 import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNControllerFactory;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
+import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -38,7 +40,14 @@ public class UNISoNCLI {
      */
     public static void main(String[] args) {
 
-        final UNISoNCLI main = new UNISoNCLI();
+        final UNISoNController controller;
+        try {
+            controller = new UNISoNControllerFactory().create(null, new DataHibernatorPoolImpl());
+        } catch (UNISoNException e) {
+            log.error("Error creating controller", e);
+            return;
+        }
+        final UNISoNCLI main = new UNISoNCLI(controller);
         final Optional<ParsedArgs> parsed = parseArgs(args);
         if (parsed.isEmpty()) {
             log.error("No valid command found in args: {}", Arrays.asList(args));
@@ -57,7 +66,10 @@ public class UNISoNCLI {
     /**
      * Instantiates a new UNI so ncli.
      */
-    public UNISoNCLI() {
+    private final UNISoNController controller;
+
+    public UNISoNCLI(final UNISoNController controller) {
+        this.controller = controller;
     }
 
     static class ParsedArgs {
@@ -91,10 +103,9 @@ public class UNISoNCLI {
      * @throws UNISoNException the UNI so n exception
      */
     private void downloadAll(final String searchString, final String host) throws UNISoNException {
-        final UNISoNController instance = UNISoNController.getInstance();
-        final Set<NewsGroup> listNewsgroups = instance.listNewsgroups(searchString, host,
-                instance.getNntpReader().getClient());
-        instance.quickDownload(listNewsgroups, null, null, DownloadMode.ALL);
+        final Set<NewsGroup> listNewsgroups = this.controller.listNewsgroups(searchString, host,
+                this.controller.getNntpReader().getClient());
+        this.controller.quickDownload(listNewsgroups, null, null, DownloadMode.ALL);
     }
 
     /**
@@ -141,9 +152,8 @@ public class UNISoNCLI {
      */
     private void listNewsgroups(final String searchString, final String host)
             throws UNISoNException {
-        final UNISoNController instance = UNISoNController.getInstance();
-        final Set<NewsGroup> listNewsgroups = instance.listNewsgroups(searchString, host,
-                instance.getNntpReader().getClient());
+        final Set<NewsGroup> listNewsgroups = this.controller.listNewsgroups(searchString, host,
+                this.controller.getNntpReader().getClient());
         Assert.assertTrue(listNewsgroups.size() > 0);
     }
 
@@ -159,9 +169,8 @@ public class UNISoNCLI {
      */
     private void quickDownload(final String arg, final Date toDate, final Date fromDate,
                                final String host) throws UNISoNException {
-        final UNISoNController instance = UNISoNController.getInstance();
-        final Set<NewsGroup> listNewsgroups = instance.listNewsgroups(arg, host,
-                instance.getNntpReader().getClient());
+        final Set<NewsGroup> listNewsgroups = this.controller.listNewsgroups(arg, host,
+                this.controller.getNntpReader().getClient());
         // HibernateHelper.generateSchema();
 
         try {
@@ -182,7 +191,7 @@ public class UNISoNCLI {
      */
     public void startDownload(final String newsgroup, final Date toDate, final Date fromDate) {
         // try {
-        // UNISoNController.getInstance().downloadMessages(newsgroup,
+        // controller.downloadMessages(newsgroup,
         // fromDate, toDate);
         //
         // } catch (UNISoNException e) {

@@ -9,8 +9,10 @@ package uk.co.sleonard.unison.gui.generated;
 import lombok.extern.slf4j.Slf4j;
 import uk.co.sleonard.unison.StatusMonitor;
 import uk.co.sleonard.unison.UNISoNController;
+import uk.co.sleonard.unison.UNISoNControllerFactory;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.input.HeaderDownloadWorker;
+import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
 import uk.co.sleonard.unison.utils.StringUtils;
 
 import java.beans.PropertyChangeEvent;
@@ -148,8 +150,9 @@ public class DownloadNewsPanel extends javax.swing.JPanel
 
                 frame = new UNISoNTabbedFrame();
                 frame.setVisible(true);
-                final DownloadNewsPanel panel = new DownloadNewsPanel(
-                        UNISoNController.getInstance());
+                UNISoNController controller = new UNISoNControllerFactory()
+                        .create(null, new DataHibernatorPoolImpl());
+                final DownloadNewsPanel panel = new DownloadNewsPanel(controller);
                 frame.add(panel);
                 panel.setVisible(true);
             } catch (final Exception e) {

@@ -6,8 +6,8 @@
  */
 package uk.co.sleonard.unison.datahandling.DAO;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Extends UsenetUser to change setId(protected)
@@ -38,11 +38,11 @@ public class UsenetUserTest {
         final String expected4 = "Programming";
         final Location expected5 = new Location();
         actual = new UsenetUser(expected, expected2, expected3, expected4, expected5);
-        Assert.assertEquals(expected, actual.getName());
-        Assert.assertEquals(expected2, actual.getEmail());
-        Assert.assertEquals(expected3, actual.getIpaddress());
-        Assert.assertEquals(expected4, actual.getGender());
-        Assert.assertEquals(expected5, actual.getLocation());
+        Assertions.assertEquals(expected, actual.getName());
+        Assertions.assertEquals(expected2, actual.getEmail());
+        Assertions.assertEquals(expected3, actual.getIpaddress());
+        Assertions.assertEquals(expected4, actual.getGender());
+        Assertions.assertEquals(expected5, actual.getLocation());
     }
 
     /**
@@ -55,12 +55,12 @@ public class UsenetUserTest {
         original.setId(123);
 
         final UsenetUser copy = new UsenetUser(original);
-        Assert.assertEquals(original.getName(), copy.getName());
-        Assert.assertEquals(original.getEmail(), copy.getEmail());
-        Assert.assertEquals(original.getIpaddress(), copy.getIpaddress());
-        Assert.assertEquals(original.getGender(), copy.getGender());
-        Assert.assertEquals(original.getLocation(), copy.getLocation());
-        Assert.assertEquals(original.getId(), copy.getId());
+        Assertions.assertEquals(original.getName(), copy.getName());
+        Assertions.assertEquals(original.getEmail(), copy.getEmail());
+        Assertions.assertEquals(original.getIpaddress(), copy.getIpaddress());
+        Assertions.assertEquals(original.getGender(), copy.getGender());
+        Assertions.assertEquals(original.getLocation(), copy.getLocation());
+        Assertions.assertEquals(original.getId(), copy.getId());
     }
 
     /**
@@ -70,9 +70,9 @@ public class UsenetUserTest {
     public void testGetEmail() {
         final String expected = "user@email.com";
         final UsenetUser actual = new UsenetUser();
-        Assert.assertNull(actual.getEmail());
+        Assertions.assertNull(actual.getEmail());
         actual.setEmail(expected);
-        Assert.assertEquals(expected, actual.getEmail());
+        Assertions.assertEquals(expected, actual.getEmail());
     }
 
     /**
@@ -82,9 +82,9 @@ public class UsenetUserTest {
     public void testGetGender() {
         final String expected = "gender";
         final UsenetUser actual = new UsenetUser();
-        Assert.assertNull(actual.getGender());
+        Assertions.assertNull(actual.getGender());
         actual.setGender(expected);
-        Assert.assertEquals(expected, actual.getGender());
+        Assertions.assertEquals(expected, actual.getGender());
     }
 
     /**
@@ -92,7 +92,7 @@ public class UsenetUserTest {
      */
     @Test
     public void testGetId() {
-        Assert.assertEquals(0, new UsenetUser().getId());
+        Assertions.assertEquals(0, new UsenetUser().getId());
     }
 
     /**
@@ -102,9 +102,9 @@ public class UsenetUserTest {
     public void testGetIpaddress() {
         final String expected = "127.0.0.1";
         final UsenetUser actual = new UsenetUser();
-        Assert.assertNull(actual.getIpaddress());
+        Assertions.assertNull(actual.getIpaddress());
         actual.setIpaddress(expected);
-        Assert.assertEquals(expected, actual.getIpaddress());
+        Assertions.assertEquals(expected, actual.getIpaddress());
     }
 
     /**
@@ -114,9 +114,9 @@ public class UsenetUserTest {
     public void testGetLocation() {
         final Location expected = new Location(null, null, "BR", false, null, null);
         final UsenetUser actual = new UsenetUser();
-        Assert.assertNull(actual.getLocation());
+        Assertions.assertNull(actual.getLocation());
         actual.setLocation(expected);
-        Assert.assertEquals(expected.getCountryCode(), actual.getLocation().getCountryCode());
+        Assertions.assertEquals(expected.getCountryCode(), actual.getLocation().getCountryCode());
     }
 
     /**
@@ -126,9 +126,9 @@ public class UsenetUserTest {
     public void testGetName() {
         final String expected = "name";
         final UsenetUser actual = new UsenetUser();
-        Assert.assertNull(actual.getName());
+        Assertions.assertNull(actual.getName());
         actual.setName(expected);
-        Assert.assertEquals(expected, actual.getName());
+        Assertions.assertEquals(expected, actual.getName());
     }
 
     /**
@@ -140,7 +140,7 @@ public class UsenetUserTest {
         final TestUsenetUser actual2 = new TestUsenetUser();
         actual1.setEmail("a@2");
         actual2.setEmail("a@22");
-        Assert.assertTrue(actual1.hashCode() != actual2.hashCode());
+        Assertions.assertTrue(actual1.hashCode() != actual2.hashCode());
     }
 
     /**
@@ -151,7 +151,7 @@ public class UsenetUserTest {
         final String expected = "elton(elton_12_nunes@hotmail.com)";
         final UsenetUser actual = new UsenetUser("elton", "elton_12_nunes@hotmail.com", null,
                 expected, null);
-        Assert.assertEquals(expected, actual.toString());
+        Assertions.assertEquals(expected, actual.toString());
     }
 
 }

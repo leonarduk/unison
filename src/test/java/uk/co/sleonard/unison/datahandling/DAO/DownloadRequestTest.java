@@ -1,9 +1,9 @@
 package uk.co.sleonard.unison.datahandling.DAO;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * The Class DownloadRequestTest.

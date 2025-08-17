@@ -8,6 +8,10 @@ package uk.co.sleonard.unison;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
+import uk.co.sleonard.unison.datahandling.MessageCacheService;
+import uk.co.sleonard.unison.datahandling.MessageFactory;
+import uk.co.sleonard.unison.datahandling.SessionManager;
+import uk.co.sleonard.unison.datahandling.UserFactory;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.DataQuery;
@@ -115,9 +119,12 @@ public class UNISoNController {
         this.gui = (frame != null) ? new UNISoNGUI(frame) : null;
 
         this.messageQueue = new LinkedBlockingQueue<>();
-        this.helper = new HibernateHelper(this.gui);
+        MessageCacheService cacheService = new MessageCacheService();
+        MessageFactory messageFactory = new MessageFactory();
+        UserFactory userFactory = new UserFactory();
+        this.helper = new HibernateHelper(this.gui, cacheService, messageFactory, userFactory);
         try {
-            final Session hibernateSession = this.getHelper().getHibernateSession();
+            final Session hibernateSession = SessionManager.openSession();
             this.setSession(hibernateSession);
             this.filter = new NewsGroupFilter(hibernateSession, this.helper);
             this.analysis = new UNISoNAnalysis(this.filter, hibernateSession, this.helper);

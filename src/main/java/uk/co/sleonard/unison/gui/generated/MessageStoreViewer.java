@@ -454,7 +454,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
                     final String nntpHost = instance.getNntpHost();
                     FullDownloadWorker.addDownloadRequest(message.getUsenetMessageID(),
                             DownloadMode.HEADERS, nntpHost, instance.getQueue(), new NewsClientImpl(),
-                            instance.getNntpReader(), instance.getHelper(), instance.getSession());
+                            instance.getNntpReader(), instance.getHelper());
                 }
             }
         } catch (final UNISoNException e) {

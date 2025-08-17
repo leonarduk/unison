@@ -6,7 +6,6 @@
  */
 package uk.co.sleonard.unison.input;
 
-import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,14 +62,13 @@ public class FullDownloadWorkerTest {
             final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
             final NewsGroupReader reader = Mockito.mock(NewsGroupReader.class);
             final HibernateHelper helper = Mockito.mock(HibernateHelper.class);
-            final Session session = Mockito.mock(Session.class);
             FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
                     DownloadMode.ALL, nntpHost, queue,
-                    this.newsClient, reader, helper, session);
+                    this.newsClient, reader, helper);
             queue.add(new NewsArticle("123", 1, new Date(), "eg@mail.com", "Lets talk", "", "alt"));
             FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
                     DownloadMode.ALL, nntpHost, queue,
-                    this.newsClient, reader, helper, session);
+                    this.newsClient, reader, helper);
 
             // Assert.assertTrue(FullDownloadWorker.queueSize() >= 1);
         } catch (final UNISoNException e) {
@@ -89,14 +87,13 @@ public class FullDownloadWorkerTest {
             final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
             final NewsGroupReader reader = Mockito.mock(NewsGroupReader.class);
             final HibernateHelper helper = Mockito.mock(HibernateHelper.class);
-            final Session session = Mockito.mock(Session.class);
             FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
                     DownloadMode.HEADERS, nntpHost, queue,
-                    this.newsClient, reader, helper, session);
+                    this.newsClient, reader, helper);
             queue.add(new NewsArticle("123", 1, new Date(), "eg@mail.com", "Lets talk", "", "alt"));
             FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
                     DownloadMode.HEADERS, nntpHost, queue,
-                    this.newsClient, reader, helper, session);
+                    this.newsClient, reader, helper);
 
             // Assert.assertTrue(FullDownloadWorker.queueSize() >= 1);
         } catch (final UNISoNException e) {

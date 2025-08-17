@@ -6,9 +6,9 @@
  */
 package uk.co.sleonard.unison.input;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import uk.co.sleonard.unison.UNISoNException;
@@ -42,7 +42,7 @@ public class FullDownloadWorkerTest {
      *
      * @throws Exception the exception
      */
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.newsClient = Mockito.mock(NewsClient.class);
         this.outQueue = new LinkedBlockingQueue<>();
@@ -67,10 +67,10 @@ public class FullDownloadWorkerTest {
                     DownloadMode.ALL, nntpHost, queue,
                     this.newsClient, reader, helper);
 
-            // Assert.assertTrue(FullDownloadWorker.queueSize() >= 1);
+            // Assertions.assertTrue(FullDownloadWorker.queueSize() >= 1);
         } catch (final UNISoNException e) {
             e.printStackTrace();
-            Assert.fail("ERROR: " + e.getMessage());
+            Assertions.fail("ERROR: " + e.getMessage());
         }
     }
 
@@ -92,10 +92,10 @@ public class FullDownloadWorkerTest {
                     DownloadMode.HEADERS, nntpHost, queue,
                     this.newsClient, reader, helper);
 
-            // Assert.assertTrue(FullDownloadWorker.queueSize() >= 1);
+            // Assertions.assertTrue(FullDownloadWorker.queueSize() >= 1);
         } catch (final UNISoNException e) {
             e.printStackTrace();
-            Assert.fail("ERROR: " + e.getMessage());
+            Assertions.fail("ERROR: " + e.getMessage());
         }
     }
 
@@ -109,9 +109,9 @@ public class FullDownloadWorkerTest {
         try {
             actual = new FullDownloadWorker("server", new LinkedBlockingQueue(),
                     this.newsClient);
-            Assert.assertNotNull(actual);
+            Assertions.assertNotNull(actual);
         } catch (final UNISoNException e) {
-            Assert.fail("ERROR: " + e.getMessage());
+            Assertions.fail("ERROR: " + e.getMessage());
         }
     }
 
@@ -153,10 +153,10 @@ public class FullDownloadWorkerTest {
         final DownloadRequest request = new DownloadRequest("<id123>", DownloadMode.ALL);
         try {
             final NewsArticle actual = this.worker.downloadArticle(request);
-            Assert.assertNotNull(actual);
-            Assert.assertEquals("Test subject", actual.getSubject());
+            Assertions.assertNotNull(actual);
+            Assertions.assertEquals("Test subject", actual.getSubject());
         } catch (final UNISoNException e) {
-            Assert.fail("ERROR: " + e.getMessage());
+            Assertions.fail("ERROR: " + e.getMessage());
         }
 
     }

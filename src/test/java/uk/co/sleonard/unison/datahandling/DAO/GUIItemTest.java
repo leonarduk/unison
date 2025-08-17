@@ -6,8 +6,8 @@
  */
 package uk.co.sleonard.unison.datahandling.DAO;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * The Class GUIItem.
@@ -26,8 +26,8 @@ public class GUIItemTest {
     public void testGetItemAndToString() {
         final NewsGroup expected = new NewsGroup();
         this.guiItem = new GUIItem<>("name", expected);
-        Assert.assertEquals("name", this.guiItem.toString());
-        Assert.assertNotNull(this.guiItem.getObject());
+        Assertions.assertEquals("name", this.guiItem.toString());
+        Assertions.assertNotNull(this.guiItem.getObject());
     }
 
 }

@@ -6,9 +6,9 @@
  */
 package uk.co.sleonard.unison.output;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * The Class RelationshipTest.
@@ -23,7 +23,7 @@ public class RelationshipTest {
      *
      * @throws Exception the exception
      */
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
     }
 
@@ -36,9 +36,9 @@ public class RelationshipTest {
         final Relationship r2 = new Relationship(10, 10);
         final Relationship r3 = new Relationship(10, 11);
 
-        Assert.assertEquals(r1, r2);
-        Assert.assertEquals(r2, r1);
-        Assert.assertNotEquals(r1, r3);
+        Assertions.assertEquals(r1, r2);
+        Assertions.assertEquals(r2, r1);
+        Assertions.assertNotEquals(r1, r3);
     }
 
     /**
@@ -48,7 +48,7 @@ public class RelationshipTest {
     public void testGetOwner() {
         final int expected = 5;
         final Relationship actual = new Relationship(5, 0);
-        Assert.assertEquals(expected, actual.getOwner());
+        Assertions.assertEquals(expected, actual.getOwner());
     }
 
     /**
@@ -58,7 +58,7 @@ public class RelationshipTest {
     public void testGetTarget() {
         final int expected = 3;
         final Relationship actual = new Relationship(0, 3);
-        Assert.assertEquals(expected, actual.getTarget());
+        Assertions.assertEquals(expected, actual.getTarget());
     }
 
     /**
@@ -68,7 +68,7 @@ public class RelationshipTest {
     public void testGetValue() {
         final int expected = 1;
         final Relationship actual = new Relationship(0, 0);
-        Assert.assertEquals(expected, actual.getValue());
+        Assertions.assertEquals(expected, actual.getValue());
     }
 
     /**
@@ -78,9 +78,9 @@ public class RelationshipTest {
     public void testHashCode() {
         final Relationship r1 = new Relationship(10, 20);
         final Relationship r2 = new Relationship(10, 20);
-        Assert.assertEquals(r1.hashCode(), r2.hashCode());
+        Assertions.assertEquals(r1.hashCode(), r2.hashCode());
         r2.incrementValue();
-        Assert.assertNotEquals(r1.hashCode(), r2.hashCode());
+        Assertions.assertNotEquals(r1.hashCode(), r2.hashCode());
     }
 
     /**
@@ -92,7 +92,7 @@ public class RelationshipTest {
         final Relationship actual = new Relationship(0, 0);
         actual.incrementValue();
         actual.incrementValue();
-        Assert.assertEquals(expected, actual.getValue());
+        Assertions.assertEquals(expected, actual.getValue());
     }
 
     /**
@@ -102,10 +102,10 @@ public class RelationshipTest {
     public void testToString() {
         String expected = "Relationship(owner=1, target=0, value=1)";
         final Relationship actual = new Relationship(1, 0);
-        Assert.assertEquals(expected, actual.toString());
+        Assertions.assertEquals(expected, actual.toString());
         actual.incrementValue();
         expected = "Relationship(owner=1, target=0, value=2)";
-        Assert.assertEquals(expected, actual.toString());
+        Assertions.assertEquals(expected, actual.toString());
     }
 
 }

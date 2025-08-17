@@ -6,9 +6,9 @@
  */
 package uk.co.sleonard.unison.output;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -51,7 +51,7 @@ public class PajekNetworkFileTest {
      *
      * @throws Exception the exception
      */
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.file = new PajekNetworkFile();
     }
@@ -63,10 +63,10 @@ public class PajekNetworkFileTest {
     public void testAddRelationship() {
         final List<Relationship> links = new Vector<>();
         Relationship link = this.file.addRelationship("Alf", "Bob", links);
-        Assert.assertEquals(1, link.getValue());
+        Assertions.assertEquals(1, link.getValue());
         link = this.file.addRelationship("Alf", "Bob", links);
-        Assert.assertEquals(2, link.getValue());
-        Assert.assertEquals(1, links.size());
+        Assertions.assertEquals(2, link.getValue());
+        Assertions.assertEquals(1, links.size());
     }
 
     /**
@@ -76,7 +76,7 @@ public class PajekNetworkFileTest {
     public void testCreateDirectedLinks() {
         final Vector<Vector> nodePairs = this.generateNodePairs();
         this.file.createDirectedLinks(nodePairs);
-        Assert.assertEquals(2, nodePairs.size());
+        Assertions.assertEquals(2, nodePairs.size());
     }
 
     /**
@@ -86,7 +86,7 @@ public class PajekNetworkFileTest {
     public void testGetFilename() {
         final String expected = "UnitTest.net";
         this.testSaveToFile();
-        Assert.assertEquals(expected, this.file.getFilename());
+        Assertions.assertEquals(expected, this.file.getFilename());
     }
 
     /**
@@ -95,7 +95,7 @@ public class PajekNetworkFileTest {
     @Test
     public void testGetFileSuffix() {
         final String expected = ".net";
-        Assert.assertEquals(expected, this.file.getFileSuffix());
+        Assertions.assertEquals(expected, this.file.getFileSuffix());
     }
 
     /**
@@ -122,9 +122,9 @@ public class PajekNetworkFileTest {
         final Vector<Vector> nodePairs = this.generateNodePairs();
         this.file.createDirectedLinks(nodePairs);
         this.file.writeData(new PrintStream(outContent));
-        Assert.assertTrue(outContent.toString().contains("*Vertices"));
+        Assertions.assertTrue(outContent.toString().contains("*Vertices"));
         this.file.writeData(new PrintStream(outContent));
-        Assert.assertTrue(outContent.toString().contains("*Arcs"));
+        Assertions.assertTrue(outContent.toString().contains("*Arcs"));
 
     }
 

@@ -1,6 +1,6 @@
 package uk.co.sleonard.unison;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
 
@@ -8,7 +8,7 @@ import javax.swing.ListModel;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link UNISoNController} that operate fully in memory.

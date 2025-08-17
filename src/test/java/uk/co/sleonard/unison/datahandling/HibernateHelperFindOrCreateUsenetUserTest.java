@@ -1,7 +1,7 @@
 package uk.co.sleonard.unison.datahandling;
 
 import org.hibernate.Session;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.input.NewsArticle;
@@ -10,7 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
 
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for {@link HibernateHelper#findOrCreateUsenetUser(NewsArticle, Session, String)}.

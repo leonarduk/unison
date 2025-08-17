@@ -4,8 +4,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
@@ -22,8 +22,8 @@ public class UsenetUserPersistenceTest {
 
         try (SessionFactory sf = cfg.buildSessionFactory();
              Session session = sf.openSession()) {
-            Assert.assertNotNull(sf.getClassMetadata(Location.class));
-            Assert.assertNotNull(sf.getClassMetadata(IpAddress.class));
+            Assertions.assertNotNull(sf.getClassMetadata(Location.class));
+            Assertions.assertNotNull(sf.getClassMetadata(IpAddress.class));
             Transaction tx = session.beginTransaction();
             Location location = new Location("City", "Country", "CC", false,
                     Collections.emptyList(), Collections.emptyList());
@@ -37,9 +37,9 @@ public class UsenetUserPersistenceTest {
 
             session.clear();
             UsenetUser fromDb = session.get(UsenetUser.class, user.getId());
-            Assert.assertNotNull(fromDb);
-            Assert.assertEquals("test@example.com", fromDb.getEmail());
-            Assert.assertEquals("City", fromDb.getLocation().getCity());
+            Assertions.assertNotNull(fromDb);
+            Assertions.assertEquals("test@example.com", fromDb.getEmail());
+            Assertions.assertEquals("City", fromDb.getLocation().getCity());
         }
     }
 }

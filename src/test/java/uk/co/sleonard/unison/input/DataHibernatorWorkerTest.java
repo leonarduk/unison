@@ -1,9 +1,9 @@
 package uk.co.sleonard.unison.input;
 
 import org.hibernate.Session;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 
@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class DataHibernatorWorkerTest {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    @Before
+    @BeforeEach
     public void clearWorkers() throws Exception {
         Field workersField = DataHibernatorWorker.class.getDeclaredField("workers");
         workersField.setAccessible(true);
@@ -52,7 +52,7 @@ public class DataHibernatorWorkerTest {
         DataHibernatorWorker.startHibernators(reader, helper, queue, session);
 
         ArrayList<DataHibernatorWorker> workers = (ArrayList<DataHibernatorWorker>) workersField.get(null);
-        Assert.assertEquals(expectedSize, workers.size());
+        Assertions.assertEquals(expectedSize, workers.size());
 
         // capture threads for state inspection
         Field threadVarField = SwingWorker.class.getDeclaredField("threadVar");
@@ -69,7 +69,7 @@ public class DataHibernatorWorkerTest {
         // ensure all threads terminated
         for (Thread t : threads) {
             t.join(1000);
-            Assert.assertFalse(t.isAlive());
+            Assertions.assertFalse(t.isAlive());
         }
 
         workers.clear();
@@ -121,9 +121,9 @@ public class DataHibernatorWorkerTest {
         thread.join(1000);
 
         int processed = stored.get();
-        Assert.assertTrue("Worker should process at least one message before interrupt",
+        Assertions.assertTrue("Worker should process at least one message before interrupt",
                 processed > 0);
-        Assert.assertTrue("Worker should not process all messages after interrupt",
+        Assertions.assertTrue("Worker should not process all messages after interrupt",
                 processed < 5);
     }
 }

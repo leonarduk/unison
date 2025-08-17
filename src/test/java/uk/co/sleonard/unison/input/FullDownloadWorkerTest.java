@@ -6,13 +6,15 @@
  */
 package uk.co.sleonard.unison.input;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.co.sleonard.unison.UNISoNController;
+
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
@@ -38,18 +40,23 @@ public class FullDownloadWorkerTest {
     private FullDownloadWorker worker;
     private NewsClient newsClient;
     private LinkedBlockingQueue outQueue;
-    private static final Logger log = LoggerFactory.getLogger(FullDownloadWorkerTest.class);
 
+  private static final Logger log = LoggerFactory.getLogger(FullDownloadWorkerTest.class);
+
+  private UNISoNController controller;
+
+  
     /**
      * Setup.
      *
      * @throws Exception the exception
      */
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.newsClient = Mockito.mock(NewsClient.class);
         this.outQueue = new LinkedBlockingQueue<>();
-        this.worker = new FullDownloadWorker("server", this.outQueue, this.newsClient);
+        this.controller = Mockito.mock(UNISoNController.class);
+        this.worker = new FullDownloadWorker("server", this.outQueue, this.newsClient, this.controller);
     }
 
     /**
@@ -64,16 +71,16 @@ public class FullDownloadWorkerTest {
             final HibernateHelper helper = Mockito.mock(HibernateHelper.class);
             FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
                     DownloadMode.ALL, nntpHost, queue,
-                    this.newsClient, reader, helper);
+                    this.newsClient, reader, helper, this.controller);
             queue.add(new NewsArticle("123", 1, new Date(), "eg@mail.com", "Lets talk", "", "alt"));
             FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
                     DownloadMode.ALL, nntpHost, queue,
-                    this.newsClient, reader, helper);
+                    this.newsClient, reader, helper, this.controller);
 
-            // Assert.assertTrue(FullDownloadWorker.queueSize() >= 1);
+            // Assertions.assertTrue(FullDownloadWorker.queueSize() >= 1);
         } catch (final UNISoNException e) {
             e.printStackTrace();
-            Assert.fail("ERROR: " + e.getMessage());
+            Assertions.fail("ERROR: " + e.getMessage());
         }
     }
 
@@ -89,16 +96,16 @@ public class FullDownloadWorkerTest {
             final HibernateHelper helper = Mockito.mock(HibernateHelper.class);
             FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
                     DownloadMode.HEADERS, nntpHost, queue,
-                    this.newsClient, reader, helper);
+                    this.newsClient, reader, helper, this.controller);
             queue.add(new NewsArticle("123", 1, new Date(), "eg@mail.com", "Lets talk", "", "alt"));
             FullDownloadWorker.addDownloadRequest("<n9rgdm$g9b$3@news4.open-news-network.org>",
                     DownloadMode.HEADERS, nntpHost, queue,
-                    this.newsClient, reader, helper);
+                    this.newsClient, reader, helper, this.controller);
 
-            // Assert.assertTrue(FullDownloadWorker.queueSize() >= 1);
+            // Assertions.assertTrue(FullDownloadWorker.queueSize() >= 1);
         } catch (final UNISoNException e) {
             e.printStackTrace();
-            Assert.fail("ERROR: " + e.getMessage());
+            Assertions.fail("ERROR: " + e.getMessage());
         }
     }
 
@@ -111,10 +118,10 @@ public class FullDownloadWorkerTest {
         FullDownloadWorker actual;
         try {
             actual = new FullDownloadWorker("server", new LinkedBlockingQueue(),
-                    this.newsClient);
+                    this.newsClient, this.controller);
             Assert.assertNotNull(actual);
         } catch (final UNISoNException e) {
-            Assert.fail("ERROR: " + e.getMessage());
+            Assertions.fail("ERROR: " + e.getMessage());
         }
     }
 
@@ -156,10 +163,10 @@ public class FullDownloadWorkerTest {
         final DownloadRequest request = new DownloadRequest("<id123>", DownloadMode.ALL);
         try {
             final NewsArticle actual = this.worker.downloadArticle(request);
-            Assert.assertNotNull(actual);
-            Assert.assertEquals("Test subject", actual.getSubject());
+            Assertions.assertNotNull(actual);
+            Assertions.assertEquals("Test subject", actual.getSubject());
         } catch (final UNISoNException e) {
-            Assert.fail("ERROR: " + e.getMessage());
+            Assertions.fail("ERROR: " + e.getMessage());
         }
 
     }
@@ -184,7 +191,7 @@ public class FullDownloadWorkerTest {
         FullDownloadWorker worker = null;
         try {
             final String nntpHost = "testserver";
-            worker = new FullDownloadWorker(nntpHost, queue, this.newsClient);
+            worker = new FullDownloadWorker(nntpHost, queue, this.newsClient, this.controller);
         } catch (final UNISoNException e1) {
             e1.printStackTrace();
         }

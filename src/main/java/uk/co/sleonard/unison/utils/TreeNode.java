@@ -3,6 +3,9 @@ package uk.co.sleonard.unison.utils;
 import javax.swing.tree.DefaultMutableTreeNode;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 /**
  * Represents a node in the application's GUI hierarchy.
@@ -28,9 +31,9 @@ public class TreeNode extends DefaultMutableTreeNode {
      * @param childObject the child object
      * @param name        the name
      */
-    public TreeNode(final Object childObject, final String name) {
-        super(childObject);
-        this.nodeName = name;
+    public TreeNode(final @NotNull Object childObject, final @NotNull String name) {
+        super(Objects.requireNonNull(childObject, "childObject"));
+        this.nodeName = Objects.requireNonNull(name, "name");
     }
 
     /*
@@ -39,7 +42,7 @@ public class TreeNode extends DefaultMutableTreeNode {
      * @see javax.swing.tree.DefaultMutableTreeNode#toString()
      */
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return this.nodeName;
     }
 }

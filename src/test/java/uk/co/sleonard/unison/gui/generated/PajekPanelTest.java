@@ -1,6 +1,11 @@
 package uk.co.sleonard.unison.gui.generated;
 
-import org.junit.Test;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.read.ListAppender;
+import org.junit.jupiter.api.Test;
+
 import org.mockito.Mockito;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
@@ -13,7 +18,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Vector;
 
-import static org.junit.Assert.assertFalse;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 /**
  * Tests for {@link PajekPanel}.

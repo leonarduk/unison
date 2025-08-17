@@ -6,6 +6,7 @@
  */
 package uk.co.sleonard.unison.output;
 
+import org.jetbrains.annotations.NotNull;
 import uk.co.sleonard.unison.UNISoNException;
 
 import javax.swing.*;
@@ -14,6 +15,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.Objects;
 import java.util.Vector;
 
 /**
@@ -43,9 +45,12 @@ public class ExportToCSV {
      * @param fieldNames the field names
      * @throws UNISoNException the UNI so n exception
      */
-    void exportTable(final String fileName, final JTable table, final Vector<String> fieldNames)
-            throws UNISoNException {
+    void exportTable(final @NotNull String fileName, final @NotNull JTable table,
+                     final @NotNull Vector<String> fieldNames) throws UNISoNException {
         try {
+            Objects.requireNonNull(fileName, "fileName");
+            Objects.requireNonNull(table, "table");
+            Objects.requireNonNull(fieldNames, "fieldNames");
             final File file = new File(fileName);
             if (file != null) {
 
@@ -92,8 +97,10 @@ public class ExportToCSV {
      * @throws UNISoNException the UNI so n exception
      */
     @SuppressWarnings("deprecation")
-    public void exportTableToCSV(final JTable table, final Vector<String> fieldNames)
+    public void exportTableToCSV(final @NotNull JTable table, final @NotNull Vector<String> fieldNames)
             throws UNISoNException {
+        Objects.requireNonNull(table, "table");
+        Objects.requireNonNull(fieldNames, "fieldNames");
         final FileDialog file = new FileDialog(new JFrame(), "Save CSV Network File",
                 FileDialog.SAVE);
         final String CSV_FILE_SUFFIX = ".csv";
@@ -126,11 +133,12 @@ public class ExportToCSV {
      * @param data the data
      * @return the string
      */
-    private String extractCommas(final String dataInput) {
-        if (dataInput.indexOf(',') > -1) {
-            return dataInput.replaceAll(",", ";");
+    private @NotNull String extractCommas(final @NotNull String dataInput) {
+        final String data = Objects.requireNonNull(dataInput, "dataInput");
+        if (data.indexOf(',') > -1) {
+            return data.replaceAll(",", ";");
         }
-        return dataInput;
+        return data;
     }
 
 }

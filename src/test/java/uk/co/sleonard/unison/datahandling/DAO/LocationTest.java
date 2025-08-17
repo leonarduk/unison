@@ -6,8 +6,8 @@
  */
 package uk.co.sleonard.unison.datahandling.DAO;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
@@ -45,29 +45,29 @@ public class LocationTest {
                 LocationTest.countryCode, guessed, posters, ipAddresses);
         Location l2 = new Location(LocationTest.city, LocationTest.country,
                 LocationTest.countryCode, !guessed, posters, ipAddresses);
-        Assert.assertTrue(l1.equals(l1));
-        Assert.assertEquals(l1, l1);
-        Assert.assertFalse(l1.equals(l2));
-        Assert.assertNotEquals(l1, l2);
+        Assertions.assertTrue(l1.equals(l1));
+        Assertions.assertEquals(l1, l1);
+        Assertions.assertFalse(l1.equals(l2));
+        Assertions.assertNotEquals(l1, l2);
         l2 = new Location(LocationTest.city + "Wrong", LocationTest.country,
                 LocationTest.countryCode, guessed, posters, ipAddresses);
-        Assert.assertNotEquals(l1, l2);
+        Assertions.assertNotEquals(l1, l2);
         l2 = new Location(LocationTest.city, LocationTest.country + "Wrong",
                 LocationTest.countryCode, guessed, posters, ipAddresses);
-        Assert.assertNotEquals(l1, l2);
+        Assertions.assertNotEquals(l1, l2);
         l2 = new Location(LocationTest.city, LocationTest.country,
                 LocationTest.countryCode + "Wrong", guessed, posters, ipAddresses);
-        Assert.assertNotEquals(l1, l2);
+        Assertions.assertNotEquals(l1, l2);
         final List<UsenetUser> posters2 = new ArrayList<>();
         posters2.add(Mockito.mock(UsenetUser.class));
         l2 = new Location(LocationTest.city, LocationTest.country, LocationTest.countryCode,
                 guessed, posters2, ipAddresses);
-        Assert.assertNotEquals(l1, l2);
+        Assertions.assertNotEquals(l1, l2);
         final List<IpAddress> ipAdddresses2 = new ArrayList<>();
         ipAdddresses2.add(Mockito.mock(IpAddress.class));
         l2 = new Location(LocationTest.city, LocationTest.country, LocationTest.countryCode,
                 guessed, posters, ipAdddresses2);
-        Assert.assertNotEquals(l1, l2);
+        Assertions.assertNotEquals(l1, l2);
 
     }
 
@@ -80,7 +80,7 @@ public class LocationTest {
                 + LocationTest.countryCode + ")";
         final Location actual = new Location(LocationTest.city, LocationTest.country,
                 LocationTest.countryCode, true, null, null);
-        Assert.assertEquals(expected, actual.fullString());
+        Assertions.assertEquals(expected, actual.fullString());
     }
 
     /**
@@ -90,9 +90,9 @@ public class LocationTest {
     public void testGetCity() {
         final String expected = LocationTest.city;
         final Location actual = new Location();
-        Assert.assertNull(actual.getCity());
+        Assertions.assertNull(actual.getCity());
         actual.setCity(expected);
-        Assert.assertEquals(expected, actual.getCity());
+        Assertions.assertEquals(expected, actual.getCity());
     }
 
     /**
@@ -102,9 +102,9 @@ public class LocationTest {
     public void testGetCountry() {
         final String expected = LocationTest.country;
         final Location actual = new Location();
-        Assert.assertNull(actual.getCountry());
+        Assertions.assertNull(actual.getCountry());
         actual.setCountry(expected);
-        Assert.assertEquals(expected, actual.getCountry());
+        Assertions.assertEquals(expected, actual.getCountry());
     }
 
     /**
@@ -114,9 +114,9 @@ public class LocationTest {
     public void testGetCountryCode() {
         final String expected = LocationTest.countryCode;
         final Location actual = new Location();
-        Assert.assertNull(actual.getCountryCode());
+        Assertions.assertNull(actual.getCountryCode());
         actual.setCountryCode(expected);
-        Assert.assertEquals(expected, actual.getCountryCode());
+        Assertions.assertEquals(expected, actual.getCountryCode());
     }
 
     /**
@@ -124,7 +124,7 @@ public class LocationTest {
      */
     @Test
     public void testGetId() {
-        Assert.assertEquals(0, new Location().getId());
+        Assertions.assertEquals(0, new Location().getId());
     }
 
     /**
@@ -134,10 +134,10 @@ public class LocationTest {
     public void testGetIpAddresses() {
         final List<IpAddress> expected = new ArrayList<>();
         final Location actual = new Location();
-        Assert.assertEquals(expected.size(), actual.getIpAddresses().size());
+        Assertions.assertEquals(expected.size(), actual.getIpAddresses().size());
         expected.add(new IpAddress());
         actual.setIpAddresses(expected);
-        Assert.assertEquals(expected.size(), actual.getIpAddresses().size());
+        Assertions.assertEquals(expected.size(), actual.getIpAddresses().size());
     }
 
     /**
@@ -147,10 +147,10 @@ public class LocationTest {
     public void testGetPosters() {
         final List<UsenetUser> expected = new ArrayList<>();
         final Location actual = new Location();
-        Assert.assertEquals(expected.size(), actual.getPosters().size());
+        Assertions.assertEquals(expected.size(), actual.getPosters().size());
         expected.add(new UsenetUser());
         actual.setPosters(expected);
-        Assert.assertEquals(expected.size(), actual.getPosters().size());
+        Assertions.assertEquals(expected.size(), actual.getPosters().size());
     }
 
     /**
@@ -162,7 +162,7 @@ public class LocationTest {
         final TestLocation actual2 = new TestLocation();
         actual1.setCity("testa");
         actual2.setCity("test3");
-        Assert.assertTrue(actual1.hashCode() != actual2.hashCode());
+        Assertions.assertTrue(actual1.hashCode() != actual2.hashCode());
     }
 
     /**
@@ -171,9 +171,9 @@ public class LocationTest {
     @Test
     public void testIsGuessed() {
         final Location actual = new Location();
-        Assert.assertFalse(actual.isGuessed());
+        Assertions.assertFalse(actual.isGuessed());
         actual.setGuessed(true);
-        Assert.assertTrue(actual.isGuessed());
+        Assertions.assertTrue(actual.isGuessed());
     }
 
     /**
@@ -184,7 +184,7 @@ public class LocationTest {
         final String expected = LocationTest.city + " - " + LocationTest.countryCode;
         final Location actual = new Location(LocationTest.city, null, LocationTest.countryCode,
                 true, null, null);
-        Assert.assertEquals(expected, actual.toString());
+        Assertions.assertEquals(expected, actual.toString());
     }
 
 }

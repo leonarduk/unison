@@ -1,8 +1,8 @@
 package uk.co.sleonard.unison.datahandling.DAO;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * The Class ResultRowTest.
@@ -17,9 +17,9 @@ public class ResultRowTest {
      */
     @Test
     public void testToString() {
-        Object obj = new Object();
-        ResultRow actual = new ResultRow(obj, 3, null);
-        String expected = new String(actual.getCount() + " " + actual.getKey());
+        var obj = new Object();
+        var actual = new ResultRow(obj, 3, null);
+        var expected = new String(actual.count() + " " + actual.key());
         assertEquals(expected, actual.toString());
     }
 
@@ -28,9 +28,9 @@ public class ResultRowTest {
      */
     @Test
     public void testGetKey() {
-        Object expected = new Object();
-        ResultRow actual = new ResultRow(expected, 0, null);
-        assertEquals(expected, actual.getKey());
+        var expected = new Object();
+        var actual = new ResultRow(expected, 0, null);
+        assertEquals(expected, actual.key());
     }
 
     /**
@@ -38,9 +38,9 @@ public class ResultRowTest {
      */
     @Test
     public void testGetType() {
-        Class<?> expected = ResultRow.class;
-        ResultRow actual = new ResultRow(null, 0, expected);
-        assertEquals(expected, actual.getType());
+        var expected = ResultRow.class;
+        var actual = new ResultRow(null, 0, expected);
+        assertEquals(expected, actual.type());
     }
 
     /**
@@ -48,9 +48,9 @@ public class ResultRowTest {
      */
     @Test
     public void testGetCount() {
-        int expected = 5;
-        ResultRow actual = new ResultRow(null, expected, null);
-        assertEquals(expected, actual.getCount());
+        var expected = 5;
+        var actual = new ResultRow(null, expected, null);
+        assertEquals(expected, actual.count());
     }
 
     /**
@@ -58,8 +58,8 @@ public class ResultRowTest {
      */
     @Test
     public void testCompareTo() {
-        ResultRow expected = new ResultRow(null, 5, ResultRow.class);
-        ResultRow actual = new ResultRow(null, 3, ResultRow.class);
+        var expected = new ResultRow(null, 5, ResultRow.class);
+        var actual = new ResultRow(null, 3, ResultRow.class);
         assertEquals(2, actual.compareTo(expected));
     }
 }

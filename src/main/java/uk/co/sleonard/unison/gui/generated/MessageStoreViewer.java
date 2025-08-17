@@ -223,7 +223,8 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
     /**
      * Creates new form MessageStoreViewer.
      */
-    public MessageStoreViewer() {
+    public MessageStoreViewer(final UNISoNController controller) {
+        this.controller = controller;
         this.initComponents();
 
         final Dimension size = this.sentDateField.getPreferredSize();
@@ -233,10 +234,8 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
         this.subjectField.setPreferredSize(size);
         this.senderField.setMaximumSize(size);
         this.senderField.setPreferredSize(size);
-        this.controller = UNISoNController.getInstance();
 
         try {
-
             this.session = this.controller.helper().getHibernateSession();
 
             // FIXME disable all non-workng parts
@@ -274,7 +273,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
         } else if (childObject instanceof String) {
             name += " : " + childObject;
         } else {
-            name += UNISoNController.getInstance().helper().getText(childObject);
+            name += this.controller.helper().getText(childObject);
         }
 
         final TreeNode child = new TreeNode(childObject, name);
@@ -345,7 +344,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
      * @param evt the evt
      */
     private void crosspostComboBoxActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_crosspostComboBoxActionPerformed
-        final UNISoNController controller = UNISoNController.getInstance();
+        final UNISoNController controller = this.controller;
         final NewsGroup selectedGroup = (NewsGroup) this.crosspostComboBox.getSelectedItem();
         controller.getFilter().setSelectedNewsgroup(selectedGroup.getName());
         this.refreshTopicHierarchy();
@@ -364,7 +363,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
         if (userObject instanceof Topic) {
             final Topic topic = (Topic) userObject;
             this.createMessageHierarchy(
-                    UNISoNController.getInstance().getDatabase().getMessages(topic, this.session),
+                    this.controller.getDatabase().getMessages(topic, this.session),
                     root, "ROOT", fillInMissing);
         }
     }
@@ -385,16 +384,6 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
     }// GEN-LAST:event_filterToggleActionPerformed
 
     /**
-     * Gets the body button action performed.
-     *
-     * @param evt the evt
-     * @return the body button action performed
-     */
-    private void getBodyButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_getBodyButtonActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_getBodyButtonActionPerformed
-
-    /**
      * Gets the list model.
      *
      * @param results the results
@@ -402,19 +391,17 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
      */
     private ListModel<GUIItem<ResultRow>> getListModel(final List<ResultRow> results) {
         final DefaultListModel<GUIItem<ResultRow>> model = new DefaultListModel<>();
-        for (final ListIterator<ResultRow> iter = results.listIterator(); iter.hasNext(); ) {
-            final ResultRow row = iter.next();
-            final Object key = row.getKey();
+        results.forEach(row -> {
+            final Object key = row.key();
             String name = (key == null) ? null : key.toString();
-            if (key instanceof UsenetUser) {
-                final UsenetUser user = (UsenetUser) key;
+            if (key instanceof UsenetUser user) {
                 name = user.getName() + "<" + user.getEmail() + ">";
             } else if (key instanceof Location) {
                 name = ((Location) key).getCountry();
             }
 
             model.addElement(new GUIItem<>(name, row));
-        }
+        });
         return model;
     }
 
@@ -430,11 +417,9 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
         // as root is not a newsgroup
         if (root.getUserObject() instanceof NewsGroup) {
             NewsGroup newsGroup = (NewsGroup) root.getUserObject();
-            UNISoNController.getInstance().getFilter()
-                    .setSelectedNewsgroup(newsGroup.getName());
+            this.controller.getFilter().setSelectedNewsgroup(newsGroup.getName());
         } else {
-            UNISoNController.getInstance().getFilter()
-                    .setSelectedNewsgroup((String) root.getUserObject());
+            this.controller.getFilter().setSelectedNewsgroup((String) root.getUserObject());
         }
 
         this.notifySelectedNewsGroupObservers();
@@ -447,14 +432,14 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
      */
     private void headersButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_headersButtonActionPerformed
         try {
-            final UNISoNController instance = UNISoNController.getInstance();
+            final UNISoNController instance = this.controller;
             for (final Message message : instance.getFilter().getMessagesFilter()) {
                 // only download for messages that need it
                 if (null == message.getPoster().getLocation()) {
                     final String nntpHost = instance.getNntpHost();
                     FullDownloadWorker.addDownloadRequest(message.getUsenetMessageID(),
                             DownloadMode.HEADERS, nntpHost, instance.getQueue(), new NewsClientImpl(),
-                            instance.getNntpReader(), instance.getHelper());
+                            instance.getNntpReader(), instance.getHelper(), instance);
                 }
             }
         } catch (final UNISoNException e) {
@@ -584,8 +569,6 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
                 evt -> MessageStoreViewer.this.refreshButtonActionPerformed(evt));
 
         this.getBodyButton.setText("Get Body");
-        this.getBodyButton.addActionListener(
-                evt -> MessageStoreViewer.this.getBodyButtonActionPerformed(evt));
 
         this.headersButton.setText("Get Extras");
         this.headersButton.setToolTipText(
@@ -813,7 +796,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
      * @param evt the evt
      */
     private void missingMessagesCheckItemStateChanged(final java.awt.event.ItemEvent evt) {// GEN-FIRST:event_missingMessagesCheckItemStateChanged
-        // TODO add your handling code here:
+        this.refreshTopicHierarchy();
     }// GEN-LAST:event_missingMessagesCheckItemStateChanged
 
     /**
@@ -836,7 +819,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
      * @param evt the evt
      */
     private void refreshButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_refreshButtonActionPerformed
-        final UNISoNController controller = UNISoNController.getInstance();
+        final UNISoNController controller = this.controller;
         controller.getDatabase().refreshDataFromDatabase();
     }// GEN-LAST:event_refreshButtonActionPerformed
 
@@ -859,7 +842,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
      * Refresh message pane.
      */
     public void refreshMessagePane() {
-        final Message message = UNISoNController.getInstance().getFilter().getSelectedMessage();
+        final Message message = this.controller.getFilter().getSelectedMessage();
 
         if (null != message) {
             // final DefaultListModel model = this.getCrossPostsModel(message);
@@ -898,10 +881,10 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
                     new Vector<>(message.getNewsgroups()));
             this.crosspostComboBox.setModel(aModel);
             try {
-                this.bodyPane.setText(StringUtils.decompress(message.getMessageBody()));
+                this.bodyPane.setText(
+                        StringUtils.decompress(message.getMessageBody()).orElse(""));
             } catch (final IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                log.error("Failed to decompress message body", e);
             }
         }
     }
@@ -912,7 +895,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
     protected void refreshNewsGroupHierarchy() {
         this.newsgroupTreeRoot.removeAllChildren();
         // FIXME split out from name - ignore db stuff
-        final UNISoNController controller = UNISoNController.getInstance();
+        final UNISoNController controller = this.controller;
         final HashMap<String, TreeNode> nodeMap = new HashMap<>();
 
         final List<NewsGroup> newsgroupFilter = new ArrayList<>();
@@ -959,7 +942,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
      * Refresh top countries.
      */
     private void refreshTopCountries() {
-        final List<ResultRow> results = UNISoNController.getInstance().getAnalysis()
+        final List<ResultRow> results = this.controller.getAnalysis()
                 .getTopCountriesList();
 
         this.topCountriesList.setModel(this.getListModel(results));
@@ -969,7 +952,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
      * Refresh top groups.
      */
     private void refreshTopGroups() {
-        final List<ResultRow> results = UNISoNController.getInstance().getAnalysis()
+        final List<ResultRow> results = this.controller.getAnalysis()
                 .getTopGroupsList();
 
         this.topGroupsList.setModel(this.getListModel(results));
@@ -983,7 +966,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
 
         this.topicRoot.removeAllChildren();
 
-        final UNISoNController controller = UNISoNController.getInstance();
+        final UNISoNController controller = this.controller;
         final NewsGroup selectedNewsgroup = controller.getFilter().getSelectedNewsgroup();
         if (null != selectedNewsgroup) {
             this.topicRoot.setNodeName(selectedNewsgroup.getFullName());
@@ -1019,7 +1002,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
      * Refresh top posters.
      */
     private void refreshTopPosters() {
-        final Vector<ResultRow> results = UNISoNController.getInstance().getAnalysis()
+        final Vector<ResultRow> results = this.controller.getAnalysis()
                 .getTopPosters();
 
         this.topPostersList.setModel(this.getListModel(results));
@@ -1034,7 +1017,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
     @SuppressWarnings("unchecked")
     private void switchFilter(final boolean on) throws UNISoNException {
         try {
-            final UNISoNController controller = UNISoNController.getInstance();
+            final UNISoNController controller = this.controller;
 
             if (on) {
                 final Date fromDate = StringUtils.stringToDate(this.fromDateField.getText());
@@ -1044,28 +1027,25 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
                 final List<GUIItem<ResultRow>> selectedCountries = this.topCountriesList
                         .getSelectedValuesList();
                 final Set<String> countries = new HashSet<>();
-                for (final GUIItem<ResultRow> row : selectedCountries) {
-                    final String selectedcountry = (String) row.getObject().getKey();
-                    countries.add(selectedcountry);
-                }
+                selectedCountries.stream()
+                        .map(row -> (String) row.object().key())
+                        .forEach(countries::add);
                 controller.getFilter().setSelectedCountries(countries);
 
                 final List<GUIItem<ResultRow>> selectedNewsgroups = this.topGroupsList
                         .getSelectedValuesList();
                 final Vector<NewsGroup> groups = new Vector<>();
-                for (final GUIItem<ResultRow> row : selectedNewsgroups) {
-                    final NewsGroup selectedgroup = (NewsGroup) row.getObject().getKey();
-                    groups.add(selectedgroup);
-                }
+                selectedNewsgroups.stream()
+                        .map(row -> (NewsGroup) row.object().key())
+                        .forEach(groups::add);
                 controller.getFilter().setSelectedNewsgroups(groups);
 
                 final List<GUIItem<ResultRow>> selectedPosters = this.topPostersList
                         .getSelectedValuesList();
                 final Vector<UsenetUser> posters = new Vector<>();
-                for (final GUIItem<ResultRow> row : selectedPosters) {
-                    final UsenetUser selectedUser = (UsenetUser) row.getObject().getKey();
-                    posters.add(selectedUser);
-                }
+                selectedPosters.stream()
+                        .map(row -> (UsenetUser) row.object().key())
+                        .forEach(posters::add);
                 controller.getFilter().setSelectedPosters(posters);
                 this.filterToggle.setText("Filtered");
                 this.filterToggle.setToolTipText("Click again to remove filter");
@@ -1092,7 +1072,15 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
      * @param evt the evt
      */
     private void topCountriesListValueChanged(final javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_topCountriesListValueChanged
-        // TODO add your handling code here:
+        if (!evt.getValueIsAdjusting()) {
+            final List<GUIItem<ResultRow>> selected = this.topCountriesList.getSelectedValuesList();
+            final Set<String> countries = new HashSet<>();
+            for (final GUIItem<ResultRow> row : selected) {
+                countries.add((String) row.getObject().getKey());
+            }
+            UNISoNController.getInstance().getFilter().setSelectedCountries(countries);
+            this.refreshTopGroups();
+        }
     }// GEN-LAST:event_topCountriesListValueChanged
 
     /**
@@ -1106,7 +1094,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
             if (null != selectedItem) {
                 final ResultRow selectedItemObject = selectedItem.getObject();
                 if (selectedItemObject.getKey() instanceof NewsGroup group) {
-                    UNISoNController.getInstance().getFilter().setSelectedNewsgroup(group.getName());
+                    this.controller.getFilter().setSelectedNewsgroup(group.getName());
                     this.notifySelectedNewsGroupObservers();
                 }
             }
@@ -1125,7 +1113,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
         final Object datanode = root.getUserObject();
         if (datanode instanceof Message) {
             final Message msg = (Message) datanode;
-            UNISoNController.getInstance().getFilter().setMessage(msg);
+            this.controller.getFilter().setMessage(msg);
             this.notifySelectedMessageObservers();
         } else {
             this.expandNode(root, this.missingMessagesCheck.isSelected());
@@ -1139,7 +1127,15 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
      * @param evt the evt
      */
     private void topPostersListValueChanged(final javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_topPostersListValueChanged
-        // TODO add your handling code here:
+        if (!evt.getValueIsAdjusting()) {
+            final List<GUIItem<ResultRow>> selected = this.topPostersList.getSelectedValuesList();
+            final Set<String> posters = new HashSet<>();
+            for (final GUIItem<ResultRow> row : selected) {
+                posters.add((String) row.getObject().getKey());
+            }
+            UNISoNController.getInstance().getFilter().setSelectedPosters(posters);
+            this.refreshMessagePane();
+        }
     }// GEN-LAST:event_topPostersListValueChanged
 
     /*

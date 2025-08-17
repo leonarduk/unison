@@ -6,10 +6,11 @@
  */
 package uk.co.sleonard.unison.input;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import uk.co.sleonard.unison.UNISoNController;
 
 /**
  * The Class NewsGroupReaderTest.
@@ -29,9 +30,9 @@ public class NewsGroupReaderTest {
      * @throws Exception
      *             the exception
      */
-    @Before
+    @BeforeEach
     public void setUp() {
-        this.newsGroup = new NewsGroupReader(new NewsClientImpl());
+        this.newsGroup = new NewsGroupReader(new NewsClientImpl(), Mockito.mock(UNISoNController.class));
     }
 
     /**
@@ -43,10 +44,10 @@ public class NewsGroupReaderTest {
         final int expected = 1;
 
         actual = this.newsGroup.getMessagesSkipped();
-        Assert.assertEquals(0, actual);
+        Assertions.assertEquals(0, actual);
         this.newsGroup.incrementMessagesSkipped();
         actual = this.newsGroup.getMessagesSkipped();
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     /**
@@ -58,10 +59,10 @@ public class NewsGroupReaderTest {
         final int expected = 1;
 
         actual = this.newsGroup.getMessagesStored();
-        Assert.assertEquals(0, actual);
+        Assertions.assertEquals(0, actual);
         this.newsGroup.incrementMessagesStored();
         actual = this.newsGroup.getMessagesStored();
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     /**
@@ -72,7 +73,7 @@ public class NewsGroupReaderTest {
         final NewsClient mockNewsClient = Mockito.mock(NewsClient.class);
         Mockito.when(mockNewsClient.getMessageCount()).thenReturn(10);
         this.newsGroup.setClient(mockNewsClient);
-        Assert.assertEquals(10, this.newsGroup.getNumberOfMessages());
+        Assertions.assertEquals(10, this.newsGroup.getNumberOfMessages());
     }
 
     /**
@@ -81,7 +82,7 @@ public class NewsGroupReaderTest {
     @Test
     public void testSuppliedNewsClientIsUsed() {
         final NewsClient mockClient = Mockito.mock(NewsClient.class);
-        final NewsGroupReader reader = new NewsGroupReader(mockClient);
+        final NewsGroupReader reader = new NewsGroupReader(mockClient, Mockito.mock(UNISoNController.class));
         reader.getNumberOfMessages();
         Mockito.verify(mockClient).getMessageCount();
     }
@@ -92,9 +93,9 @@ public class NewsGroupReaderTest {
     @Test
     public void testGetSetMessageCount() {
         final int expected = 5;
-        Assert.assertEquals(0, this.newsGroup.getMessageCount());
+        Assertions.assertEquals(0, this.newsGroup.getMessageCount());
         this.newsGroup.setMessageCount(expected);
-        Assert.assertEquals(expected, this.newsGroup.getMessageCount());
+        Assertions.assertEquals(expected, this.newsGroup.getMessageCount());
     }
 
     /**
@@ -104,7 +105,7 @@ public class NewsGroupReaderTest {
     public void testIncrementMessagesSkipped() {
         this.newsGroup.incrementMessagesSkipped();
         this.newsGroup.incrementMessagesSkipped();
-        Assert.assertEquals(2, this.newsGroup.getMessagesSkipped());
+        Assertions.assertEquals(2, this.newsGroup.getMessagesSkipped());
     }
 
     /**
@@ -114,7 +115,7 @@ public class NewsGroupReaderTest {
     public void testIncrementMessagesStored() {
         this.newsGroup.incrementMessagesStored();
         this.newsGroup.incrementMessagesStored();
-        Assert.assertEquals(2, this.newsGroup.getMessagesStored());
+        Assertions.assertEquals(2, this.newsGroup.getMessagesStored());
     }
 
     /**
@@ -123,6 +124,6 @@ public class NewsGroupReaderTest {
     @Test
     public void testIsConnected() {
         final boolean actual = this.newsGroup.isConnected();
-        Assert.assertFalse(actual);
+        Assertions.assertFalse(actual);
     }
 }

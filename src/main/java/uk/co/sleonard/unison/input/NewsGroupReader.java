@@ -21,7 +21,9 @@ public class NewsGroupReader {
     /**
      * The client.
      */
-    NewsClient client;
+    private final NewsClient client;
+
+    private final UNISoNController controller;
 
     /**
      * The message count.
@@ -43,8 +45,9 @@ public class NewsGroupReader {
      *
      * @param client the {@link NewsClient} to use
      */
-    public NewsGroupReader(final NewsClient client) {
+    public NewsGroupReader(final NewsClient client, final UNISoNController controller) {
         this.client = client;
+        this.controller = controller;
     }
 
 
@@ -120,10 +123,6 @@ public class NewsGroupReader {
     // toDate, this);
     // }
 
-    public void setClient(final NewsClient client) {
-        this.client = client;
-    }
-
     /**
      * Sets the downloader finished.
      *
@@ -148,9 +147,9 @@ public class NewsGroupReader {
     synchronized void showDownloadStatus() {
         final int i = this.getMessagesSkipped() + this.getMessagesStored();
 
-        if (this.getMessageCount() > 0) {
+        if (this.getMessageCount() > 0 && this.controller != null) {
             final int progress = (i * 100) / this.getMessageCount();
-            UNISoNController.getInstance().setDownloadingState(progress);
+            this.controller.setDownloadingState(progress);
         }
 
     }

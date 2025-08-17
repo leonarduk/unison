@@ -8,9 +8,9 @@ package uk.co.sleonard.unison.datahandling.DAO;
 
 import org.apache.commons.net.nntp.NewsgroupInfo;
 import org.apache.commons.net.nntp.NewsgroupInfoFactory;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -65,9 +65,9 @@ public class NewsGroupTest {
     public void getLastIndexDownloaded() {
         final int expected = 10;
         final NewsGroup actual = new NewsGroup();
-        Assert.assertEquals(0, actual.getLastIndexDownloaded());
+        Assertions.assertEquals(0, actual.getLastIndexDownloaded());
         actual.setLastIndexDownloaded(expected);
-        Assert.assertEquals(expected, actual.getLastIndexDownloaded());
+        Assertions.assertEquals(expected, actual.getLastIndexDownloaded());
     }
 
     /**
@@ -77,9 +77,9 @@ public class NewsGroupTest {
     public void getLastMessage() {
         final int expected = 10;
         final NewsGroup actual = new NewsGroup();
-        Assert.assertEquals(0, actual.getLastMessage());
+        Assertions.assertEquals(0, actual.getLastMessage());
         actual.setLastMessage(expected);
-        Assert.assertEquals(expected, actual.getLastMessage());
+        Assertions.assertEquals(expected, actual.getLastMessage());
     }
 
     /**
@@ -87,7 +87,7 @@ public class NewsGroupTest {
      *
      * @throws Exception the exception
      */
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final NewsgroupInfo ngInfoMock = this.generateNewsgroupInfoMock();
         this.nntpNG = new NewsGroup(ngInfoMock);
@@ -102,7 +102,7 @@ public class NewsGroupTest {
         expected.setName("ng1");
         final NewsGroup actual = new NewsGroup();
         actual.setName("ng1");
-        Assert.assertEquals(0, actual.compareTo(expected));
+        Assertions.assertEquals(0, actual.compareTo(expected));
     }
 
     /**
@@ -110,7 +110,7 @@ public class NewsGroupTest {
      */
     @Test
     public void testGetArticleCount() {
-        Assert.assertEquals(NewsGroupTest.expectedArticleCount, this.nntpNG.getArticleCount());
+        Assertions.assertEquals(NewsGroupTest.expectedArticleCount, this.nntpNG.getArticleCount());
     }
 
     /**
@@ -118,12 +118,12 @@ public class NewsGroupTest {
      */
     @Test
     public void testGetFirstMessage() {
-        Assert.assertEquals(NewsGroupTest.expectedFirstMessage, this.nntpNG.getFirstMessage());
+        Assertions.assertEquals(NewsGroupTest.expectedFirstMessage, this.nntpNG.getFirstMessage());
         final int expected = 10;
         final NewsGroup actual = new NewsGroup();
-        Assert.assertEquals(0, actual.getFirstMessage());
+        Assertions.assertEquals(0, actual.getFirstMessage());
         actual.setFirstMessage(expected);
-        Assert.assertEquals(expected, actual.getFirstMessage());
+        Assertions.assertEquals(expected, actual.getFirstMessage());
     }
 
     /**
@@ -133,9 +133,9 @@ public class NewsGroupTest {
     public void testGetFullName() {
         final String expected = "fullname";
         final NewsGroup actual = new NewsGroup();
-        Assert.assertNull(actual.getFullName());
+        Assertions.assertNull(actual.getFullName());
         actual.setFullName(expected);
-        Assert.assertEquals(expected, actual.getFullName());
+        Assertions.assertEquals(expected, actual.getFullName());
     }
 
     /**
@@ -143,7 +143,7 @@ public class NewsGroupTest {
      */
     @Test
     public void testGetId() {
-        Assert.assertEquals(0, new NewsGroup().getId());
+        Assertions.assertEquals(0, new NewsGroup().getId());
     }
 
     /**
@@ -151,7 +151,7 @@ public class NewsGroupTest {
      */
     @Test
     public void testGetLastMessage() {
-        Assert.assertEquals(NewsGroupTest.expectedLastMessage, this.nntpNG.getLastMessage());
+        Assertions.assertEquals(NewsGroupTest.expectedLastMessage, this.nntpNG.getLastMessage());
     }
 
     /**
@@ -161,9 +161,9 @@ public class NewsGroupTest {
     public void testGetLastMessageTotal() {
         final int expected = 10;
         final NewsGroup actual = new NewsGroup();
-        Assert.assertEquals(0, actual.getLastMessageTotal());
+        Assertions.assertEquals(0, actual.getLastMessageTotal());
         actual.setLastMessageTotal(expected);
-        Assert.assertEquals(expected, actual.getLastMessageTotal());
+        Assertions.assertEquals(expected, actual.getLastMessageTotal());
     }
 
     /**
@@ -173,10 +173,10 @@ public class NewsGroupTest {
     public void testGetMessages() {
         final Set<Message> expected = new HashSet<>(0);
         final NewsGroup actual = new NewsGroup();
-        Assert.assertEquals(expected.size(), actual.getMessages().size());
+        Assertions.assertEquals(expected.size(), actual.getMessages().size());
         expected.add(new Message());
         actual.setMessages(expected);
-        Assert.assertEquals(expected.size(), actual.getMessages().size());
+        Assertions.assertEquals(expected.size(), actual.getMessages().size());
     }
 
     /**
@@ -186,9 +186,9 @@ public class NewsGroupTest {
     public void testGetName() {
         final String expected = "myname";
         final NewsGroup actual = new NewsGroup();
-        Assert.assertNull(actual.getName());
+        Assertions.assertNull(actual.getName());
         actual.setName(expected);
-        Assert.assertEquals(expected, actual.getName());
+        Assertions.assertEquals(expected, actual.getName());
     }
 
     /**
@@ -199,9 +199,9 @@ public class NewsGroupTest {
         final NewsGroup expected = new NewsGroup("alt.news", null, null, null, 1, 2, 1, 2, null,
                 true);
         final NewsGroup actual = new NewsGroup();
-        Assert.assertNull(actual.getParentNewsGroup());
+        Assertions.assertNull(actual.getParentNewsGroup());
         actual.setParentNewsGroup(expected);
-        Assert.assertEquals(expected.getName(), actual.getParentNewsGroup().getName());
+        Assertions.assertEquals(expected.getName(), actual.getParentNewsGroup().getName());
     }
 
     /**
@@ -211,10 +211,10 @@ public class NewsGroupTest {
     public void testGetTopics() {
         final Set<Topic> expected = new HashSet<>(0);
         final NewsGroup actual = new NewsGroup();
-        Assert.assertEquals(expected.size(), actual.getTopics().size());
+        Assertions.assertEquals(expected.size(), actual.getTopics().size());
         expected.add(new Topic());
         actual.setTopics(expected);
-        Assert.assertEquals(expected.size(), actual.getTopics().size());
+        Assertions.assertEquals(expected.size(), actual.getTopics().size());
     }
 
     /**
@@ -225,7 +225,7 @@ public class NewsGroupTest {
         final TestNewsGroup actual2 = new TestNewsGroup();
         actual1.setFullName("abc");
         actual2.setFullName("def");
-        Assert.assertTrue(actual1.hashCode() != actual2.hashCode());
+        Assertions.assertTrue(actual1.hashCode() != actual2.hashCode());
     }
 
     /**
@@ -235,9 +235,9 @@ public class NewsGroupTest {
     public void testIsLastNode() {
         final boolean expected = true;
         final NewsGroup actual = new NewsGroup();
-        Assert.assertFalse(actual.isLastNode());
+        Assertions.assertFalse(actual.isLastNode());
         actual.setLastNode(expected);
-        Assert.assertEquals(expected, actual.isLastNode());
+        Assertions.assertEquals(expected, actual.isLastNode());
     }
 
     /**
@@ -250,7 +250,7 @@ public class NewsGroupTest {
         actual.setFullName("fullname");
         actual.setLastMessage(10);
         actual.setEstimatedArticleCount(10);
-        Assert.assertEquals(expected, actual.toString());
+        Assertions.assertEquals(expected, actual.toString());
     }
 
 }

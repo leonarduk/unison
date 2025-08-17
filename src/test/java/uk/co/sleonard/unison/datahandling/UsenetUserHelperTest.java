@@ -1,12 +1,12 @@
 package uk.co.sleonard.unison.datahandling;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.co.sleonard.unison.datahandling.DAO.EmailAddress;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * The Class UsenetUserHelperTest

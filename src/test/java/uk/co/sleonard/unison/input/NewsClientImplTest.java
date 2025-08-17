@@ -9,9 +9,9 @@ package uk.co.sleonard.unison.input;
 import org.apache.commons.net.nntp.NNTPClient;
 import org.apache.commons.net.nntp.NewsgroupInfo;
 import org.apache.commons.net.nntp.NewsgroupInfoFactory;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import uk.co.sleonard.unison.UNISoNException;
@@ -30,7 +30,7 @@ public class NewsClientImplTest {
     private NewsClient client;
     private NNTPClient mock;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.mock = Mockito.mock(NNTPClient.class);
         this.client = new NewsClientImpl(this.mock);
@@ -172,7 +172,7 @@ public class NewsClientImplTest {
         final int expected = 205;
         Mockito.when(this.mock.quit()).thenReturn(expected);
         final int actual = this.client.quit();
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
         Mockito.verify(this.mock).quit();
     }
 
@@ -188,7 +188,7 @@ public class NewsClientImplTest {
         final Reader reader = new StringReader("content");
         Mockito.when(this.mock.retrieveArticle(articleId)).thenReturn(reader);
         final Reader actual = this.client.retrieveArticle(articleId);
-        Assert.assertSame(reader, actual);
+        Assertions.assertSame(reader, actual);
         Mockito.verify(this.mock).retrieveArticle(articleId);
     }
 
@@ -205,7 +205,7 @@ public class NewsClientImplTest {
         final Reader header = new StringReader("header");
         Mockito.when(this.mock.retrieveArticleHeader(articleId)).thenReturn(header);
         final Reader actual = this.client.retrieveArticleHeader(articleId);
-        Assert.assertSame(header, actual);
+        Assertions.assertSame(header, actual);
         Mockito.verify(this.mock).retrieveArticleHeader(articleId);
     }
 
@@ -223,7 +223,7 @@ public class NewsClientImplTest {
         final BufferedReader reader = new BufferedReader(new StringReader("info"));
         Mockito.when(this.mock.retrieveArticleInfo(low, high)).thenReturn(reader);
         final BufferedReader actual = this.client.retrieveArticleInfo(low, high);
-        Assert.assertSame(reader, actual);
+        Assertions.assertSame(reader, actual);
         Mockito.verify(this.mock).retrieveArticleInfo(low, high);
     }
 

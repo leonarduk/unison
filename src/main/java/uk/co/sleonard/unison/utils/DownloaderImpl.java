@@ -7,13 +7,14 @@
 package uk.co.sleonard.unison.utils;
 
 import uk.co.sleonard.unison.UNISoNController;
-import org.hibernate.Session;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 import uk.co.sleonard.unison.input.*;
 
+import java.util.Objects;
 import java.util.concurrent.LinkedBlockingQueue;
+import org.jetbrains.annotations.NotNull;
 
 public class DownloaderImpl implements Downloader {
 
@@ -22,27 +23,25 @@ public class DownloaderImpl implements Downloader {
     private final NewsClient newsClient;
     private final NewsGroupReader nntpReader;
     private final HibernateHelper helper;
+    private final UNISoNController controller;
 
-    public DownloaderImpl() {
-        this(UNISoNController.getInstance().getNntpHost(),
-                UNISoNController.getInstance().getQueue(), new NewsClientImpl(),
-                UNISoNController.getInstance().getNntpReader(),
-                UNISoNController.getInstance().getHelper());
-    }
-
-    public DownloaderImpl(final String nntpHost, final LinkedBlockingQueue<NewsArticle> queue1,
-                          final NewsClient newsClient1, final NewsGroupReader reader,
-                          final HibernateHelper helper2) {
-        this.nntpHost = nntpHost;
-        this.queue = queue1;
-        this.newsClient = newsClient1;
-        this.nntpReader = reader;
-        this.helper = helper2;
+    public DownloaderImpl(final @NotNull String nntpHost,
+                          final @NotNull LinkedBlockingQueue<NewsArticle> queue1,
+                          final @NotNull NewsClient newsClient1,
+                          final @NotNull NewsGroupReader reader,
+                          final @NotNull HibernateHelper helper2) {
+        this.nntpHost = Objects.requireNonNull(nntpHost, "nntpHost");
+        this.queue = Objects.requireNonNull(queue1, "queue");
+        this.newsClient = Objects.requireNonNull(newsClient1, "newsClient");
+        this.nntpReader = Objects.requireNonNull(reader, "reader");
+        this.helper = Objects.requireNonNull(helper2, "helper");
     }
 
     @Override
-    public void addDownloadRequest(final String usenetID, final DownloadMode mode) throws UNISoNException {
-        FullDownloadWorker.addDownloadRequest(usenetID, mode, this.nntpHost, this.queue,
+    public void addDownloadRequest(final @NotNull String usenetID, final @NotNull DownloadMode mode)
+            throws UNISoNException {
+        FullDownloadWorker.addDownloadRequest(Objects.requireNonNull(usenetID, "usenetID"),
+                Objects.requireNonNull(mode, "mode"), this.nntpHost, this.queue,
                 this.newsClient, this.nntpReader, this.helper);
     }
 

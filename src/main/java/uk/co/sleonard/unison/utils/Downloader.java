@@ -6,6 +6,7 @@
  */
 package uk.co.sleonard.unison.utils;
 
+import org.jetbrains.annotations.NotNull;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 
@@ -18,6 +19,6 @@ public interface Downloader {
      *             {@link DownloadMode#BASIC}, {@link DownloadMode#HEADERS} or {@link DownloadMode#ALL}
      * @throws UNISoNException if the request cannot be queued or the mode is unsupported
      */
-    void addDownloadRequest(final String usenetID, final DownloadMode mode) throws UNISoNException;
+    void addDownloadRequest(@NotNull String usenetID, @NotNull DownloadMode mode) throws UNISoNException;
 
 }

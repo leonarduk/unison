@@ -6,13 +6,12 @@
  */
 package uk.co.sleonard.unison.input;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
@@ -34,10 +33,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
  */
+@Slf4j
 class HeaderDownloadWorkerTest {
 
     private HeaderDownloadWorker worker;
-    private static final Logger log = LoggerFactory.getLogger(HeaderDownloadWorkerTest.class);
 
     /**
      * Setup.

@@ -6,6 +6,7 @@
  */
 package uk.co.sleonard.unison.input;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.nntp.Article;
 import org.apache.commons.net.nntp.NNTPClient;
@@ -62,7 +63,13 @@ public class HeaderDownloadWorker extends SwingWorker {
 
     /**
      * The downloading.
+     * -- GETTER --
+     *  Checks if is downloading.
+     *
+     * @return true, if is downloading
+
      */
+    @Getter
     private volatile boolean downloading = false;
 
     /**
@@ -223,9 +230,14 @@ public class HeaderDownloadWorker extends SwingWorker {
      * @param to          the to
      * @throws UNISoNException the UNI so n exception
      */
-    public void initialise(final NewsGroupReader reader, final int startIndex1, final int endIndex1,
-                           final String server, final String newsgroup1,
-                           final DownloadMode mode1, final Date from, final Date to) throws UNISoNException {
+    public void initialise(final NewsGroupReader reader,
+                           final int startIndex1,
+                           final int endIndex1,
+                           final String server,
+                           final String newsgroup1,
+                           final DownloadMode mode1,
+                           final Date from,
+                           final Date to) throws UNISoNException {
         this.mode = mode1;
         this.startIndex = startIndex1;
         this.endIndex = endIndex1;
@@ -245,17 +257,7 @@ public class HeaderDownloadWorker extends SwingWorker {
         }
 
         this.downloading = true;
-        log.info("Creating " + this.getClass() + " " + newsgroup1 + "["
-                + reader.getMessageCount() + "]");
-    }
-
-    /**
-     * Checks if is downloading.
-     *
-     * @return true, if is downloading
-     */
-    public boolean isDownloading() {
-        return this.downloading;
+        log.info("Creating {} {}[{}]", this.getClass(), newsgroup1, reader.getMessageCount());
     }
 
     /**

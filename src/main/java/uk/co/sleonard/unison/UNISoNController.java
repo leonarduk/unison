@@ -311,9 +311,16 @@ public class UNISoNController {
                         group.getFirstMessage(), group.getLastMessage());
                 this.client.reconnect();
                 this.client.selectNewsgroup(group.getName());
-                reader.setMessageCount(group.getArticleCount());
-                headerDownloader2.initialise(reader, group.getFirstMessage(),
-                        group.getLastMessage(), nntpHost2, group.getName(), mode, fromDate1,
+                int articleCount = group.getArticleCount();
+                log.debug("Group {} has {} articles", group.getName(), articleCount);
+                reader.setMessageCount(articleCount);
+                headerDownloader2.initialise(reader,
+                        group.getFirstMessage(),
+                        group.getLastMessage(),
+                        nntpHost2,
+                        group.getName(),
+                        mode,
+                        fromDate1,
                         toDate1);
                 log.debug("Initialised header downloader for {}", group.getName());
             } catch (final IOException e) {

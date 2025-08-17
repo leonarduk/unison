@@ -47,6 +47,11 @@ public class HeaderDownloadWorker extends SwingWorker {
     private NewsGroupReader newsReader = null;
 
     /**
+     * The newsgroup.
+     */
+    private String newsgroup;
+
+    /**
      * The start index.
      */
     private int startIndex;
@@ -249,6 +254,7 @@ public class HeaderDownloadWorker extends SwingWorker {
         this.startIndex = startIndex1;
         this.endIndex = endIndex1;
         this.newsReader = reader;
+        this.newsgroup = newsgroup1;
         this.fromDate = from;
         this.toDate = to;
 
@@ -328,7 +334,7 @@ public class HeaderDownloadWorker extends SwingWorker {
 
         if (this.inDateRange(this.fromDate, this.toDate, date)) {
             queue1.add(new NewsArticle(articleId, articleNumber, date, from, subject, references,
-                    references));
+                    this.newsgroup));
             this.kept++;
             if (!this.mode.equals(DownloadMode.BASIC)) {
                 this.downloader.addDownloadRequest(articleId, this.mode);

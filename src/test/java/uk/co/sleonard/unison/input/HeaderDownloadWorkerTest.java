@@ -170,6 +170,22 @@ class HeaderDownloadWorkerTest {
         }
     }
 
+    @Test
+    void testProcessMessageUsesNewsgroup() throws UNISoNException {
+        final LinkedBlockingQueue<NewsArticle> queue = new LinkedBlockingQueue<>();
+        final NewsClient nc = Mockito.mock(NewsClient.class);
+        final NewsGroupReader ngr = new NewsGroupReader(nc, Mockito.mock(UNISoNController.class));
+        this.worker.initialise(ngr, 0, 1, "server", "test.group", DownloadMode.BASIC, null, null);
+
+        final String line =
+                "1\tSubject\tsender@email.com\t2016-04-01\t1234\t123@email.com";
+        this.worker.processMessage(queue, line);
+
+        final NewsArticle article = queue.poll();
+        Assertions.assertNotNull(article);
+        Assertions.assertEquals("test.group", article.getNewsgroups());
+    }
+
     /**
      * Test construct
      *

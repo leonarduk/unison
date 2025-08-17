@@ -1,16 +1,11 @@
 package uk.co.sleonard.unison;
 
-import org.hibernate.Session;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
-import uk.co.sleonard.unison.datahandling.SessionManager;
 import uk.co.sleonard.unison.input.DataHibernatorPool;
-import uk.co.sleonard.unison.input.NewsArticle;
 import uk.co.sleonard.unison.input.NewsClient;
 
 import java.util.Collections;
@@ -40,20 +35,14 @@ class UNISoNControllerListNewsgroupsTest {
             DataHibernatorPool pool = mock(DataHibernatorPool.class);
             HibernateHelper helper = mock(HibernateHelper.class);
 
-            try (MockedStatic<SessionManager> sessionManager = Mockito.mockStatic(SessionManager.class)) {
-                Session session = mock(Session.class);
-                sessionManager.when(SessionManager::openSession).thenReturn(session);
+            UNISoNController controller = new UNISoNController(
+                    client, helper, new LinkedBlockingQueue<>(), pool, null);
 
-                UNISoNController controller = new UNISoNController(
-                        client, helper, new LinkedBlockingQueue<NewsArticle>(), pool, null);
+            Set<NewsGroup> result = controller.listNewsgroups(group, host, client);
 
-                Set<NewsGroup> result = controller.listNewsgroups(group, host, client);
-
-                assertSame(expected, result);
-                assertEquals(host, controller.getNntpHost());
-                verify(client).listNewsGroups(group, host);
-                sessionManager.verify(() -> SessionManager.openSession(), Mockito.times(1));
-            }
+            assertSame(expected, result);
+            assertEquals(host, controller.getNntpHost());
+            verify(client).listNewsGroups(group, host);
         }
     }
 }

@@ -1,6 +1,5 @@
 package uk.co.sleonard.unison.utils;
 
-import org.hibernate.Session;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -34,17 +33,16 @@ public class DownloaderImplTest {
         NewsClient newsClient = Mockito.mock(NewsClient.class);
         NewsGroupReader reader = Mockito.mock(NewsGroupReader.class);
         HibernateHelper helper = Mockito.mock(HibernateHelper.class);
-        Session session = Mockito.mock(Session.class);
 
         PowerMockito.mockStatic(FullDownloadWorker.class);
 
-        DownloaderImpl downloader = new DownloaderImpl(nntpHost, queue, newsClient, reader, helper, session);
+        DownloaderImpl downloader = new DownloaderImpl(nntpHost, queue, newsClient, reader, helper);
         String usenetId = "<123>";
         DownloadMode mode = DownloadMode.ALL;
 
         downloader.addDownloadRequest(usenetId, mode);
 
         PowerMockito.verifyStatic(FullDownloadWorker.class, Mockito.times(1));
-        FullDownloadWorker.addDownloadRequest(usenetId, mode, nntpHost, queue, newsClient, reader, helper, session);
+        FullDownloadWorker.addDownloadRequest(usenetId, mode, nntpHost, queue, newsClient, reader, helper);
     }
 }

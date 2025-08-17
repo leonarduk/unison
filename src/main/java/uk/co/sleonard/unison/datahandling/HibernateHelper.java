@@ -6,14 +6,7 @@
  */
 package uk.co.sleonard.unison.datahandling;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
 import lombok.extern.slf4j.Slf4j;
-import org.ehcache.Cache;
-import org.ehcache.CacheManager;
-import org.ehcache.config.builders.CacheConfigurationBuilder;
-import org.ehcache.config.builders.CacheManagerBuilder;
-import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.hibernate.*;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -25,19 +18,11 @@ import org.hibernate.query.Query;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.schema.TargetType;
 import org.hsqldb.util.DatabaseManagerSwing;
-import org.slf4j.LoggerFactory;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.*;
 import uk.co.sleonard.unison.gui.UNISoNGUI;
-import uk.co.sleonard.unison.input.LocationFinder;
-import uk.co.sleonard.unison.input.LocationFinderImpl;
 import uk.co.sleonard.unison.input.NewsArticle;
-import uk.co.sleonard.unison.utils.StringUtils;
 
-import javax.naming.NamingException;
-import javax.swing.*;
-import java.io.File;
-import java.io.IOException;
 import java.sql.BatchUpdateException;
 import java.sql.SQLException;
 import java.util.*;
@@ -70,8 +55,6 @@ public class HibernateHelper {
     /**
      * The first connect.
      */
-    private static boolean firstConnect = true;
-
     /**
      * The Constant GUI_ARGS.
      */
@@ -88,13 +71,10 @@ public class HibernateHelper {
      */
     private static SessionFactory sessionFactory = null;
 
-    private final LocationFinder locationFinder;
-
     private final UNISoNGUI gui;
-
-    private final CacheManager cacheManager;
-
-    private final Cache<String, Message> messagesCache;
+    private final MessageCacheService cacheService;
+    private final MessageFactory messageFactory;
+    private final UserFactory userFactory;
 
     /**
      * This opens up a SQL client to access the database directly.
@@ -113,12 +93,14 @@ public class HibernateHelper {
      * @param gui the controller
      */
     public HibernateHelper(final UNISoNGUI gui) {
+        this(gui, new MessageCacheService(), new MessageFactory(), new UserFactory());
+    }
+
+    public HibernateHelper(final UNISoNGUI gui, final MessageCacheService cacheService, final MessageFactory messageFactory, final UserFactory userFactory) {
         this.gui = gui;
-        this.locationFinder = new LocationFinderImpl();
-        this.cacheManager = CacheManagerBuilder.newCacheManagerBuilder().build(true);
-        this.messagesCache = this.cacheManager.createCache("messagesCache",
-                CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, Message.class,
-                        ResourcePoolsBuilder.heap(1000)));
+        this.cacheService = cacheService;
+        this.messageFactory = messageFactory;
+        this.userFactory = userFactory;
     }
 
     /**
@@ -128,17 +110,6 @@ public class HibernateHelper {
      * @param session the session
      * @return the location
      */
-    private synchronized Location createLocation(final NewsArticle article, final Session session) {
-        Location location;
-        final IpAddress ip = this.findOrCreateIpAddress(article, session);
-        location = ip.getLocation();
-        if (null == location) {
-            // create location to find city (does web lookup)
-            location = this.findOrCreateLocation(session, ip);
-        }
-        return location;
-    }
-
     /**
      * Creates the message.
      *
@@ -148,31 +119,6 @@ public class HibernateHelper {
      * @return the message
      * @throws UNISoNException the UNI so n exception
      */
-    Message createMessage(final NewsArticle article, final Topic topic, final UsenetUser poster)
-            throws UNISoNException {
-        Message message;
-        byte[] body = null;
-        if (null != article.getContent()) {
-            // As messages can be quite large, we compress them
-            try {
-                body = StringUtils.compress(article.getContent().toString());
-            } catch (final IOException e) {
-                throw new UNISoNException("Failed to compress message", e);
-            }
-        }
-
-        message = new Message(
-                article.getDate(),
-                article.getArticleID(),
-                article.getSubject(),
-                poster,
-                topic,
-                new HashSet<>(),
-                article.getReferences(),
-                body);
-        return message;
-    }
-
     /**
      * Creates the usenet user.
      *
@@ -182,22 +128,6 @@ public class HibernateHelper {
      * @param gender        the gender
      * @return the usenet user
      */
-    private synchronized UsenetUser createUsenetUser(final NewsArticle article,
-                                                     final Session session, final Location locationInput, final String gender)
-            throws UNISoNException {
-        Location location = locationInput;
-        // Add location details if got all details
-        if (article.isFullHeader()) {
-            location = this.createLocation(article, session);
-        }
-        final UsenetUser poster = this.findOrCreateUsenetUser(article, session, gender);
-        if ((null == poster.getLocation()) || !poster.getLocation().equals(location)) {
-            poster.setLocation(location);
-            session.saveOrUpdate(poster);
-        }
-        return poster;
-    }
-
     /**
      * Find by key.
      *
@@ -225,67 +155,17 @@ public class HibernateHelper {
     }
 
     Message findMessage(final Message aMessage, final Session session) {
-        Message message = this.messagesCache.get(aMessage.getUsenetMessageID());
+        Message message = this.cacheService.get(aMessage.getUsenetMessageID());
         if (null == message) {
             message = (Message) this.findByKey(aMessage.getUsenetMessageID(), session, Message.class);
             if (null != message) {
-                this.messagesCache.put(aMessage.getUsenetMessageID(), message);
+                this.cacheService.put(message);
             }
         }
         return message;
     }
 
-    /**
-     * Find or create ip address.
-     *
-     * @param article the article
-     * @param session the session
-     * @return the ip address
-     */
-    private synchronized IpAddress findOrCreateIpAddress(final NewsArticle article,
-                                                         final Session session) {
-        // If user is new, then location might be too
-        IpAddress ip = (IpAddress) this.findByKey(article.getPostingHost(), session,
-                IpAddress.class);
-
-        if (null == ip) {
-            ip = new IpAddress(article.getPostingHost(), null);
-            session.saveOrUpdate(ip);
-        }
-        return ip;
-    }
-
-    /**
-     * Find or create location.
-     *
-     * @param session   the session
-     * @param ipAddress the ip address
-     * @return the location
-     */
-    synchronized Location findOrCreateLocation(final Session session, final IpAddress ipAddress) {
-        Location location;
-        location = this.locationFinder.createLocation(ipAddress.getIpAddress());
-
-        // find if location was already created for another
-        // IP
-        final Location dbLocation = (Location) this.findByKey(location.getCity(), session,
-                Location.class);
-        if (null != dbLocation) {
-            location = dbLocation;
-            List<IpAddress> ipAddresses = location.getIpAddresses();
-            if (null == ipAddresses) {
-                ipAddresses = new ArrayList<>();
-            }
-            ipAddresses.add(ipAddress);
-        }
-        session.saveOrUpdate(location);
-
-        return location;
-    }
-
-
-    private synchronized Message findOrCreateMessage(final Message aMessage,
-                                                     final Session session) {
+    private synchronized Message findOrCreateMessage(final Message aMessage, final Session session) {
         Message message = null;
         try {
             message = this.findMessage(aMessage, session);
@@ -293,7 +173,7 @@ public class HibernateHelper {
                 session.saveOrUpdate(aMessage.getPoster());
                 message = aMessage;
                 session.saveOrUpdate(aMessage);
-                this.messagesCache.put(aMessage.getUsenetMessageID(), message);
+                this.cacheService.put(message);
             }
         } catch (final ObjectNotFoundException e) {
             log.warn(aMessage.getPoster().toString(), e);
@@ -362,44 +242,12 @@ public class HibernateHelper {
      * @param gender  the gender
      * @return the usenet user
      */
-    private synchronized UsenetUser findOrCreateUsenetUser(final NewsArticle article,
-                                                           final Session session, final String gender)
-            throws UNISoNException {
-        EmailAddress emailAddress;
-        try {
-            emailAddress = UsenetUserHelper.parseFromField(article);
-        } catch (final IllegalArgumentException e) {
-            throw new UNISoNException("Failed to parse From field: " + article.getFrom(), e);
-        }
-        if ((emailAddress == null) || (emailAddress.getEmail() == null)) {
-            throw new UNISoNException(
-                    "Missing email address in From field: " + article.getFrom());
-        }
-        UsenetUser poster = this.findUsenetUser(emailAddress, session);
-
-        if (null == poster) {
-            poster = new UsenetUser(emailAddress.getName(), emailAddress.getEmail(),
-                    emailAddress.getIpAddress(), gender, null);
-            session.saveOrUpdate(poster);
-        }
-        return poster;
-    }
-
-    synchronized UsenetUser findUsenetUser(final EmailAddress emailAddress,
-                                           final Session session) {
-        if ((emailAddress == null) || (emailAddress.getEmail() == null)) {
-            return null;
-        }
-        return (UsenetUser) this.findByKey(emailAddress.getEmail(), session, UsenetUser.class);
-    }
-
     /**
      * Generate schema.
      */
     public void generateSchema() {
-        Configuration config;
         try {
-            config = this.getHibernateConfig();
+            Configuration config = new Configuration().configure();
             final StandardServiceRegistry standardServiceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(config.getProperties())
                     .build();
@@ -428,92 +276,9 @@ public class HibernateHelper {
      * @throws MappingException   the mapping exception
      * @throws NamingException    the naming exception
      */
-    private Configuration getHibernateConfig()
-            throws HibernateException, MappingException, NamingException {
-        final Configuration config = new Configuration().configure();
-
-        // show what config we have just read in
-        final Properties props = config.getProperties();
-
-        if (HibernateHelper.firstConnect) {
-            // will be like jdbc:hsqldb:file:<filelocation>
-            final String connUrl = props.getProperty(HibernateHelper.HIBERNATE_CONNECTION_URL);
-            final String dbLocation = connUrl.replaceFirst("jdbc:hsqldb:file:", "");
-            log.warn("DB: " + dbLocation);
-
-            final String dbLockFileName = dbLocation + ".lck";
-            final File dbLock = new File(dbLockFileName);
-
-            // Try to delete it once anyway
-            if (dbLock.exists()) {
-                dbLock.delete();
-            }
-            // If lock exists warn user and ask what to do
-            while (dbLock.exists()) {
-
-                final String question = "Found database lockfile " + dbLockFileName
-                        + "\n if there is another UNISoN running, then quit,\n"
-                        + " otherwise click OK";
-                final String defaultOption = "OK";
-
-                final String[] options = {defaultOption, "Quit"};
-                final String title = "Database locked";
-                if (null != this.gui) {
-                    final int response = this.gui.askQuestion(question, options, title,
-                            defaultOption);
-                    switch (response) {
-                        case 0: // delete
-                            dbLock.delete();
-                            break;
-                        case 1:
-                            System.exit(0);
-                            break;
-                        case JOptionPane.CLOSED_OPTION: // quit
-                            break;
-                        default:
-                            break;
-                    }
-                } else {
-                    dbLock.delete();
-                }
-            }
-            HibernateHelper.firstConnect = false;
-            final String dbSchemaFile = dbLocation + ".script";
-            final File dbSchema = new File(dbSchemaFile);
-
-            if (!dbSchema.exists()) {
-                log.warn("No database - creating now");
-                this.generateSchema();
-            }
-        }
-        log.debug("getHibernateConfig");
-        return config;
-    }
-
     public synchronized Session getHibernateSession() throws UNISoNException {
         log.debug("getHibernateSession");
-        if (null == HibernateHelper.sessionFactory) {
-            try {
-                final Configuration config = this.getHibernateConfig();
-
-                // FIXME - couldn't stop the NoInitialContext warning so this
-                // hack will stop it being displayed
-                final Logger root = (Logger) LoggerFactory
-                        .getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
-                final Level level = root.getLevel();
-                root.setLevel(Level.ERROR);
-                HibernateHelper.sessionFactory = config.buildSessionFactory();
-                root.setLevel(level);
-
-            } catch (final Throwable e) {
-                e.printStackTrace();
-                throw new UNISoNException("Failed to connect to DB", e);
-            }
-        }
-        log.debug("getHibernateSession");
-
-        return HibernateHelper.sessionFactory.openSession();
-
+        return SessionManager.openSession();
     }
 
     /**
@@ -598,9 +363,9 @@ public class HibernateHelper {
             tx = session.beginTransaction();
             tx.begin();
 
-            final UsenetUser poster = this.createUsenetUser(article, session, location, gender);
+            final UsenetUser poster = this.userFactory.createUsenetUser(article, session, location, gender, this);
 
-            final Message message = this.createMessage(article, null, poster);
+            final Message message = this.messageFactory.createMessage(article, null, poster);
 
             this.storeNewsgroups(article.getNewsgroupsList(), message, session);
 

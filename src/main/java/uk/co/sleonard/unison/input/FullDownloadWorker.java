@@ -11,6 +11,7 @@ import org.apache.commons.net.MalformedServerReplyException;
 import org.hibernate.Session;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
+import uk.co.sleonard.unison.datahandling.SessionManager;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
@@ -73,8 +74,9 @@ public class FullDownloadWorker extends SwingWorker {
     public synchronized static void addDownloadRequest(final String usenetID,
                                                        final DownloadMode mode, final String nntpHost,
                                                        final LinkedBlockingQueue<NewsArticle> queue, final NewsClient newsClient,
-                                                       final NewsGroupReader nntpReader, final HibernateHelper helper, final Session session)
+                                                       final NewsGroupReader nntpReader, final HibernateHelper helper)
             throws UNISoNException {
+        Session session = SessionManager.openSession();
         final DownloadRequest request = new DownloadRequest(usenetID, mode);
 
         FullDownloadWorker.downloadQueue.add(request);

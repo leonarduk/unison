@@ -171,8 +171,18 @@ public class FullDownloadWorkerTest {
 
     @Test
     public void testFailToConnect() throws Exception {
+        Mockito.reset(this.newsClient);
         Mockito.doThrow(new IOException("Failed to connect")).when(this.newsClient)
                 .connect(ArgumentMatchers.anyString());
+        Mockito.when(this.newsClient.retrieveArticle(ArgumentMatchers.anyString()))
+                .thenAnswer(invocation -> {
+                    this.newsClient.connect("host");
+                    return new StringReader("");
+                });
+        final DownloadRequest request = new DownloadRequest("<id>", DownloadMode.ALL);
+        Assert.assertThrows(IOException.class,
+                () -> this.worker.downloadFullMessage(request));
+        Mockito.verify(this.newsClient).connect(ArgumentMatchers.anyString());
     }
 
     /**

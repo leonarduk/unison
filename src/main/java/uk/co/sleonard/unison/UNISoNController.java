@@ -336,6 +336,7 @@ public class UNISoNController {
                         fromDate1,
                         toDate1);
                 headerDownloader2.awaitCompletion();
+                FullDownloadWorker.awaitCompletion();
                 log.debug("Completed header download for {}", group.getName());
             } catch (final IOException e) {
                 e.printStackTrace();

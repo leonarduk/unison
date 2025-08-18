@@ -95,6 +95,18 @@ public class FullDownloadWorker extends SwingWorker {
     }
 
     /**
+     * Blocks until all queued downloads have completed and all worker threads have finished.
+     *
+     * @throws InterruptedException if interrupted while waiting
+     */
+    public static void awaitCompletion() throws InterruptedException {
+        while (!FullDownloadWorker.downloadQueue.isEmpty()
+                || !FullDownloadWorker.downloaders.isEmpty()) {
+            Thread.sleep(500);
+        }
+    }
+
+    /**
      * Start downloaders.
      *
      * @param numberOfDownloaders the number of downloaders

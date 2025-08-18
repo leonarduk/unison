@@ -441,9 +441,12 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
                             instance.getNntpReader(), instance.getHelper(), instance);
                 }
             }
+            FullDownloadWorker.awaitCompletion();
         } catch (final UNISoNException e) {
             final String message = "Failed to download extra fields: " + e.getMessage();
             this.showAlert(message);
+        } catch (final InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }// GEN-LAST:event_headersButtonActionPerformed
 

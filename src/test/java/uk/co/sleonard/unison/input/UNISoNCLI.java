@@ -104,7 +104,13 @@ public class UNISoNCLI {
     private void downloadAll(final String searchString, final String host) throws UNISoNException {
         final Set<NewsGroup> listNewsgroups = this.controller.listNewsgroups(searchString, host,
                 this.controller.getNntpReader().getClient());
-        this.controller.quickDownload(listNewsgroups, null, null, DownloadMode.ALL);
+        try {
+            this.controller.quickDownload(listNewsgroups, null, null, DownloadMode.ALL);
+            FullDownloadWorker.awaitCompletion();
+        } catch (final InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new UNISoNException("Download interrupted", e);
+        }
     }
 
     /**
@@ -173,8 +179,11 @@ public class UNISoNCLI {
 
         try {
             this.controller.quickDownload(listNewsgroups, fromDate, toDate, DownloadMode.BASIC);
+            FullDownloadWorker.awaitCompletion();
         } catch (final UNISoNException e) {
             log.error("Error downloading messages", e);
+        } catch (final InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
         DatabaseManagerSwing.main(HibernateHelper.GUI_ARGS);
 

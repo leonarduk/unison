@@ -8,13 +8,11 @@ package uk.co.sleonard.unison.input;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.MalformedServerReplyException;
-import org.hibernate.Session;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
-import uk.co.sleonard.unison.datahandling.SessionManager;
 import uk.co.sleonard.unison.utils.StringUtils;
 
 import java.io.BufferedReader;
@@ -76,7 +74,6 @@ public class FullDownloadWorker extends SwingWorker {
                                                        final LinkedBlockingQueue<NewsArticle> queue, final NewsClient newsClient,
                                                        final NewsGroupReader nntpReader, final HibernateHelper helper,
                                                        final UNISoNController controller) throws UNISoNException {
-        Session session = SessionManager.openSession();
         final DownloadRequest request = new DownloadRequest(usenetID, mode);
         log.trace("Queueing download request {} in mode {}", usenetID, mode);
 
@@ -85,7 +82,7 @@ public class FullDownloadWorker extends SwingWorker {
         if (FullDownloadWorker.downloaders.isEmpty()) {
             FullDownloadWorker.startDownloaders(1, nntpHost, queue, newsClient, controller);
         }
-        DataHibernatorWorker.startHibernators(nntpReader, helper, queue, session);
+        DataHibernatorWorker.startHibernators(nntpReader, helper, queue);
     }
 
     /**

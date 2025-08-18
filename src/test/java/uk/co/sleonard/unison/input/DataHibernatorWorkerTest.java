@@ -46,10 +46,9 @@ public class DataHibernatorWorkerTest {
         HibernateHelper helper = Mockito.mock(HibernateHelper.class);
         LinkedBlockingQueue queue = Mockito.mock(LinkedBlockingQueue.class);
         Mockito.when(queue.isEmpty()).thenReturn(true);
-        Session session = Mockito.mock(Session.class);
 
         // start workers
-        DataHibernatorWorker.startHibernators(reader, helper, queue, session);
+        DataHibernatorWorker.startHibernators(reader, helper, queue);
 
         ArrayList<DataHibernatorWorker> workers = (ArrayList<DataHibernatorWorker>) workersField.get(null);
         Assertions.assertEquals(expectedSize, workers.size());

@@ -9,7 +9,9 @@ import org.hibernate.cfg.Configuration;
  * Utility class responsible for creating and providing Hibernate {@link Session}
  * instances. The configuration is read from the standard Hibernate
  * configuration file on first use and the {@link SessionFactory} is cached for
- * subsequent calls.
+ * subsequent calls. All session creation is centralised here to avoid
+ * scattering configuration throughout the codebase. Callers are responsible for
+ * closing sessions when finished to prevent resource leaks.
  */
 @Slf4j
 public final class SessionManager {

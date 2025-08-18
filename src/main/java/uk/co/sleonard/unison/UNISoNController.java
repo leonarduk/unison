@@ -29,6 +29,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * The Class UNISoNController.
+ * <p>
+ * Manages high level application state including a long-lived Hibernate
+ * {@link Session} used for filtering and analysis. The session is created on
+ * construction and should be closed by calling {@link #close()} when the
+ * controller is no longer required.
  *
  * @author Stephen <github@leonarduk.com>
  * @since v1.0.0
@@ -256,13 +261,21 @@ public class UNISoNController {
      * @return the queue
      */
     public LinkedBlockingQueue<NewsArticle> getQueue() {
-        DataHibernatorWorker.startHibernators(this.getNntpReader(), this.helper, this.messageQueue,
-                this.session);
+        DataHibernatorWorker.startHibernators(this.getNntpReader(), this.helper, this.messageQueue);
         return this.messageQueue;
     }
 
     public Session getSession() {
         return this.session;
+    }
+
+    /**
+     * Close resources held by this controller including the long-lived Hibernate session.
+     */
+    public void close() {
+        if (this.session != null && this.session.isOpen()) {
+            this.session.close();
+        }
     }
 
     /**

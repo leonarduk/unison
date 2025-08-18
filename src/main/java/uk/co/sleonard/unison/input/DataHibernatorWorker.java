@@ -11,6 +11,7 @@ package uk.co.sleonard.unison.input;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
+import uk.co.sleonard.unison.datahandling.SessionManager;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -47,16 +48,15 @@ public class DataHibernatorWorker extends SwingWorker {
     /**
      * Start hibernators.
      *
-     * @param helper2
-     * @param queue2
-     * @param session2
+     * @param helper2 helper used to persist data
+     * @param queue2  queue containing articles to hibernate
      */
     public synchronized static void startHibernators(final NewsGroupReader nntpReader,
-                                                     final HibernateHelper helper2, final LinkedBlockingQueue<NewsArticle> queue2,
-                                                     final Session session2) {
+                                                     final HibernateHelper helper2, final LinkedBlockingQueue<NewsArticle> queue2) {
         while (DataHibernatorWorker.workers.size() < DataHibernatorWorker.numberofHibernators) {
+            Session session = SessionManager.openSession();
             DataHibernatorWorker.workers
-                    .add(new DataHibernatorWorker(nntpReader, helper2, queue2, session2));
+                    .add(new DataHibernatorWorker(nntpReader, helper2, queue2, session));
         }
     }
 
@@ -98,7 +98,7 @@ public class DataHibernatorWorker extends SwingWorker {
         log.debug("construct : " + this.saveToDatabase + " queue " + this.queue.size());
 
         try {
-            // HAve one session per worker rather than per message
+            // Have one session per worker rather than per message
             while (this.saveToDatabase) {
                 this.pollQueue(this.queue, this.session);
                 // wait a second
@@ -110,11 +110,15 @@ public class DataHibernatorWorker extends SwingWorker {
             }
             DataHibernatorWorker.workers.remove(this);
             if (DataHibernatorWorker.workers.size() == 0) {
-              log.info("Download complete");
+                log.info("Download complete");
             }
         } catch (@SuppressWarnings("unused") final InterruptedException e) {
             Thread.currentThread().interrupt();
             return "Interrupted";
+        } finally {
+            if (this.session != null && this.session.isOpen()) {
+                this.session.close();
+            }
         }
         return "Completed";
     }

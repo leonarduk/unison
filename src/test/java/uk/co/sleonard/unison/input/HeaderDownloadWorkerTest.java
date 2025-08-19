@@ -262,14 +262,18 @@ class HeaderDownloadWorkerTest {
         Mockito.doAnswer(invocation -> {
             latch.countDown();
             return true;
-        }).when(spyWorker).storeArticleInfo(Mockito.any());
+        }).when(spyWorker).storeArticleInfo(Mockito.any(LinkedBlockingQueue.class));
 
         spyWorker.initialise();
         spyWorker.resume();
 
-        Assertions.assertTrue(latch.await(1, TimeUnit.SECONDS));
-        Mockito.verify(spyWorker).storeArticleInfo(Mockito.any());
-        spyWorker.fullstop();
+        try {
+            Assertions.assertTrue(latch.await(1, TimeUnit.SECONDS),
+                    "storeArticleInfo was not called");
+            Mockito.verify(spyWorker).storeArticleInfo(Mockito.any(LinkedBlockingQueue.class));
+        } finally {
+            spyWorker.fullstop();
+        }
     }
 
     @Test

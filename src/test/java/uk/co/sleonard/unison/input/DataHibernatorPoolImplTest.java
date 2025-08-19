@@ -14,10 +14,10 @@ class DataHibernatorPoolImplTest {
      */
     @Test
     void testStopAllDownloadsDelegates() {
+        DataHibernatorPool pool = new DataHibernatorPoolImpl();
         try (MockedStatic<DataHibernatorWorker> mock = Mockito.mockStatic(DataHibernatorWorker.class)) {
-            DataHibernatorPool pool = new DataHibernatorPoolImpl();
             pool.stopAllDownloads();
-            mock.verify(DataHibernatorWorker::stopDownload);
+            mock.verify(DataHibernatorWorker::stopDownload, Mockito.times(1));
         }
     }
 }

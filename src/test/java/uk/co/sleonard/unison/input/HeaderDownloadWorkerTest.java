@@ -258,6 +258,7 @@ class HeaderDownloadWorkerTest {
         final HeaderDownloadWorker spyWorker = Mockito.spy(
                 new HeaderDownloadWorker(new LinkedBlockingQueue<>(),
                         Mockito.mock(Downloader.class)));
+        // Latch ensures storeArticleInfo runs before verification
         final CountDownLatch latch = new CountDownLatch(1);
         Mockito.doAnswer(invocation -> {
             latch.countDown();
@@ -271,6 +272,9 @@ class HeaderDownloadWorkerTest {
             Assertions.assertTrue(latch.await(1, TimeUnit.SECONDS),
                     "storeArticleInfo was not called");
             Mockito.verify(spyWorker).storeArticleInfo(Mockito.any(LinkedBlockingQueue.class));
+        } catch (final InterruptedException e) {
+            Thread.currentThread().interrupt();
+            Assertions.fail("Interrupted while waiting for storeArticleInfo", e);
         } finally {
             spyWorker.fullstop();
         }

@@ -31,7 +31,6 @@
         <swing-layout.version>1.0.3</swing-layout.version>
         <h2.version>2.2.224</h2.version>
         <it.includes></it.includes>
-        <jacoco.version>0.8.11</jacoco.version>
     </properties>
     <dependencyManagement>
         <dependencies>

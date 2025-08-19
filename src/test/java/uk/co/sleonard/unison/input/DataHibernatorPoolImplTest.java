@@ -1,6 +1,7 @@
 package uk.co.sleonard.unison.input;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 /**
@@ -13,11 +14,11 @@ class DataHibernatorPoolImplTest {
      */
     @Test
     void testStopAllDownloadsDelegates() {
-        DataHibernatorWorker mocked = Mockito.mock(DataHibernatorWorker.class);
-            DataHibernatorPool pool = new DataHibernatorPoolImpl();
+        DataHibernatorPool pool = new DataHibernatorPoolImpl();
+        try (MockedStatic<DataHibernatorWorker> mock = Mockito.mockStatic(DataHibernatorWorker.class)) {
             pool.stopAllDownloads();
-
-        Mockito.verify(mocked, Mockito.atLeastOnce()).stopDownload();
-
+            mock.verify(DataHibernatorWorker::stopDownload);
+            mock.verifyNoMoreInteractions();
+        }
     }
 }

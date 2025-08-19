@@ -24,7 +24,9 @@ import java.io.StringReader;
 import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -256,13 +258,26 @@ class HeaderDownloadWorkerTest {
         final HeaderDownloadWorker spyWorker = Mockito.spy(
                 new HeaderDownloadWorker(new LinkedBlockingQueue<>(),
                         Mockito.mock(Downloader.class)));
-        Mockito.doReturn(true).when(spyWorker).storeArticleInfo(Mockito.any());
+        // Latch ensures storeArticleInfo runs before verification
+        final CountDownLatch latch = new CountDownLatch(1);
+        Mockito.doAnswer(invocation -> {
+            latch.countDown();
+            return true;
+        }).when(spyWorker).storeArticleInfo(Mockito.any(LinkedBlockingQueue.class));
 
         spyWorker.initialise();
         spyWorker.resume();
 
-        Mockito.verify(spyWorker, Mockito.timeout(1000)).storeArticleInfo(Mockito.any());
-        spyWorker.fullstop();
+        try {
+            Assertions.assertTrue(latch.await(1, TimeUnit.SECONDS),
+                    "storeArticleInfo was not called");
+            Mockito.verify(spyWorker).storeArticleInfo(Mockito.any(LinkedBlockingQueue.class));
+        } catch (final InterruptedException e) {
+            Thread.currentThread().interrupt();
+            Assertions.fail("Interrupted while waiting for storeArticleInfo", e);
+        } finally {
+            spyWorker.fullstop();
+        }
     }
 
     @Test

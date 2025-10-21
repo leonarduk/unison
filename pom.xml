@@ -20,7 +20,7 @@
         <jms.version>3.1.0</jms.version>
         <javassist.version>3.30.2-GA</javassist.version>
         <commons-net>3.11.1</commons-net>
-        <commons-lang3.version>3.14.0</commons-lang3.version>
+        <commons-lang3.version>3.18.0</commons-lang3.version>
         <maven-jxr-plugin.version>3.3.1</maven-jxr-plugin.version>
 
         <hibernate-core.version>5.6.15.Final</hibernate-core.version>

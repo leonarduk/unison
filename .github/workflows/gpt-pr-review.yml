@@ -1,0 +1,23 @@
+name: GPT PR Review
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  ai-review:
+    if: ${{ github.actor != 'dependabot[bot]' && vars.ENABLE_GPT_REVIEW != 'false' }}
+    permissions:
+      pull-requests: write
+      contents: read
+      issues: write
+    uses: ./.github/workflows/_ai-pr-review.yml
+    with:
+      provider_name: GPT
+      provider_id: gpt
+      review_module: cicaid_devtools.lib.gpt_review
+      workflow_file: gpt-pr-review.yml
+    secrets:
+      openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+      deepseek_api_key: ${{ secrets.DEEPSEEK_API_KEY }}
+      gh_token: ${{ secrets.GITHUB_TOKEN }}

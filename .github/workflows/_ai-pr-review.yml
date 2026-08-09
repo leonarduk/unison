@@ -1,0 +1,269 @@
+name: Reusable AI PR Review
+
+on:
+  workflow_call:
+    inputs:
+      provider_name:
+        description: "Display name of the reviewer (e.g. DeepSeek, GPT)"
+        required: true
+        type: string
+      provider_id:
+        description: "Lowercase identifier used for file/output naming (e.g. deepseek, gpt)"
+        required: true
+        type: string
+      review_module:
+        description: "Dotted module name of the provider's review integration (e.g. cicaid_devtools.lib.deepseek_review)"
+        required: true
+        type: string
+      workflow_file:
+        description: "Filename of the calling workflow, used in the posted comment link"
+        required: true
+        type: string
+      deepseek_model:
+        description: "DEEPSEEK_MODEL override passed to the review script, if any"
+        required: false
+        type: string
+        default: ""
+      deepseek_max_tokens:
+        description: "DEEPSEEK_MAX_TOKENS override passed to the review script, if any"
+        required: false
+        type: string
+        default: ""
+      discussion_max_chars:
+        description: "Max characters of PR discussion to include in the review prompt, if any (default 20000)"
+        required: false
+        type: string
+        default: ""
+    secrets:
+      openai_api_key:
+        description: "OpenAI API key, used for GPT reviews"
+        required: false
+      deepseek_api_key:
+        description: "DeepSeek API key, used for DeepSeek reviews"
+        required: false
+      gh_token:
+        description: "Token used for gh CLI calls (PR/issue read and write)"
+        required: true
+
+# github.workflow resolves to the *calling* workflow's name (DeepSeek/GPT PR
+# Review), so this groups per-provider without cross-cancelling other
+# providers' runs for the same PR.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  ai-review:
+    name: ${{ inputs.provider_name }} AI code review
+    runs-on: ubuntu-latest
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    permissions:
+      pull-requests: write
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Install cicaid-devtools
+        run: python -m pip install "cicaid-devtools @ https://github.com/leonarduk/cicaid/releases/download/v0.5.2/cicaid_devtools-0.5.2-py3-none-any.whl"
+
+      - name: Get linked issue body
+        id: issue
+        env:
+          GH_TOKEN: ${{ secrets.gh_token }}
+        run: |
+          ISSUE_NUM=$(gh pr view ${{ github.event.pull_request.number }} --json body,title \
+            | jq -r '[.title, .body] | join(" ")' \
+            | grep -oE '(Closes|Fixes|Refs) #[0-9]+' | head -1 | grep -oE '[0-9]+' || true)
+          if [ -n "$ISSUE_NUM" ]; then
+            ISSUE_BODY=$(gh issue view "$ISSUE_NUM" --json body -q .body 2>/dev/null || echo "Issue not found")
+          else
+            ISSUE_BODY="No linked issue found. Review code on its own merits."
+          fi
+          DELIM="EOF_$(uuidgen | tr -d '-')"
+          {
+            echo "body<<$DELIM"
+            echo "$ISSUE_BODY"
+            echo "$DELIM"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Get PR diff
+        id: diff
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          ISSUE_BODY: ${{ steps.issue.outputs.body }}
+        run: |
+          git fetch origin "$BASE_REF"
+          DIFF=$(python3 -m cicaid_devtools.lib.review_diff \
+            --base-ref "$BASE_REF" \
+            --pr-title "$PR_TITLE" \
+            --issue-body "$ISSUE_BODY")
+          DELIM="EOF_$(uuidgen | tr -d '-')"
+          {
+            echo "diff<<$DELIM"
+            echo "$DIFF"
+            echo "$DELIM"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Get PR discussion since last review
+        id: discussion
+        env:
+          GH_TOKEN: ${{ secrets.gh_token }}
+          DISCUSSION_MAX_CHARS: ${{ inputs.discussion_max_chars }}
+        run: |
+          MAX_CHARS_ARGS=()
+          if [ -n "$DISCUSSION_MAX_CHARS" ]; then
+            MAX_CHARS_ARGS=(--max-chars "$DISCUSSION_MAX_CHARS")
+          fi
+          DISCUSSION=$(python3 -m cicaid_devtools.lib.review_discussion \
+            --repo "${{ github.repository }}" \
+            --pr-number "${{ github.event.pull_request.number }}" \
+            --provider-name "${{ inputs.provider_name }}" \
+            "${MAX_CHARS_ARGS[@]}")
+          DELIM="EOF_$(uuidgen | tr -d '-')"
+          {
+            echo "text<<$DELIM"
+            echo "$DISCUSSION"
+            echo "$DELIM"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Extract verified symbols from diff
+        id: verified
+        env:
+          DIFF_OUTPUT: ${{ steps.diff.outputs.diff }}
+        run: |
+          VERIFIED=$(python3 -m cicaid_devtools.lib.verified_symbols \
+            --diff "$DIFF_OUTPUT")
+          DELIM="EOF_$(uuidgen | tr -d '-')"
+          {
+            echo "facts<<$DELIM"
+            echo "$VERIFIED"
+            echo "$DELIM"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Call ${{ inputs.provider_name }} API
+        env:
+          OPENAI_API_KEY: ${{ secrets.openai_api_key }}
+          DEEPSEEK_API_KEY: ${{ secrets.deepseek_api_key }}
+          DEEPSEEK_MODEL: ${{ inputs.deepseek_model }}
+          DEEPSEEK_MAX_TOKENS: ${{ inputs.deepseek_max_tokens }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          DIFF: ${{ steps.diff.outputs.diff }}
+          ISSUE_BODY: ${{ steps.issue.outputs.body }}
+          DISCUSSION: ${{ steps.discussion.outputs.text }}
+          VERIFIED_FACTS: ${{ steps.verified.outputs.facts }}
+        run: |
+          python3 -m ${{ inputs.review_module }} > /tmp/${{ inputs.provider_id }}_review_body.md
+
+          # Guard: `-s` returns true only if the file exists AND has size > 0.
+          # This distinguishes a successful API response (review body written to stdout)
+          # from a failure (empty output, missing file, or API error).
+          if [ ! -s /tmp/${{ inputs.provider_id }}_review_body.md ]; then
+            echo "ERROR: ${{ inputs.provider_name }} review output was empty" >&2
+            exit 1
+          fi
+
+      - name: Check ${{ inputs.provider_name }} approval
+        id: check_approval
+        continue-on-error: true  # REQUEST CHANGES exits 1; allow later steps (post comment, create issues) to still run
+        run: |
+          set +e
+          python3 -m cicaid_devtools.lib.verdict /tmp/${{ inputs.provider_id }}_review_body.md "${{ inputs.provider_name }}"
+          verdict_exit=$?
+          set -e
+
+          # Exit codes from extract_verdict.py: 0 = APPROVE, 2 = provider outage
+          # (soft-fail, doesn't block merge), anything else = REQUEST CHANGES /
+          # missing verdict (hard fail).
+          if [ "$verdict_exit" -eq 0 ]; then
+            echo "approved=true" >> "$GITHUB_OUTPUT"
+          elif [ "$verdict_exit" -eq 2 ]; then
+            echo "approved=skipped" >> "$GITHUB_OUTPUT"
+          else
+            echo "approved=false" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+
+      - name: Post ${{ inputs.provider_name }} review comment
+        if: (success() || failure()) && !cancelled()
+        continue-on-error: true  # If posting fails (e.g. API rate limit), don't fail job; review is also in Actions summary
+        env:
+          GH_TOKEN: ${{ secrets.gh_token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          python3 -m cicaid_devtools.lib.review_comment /tmp/${{ inputs.provider_id }}_review_body.md \
+            "${{ inputs.provider_name }}" "${{ inputs.workflow_file }}" "$RUN_URL" > /tmp/${{ inputs.provider_id }}_comment_body.md
+
+          # Write to Actions job summary so the review is always visible in the UI,
+          # even if the gh pr comment call below fails.
+          cat /tmp/${{ inputs.provider_id }}_comment_body.md >> "$GITHUB_STEP_SUMMARY"
+
+          if ! gh pr comment "$PR_NUMBER" --body-file /tmp/${{ inputs.provider_id }}_comment_body.md; then
+            echo "::warning title=${{ inputs.provider_name }} review comment::Failed to post the ${{ inputs.provider_name }} review comment to PR #$PR_NUMBER — check the Actions log above for the gh error (rate limit, token scope, or network)."
+            echo "WARNING: failed to post review comment — check the Actions log" >&2
+            exit 0
+          fi
+
+      - name: Create follow-up issues
+        if: steps.check_approval.outputs.approved == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.gh_token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          OPENAI_API_KEY: ${{ secrets.openai_api_key }}
+          DEEPSEEK_API_KEY: ${{ secrets.deepseek_api_key }}
+          FOLLOWUP_LLM_PROVIDER: ${{ vars.FOLLOWUP_LLM_PROVIDER }}
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: |
+          # Fetch existing label names once and only create the ones missing,
+          # instead of firing a gh label create call (and eating a 422) for
+          # every label on every run.
+          existing_labels="$(gh label list --json name -q '.[].name')"
+
+          create_label_if_missing() {
+            local name="$1" color="$2" description="$3"
+            if ! grep -qxF "$name" <<< "$existing_labels"; then
+              gh label create "$name" --color "$color" --description "$description" 2>/dev/null || true
+            fi
+          }
+
+          create_label_if_missing "ai-suggested" "0075ca" "Suggested by AI code review"
+          create_label_if_missing "haiku" "C5DEF5" "Suitable for Claude Haiku (simple/mechanical task)"
+          create_label_if_missing "sonnet" "BFD4F2" "Suitable for Claude Sonnet (moderate reasoning)"
+          create_label_if_missing "opus" "0052CC" "Suitable for Claude Opus (complex design/architecture)"
+
+          # Extract titles to a file, then create issues via Python subprocess (no shell injection)
+          python3 -m cicaid_devtools.lib.followups /tmp/${{ inputs.provider_id }}_review_body.md \
+            > /tmp/followups.json
+          python3 -m cicaid_devtools.lib.followup_issues \
+            /tmp/followups.json "${PR_NUMBER}" /tmp/${{ inputs.provider_id }}_review_body.md
+
+      - name: Add 'Changes Requested' label if review failed
+        if: steps.check_approval.outputs.approved == 'false'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.gh_token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          # Create the label only if it doesn't already exist
+          if ! gh label list --json name -q '.[].name' | grep -qxF "Changes Requested"; then
+            gh label create "Changes Requested" --color "d73a49" --description "PR requested changes from code review" \
+              2>/dev/null || true
+          fi
+
+          # Add the label to the PR
+          gh pr edit "$PR_NUMBER" --add-label "Changes Requested"
+
+      - name: Fail if ${{ inputs.provider_name }} did not approve
+        if: always() && contains(fromJson('["failure","skipped"]'), steps.check_approval.outcome)
+        run: |
+          echo "::error::${{ inputs.provider_name }} review: CHANGES REQUESTED — address the review findings before merging."
+          exit 1

@@ -1,0 +1,26 @@
+name: Workflow Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  actionlint:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download actionlint
+        run: |
+          curl -sSL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash | bash -s -- latest /usr/local/bin
+        shell: bash
+
+      - name: Lint workflow files
+        run: |
+          actionlint -color -shellcheck= .github/workflows/*.yml
+        shell: bash

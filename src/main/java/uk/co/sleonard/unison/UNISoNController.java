@@ -339,7 +339,6 @@ public class UNISoNController {
                 FullDownloadWorker.awaitCompletion();
                 log.debug("Completed header download for {}", group.getName());
             } catch (final IOException e) {
-                e.printStackTrace();
                 throw new UNISoNException(
                         "Error downloading messages. Check your internet connection: ", e);
             } catch (final InterruptedException e) {

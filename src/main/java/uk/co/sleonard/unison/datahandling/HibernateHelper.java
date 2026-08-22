@@ -264,7 +264,7 @@ public class HibernateHelper {
             final SchemaExport export = new SchemaExport();
             export.create(EnumSet.of(TargetType.DATABASE), metadata);
         } catch (final Exception e) {
-            e.printStackTrace();
+            log.error("Failed to export schema", e);
         }
     }
 
@@ -401,12 +401,11 @@ public class HibernateHelper {
 
             }
             log.error("Failed to store message", e);
-            e.printStackTrace();
             if (tx != null) {
                 try {
                     tx.rollback();
                 } catch (final HibernateException e1) {
-                    e1.printStackTrace();
+                    log.error("Failed to rollback transaction", e1);
                     return false;
                 }
             }

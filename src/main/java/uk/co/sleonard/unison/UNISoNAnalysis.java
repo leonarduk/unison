@@ -8,8 +8,8 @@ package uk.co.sleonard.unison;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.HibernateException;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.query.NativeQuery;
 import uk.co.sleonard.unison.datahandling.DAO.*;
 import uk.co.sleonard.unison.datahandling.HibernateHelper;
 
@@ -105,7 +105,7 @@ public class UNISoNAnalysis {
         final String sql = "SELECT count(*) as posts, newsgroup_id FROM newsgroup_message "
                 + " group by newsgroup_id " + " order by posts desc";
 
-        final SQLQuery query = this.session.createSQLQuery(sql);
+        final NativeQuery<?> query = this.session.createNativeQuery(sql);
 
         final List<?> returnVal = query.list();
 

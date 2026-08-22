@@ -114,7 +114,7 @@ public class NewsClientImpl implements NewsClient {
                             + "or there is no internet connection. \n" + "Try another host.",
                     e);
         } catch (final IOException e) {
-            e.printStackTrace();
+            log.error("Problem connecting to new server", e);
             throw new UNISoNException("problem connecting to new server");
         }
     }
@@ -144,7 +144,7 @@ public class NewsClientImpl implements NewsClient {
             this.client.logout();
             this.client.disconnect();
         } catch (final Exception e) {
-            e.printStackTrace();
+            log.error("Failed to disconnect from news server", e);
         }
     }
 

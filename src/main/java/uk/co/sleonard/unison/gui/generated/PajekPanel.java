@@ -273,7 +273,7 @@ class PajekPanel extends javax.swing.JPanel implements DataChangeListener {
             try {
                 size = refMsgs.size();
             } catch (final Exception e) {
-                e.printStackTrace();
+                log.error("Failed to determine referenced message count", e);
                 size = 0;
             }
             if ((null != refMsgs) && (size > 0)) {
@@ -482,8 +482,11 @@ class PajekPanel extends javax.swing.JPanel implements DataChangeListener {
 
         // filePreviewArea
         this.pajekFile = new PajekNetworkFile();
-        this.pajekFile.createDirectedLinks(
-                ((DefaultTableModel) this.resultsMatrixTable.getModel()).getDataVector());
+        // DefaultTableModel.getDataVector() predates generics and returns a raw Vector.
+        @SuppressWarnings("unchecked")
+        final Vector<Vector<String>> tableData = (Vector<Vector<String>>) (Vector<?>)
+                ((DefaultTableModel) this.resultsMatrixTable.getModel()).getDataVector();
+        this.pajekFile.createDirectedLinks(tableData);
         this.graphScrollPane.removeAll();
 
         final GraphPreviewPanel previewPanel = this.pajekFile.getPreviewPanel();
@@ -567,7 +570,7 @@ class PajekPanel extends javax.swing.JPanel implements DataChangeListener {
             try {
                 this.refreshPajekMatrixTable();
             } catch (final UNISoNException e) {
-                e.printStackTrace();
+                log.error("Failed to refresh Pajek matrix table", e);
             }
         }
     }

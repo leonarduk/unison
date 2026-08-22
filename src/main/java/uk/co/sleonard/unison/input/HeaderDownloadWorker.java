@@ -140,7 +140,6 @@ public class HeaderDownloadWorker extends SwingWorker {
                     this.storeArticleInfo(this.queue);
                 } catch (final UNISoNException e) {
                     log.error("Error", e);
-                    e.printStackTrace();
                     this.completionLatch.countDown();
                     return "FAIL";
                 }
@@ -185,7 +184,7 @@ public class HeaderDownloadWorker extends SwingWorker {
                 newsReader2.getClient().quit();
             }
         } catch (final IOException e) {
-            e.printStackTrace();
+            log.error("Failed to quit NNTP client", e);
         }
         this.notifyListeners();
         this.completionLatch.countDown();
@@ -381,7 +380,8 @@ public class HeaderDownloadWorker extends SwingWorker {
                     try {
                         Thread.sleep(1000);
                     } catch (final InterruptedException e) {
-                        e.printStackTrace();
+                        Thread.currentThread().interrupt();
+                        log.warn("Interrupted while waiting for queue to drain", e);
                     }
                 }
                 if (pausedForQueue) {
@@ -449,7 +449,6 @@ public class HeaderDownloadWorker extends SwingWorker {
             }
         } catch (final IOException e1) {
             log.error("Error", e1);
-            e1.printStackTrace();
             return false;
         }
 

@@ -7,9 +7,10 @@
 package uk.co.sleonard.unison;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.input.DataHibernatorPoolImpl;
 import uk.co.sleonard.unison.utils.StringUtils;
@@ -18,10 +19,11 @@ import javax.swing.*;
 import java.util.Set;
 
 @Slf4j
+@Disabled("Requires a live NNTP server and is disabled to avoid external network calls")
 public class UNISoNControllerIT {
     private UNISoNController controller;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.controller = new UNISoNControllerFactory().create(null, new DataHibernatorPoolImpl());
     }

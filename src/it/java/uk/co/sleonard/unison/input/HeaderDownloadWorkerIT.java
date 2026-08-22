@@ -6,9 +6,9 @@
  */
 package uk.co.sleonard.unison.input;
 
-import org.junit.Ignore;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.DownloadRequest.DownloadMode;
@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.concurrent.LinkedBlockingQueue;
 
-@Ignore("Requires a live NNTP server and is disabled to avoid external network calls")
+@Disabled("Requires a live NNTP server and is disabled to avoid external network calls")
 public class HeaderDownloadWorkerIT {
 
     public static LinkedBlockingQueue<NewsArticle> populateQueueWithOneRealMessage()

@@ -27,16 +27,22 @@ abstract class SwingWorker implements Runnable {
     /**
      * The thread var.
      */
-    private final ThreadVar threadVar;
+    private final ThreadVar threadVar = new ThreadVar(null);
 
     /**
-     * Start a thread that will call the <code>construct</code> method and then exit.
+     * The name the worker thread is created with.
+     */
+    private final String name;
+
+    /**
+     * Prepare a worker with the given thread name. The thread itself is created lazily in
+     * {@link #start()} so that it binds to the instance {@code start()} is actually invoked on
+     * (important when this object is wrapped, e.g. by a test spy).
      *
      * @param name the name
      */
     SwingWorker(final String name) {
-        final Thread t = new Thread(this, name);
-        this.threadVar = new ThreadVar(t);
+        this.name = name;
     }
 
     /**
@@ -96,10 +102,9 @@ abstract class SwingWorker implements Runnable {
      * Start the worker thread.
      */
     public void start() {
-        final Thread t = this.threadVar.get();
-        if (t != null) {
-            t.start();
-        }
+        final Thread t = new Thread(this, this.name);
+        this.threadVar.set(t);
+        t.start();
     }
 
     /**
@@ -135,6 +140,15 @@ abstract class SwingWorker implements Runnable {
          */
         synchronized Thread get() {
             return this.thread;
+        }
+
+        /**
+         * Sets the thread.
+         *
+         * @param t the new thread
+         */
+        synchronized void set(final Thread t) {
+            this.thread = t;
         }
     }
 }

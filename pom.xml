@@ -17,7 +17,7 @@
         <jacoco.version>0.8.11</jacoco.version>
         <maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
         <commons-net>3.11.1</commons-net>
-        <commons-lang3.version>3.14.0</commons-lang3.version>
+        <commons-lang3.version>3.18.0</commons-lang3.version>
         <maven-jxr-plugin.version>3.3.1</maven-jxr-plugin.version>
 
         <hibernate-core.version>5.6.15.Final</hibernate-core.version>

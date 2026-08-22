@@ -10,7 +10,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <slf4j.version>2.0.13</slf4j.version>
         <logback.version>1.5.6</logback.version>
-        <junit.version>4.13.2</junit.version>
         <java.version>21</java.version>
         <mockito.version>5.19.0</mockito.version>
         <lombok.version>1.18.38</lombok.version>
@@ -457,7 +456,7 @@
             <url>http://uk.linkedin.com/in/steveleonard/</url>
         </developer>
         <developer>
-            <id>leonarduk</id>
+            <id>eltonnunes</id>
             <name>Elton Nunes</name>
             <email>elton_12_nunes@hotmail.com</email>
             <roles>

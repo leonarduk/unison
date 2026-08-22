@@ -2,5 +2,9 @@
 /target
 /src/main/resources/DB/projectDB.properties
 /deploy/unison.jar
+/UnitTest.net
+.classpath
+.project
+.settings/
 
 *.lck

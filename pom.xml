@@ -10,7 +10,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <slf4j.version>2.0.13</slf4j.version>
         <logback.version>1.5.6</logback.version>
-        <junit.version>4.13.2</junit.version>
         <java.version>21</java.version>
         <mockito.version>5.19.0</mockito.version>
         <lombok.version>1.18.38</lombok.version>
@@ -27,7 +26,9 @@
         <ehcache.version>3.10.8</ehcache.version>
         <swing-layout.version>1.0.3</swing-layout.version>
         <h2.version>2.2.224</h2.version>
-        <it.includes></it.includes>
+        <!-- Integration tests (src/it/java, *IT.java) require a live NNTP server and are
+             skipped by default; run with -DskipITs=false to enable them. -->
+        <skipITs>true</skipITs>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -168,10 +169,30 @@
                     <argLine>@{argLine} -XX:+EnableDynamicAgentLoading</argLine>
                     <includes>
                         <include>**/*Test.java</include>
-                        <include>${it.includes}</include>
                     </includes>
                     <useModulePath>false</useModulePath>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <argLine>@{argLine} -XX:+EnableDynamicAgentLoading</argLine>
+                    <includes>
+                        <include>**/*IT.java</include>
+                    </includes>
+                    <skipITs>${skipITs}</skipITs>
+                    <useModulePath>false</useModulePath>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -395,7 +416,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.9.1</version>
+                <version>3.6.0</version>
                 <configuration>
                     <configLocation>formatters/checkstyle.xml</configLocation><!-- default -->
                 </configuration>
@@ -435,7 +456,7 @@
             <url>http://uk.linkedin.com/in/steveleonard/</url>
         </developer>
         <developer>
-            <id>leonarduk</id>
+            <id>eltonnunes</id>
             <name>Elton Nunes</name>
             <email>elton_12_nunes@hotmail.com</email>
             <roles>

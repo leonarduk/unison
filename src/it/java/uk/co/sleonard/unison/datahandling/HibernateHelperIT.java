@@ -7,8 +7,9 @@
 package uk.co.sleonard.unison.datahandling;
 
 import org.hibernate.Session;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.input.HeaderDownloadWorkerIT;
 import uk.co.sleonard.unison.input.NewsArticle;
@@ -16,6 +17,7 @@ import uk.co.sleonard.unison.input.NewsArticle;
 import java.io.IOException;
 import java.util.concurrent.LinkedBlockingQueue;
 
+@Disabled("Requires a live NNTP server and is disabled to avoid external network calls")
 public class HibernateHelperIT {
 
     @Test

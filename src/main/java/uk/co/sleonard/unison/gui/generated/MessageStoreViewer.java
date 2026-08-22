@@ -318,7 +318,7 @@ class MessageStoreViewer extends javax.swing.JPanel implements DataChangeListene
                     // else ignore it and add to root
                 }
             } catch (final ObjectNotFoundException e) {
-                e.printStackTrace();
+                log.error("Referenced message not found", e);
             }
 
             // if it matches then it refers to previous so add as a child to

@@ -1,7 +1,0 @@
-Testsuite: uk.co.sleonard.unison.datahandling.tests.HibernateHelperTest
-Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.078 sec
-------------- Standard Output ---------------
-OK
-------------- ---------------- ---------------
-
-Testcase: testData took 0.078 sec

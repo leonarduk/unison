@@ -133,7 +133,7 @@ public class UNISoNCLI {
                 try {
                     this.downloadAll(arg, host);
                 } catch (final UNISoNException e) {
-                    e.printStackTrace();
+                    log.error("Error downloading all messages", e);
                 }
                 break;
             case QUICKDOWNLOAD:

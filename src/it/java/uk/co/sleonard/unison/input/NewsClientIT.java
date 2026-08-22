@@ -7,9 +7,9 @@
 package uk.co.sleonard.unison.input;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Ignore;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import uk.co.sleonard.unison.UNISoNException;
 import uk.co.sleonard.unison.datahandling.DAO.NewsGroup;
 import uk.co.sleonard.unison.utils.StringUtils;
@@ -26,7 +26,7 @@ import java.util.Set;
  * @since 22 May 2016
  */
 @Slf4j
-@Ignore("Requires a live NNTP server and is disabled to avoid external network calls")
+@Disabled("Requires a live NNTP server and is disabled to avoid external network calls")
 public class NewsClientIT {
 
     public static BufferedReader downloadFirstMessage() throws IOException, UNISoNException {
@@ -54,18 +54,19 @@ public class NewsClientIT {
      * @throws IOException
      * @throws SocketException
      */
-    @Test(expected = UnknownHostException.class)
-    public void testConnectForInvalidServer() throws SocketException, IOException {
+    @Test
+    public void testConnectForInvalidServer() {
         final NewsClient client = new NewsClientImpl();
         final String hostname = "broken.server";
-        client.connect(hostname, 119);
+        Assertions.assertThrows(UnknownHostException.class,
+                () -> client.connect(hostname, 119));
     }
 
     /**
      * @throws IOException
      * @throws SocketException
      */
-    @Ignore
+    @Disabled
     @Test
     public void testConnectForServersProperties() throws SocketException, IOException {
         final NewsClient client = new NewsClientImpl();

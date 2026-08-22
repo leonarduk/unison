@@ -6,14 +6,14 @@
  */
 package uk.co.sleonard.unison.input;
 
-import org.junit.Ignore;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import uk.co.sleonard.unison.datahandling.DAO.Location;
 
+@Disabled("Requires a live network call to the geolocation service and is disabled to avoid external network calls")
 public class LocationFinderImplIT {
 
-    @Ignore  // times out in Travis build
     @Test
     public void testCreateLocation() {
         final LocationFinder locationFinder = new LocationFinderImpl();

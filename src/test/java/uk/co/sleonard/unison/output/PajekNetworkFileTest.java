@@ -34,8 +34,8 @@ public class PajekNetworkFileTest {
      *
      * @return Vector<Vector < String>> filled.
      */
-    private Vector<Vector> generateNodePairs() {
-        final Vector<Vector> nodePairs = new Vector<>();
+    private Vector<Vector<String>> generateNodePairs() {
+        final Vector<Vector<String>> nodePairs = new Vector<>();
         final Vector<String> vector = new Vector<>();
         vector.addElement("Alf");
         vector.addElement("Bob");
@@ -74,7 +74,7 @@ public class PajekNetworkFileTest {
      */
     @Test
     public void testCreateDirectedLinks() {
-        final Vector<Vector> nodePairs = this.generateNodePairs();
+        final Vector<Vector<String>> nodePairs = this.generateNodePairs();
         this.file.createDirectedLinks(nodePairs);
         Assertions.assertEquals(2, nodePairs.size());
     }
@@ -119,7 +119,7 @@ public class PajekNetworkFileTest {
     @Test
     public void testWriteData() {
         final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        final Vector<Vector> nodePairs = this.generateNodePairs();
+        final Vector<Vector<String>> nodePairs = this.generateNodePairs();
         this.file.createDirectedLinks(nodePairs);
         this.file.writeData(new PrintStream(outContent));
         Assertions.assertTrue(outContent.toString().contains("*Vertices"));

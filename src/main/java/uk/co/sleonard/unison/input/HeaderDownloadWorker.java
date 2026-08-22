@@ -147,6 +147,14 @@ public class HeaderDownloadWorker extends SwingWorker {
                 this.downloading = false;
                 this.notifyListeners();
                 this.completionLatch.countDown();
+            } else {
+                // Idle: avoid burning a full CPU core spinning on the flag.
+                try {
+                    Thread.sleep(50);
+                } catch (final InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
             }
 
         }

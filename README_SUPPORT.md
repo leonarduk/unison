@@ -3,7 +3,7 @@
 This document outlines how to build, test, and obtain support for **UNISoN**.
 
 ## Build Prerequisites
-- **Java Development Kit 17** – set `JAVA_HOME` accordingly and ensure `java` is on your `PATH`.
+- **Java Development Kit 21** – set `JAVA_HOME` accordingly and ensure `java` is on your `PATH`.
 - **Apache Maven 3.8+** – used for building and running tests.
 - **Git** – required for fetching the source and contributing changes.
 

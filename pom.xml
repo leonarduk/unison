@@ -17,14 +17,11 @@
         <junit.jupiter.version>5.10.2</junit.jupiter.version>
         <jacoco.version>0.8.11</jacoco.version>
         <maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
-        <jms.version>3.1.0</jms.version>
-        <javassist.version>3.30.2-GA</javassist.version>
         <commons-net>3.11.1</commons-net>
         <commons-lang3.version>3.14.0</commons-lang3.version>
         <maven-jxr-plugin.version>3.3.1</maven-jxr-plugin.version>
 
         <hibernate-core.version>5.6.15.Final</hibernate-core.version>
-        <hibernate-tools.version>5.6.15.Final</hibernate-tools.version>
         <hsqldb.version>2.7.3</hsqldb.version>
         <jung.version>1.7.6</jung.version>
         <ehcache.version>3.10.8</ehcache.version>
@@ -257,11 +254,6 @@
             <artifactId>commons-net</artifactId>
             <version>${commons-net}</version>
         </dependency>
-        <dependency>
-            <groupId>jakarta.jms</groupId>
-            <artifactId>jakarta.jms-api</artifactId>
-            <version>${jms.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -276,14 +268,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Caused by: java.lang.ClassNotFoundException: javassist.util.proxy.MethodFilter -->
-        <dependency>
-            <groupId>org.javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <version>${javassist.version}</version>
-        </dependency>
-
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -294,12 +278,14 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate-core.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-tools</artifactId>
-            <version>${hibernate-tools.version}</version>
+            <exclusions>
+                <!-- Avoid shipping a second, older javax.activation implementation alongside
+                     com.sun.activation:jakarta.activation pulled in by the mail dependency. -->
+                <exclusion>
+                    <groupId>javax.activation</groupId>
+                    <artifactId>javax.activation-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -364,12 +350,9 @@
         </dependency>
 
 
-        <!-- Jakarta Mail API and implementation -->
-        <dependency>
-            <groupId>jakarta.mail</groupId>
-            <artifactId>jakarta.mail-api</artifactId>
-            <version>2.1.3</version>
-        </dependency>
+        <!-- Jakarta Mail implementation (bundles its own copy of the jakarta.mail API,
+             so the separate jakarta.mail-api artifact is intentionally not declared here
+             to avoid shipping two versions of the same classes in the fat JAR) -->
         <dependency>
             <groupId>com.sun.mail</groupId>
             <artifactId>jakarta.mail</artifactId>

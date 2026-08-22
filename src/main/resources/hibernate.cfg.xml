@@ -8,16 +8,12 @@
             org.hsqldb.jdbcDriver
         </property>
         <property name="hibernate.connection.url">
-            jdbc:hsqldb:mem:testdb
+            jdbc:hsqldb:file:unison-data/db;shutdown=true
         </property>
         <property name="hibernate.connection.username">SA</property>
         <property name="hibernate.dialect">
             org.hibernate.dialect.HSQLDialect
         </property>
-        <property name="hibernate.cache.provider_class">
-            org.hibernate.cache.NoCacheProvider
-        </property>
-
 
         <property name="hibernate.cache.use_query_cache">false</property>
         <property name="hibernate.cache.use_second_level_cache">
@@ -27,8 +23,8 @@
         <!-- JDBC connection pool (use the built-in) -->
         <property name="hibernate.connection.pool_size">20</property>
 
-        <!-- Create schema for tests on startup -->
-        <property name="hibernate.hbm2ddl.auto">create</property>
+        <!-- Update the schema in place, preserving existing data -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
 
         <!-- Echo all executed SQL to stdout -->
         <property name="hibernate.show_sql">false</property>

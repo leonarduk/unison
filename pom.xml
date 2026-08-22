@@ -56,6 +56,14 @@
                 <artifactId>byte-buddy-agent</artifactId>
                 <version>1.17.6</version>
             </dependency>
+            <!-- jung:jung:1.7.6 pulls in commons-collections 3.1, which contains the
+                 InvokerTransformer deserialization RCE gadget (CVE-2015-6420/7501); force the
+                 patched release. -->
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>3.2.2</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

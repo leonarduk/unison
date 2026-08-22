@@ -8,8 +8,6 @@ package uk.co.sleonard.unison.input;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hsqldb.util.DatabaseManagerSwing;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import uk.co.sleonard.unison.UNISoNController;
 import uk.co.sleonard.unison.UNISoNControllerFactory;
 import uk.co.sleonard.unison.UNISoNException;
@@ -29,7 +27,6 @@ import java.util.Set;
  * @since v1.0.0
  */
 @Slf4j
-@Disabled("Command line entry point - not a unit test")
 public class UNISoNCLI {
 
     /**
@@ -159,7 +156,9 @@ public class UNISoNCLI {
             throws UNISoNException {
         final Set<NewsGroup> listNewsgroups = this.controller.listNewsgroups(searchString, host,
                 this.controller.getNntpReader().getClient());
-        Assertions.assertTrue(listNewsgroups.size() > 0);
+        if (listNewsgroups.isEmpty()) {
+            throw new UNISoNException("No newsgroups found matching: " + searchString);
+        }
     }
 
 

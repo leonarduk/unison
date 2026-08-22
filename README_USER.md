@@ -1,7 +1,7 @@
 # Unison User Guide
 
 ## Installation Prerequisites
-- **Java Development Kit (JDK) 17 or later**
+- **Java Development Kit (JDK) 21 or later**
 - **Apache Maven** for building from source
 - Network access to an NNTP server
 

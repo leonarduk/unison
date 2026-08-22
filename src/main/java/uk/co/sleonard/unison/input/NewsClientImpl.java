@@ -106,7 +106,7 @@ public class NewsClientImpl implements NewsClient {
         } catch (final ConnectException e) {
             throw new UNISoNException(
                     "Connection refused. \n" + "Check your settings are correct: server " + server
-                            + " username " + username + " password " + password,
+                            + " username " + username,
                     e);
         } catch (final UnknownHostException e) {
             throw new UNISoNException(

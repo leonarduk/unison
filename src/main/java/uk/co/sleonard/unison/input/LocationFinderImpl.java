@@ -9,15 +9,15 @@ package uk.co.sleonard.unison.input;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import lombok.extern.slf4j.Slf4j;
 import uk.co.sleonard.unison.datahandling.DAO.IpAddress;
 import uk.co.sleonard.unison.datahandling.DAO.Location;
 import uk.co.sleonard.unison.datahandling.DAO.UsenetUser;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
+import java.net.URI;
 import java.net.URLConnection;
 import java.util.Vector;
 import java.util.regex.Pattern;
@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 /**
  * The Class LocationFinderImpl.
  */
+@Slf4j
 public class LocationFinderImpl implements LocationFinder {
 
     /**
@@ -39,7 +40,7 @@ public class LocationFinderImpl implements LocationFinder {
      * Instantiates a new location finder impl.
      */
     public LocationFinderImpl() {
-        this("http://freegeoip.net/json/");
+        this("https://ip-api.com/json/");
     }
 
     /**
@@ -68,16 +69,15 @@ public class LocationFinderImpl implements LocationFinder {
             }
 
             /**
-             * {"ip":"213.205.194.135","country_code":"GB","country_name":"United Kingdom"
-             * ,"region_code":"ENG","region_name":"England","city":"London","zip_code":"EC4N",
-             * "time_zone":"Europe/London","latitude":51.5144,"longitude":-0.0941,"metro_code":0}
+             * {"status":"success","country":"United Kingdom","countryCode":"GB",
+             * "region":"ENG","regionName":"England","city":"London","zip":"EC4N",
+             * "lat":51.5144,"lon":-0.0941,"timezone":"Europe/London","query":"213.205.194.135"}
              */
 
             final String sURL = this.webUrl + ipAddress; // just a string
 
             // Connect to the URL using java's native library
-            final URL url = new URL(sURL);
-            final URLConnection request = url.openConnection();
+            final URLConnection request = URI.create(sURL).toURL().openConnection();
             request.connect();
 
             // Convert to a JSON object to print data
@@ -93,8 +93,8 @@ public class LocationFinderImpl implements LocationFinder {
             final JsonObject rootobj = root.getAsJsonObject(); // May be an array, may be an object.
 
             final String city = rootobj.get("city").getAsString();
-            final String country = rootobj.get("country_name").getAsString();
-            final String countryCode = rootobj.get("country_code").getAsString();
+            final String country = rootobj.get("country").getAsString();
+            final String countryCode = rootobj.get("countryCode").getAsString();
             final boolean guessed = false;
 
             final Vector<UsenetUser> posters = null;// new Vector<UsenetUser>();
@@ -102,10 +102,8 @@ public class LocationFinderImpl implements LocationFinder {
 
             return new Location(city, country, countryCode, guessed, posters, ips);
 
-        } catch (final FileNotFoundException e) {
-            e.printStackTrace();
         } catch (final IOException e) {
-            e.printStackTrace();
+            log.warn("Failed to look up location for IP address {}: {}", ipAddress, e.getMessage());
         }
         return new Location();
 

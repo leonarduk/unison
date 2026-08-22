@@ -2,15 +2,15 @@ name: CodeQL
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
-    branches: [main]
+    branches: [master]
   schedule:
     - cron: "30 4 * * 1"
 
 jobs:
   analyze:
-    name: Analyze (python)
+    name: Analyze (java)
     runs-on: ubuntu-latest
     permissions:
       security-events: write
@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: github/codeql-action/init@v4
         with:
-          languages: python
+          languages: java-kotlin
       - uses: github/codeql-action/analyze@v4
         with:
-          category: "/language:python"
+          category: "/language:java"
